@@ -10,7 +10,6 @@ export default function Home() {
     <button onClick={() => {router.push("dashboard")}} className='outline outline-dashed p-2 mt-2 hover:cursor-pointer'>
       Go Dashboard
     </button>
-
   </div>
   );
 }
