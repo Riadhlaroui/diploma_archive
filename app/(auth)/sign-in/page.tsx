@@ -26,7 +26,7 @@ export default function SignIn() {
     }
   }, [router]);
 
-  if(checkingAuth) return <FullScreenLoader />
+  if (checkingAuth) return <FullScreenLoader />;
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prev) => !prev);
@@ -105,7 +105,7 @@ export default function SignIn() {
           </div>
           <div className="flex items-start w-full">
             <span className="ml-2 opacity-70 font-semibold text-sm hover:cursor-pointer">
-              forgotten your password?
+              Forgot your password?
             </span>
           </div>
 
