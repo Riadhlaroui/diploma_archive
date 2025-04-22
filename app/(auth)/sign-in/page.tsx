@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
 import pb from "@/lib/pocketbase";
 import { toast } from "sonner";
+import FullScreenLoader from "@/components/FullScreenLoader";
 
 export default function SignIn() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -15,6 +16,17 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const [checkingAuth, setCheckingAuth] = React.useState(true);
+
+  useEffect(() => {
+    if (pb.authStore.isValid) {
+      router.replace("/dashboard");
+    } else {
+      setCheckingAuth(false);
+    }
+  }, [router]);
+
+  if(checkingAuth) return <FullScreenLoader />
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prev) => !prev);
