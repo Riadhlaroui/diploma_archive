@@ -29,9 +29,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
 import { CircleUserRound } from "lucide-react";
+import pb from "@/lib/pocketbase";
 
 export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 	const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+
+	const user = pb.authStore.model;
+
+  if (!user) return <p>Not logged in</p>;
 
 	const handleLogout = () => {
 		console.log("User logged out.");
@@ -48,9 +53,9 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 							<>
 								<CircleUserRound className="ml-1.5 size-[2rem] flex-shrink-0 opacity-90" />
 								<div className=" flex flex-col items-start">
-									<p className=" font-semibold">Riadh</p>
+									<p className=" font-semibold">{user.userName}</p>
 									<span className="text-sm opacity-65 truncate max-w-fit overflow-hidden text-ellipsis whitespace-nowrap cursor-default">
-										coolEmail@gmail.com
+										{user.email}
 									</span>
 								</div>
 							</>
