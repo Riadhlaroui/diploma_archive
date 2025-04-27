@@ -23,8 +23,8 @@ _This file will be deleted once tasks are migrated to Jira. Last updated: [23-04
 
 ### Tasks & Decisions (Pre-Jira)
 
-- [ ] **riad**: Set up github repo and next.js (done)
-- [ ] **youssouf**: prepare the work plan /prepare use case/ summary of what they need/
+- [x] **riad**: Set up github repo and next.js
+- [x] **youssouf**: prepare the work plan /prepare use case/ summary of what they need/
 
 ## 3. Scheduling & Reporting
 
@@ -33,8 +33,8 @@ _This file will be deleted once tasks are migrated to Jira. Last updated: [23-04
 #### Next Lahcen Meeting: april 29
 
 - prep:
-  use case
-  summary
+  - use case (done)
+  - summary
 
 ### 📅 Weekly Lahcen Updates
 
