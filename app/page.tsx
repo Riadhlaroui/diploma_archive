@@ -5,8 +5,7 @@ import pb from "@/lib/pocketbase"; // make sure this points to your pb instance
 import { useEffect } from "react";
 
 export default function Home() {
- const router = useRouter();
-
+  const router = useRouter();
 
   return (
     <div className="w-full flex flex-col items-center justify-center gap-2 transition-colors duration-300">

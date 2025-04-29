@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import pb from "@/lib/pocketbase";
 import { toast } from "sonner";
 import FullScreenLoader from "@/components/FullScreenLoader";
+import { XCircle, CheckCircle } from "lucide-react";
 
 export default function SignIn() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -37,10 +38,27 @@ export default function SignIn() {
     try {
       await pb.collection("Archive_users").authWithPassword(email, password);
       router.push("/dashboard");
-      toast.success("Login succeeded");
+
+      toast.success(
+        <div className="flex items-center gap-2">
+          <div>
+            <div className="font-semibold">Login successful</div>
+            <div className="text-sm">Welcome back</div>
+          </div>
+        </div>
+      );
+
       console.log("We good.");
     } catch (err) {
-      toast.error("Login failed");
+      toast.error(
+        <div className="flex items-center gap-2">
+          <div>
+            <div className="font-semibold">Login failed</div>
+            <div className="text-sm">Email or password is incorrect</div>
+          </div>
+        </div>
+      );
+
       console.log("We not good vro.");
     }
   };

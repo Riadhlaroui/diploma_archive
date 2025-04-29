@@ -8,6 +8,7 @@ import {
   ChevronDown,
   UserX,
   UserRoundPen,
+  UsersRound,
 } from "lucide-react";
 import {
   Sidebar,
@@ -58,19 +59,9 @@ const items = [
 
 const studentContent = [
   {
-    title: "Register Student",
+    title: "Students",
     url: "#",
-    icon: BadgePlus,
-  },
-  {
-    title: "Delete Student",
-    url: "#",
-    icon: UserX,
-  },
-  {
-    title: "Edit Student",
-    url: "#",
-    icon: UserRoundPen,
+    icon: UsersRound,
   },
 ];
 
@@ -99,15 +90,10 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <Collapsible defaultOpen className="group/collapsible">
-          <SidebarGroup>
-            <SidebarGroupLabel asChild>
-              <CollapsibleTrigger>
+        <SidebarGroup>
+            <SidebarGroupLabel>
                 Manage Students
-                <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
-              </CollapsibleTrigger>
             </SidebarGroupLabel>
-            <CollapsibleContent>
               <SidebarGroupContent>
                 <SidebarMenu>
                   {studentContent.map((item) => (
@@ -122,9 +108,8 @@ export function AppSidebar() {
                   ))}
                 </SidebarMenu>
               </SidebarGroupContent>
-            </CollapsibleContent>
           </SidebarGroup>
-        </Collapsible>
+
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
