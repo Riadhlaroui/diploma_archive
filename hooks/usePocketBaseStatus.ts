@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 
 export function usePocketBaseStatus(url: string, interval = 5000) {
-  const [isOnline, setIsOnline] = useState(true);
+  const [isOnline, setIsOnline] = useState<boolean | null>(null); // null = loading
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
@@ -10,9 +11,15 @@ export function usePocketBaseStatus(url: string, interval = 5000) {
     const checkConnection = async () => {
       try {
         const res = await fetch(`${url}/api/health`);
-        if (isMounted) setIsOnline(res.ok);
+        if (isMounted) {
+          setIsOnline(res.ok);
+          setLoading(false);
+        }
       } catch (err) {
-        if (isMounted) setIsOnline(false);
+        if (isMounted) {
+          setIsOnline(false);
+          setLoading(false);
+        }
       }
     };
 
@@ -25,5 +32,5 @@ export function usePocketBaseStatus(url: string, interval = 5000) {
     };
   }, [url, interval]);
 
-  return isOnline;
+  return { isOnline, loading };
 }
