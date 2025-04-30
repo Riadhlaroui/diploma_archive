@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { ProfileDropDownMenu } from "./ProfileDropDownMenu";
+import { ConnectionStatus } from "./ConnectionStatus";
 
 export function AppSidebar() {
   const { t } = useTranslation();
@@ -103,6 +104,9 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter>
+        {!isCollapsed &&
+        <ConnectionStatus />  
+        }
         <SidebarMenu>
           <SidebarMenuItem>
             <ProfileDropDownMenu isCollapsed={isCollapsed} />
