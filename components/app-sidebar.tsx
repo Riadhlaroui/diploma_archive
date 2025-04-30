@@ -2,13 +2,7 @@
 import "@/lib/i18n";
 import { useTranslation } from "react-i18next";
 
-import {
-  Home,
-  Inbox,
-  Search,
-  Settings,
-  UsersRound,
-} from "lucide-react";
+import { Home, Inbox, Search, Settings, UsersRound } from "lucide-react";
 
 import {
   Sidebar,
@@ -67,7 +61,9 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>{t("sidebar.application") || "Application"}</SidebarGroupLabel>
+          <SidebarGroupLabel>
+            {t("sidebar.application") || "Application"}
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -85,7 +81,9 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>{t("sidebar.manageStudents") || "Manage Students"}</SidebarGroupLabel>
+          <SidebarGroupLabel>
+            {t("sidebar.manageStudents") || "Manage Students"}
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {studentContent.map((item) => (
@@ -104,9 +102,7 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter>
-        {!isCollapsed &&
-        <ConnectionStatus />  
-        }
+        {!isCollapsed && <ConnectionStatus />}
         <SidebarMenu>
           <SidebarMenuItem>
             <ProfileDropDownMenu isCollapsed={isCollapsed} />
