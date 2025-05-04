@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { X, FileText, Plus, Check } from "lucide-react";
 import pb from "@/lib/pocketbase";
@@ -108,23 +108,24 @@ export default function StudentForm({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleChange = (e) => {
+  // Use useCallback to memoize the handleChange function
+  const handleChange = useCallback((e) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
 
     // Clear error when field is edited
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: null,
-      }));
-    }
-  };
+    setErrors((prev) => ({
+      ...prev,
+      [name]: null,
+    }));
+  }, []);
 
-  const handleDiplomaTypeToggle = (value) => {
+  // Use useCallback to memoize the handleDiplomaTypeToggle function
+  const handleDiplomaTypeToggle = useCallback((value) => {
     setFormData((prev) => {
       const diplomaTypes = [...prev.diplomaTypes];
       const index = diplomaTypes.indexOf(value);
@@ -142,13 +143,11 @@ export default function StudentForm({
     });
 
     // Clear error when field is edited
-    if (errors.diplomaTypes) {
-      setErrors((prev) => ({
-        ...prev,
-        diplomaTypes: null,
-      }));
-    }
-  };
+    setErrors((prev) => ({
+      ...prev,
+      diplomaTypes: null,
+    }));
+  }, []);
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
@@ -157,7 +156,7 @@ export default function StudentForm({
     processFiles(selectedFiles);
   };
 
-  const processFiles = (selectedFiles) => {
+  const processFiles = useCallback((selectedFiles) => {
     // Check file types (PDF or image)
     const invalidFiles = selectedFiles.filter(
       (file) => !file.type.includes("pdf") && !file.type.includes("image")
@@ -205,13 +204,11 @@ export default function StudentForm({
     });
 
     // Clear file error
-    if (errors.files) {
-      setErrors((prev) => ({
-        ...prev,
-        files: null,
-      }));
-    }
-  };
+    setErrors((prev) => ({
+      ...prev,
+      files: null,
+    }));
+  }, []);
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -228,28 +225,31 @@ export default function StudentForm({
     processFiles(droppedFiles);
   };
 
-  const removeFile = (index) => {
-    setFilePreviews((prev) => {
-      const newPreviews = [...prev];
-      newPreviews.splice(index, 1);
-      return newPreviews;
-    });
+  const removeFile = useCallback(
+    (index) => {
+      setFilePreviews((prev) => {
+        const newPreviews = [...prev];
+        newPreviews.splice(index, 1);
+        return newPreviews;
+      });
 
-    setFiles((prev) => {
-      const newFiles = [...prev];
-      // Only remove from files array if it's a new file (has file property)
-      const fileToRemove = filePreviews[index];
-      if (fileToRemove && fileToRemove.file) {
-        const fileIndex = newFiles.findIndex(
-          (f) => f.name === fileToRemove.name
-        );
-        if (fileIndex !== -1) {
-          newFiles.splice(fileIndex, 1);
+      setFiles((prev) => {
+        const newFiles = [...prev];
+        // Only remove from files array if it's a new file (has file property)
+        const fileToRemove = filePreviews[index];
+        if (fileToRemove && fileToRemove.file) {
+          const fileIndex = newFiles.findIndex(
+            (f) => f.name === fileToRemove.name
+          );
+          if (fileIndex !== -1) {
+            newFiles.splice(fileIndex, 1);
+          }
         }
-      }
-      return newFiles;
-    });
-  };
+        return newFiles;
+      });
+    },
+    [filePreviews]
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -265,7 +265,7 @@ export default function StudentForm({
       Object.keys(formData).forEach((key) => {
         if (key === "diplomaTypes") {
           // Handle array of diploma types
-          formData.diplomaTypes.forEach((type, index) => {
+          formData.diplomaTypes.forEach((type) => {
             formDataToSubmit.append(`diplomaTypes`, type);
           });
         } else {
@@ -274,7 +274,7 @@ export default function StudentForm({
       });
 
       // Add files if they exist
-      files.forEach((file, index) => {
+      files.forEach((file) => {
         formDataToSubmit.append(`files`, file);
       });
 
@@ -305,18 +305,22 @@ export default function StudentForm({
     }
   };
 
-  const FormField = ({ label, required, children, error }) => (
-    <div className="mb-4">
-      <div className="mb-1 flex items-center">
-        {label && (
-          <label className="text-xs font-medium text-gray-500">
-            {label} {required && <span className="text-red-500">*</span>}
-          </label>
-        )}
+  // Memoize the FormField component to prevent unnecessary re-renders
+  const FormField = useCallback(
+    ({ label, required, children, error }) => (
+      <div className="mb-4">
+        <div className="mb-1 flex items-center">
+          {label && (
+            <label className="text-xs font-medium text-gray-500">
+              {label} {required && <span className="text-red-500">*</span>}
+            </label>
+          )}
+        </div>
+        {children}
+        {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
       </div>
-      {children}
-      {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
-    </div>
+    ),
+    []
   );
 
   return (
@@ -329,7 +333,7 @@ export default function StudentForm({
             name="studentId"
             value={formData.studentId}
             onChange={handleChange}
-            className="w-full rounded bg-gray-100 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded bg-gray-100 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-800"
             placeholder="Leave empty to auto-generate..."
           />
         </FormField>
@@ -341,7 +345,7 @@ export default function StudentForm({
             name="firstName"
             value={formData.firstName}
             onChange={handleChange}
-            className="w-full rounded bg-gray-100 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded bg-gray-100 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-800"
             placeholder="Enter first name"
           />
         </FormField>
@@ -353,7 +357,7 @@ export default function StudentForm({
             name="lastName"
             value={formData.lastName}
             onChange={handleChange}
-            className="w-full rounded bg-gray-100 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded bg-gray-100 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-800"
             placeholder="Enter last name"
           />
         </FormField>
@@ -364,7 +368,7 @@ export default function StudentForm({
             name="faculty"
             value={formData.faculty}
             onChange={handleChange}
-            className="w-full rounded bg-gray-100 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded bg-gray-100 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-800"
           >
             <option value="">Select Faculty</option>
             {FACULTY_OPTIONS.map((option) => (
@@ -383,7 +387,7 @@ export default function StudentForm({
                 key={option.value}
                 className={`flex cursor-pointer items-center rounded border p-2 ${
                   formData.diplomaTypes.includes(option.value)
-                    ? "border-blue-500 bg-blue-50"
+                    ? "border-gray-800 bg-blue-50"
                     : "border-gray-200 bg-gray-100"
                 }`}
                 onClick={() => handleDiplomaTypeToggle(option.value)}
@@ -391,7 +395,7 @@ export default function StudentForm({
                 <div
                   className={`mr-2 flex h-4 w-4 items-center justify-center rounded-sm border ${
                     formData.diplomaTypes.includes(option.value)
-                      ? "border-blue-500 bg-blue-500"
+                      ? "border-gray-800 bg-gray-800"
                       : "border-gray-300"
                   }`}
                 >
@@ -414,7 +418,7 @@ export default function StudentForm({
             onChange={handleChange}
             min="2000"
             max="2100"
-            className="w-full rounded bg-gray-100 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded bg-gray-100 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-800"
             placeholder="Enter year"
           />
         </FormField>
