@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Upload, X, FileText } from "lucide-react";
+import { X, FileText, Plus, Check } from "lucide-react";
 import pb from "@/lib/pocketbase";
 
 const FACULTY_OPTIONS = [
@@ -19,6 +19,7 @@ const DIPLOMA_TYPES = [
   { value: "Licence", label: "Licence" },
   { value: "Master", label: "Master" },
   { value: "Magister", label: "Magister" },
+  { value: "Doctorat", label: "Doctorat" },
 ];
 
 export default function StudentForm({
@@ -29,15 +30,15 @@ export default function StudentForm({
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
-  const [file, setFile] = useState(null);
-  const [filePreview, setFilePreview] = useState(null);
+  const [files, setFiles] = useState([]);
+  const [filePreviews, setFilePreviews] = useState([]);
 
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     studentId: "",
     faculty: "",
-    diplomaType: "",
+    diplomaTypes: [], // Changed to array for multiple selections
     year: new Date().getFullYear(),
   });
 
@@ -49,13 +50,33 @@ export default function StudentForm({
         lastName: studentData.lastName || "",
         studentId: studentData.studentId || "",
         faculty: studentData.faculty || "",
-        diplomaType: studentData.diplomaType || "",
+        // Convert to array if it's a string
+        diplomaTypes: Array.isArray(studentData.diplomaTypes)
+          ? studentData.diplomaTypes
+          : studentData.diplomaType
+          ? [studentData.diplomaType]
+          : [],
         year: studentData.year || new Date().getFullYear(),
       });
 
-      // If there's a file, set the preview
-      if (studentData.fileUrl) {
-        setFilePreview(studentData.fileUrl);
+      // If there are files, set the previews
+      if (studentData.files && Array.isArray(studentData.files)) {
+        setFilePreviews(
+          studentData.files.map((file) => ({
+            url: pb.getFileUrl(studentData, file),
+            name: file,
+            isPdf: file.endsWith(".pdf"),
+          }))
+        );
+      } else if (studentData.file) {
+        // Handle legacy single file
+        setFilePreviews([
+          {
+            url: pb.getFileUrl(studentData, studentData.file),
+            name: studentData.file,
+            isPdf: studentData.file.endsWith(".pdf"),
+          },
+        ]);
       }
     }
   }, [studentData]);
@@ -75,8 +96,8 @@ export default function StudentForm({
       newErrors.faculty = "Faculty is required";
     }
 
-    if (!formData.diplomaType) {
-      newErrors.diplomaType = "Diploma type is required";
+    if (!formData.diplomaTypes.length) {
+      newErrors.diplomaTypes = "At least one diploma type is required";
     }
 
     if (!formData.year || isNaN(formData.year)) {
@@ -103,39 +124,91 @@ export default function StudentForm({
     }
   };
 
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    if (!selectedFile) return;
+  const handleDiplomaTypeToggle = (value) => {
+    setFormData((prev) => {
+      const diplomaTypes = [...prev.diplomaTypes];
+      const index = diplomaTypes.indexOf(value);
 
-    // Check file type (PDF or image)
-    const fileType = selectedFile.type;
-    if (!fileType.includes("pdf") && !fileType.includes("image")) {
+      if (index === -1) {
+        diplomaTypes.push(value);
+      } else {
+        diplomaTypes.splice(index, 1);
+      }
+
+      return {
+        ...prev,
+        diplomaTypes,
+      };
+    });
+
+    // Clear error when field is edited
+    if (errors.diplomaTypes) {
       setErrors((prev) => ({
         ...prev,
-        file: "Only PDF or image files are allowed",
+        diplomaTypes: null,
+      }));
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    if (!selectedFiles.length) return;
+
+    processFiles(selectedFiles);
+  };
+
+  const processFiles = (selectedFiles) => {
+    // Check file types (PDF or image)
+    const invalidFiles = selectedFiles.filter(
+      (file) => !file.type.includes("pdf") && !file.type.includes("image")
+    );
+
+    if (invalidFiles.length > 0) {
+      setErrors((prev) => ({
+        ...prev,
+        files: "Only PDF or image files are allowed",
       }));
       return;
     }
 
-    setFile(selectedFile);
+    // Add new files to existing files
+    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
 
-    // Create preview for the file
-    if (fileType.includes("image")) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setFilePreview(e.target.result);
-      };
-      reader.readAsDataURL(selectedFile);
-    } else {
-      // For PDF, just show an icon
-      setFilePreview("pdf");
-    }
+    // Create previews for the files
+    const newPreviews = selectedFiles.map((file) => {
+      if (file.type.includes("image")) {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            resolve({
+              url: e.target.result,
+              name: file.name,
+              isPdf: false,
+              file,
+            });
+          };
+          reader.readAsDataURL(file);
+        });
+      } else {
+        // For PDF, just show an icon
+        return Promise.resolve({
+          url: "pdf",
+          name: file.name,
+          isPdf: true,
+          file,
+        });
+      }
+    });
+
+    Promise.all(newPreviews).then((resolvedPreviews) => {
+      setFilePreviews((prev) => [...prev, ...resolvedPreviews]);
+    });
 
     // Clear file error
-    if (errors.file) {
+    if (errors.files) {
       setErrors((prev) => ({
         ...prev,
-        file: null,
+        files: null,
       }));
     }
   };
@@ -149,45 +222,33 @@ export default function StudentForm({
     e.preventDefault();
     e.stopPropagation();
 
-    const droppedFile = e.dataTransfer.files[0];
-    if (!droppedFile) return;
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    if (!droppedFiles.length) return;
 
-    // Check file type (PDF or image)
-    const fileType = droppedFile.type;
-    if (!fileType.includes("pdf") && !fileType.includes("image")) {
-      setErrors((prev) => ({
-        ...prev,
-        file: "Only PDF or image files are allowed",
-      }));
-      return;
-    }
-
-    setFile(droppedFile);
-
-    // Create preview for the file
-    if (fileType.includes("image")) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setFilePreview(e.target.result);
-      };
-      reader.readAsDataURL(droppedFile);
-    } else {
-      // For PDF, just show an icon
-      setFilePreview("pdf");
-    }
-
-    // Clear file error
-    if (errors.file) {
-      setErrors((prev) => ({
-        ...prev,
-        file: null,
-      }));
-    }
+    processFiles(droppedFiles);
   };
 
-  const removeFile = () => {
-    setFile(null);
-    setFilePreview(null);
+  const removeFile = (index) => {
+    setFilePreviews((prev) => {
+      const newPreviews = [...prev];
+      newPreviews.splice(index, 1);
+      return newPreviews;
+    });
+
+    setFiles((prev) => {
+      const newFiles = [...prev];
+      // Only remove from files array if it's a new file (has file property)
+      const fileToRemove = filePreviews[index];
+      if (fileToRemove && fileToRemove.file) {
+        const fileIndex = newFiles.findIndex(
+          (f) => f.name === fileToRemove.name
+        );
+        if (fileIndex !== -1) {
+          newFiles.splice(fileIndex, 1);
+        }
+      }
+      return newFiles;
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -202,13 +263,20 @@ export default function StudentForm({
 
       // Add all form fields
       Object.keys(formData).forEach((key) => {
-        formDataToSubmit.append(key, formData[key]);
+        if (key === "diplomaTypes") {
+          // Handle array of diploma types
+          formData.diplomaTypes.forEach((type, index) => {
+            formDataToSubmit.append(`diplomaTypes`, type);
+          });
+        } else {
+          formDataToSubmit.append(key, formData[key]);
+        }
       });
 
-      // Add file if exists
-      if (file) {
-        formDataToSubmit.append("file", file);
-      }
+      // Add files if they exist
+      files.forEach((file, index) => {
+        formDataToSubmit.append(`files`, file);
+      });
 
       if (studentData) {
         // Update existing record
@@ -307,20 +375,34 @@ export default function StudentForm({
           </select>
         </FormField>
 
-        {/* Diploma Type */}
-        <FormField label="Diploma Type" required error={errors.diplomaType}>
-          <select
-            name="diplomaType"
-            value={formData.diplomaType}
-            onChange={handleChange}
-            className="w-full rounded bg-gray-100 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
-          >
+        {/* Diploma Types - Multiple Selection */}
+        <FormField label="Diploma Types" required error={errors.diplomaTypes}>
+          <div className="grid grid-cols-2 gap-2">
             {DIPLOMA_TYPES.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
+              <div
+                key={option.value}
+                className={`flex cursor-pointer items-center rounded border p-2 ${
+                  formData.diplomaTypes.includes(option.value)
+                    ? "border-blue-500 bg-blue-50"
+                    : "border-gray-200 bg-gray-100"
+                }`}
+                onClick={() => handleDiplomaTypeToggle(option.value)}
+              >
+                <div
+                  className={`mr-2 flex h-4 w-4 items-center justify-center rounded-sm border ${
+                    formData.diplomaTypes.includes(option.value)
+                      ? "border-blue-500 bg-blue-500"
+                      : "border-gray-300"
+                  }`}
+                >
+                  {formData.diplomaTypes.includes(option.value) && (
+                    <Check className="h-3 w-3 text-white" />
+                  )}
+                </div>
+                <span className="text-sm">{option.label}</span>
+              </div>
             ))}
-          </select>
+          </div>
         </FormField>
 
         {/* Year */}
@@ -337,56 +419,71 @@ export default function StudentForm({
           />
         </FormField>
 
-        {/* File Upload */}
-        <FormField label="Diploma File" error={errors.file}>
-          <div
-            className="w-full rounded bg-gray-100 p-2"
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-          >
-            {filePreview ? (
-              <div className="relative flex items-center rounded p-2">
-                {filePreview === "pdf" ? (
-                  <div className="flex items-center">
-                    <FileText className="mr-2 h-6 w-6 text-blue-600" />
-                    <span className="text-sm text-gray-700">{file.name}</span>
-                  </div>
-                ) : (
-                  <div className="relative h-16 w-16">
-                    <img
-                      src={filePreview || "/placeholder.svg"}
-                      alt="File preview"
-                      className="h-full w-full rounded object-cover"
-                    />
-                  </div>
-                )}
+        {/* File Upload - Multiple Files */}
+        <FormField label="Diploma Files" error={errors.files}>
+          <div className="space-y-2">
+            {/* File previews */}
+            {filePreviews.length > 0 && (
+              <div className="mb-2 space-y-2">
+                {filePreviews.map((preview, index) => (
+                  <div
+                    key={index}
+                    className="relative flex items-center rounded bg-gray-100 p-2"
+                  >
+                    {preview.isPdf ? (
+                      <div className="flex items-center">
+                        <FileText className="mr-2 h-6 w-6 text-blue-600" />
+                        <span className="text-sm text-gray-700">
+                          {preview.name}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center">
+                        <div className="relative mr-2 h-10 w-10">
+                          <img
+                            src={preview.url || "/placeholder.svg"}
+                            alt="File preview"
+                            className="h-full w-full rounded object-cover"
+                          />
+                        </div>
+                        <span className="text-sm text-gray-700">
+                          {preview.name}
+                        </span>
+                      </div>
+                    )}
 
-                <button
-                  type="button"
-                  onClick={removeFile}
-                  className="absolute right-1 top-1 rounded-full bg-gray-200 p-1 text-gray-600 hover:bg-gray-300"
-                >
-                  <X size={14} />
-                </button>
-              </div>
-            ) : (
-              <div
-                className="flex cursor-pointer items-center justify-center rounded p-4 text-center"
-                onClick={() => document.getElementById("fileInput").click()}
-              >
-                <div>
-                  <Upload className="mx-auto mb-1 h-5 w-5 text-gray-400" />
-                  <span className="text-xs text-gray-500">Upload new file</span>
-                  <input
-                    id="fileInput"
-                    type="file"
-                    accept=".pdf,image/*"
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                </div>
+                    <button
+                      type="button"
+                      onClick={() => removeFile(index)}
+                      className="absolute right-1 top-1 rounded-full bg-gray-200 p-1 text-gray-600 hover:bg-gray-300"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                ))}
               </div>
             )}
+
+            {/* Upload new file button */}
+            <div
+              className="flex cursor-pointer items-center justify-center rounded bg-gray-100 p-3 text-center"
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+              onClick={() => document.getElementById("fileInput").click()}
+            >
+              <div className="flex items-center">
+                <Plus className="mr-1 h-4 w-4 text-gray-500" />
+                <span className="text-xs text-gray-500">Upload new file</span>
+                <input
+                  id="fileInput"
+                  type="file"
+                  accept=".pdf,image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                  multiple
+                />
+              </div>
+            </div>
           </div>
         </FormField>
 
