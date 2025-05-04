@@ -1,14 +1,9 @@
 "use client";
-import {
-  Home,
-  Inbox,
-  Search,
-  Settings,
-  BadgePlus,
-  ChevronDown,
-  UserX,
-  UserRoundPen,
-} from "lucide-react";
+import "@/lib/i18n";
+import { useTranslation } from "react-i18next";
+
+import { Home, Inbox, Search, Settings, UsersRound } from "lucide-react";
+
 import {
   Sidebar,
   SidebarContent,
@@ -19,70 +14,56 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   useSidebar,
 } from "@/components/ui/sidebar";
 
 import { ProfileDropDownMenu } from "./ProfileDropDownMenu";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "./ui/collapsible";
-
-// Menu items.
-const items = [
-  {
-    title: "Home",
-    url: "dashboard",
-    icon: Home,
-  },
-  {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "settings",
-    icon: Settings,
-  },
-];
-
-const studentContent = [
-  {
-    title: "Register Student",
-    url: "#",
-    icon: BadgePlus,
-  },
-  {
-    title: "Delete Student",
-    url: "#",
-    icon: UserX,
-  },
-  {
-    title: "Edit Student",
-    url: "#",
-    icon: UserRoundPen,
-  },
-];
+import { ConnectionStatus } from "./ConnectionStatus";
 
 export function AppSidebar() {
+  const { t } = useTranslation();
   const { state } = useSidebar(); // 'collapsed' or 'expanded'
   const isCollapsed = state === "collapsed";
+
+  // Menu items (translated)
+  const items = [
+    {
+      title: t("sidebar.home"),
+      url: "dashboard",
+      icon: Home,
+    },
+    {
+      title: t("sidebar.inbox"),
+      url: "#",
+      icon: Inbox,
+    },
+    {
+      title: t("sidebar.search"),
+      url: "#",
+      icon: Search,
+    },
+    {
+      title: t("sidebar.settings"),
+      url: "settings",
+      icon: Settings,
+    },
+  ];
+
+  const studentContent = [
+    {
+      title: t("sidebar.students"),
+      url: "#",
+      icon: UsersRound,
+    },
+  ];
 
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>
+            {t("sidebar.application") || "Application"}
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -99,34 +80,29 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <Collapsible defaultOpen className="group/collapsible">
-          <SidebarGroup>
-            <SidebarGroupLabel asChild>
-              <CollapsibleTrigger>
-                Manage Students
-                <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
-              </CollapsibleTrigger>
-            </SidebarGroupLabel>
-            <CollapsibleContent>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {studentContent.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild>
-                        <a href={item.url}>
-                          <item.icon />
-                          <span>{item.title}</span>
-                        </a>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </CollapsibleContent>
-          </SidebarGroup>
-        </Collapsible>
+        <SidebarGroup>
+          <SidebarGroupLabel>
+            {t("sidebar.manageStudents") || "Manage Students"}
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {studentContent.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <a href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
+
       <SidebarFooter>
+        {!isCollapsed && <ConnectionStatus />}
         <SidebarMenu>
           <SidebarMenuItem>
             <ProfileDropDownMenu isCollapsed={isCollapsed} />
