@@ -5,7 +5,6 @@ import {
 	LifeBuoy,
 	LogOut,
 	Mail,
-	MessageSquare,
 	PlusCircle,
 	Settings,
 	User,
@@ -63,7 +62,7 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 		<>
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
-					<div className="flex items-center gap-3 w-full p-1 rounded-sm outline-dashed outline-2 border-[0px] bg-muted transition-colors">
+					<div className="flex items-center gap-3 w-full p-1 rounded-sm outline-dashed outline-2 border-[0px] bg-muted transition-colors hover:cursor-pointer">
 						{isCollapsed && <User2 className=" opacity-90 w-[24px] h-[24px]" />}
 						{!isCollapsed && (
 							<>
@@ -82,7 +81,10 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 					<DropdownMenuLabel>{t("profile.myAccount")}</DropdownMenuLabel>
 					<DropdownMenuSeparator />
 					<DropdownMenuGroup>
-						<DropdownMenuItem>
+						<DropdownMenuItem
+							className=" hover:cursor-pointer"
+							onClick={() => router.push("/profile")}
+						>
 							<User />
 							<span>{t("profile.profile")}</span>
 						</DropdownMenuItem>
