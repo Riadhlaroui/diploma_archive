@@ -51,5 +51,43 @@ _This file will be deleted once tasks are migrated to Jira. Last updated: [23-04
 3. Implementation (Frontend/Backend)
 4. Results & Testing
 
+---
+
+## 📄 LaTeX Document Structure (max 10 pages)
+
+**Cover Page**
+- University name and logo
+- Faculty, department
+- Project title and subtitle
+- Student names and supervisor
+
+**Résumé (French summary)**  
+Short summary in French with key features listed.
+
+**Abstract (English summary)**  
+Same as Résumé, written in English.
+
+**Chapter 1: Introduction**
+- Problem Statement
+- Objectives
+- Proposed Solution
+
+**Chapter 2: System Design**
+- System Architecture
+- Technologies and Tools Used
+- Database Design (ER diagram or table descriptions)
+
+**Chapter 3: Implementation**
+- Main features (Search, CRUD, Diploma Printing, etc.)
+- Sample UI Screenshots
+- Optional: User Roles and Permissions
+
+**Chapter 4: Conclusion**
+- Project Achievements
+- Lessons Learned
+- Suggested Future Improvements
+
+---
+
 
 ## References & Resources (optional)
