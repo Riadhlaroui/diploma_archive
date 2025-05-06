@@ -4,12 +4,13 @@ import {
 	Github,
 	LifeBuoy,
 	LogOut,
-	Mail,
 	PlusCircle,
 	Settings,
 	User,
 	User2,
 	Users,
+	UserRoundPlus,
+	UserRoundX,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -32,9 +33,13 @@ import { getUserInfo, clearAurthStore } from "../utils/getUserInfo";
 
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
+import AddStaffDialog from "./AddStaffDialog";
+import DeleteStaffDialog from "./DeleteStaffDialog";
 
 export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 	const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+	const [openAddDialog, setOpenAddDialog] = useState(false);
+	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 	const [isClient, setIsClient] = useState(false);
 
 	const router = useRouter();
@@ -88,26 +93,37 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 							<User />
 							<span>{t("profile.profile")}</span>
 						</DropdownMenuItem>
-						<DropdownMenuItem>
+						<DropdownMenuItem className=" hover:cursor-pointer">
 							<Settings />
 							<span>{t("profile.settings")}</span>
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
 					<DropdownMenuSeparator />
 					<DropdownMenuGroup>
-						<DropdownMenuItem>
+						<DropdownMenuItem className=" hover:cursor-pointer">
 							<Users />
 							<span>{t("profile.team")}</span>
 						</DropdownMenuItem>
 						<DropdownMenuSub>
-							<DropdownMenuSubTrigger>
+							<DropdownMenuSubTrigger className=" hover:cursor-pointer">
 								<span>{t("profile.addUser")}</span>
 							</DropdownMenuSubTrigger>
 							<DropdownMenuPortal>
 								<DropdownMenuSubContent>
-									<DropdownMenuItem>
-										<Mail />
-										<span>{t("profile.team")}</span>
+									<DropdownMenuItem
+										className="hover:cursor-pointer"
+										onClick={() => setOpenAddDialog(true)}
+									>
+										<UserRoundPlus />
+										<span>{t("profile.addMember")}</span>
+									</DropdownMenuItem>
+									<DropdownMenuSeparator />
+									<DropdownMenuItem
+										className=" hover:cursor-pointer"
+										onClick={() => setOpenDeleteDialog(true)}
+									>
+										<UserRoundX />
+										<span>{t("profile.deleteMember")}</span>
 									</DropdownMenuItem>
 									<DropdownMenuSeparator />
 									<DropdownMenuItem>
@@ -119,11 +135,11 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 						</DropdownMenuSub>
 					</DropdownMenuGroup>
 					<DropdownMenuSeparator />
-					<DropdownMenuItem>
+					<DropdownMenuItem className=" hover:cursor-pointer">
 						<Github />
 						<span>GitHub</span>
 					</DropdownMenuItem>
-					<DropdownMenuItem>
+					<DropdownMenuItem className=" hover:cursor-pointer">
 						<LifeBuoy />
 						<span>Support</span>
 					</DropdownMenuItem>
@@ -132,12 +148,23 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 						<span>API</span>
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
-					<DropdownMenuItem onClick={() => setShowLogoutDialog(true)}>
+					<DropdownMenuItem
+						className="hover:cursor-pointer"
+						onClick={() => setShowLogoutDialog(true)}
+					>
 						<LogOut />
 						<span>{t("profile.logout")}</span>
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
+
+			{/* Add Staff Dialog */}
+			<AddStaffDialog open={openAddDialog} onOpenChange={setOpenAddDialog} />
+
+			<DeleteStaffDialog
+				open={openDeleteDialog}
+				onOpenChange={setOpenDeleteDialog}
+			/>
 
 			{/* Logout Dialog */}
 			{showLogoutDialog && (
@@ -151,12 +178,17 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 						</p>
 						<div className="flex justify-center gap-4 pt-4">
 							<Button
+								className=" hover:cursor-pointer"
 								variant="outline"
 								onClick={() => setShowLogoutDialog(false)}
 							>
 								{t("profile.cancel")}
 							</Button>
-							<Button variant="destructive" onClick={handleLogout}>
+							<Button
+								className="hover:cursor-pointer"
+								variant="destructive"
+								onClick={handleLogout}
+							>
 								{t("profile.logout")}
 							</Button>
 						</div>

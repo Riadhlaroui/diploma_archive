@@ -1,68 +1,52 @@
+// app/dashboard/page.tsx
 "use client";
-import "@/lib/i18n"; // ✅ Forces i18n to initialize
 import { useTranslation } from "react-i18next";
-
-import { Search } from "lucide-react";
-import React, { useEffect } from "react";
-import pb from "@/lib/pocketbase";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Search } from "lucide-react";
+
+import { checkAuthOrRedirect } from "../../src/services/authService";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const Dashboard = () => {
-  const router = useRouter();
-  const { t, i18n } = useTranslation();
+export default function DashboardPage() {
+	const { t } = useTranslation();
 
-  const [checkingAuth, setCheckingAuth] = React.useState(true);
+	const [checkingAuth, setCheckingAuth] = useState(true);
+	const router = useRouter();
 
-  useEffect(() => {
-    if (!pb.authStore.isValid) {
-      router.replace("/sign-in");
-    } else {
-      setCheckingAuth(false);
-    }
-  }, [router]);
+	useEffect(() => {
+		try {
+			checkAuthOrRedirect(router);
+			setCheckingAuth(false);
+		} catch {}
+	}, [router]);
 
-  const switchLanguage = (lang: "en" | "fr") => {
-    i18n.changeLanguage(lang);
-    localStorage.setItem("lang", lang);
-  };
+	if (checkingAuth) return <Skeleton className="w-full h-full" />;
 
-  useEffect(() => {
-    const savedLang = localStorage.getItem("lang") as "en" | "fr" | null;
-    if (savedLang && savedLang !== i18n.language) {
-      i18n.changeLanguage(savedLang);
-    }
-  }, [i18n]);
+	return (
+		<div className="w-full flex flex-col items-center justify-center gap-4 p-4">
+			<div className="absolute top-0 right-0 p-4">
+				<ThemeToggle />
+			</div>
 
-  if (checkingAuth) return <Skeleton className="w-full h-full" />;
+			<h1 className="text-2xl font-bold">{t("dashboard.title")}</h1>
 
-  return (
-    <div className="w-full flex flex-col items-center justify-center gap-4 p-4 transition-colors duration-300">
+			<form className="flex items-center justify-center w-full">
+				<input
+					name="query"
+					placeholder={t("dashboard.searchPlaceholder")}
+					className="border p-3 w-[40%] h-[2.5rem] focus:outline-none"
+				/>
+				<button
+					type="submit"
+					className="border-b border-t border-r p-2 h-[2.5rem] rounded-r-lg"
+				>
+					<Search />
+				</button>
+			</form>
 
-      <div className="absolute top-0 right-0 p-4">
-        <ThemeToggle />
-      </div>
-
-      <h1 className="text-2xl font-bold">{t("dashboard.title")}</h1>
-
-      <form action="" className="flex items-center justify-center w-full">
-        <input
-          name="query"
-          placeholder={t("dashboard.searchPlaceholder")}
-          className="border p-3 w-[40%] h-[2.5rem] focus:outline-none"
-        />
-        <button
-          type="submit"
-          className="border-b border-t border-r p-2 h-[2.5rem] rounded-r-lg"
-        >
-          <Search />
-        </button>
-      </form>
-
-      <div className="w-full h-full border">{/* content area */}</div>
-    </div>
-  );
-};
-
-export default Dashboard;
+			<div className="w-full h-full border">{/* content */}</div>
+		</div>
+	);
+}
