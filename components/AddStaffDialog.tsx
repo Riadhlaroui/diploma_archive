@@ -2,13 +2,28 @@ import * as Dialog from "@radix-ui/react-dialog";
 import React, { useState } from "react";
 import { Eye, EyeOff, X } from "lucide-react";
 import { Separator } from "./ui/separator";
-
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from "./ui/select";
 type Props = {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 };
 
+import { createUser } from "./../app/src/services/userService";
+import { toast } from "sonner";
+
+import { useTranslation } from "react-i18next";
+
 const AddStaffDialog = ({ open, onOpenChange }: Props) => {
+	const { t } = useTranslation();
+
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 	const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
 		useState(false);
@@ -21,25 +36,120 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 		setIsConfirmPasswordVisible((prev) => !prev);
 	};
 
+	const calculatePasswordStrength = (password: string): number => {
+		let strength = 0;
+		if (password.length >= 8) strength++;
+		if (/[A-Z]/.test(password)) strength++;
+		if (/[a-z]/.test(password)) strength++;
+		if (/[0-9]/.test(password)) strength++;
+		if (/[^A-Za-z0-9]/.test(password)) strength++;
+		return strength;
+	};
+
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [phoneNumber, setPhoneNumber] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [strength, setStrength] = useState(0);
 	const [confirmPassword, setConfirmPassword] = useState("");
+	const [role, setRole] = useState<"admin" | "staff">("staff");
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		console.log("Form submitted");
+
+		if (password !== confirmPassword) {
+			toast.error(
+				<div className="flex items-center gap-2">
+					<div>
+						<div className="font-semibold">
+							{t("addStaffDialog.errors.mismatchTitle")}
+						</div>
+						<div className="text-sm ">
+							{t("addStaffDialog.errors.mismatchDesc")}
+						</div>
+					</div>
+				</div>
+			);
+			return;
+		}
+
+		if (
+			!firstName ||
+			!lastName ||
+			!phoneNumber ||
+			!email ||
+			!password ||
+			!confirmPassword ||
+			!role
+		) {
+			toast.error(
+				<div className="flex items-center gap-2">
+					<div>
+						<div className="font-semibold">
+							{t("addStaffDialog.errors.missingTitle")}
+						</div>
+						<div className="text-sm">
+							{t("addStaffDialog.errors.missingDesc")}
+						</div>
+					</div>
+				</div>
+			);
+			return;
+		}
+
+		if (strength < 3) {
+			toast.error(
+				<div className="flex items-center gap-2">
+					<div>
+						<div className="font-semibold">
+							{t("addStaffDialog.errors.weakTitle")}
+						</div>
+						<div className="text-sm ">
+							{t("addStaffDialog.errors.weakDesc")}
+						</div>
+					</div>
+				</div>
+			);
+			return;
+		}
+
+		console.log("Form submitted:", {
+			email,
+			password,
+			firstName,
+			lastName,
+			phone: phoneNumber,
+			role,
+		});
+
+		try {
+			await createUser({
+				email,
+				password,
+				firstName,
+				lastName,
+				phone: phoneNumber,
+				role,
+			});
+			toast.success(t("addStaffDialog.userCreatedSuccess"));
+			onOpenChange(false);
+		} catch (error) {
+			console.error("Error creating user:", error);
+			toast.error(t("addStaffDialog.errors.userCreatedError"));
+		}
 	};
 
 	return (
 		<Dialog.Root open={open} onOpenChange={onOpenChange}>
 			<Dialog.Portal>
 				<Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
-				<Dialog.Content className="w-full max-w-lg fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-none shadow-lg">
+				<Dialog.Content
+					className="w-full max-w-lg fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-none shadow-lg"
+					onPointerDownOutside={(e) => e.preventDefault()}
+				>
 					<Dialog.Title className="text-lg font-semibold">
-						Add Staff Member
+						{t("addStaffDialog.title")}
 					</Dialog.Title>
 
 					<Dialog.Close className="absolute top-2 right-2 text-gray-500 hover:text-black">
@@ -59,7 +169,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 										onChange={(e) => setFirstName(e.target.value)}
 									/>
 									<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
-										First name
+										{t("addStaffDialog.firstName")}
 										<span className="text-[#D81212]">*</span>
 									</label>
 								</div>
@@ -72,7 +182,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 										onChange={(e) => setLastName(e.target.value)}
 									/>
 									<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
-										Last name
+										{t("addStaffDialog.lastName")}
 										<span className="text-[#D81212]">*</span>
 									</label>
 								</div>
@@ -86,7 +196,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 									onChange={(e) => setPhoneNumber(e.target.value)}
 								/>
 								<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
-									Phone Number
+									{t("addStaffDialog.phoneNumber")}
 									<span className="text-[#D81212]">*</span>
 								</label>
 							</div>
@@ -101,21 +211,36 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 									onChange={(e) => setEmail(e.target.value)}
 								/>
 								<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
-									Email
+									{t("addStaffDialog.email")}
 									<span className="text-[#D81212]">*</span>
 								</label>
 							</div>
 
 							<div className="relative">
+								<meter
+									min="0"
+									max="5"
+									value={strength}
+									low={2}
+									high={4}
+									optimum={5}
+									className="absolute top-1 right-3 w-[60%] h-3 rounded-full bg-gray-200"
+								></meter>
+
 								<input
 									type={isPasswordVisible ? "text" : "password"}
 									className="peer w-full bg-[#E3E8ED] h-[4rem] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none placeholder-transparent"
-									onChange={(e) => setPassword(e.target.value)}
+									onChange={(e) => {
+										const value = e.target.value;
+										setPassword(value);
+										setStrength(calculatePasswordStrength(value));
+									}}
 								/>
 								<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
-									Password
+									{t("addStaffDialog.password")}{" "}
 									<span className="text-[#D81212]">*</span>
 								</label>
+
 								<button
 									type="button"
 									onClick={togglePasswordVisibility}
@@ -136,7 +261,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 									onChange={(e) => setConfirmPassword(e.target.value)}
 								/>
 								<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
-									Confirm password
+									{t("addStaffDialog.confirmPassword")}
 									<span className="text-[#D81212]">*</span>
 								</label>
 								<button
@@ -151,6 +276,30 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 									)}
 								</button>
 							</div>
+
+							<div>
+								<Select
+									value={role}
+									onValueChange={(value) => setRole(value as "admin" | "staff")}
+								>
+									<SelectTrigger className="w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px]  focus:outline-none">
+										<SelectValue
+											placeholder={t("addStaffDialog.selectRolePlaceholder")}
+										/>
+									</SelectTrigger>
+									<SelectContent>
+										<SelectGroup>
+											<SelectLabel>{t("addStaffDialog.roleLabel")}</SelectLabel>
+											<SelectItem value="staff">
+												{t("addStaffDialog.staffRole")}
+											</SelectItem>
+											<SelectItem value="admin">
+												{t("addStaffDialog.adminRole")}
+											</SelectItem>
+										</SelectGroup>
+									</SelectContent>
+								</Select>
+							</div>
 						</div>
 
 						<Separator />
@@ -161,14 +310,14 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 									type="button"
 									className="bg-gray-300 text-black px-4 py-2 rounded-[3px] hover:cursor-pointer"
 								>
-									Cancel
+									{t("addStaffDialog.cancelButton")}
 								</button>
 							</Dialog.Close>
 							<button
 								type="submit"
 								className="bg-black text-white px-4 py-2 rounded-[3px] hover:cursor-pointer"
 							>
-								Submit
+								{t("addStaffDialog.submitButton")}
 							</button>
 						</div>
 					</form>

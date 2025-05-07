@@ -111,41 +111,44 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
 					<DropdownMenuSeparator />
-					<DropdownMenuGroup>
-						<DropdownMenuItem className=" hover:cursor-pointer">
-							<Users />
-							<span>{t("profile.team")}</span>
-						</DropdownMenuItem>
-						<DropdownMenuSub>
-							<DropdownMenuSubTrigger className=" hover:cursor-pointer">
-								<span>{t("profile.addUser")}</span>
-							</DropdownMenuSubTrigger>
-							<DropdownMenuPortal>
-								<DropdownMenuSubContent>
-									<DropdownMenuItem
-										className="hover:cursor-pointer"
-										onClick={() => setOpenAddDialog(true)}
-									>
-										<UserRoundPlus />
-										<span>{t("profile.addMember")}</span>
-									</DropdownMenuItem>
-									<DropdownMenuSeparator />
-									<DropdownMenuItem
-										className=" hover:cursor-pointer"
-										onClick={() => setOpenDeleteDialog(true)}
-									>
-										<UserRoundX />
-										<span>{t("profile.deleteMember")}</span>
-									</DropdownMenuItem>
-									<DropdownMenuSeparator />
-									<DropdownMenuItem>
-										<PlusCircle />
-										<span>More...</span>
-									</DropdownMenuItem>
-								</DropdownMenuSubContent>
-							</DropdownMenuPortal>
-						</DropdownMenuSub>
-					</DropdownMenuGroup>
+					{user?.role !== "staff" && (
+						<DropdownMenuGroup>
+							<DropdownMenuItem className=" hover:cursor-pointer">
+								<Users />
+								<span>{t("profile.team")}</span>
+							</DropdownMenuItem>
+							<DropdownMenuSub>
+								<DropdownMenuSubTrigger className=" hover:cursor-pointer">
+									<span>{t("profile.addUser")}</span>
+								</DropdownMenuSubTrigger>
+								<DropdownMenuPortal>
+									<DropdownMenuSubContent>
+										<DropdownMenuItem
+											className="hover:cursor-pointer"
+											onClick={() => setOpenAddDialog(true)}
+										>
+											<UserRoundPlus />
+											<span>{t("profile.addMember")}</span>
+										</DropdownMenuItem>
+										<DropdownMenuSeparator />
+										<DropdownMenuItem
+											className=" hover:cursor-pointer"
+											onClick={() => setOpenDeleteDialog(true)}
+										>
+											<UserRoundX />
+											<span>{t("profile.deleteMember")}</span>
+										</DropdownMenuItem>
+										<DropdownMenuSeparator />
+										<DropdownMenuItem>
+											<PlusCircle />
+											<span>More...</span>
+										</DropdownMenuItem>
+									</DropdownMenuSubContent>
+								</DropdownMenuPortal>
+							</DropdownMenuSub>
+						</DropdownMenuGroup>
+					)}
+
 					<DropdownMenuSeparator />
 					<DropdownMenuItem className=" hover:cursor-pointer">
 						<Github />
