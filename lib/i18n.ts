@@ -61,6 +61,34 @@ i18n
 						disconnected: "Disconnected from server",
 						checking: "Checking server status...",
 					},
+
+					addStaffDialog: {
+						triggerButton: "Add Staff",
+						title: "Add New Staff",
+						firstName: "First Name",
+						lastName: "Last Name",
+						phoneNumber: "Phone Number",
+						email: "Email",
+						password: "Password",
+						confirmPassword: "Confirm Password",
+						roleLabel: "Role",
+						selectRolePlaceholder: "Select a role",
+						staffRole: "Staff",
+						adminRole: "Admin",
+						submitButton: "Submit",
+						errors: {
+							mismatchTitle: "Passwords do not match",
+							mismatchDesc: "Please make sure both passwords are the same.",
+							missingTitle: "Missing Required Fields",
+							missingDesc: "Please fill in all required fields marked with *.",
+							weakTitle: "Weak Password",
+							weakDesc:
+								"Password must be at least 8 characters long, include an uppercase letter and a number or special character.",
+							userCreatedError: "Failed to create user. Please try again.",
+						},
+						cancelButton: "Cancel",
+						userCreatedSuccess: "User successfully created!",
+					},
 				},
 			},
 			fr: {
@@ -112,6 +140,37 @@ i18n
 						connected: "Connecté au serveur",
 						disconnected: "Déconnecté du serveur",
 						checking: "Vérification du statut du serveur...",
+					},
+
+					addStaffDialog: {
+						triggerButton: "Ajouter un membre",
+						title: "Ajouter un nouveau membre",
+						firstName: "Prénom",
+						lastName: "Nom",
+						phoneNumber: "Numéro de téléphone",
+						email: "E-mail",
+						password: "Mot de passe",
+						confirmPassword: "Confirmer le mot de passe",
+						roleLabel: "Rôle",
+						selectRolePlaceholder: "Sélectionner un rôle",
+						staffRole: "Personnel",
+						adminRole: "Administrateur",
+						submitButton: "Soumettre",
+						errors: {
+							mismatchTitle: "Les mots de passe ne correspondent pas",
+							mismatchDesc:
+								"Veuillez vous assurer que les deux mots de passe sont identiques.",
+							missingTitle: "Champs requis manquants",
+							missingDesc:
+								"Veuillez remplir tous les champs obligatoires marqués d’un *.",
+							weakTitle: "Mot de passe faible",
+							weakDesc:
+								"Le mot de passe doit comporter au moins 8 caractères, inclure une majuscule et un chiffre ou un caractère spécial.",
+							userCreatedError:
+								"Échec de la création de l'utilisateur. Veuillez réessayer.",
+						},
+						cancelButton: "Annuler",
+						userCreatedSuccess: "Utilisateur créé avec succès !",
 					},
 				},
 			},
