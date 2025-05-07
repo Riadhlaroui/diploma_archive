@@ -21,8 +21,12 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 		setIsConfirmPasswordVisible((prev) => !prev);
 	};
 
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
+	const [phoneNumber, setPhoneNumber] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -52,6 +56,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 										type="text"
 										className="peer w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none"
 										placeholder=""
+										onChange={(e) => setFirstName(e.target.value)}
 									/>
 									<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
 										First name
@@ -64,6 +69,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 										type="text"
 										className="peer w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none"
 										placeholder=""
+										onChange={(e) => setLastName(e.target.value)}
 									/>
 									<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
 										Last name
@@ -77,6 +83,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 									type="number"
 									className="peer w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none"
 									placeholder=""
+									onChange={(e) => setPhoneNumber(e.target.value)}
 								/>
 								<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
 									Phone Number
@@ -126,6 +133,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 								<input
 									type={isConfirmPasswordVisible ? "text" : "password"}
 									className="peer w-full bg-[#E3E8ED] h-[4rem] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none placeholder-transparent"
+									onChange={(e) => setConfirmPassword(e.target.value)}
 								/>
 								<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
 									Confirm password
@@ -151,7 +159,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 							<Dialog.Close asChild>
 								<button
 									type="button"
-									className="bg-gray-300 text-black px-4 py-2 rounded-[3px] hover:bg-gray-400 hover:cursor-pointer"
+									className="bg-gray-300 text-black px-4 py-2 rounded-[3px] hover:cursor-pointer"
 								>
 									Cancel
 								</button>
