@@ -8,17 +8,24 @@ type createUserInput = {
 	lastName: string;
 	email: string;
 	password: string;
-	passwordConfirm?: string; // ✅ Add this field
+	passwordConfirm?: string;
 	role: "admin" | "staff";
 	phone: string;
+};
+
+export type InboxRecord = {
+	id: string;
+	action: string;
+	userEmail: string;
+	targetType: string;
+	targetId: string;
+	timestamp: string;
 };
 
 export async function getCurrentUser(): Promise<User | null> {
 	try {
 		const record = pb.authStore.model;
 		if (!record) return null;
-
-		console.log("User record:", record);
 
 		return {
 			id: record.id,
@@ -42,7 +49,22 @@ export async function createUser(data: createUserInput): Promise<User | null> {
 			passwordConfirm: data.password,
 		});
 
-		console.log("User record:", record);
+		const currentUser = pb.authStore.model;
+
+		if (currentUser) {
+			await pb.collection("Archive_inbox").create({
+				action: "create_user",
+				userEmail: currentUser.email,
+				targetType: "user",
+				targetId: record.id,
+				timestamp: new Date().toISOString(),
+				details: {
+					createdUserEmail: record.email,
+					role: record.role,
+				},
+			});
+		}
+
 		return {
 			id: record.id,
 			firstName: record.firstName,
@@ -53,9 +75,28 @@ export async function createUser(data: createUserInput): Promise<User | null> {
 			createdAt: new Date(record.created),
 			updatedAt: new Date(record.updated),
 		};
-	} catch (error) {
-		console.error("Error response from PocketBase:", error);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	} catch (error: any) {
+		console.error("Error response from PocketBase:", error?.response || error);
 		throw error;
+	}
+}
+
+export async function getInbox(page = 1, perPage = 5) {
+	try {
+		const result = await pb
+			.collection("Archive_inbox")
+			.getList<InboxRecord>(page, perPage, { sort: "-timestamp" });
+		return result;
+	} catch (error) {
+		console.error("Failed to fetch audit logs:", error);
+		return {
+			items: [],
+			page: 1,
+			perPage,
+			totalPages: 1,
+			totalItems: 0,
+		};
 	}
 }
 

@@ -3,11 +3,9 @@ export interface Student {
 	firstName: string;
 	lastName: string;
 	enrollmentYear: number;
-	cycle: string; // e.g., "Undergraduate", "Master"
-	level: string; // e.g., "L1", "M2"
-	field: string; // e.g., "Engineering"
-	major: string; // e.g., "Computer Science"
-	specialization: string; // e.g., "AI & ML"
+	faculty: string; // e.g., "Computer Science"
+	diplomaType: string; // e.g., "Bachelor of Science"
+	year: Date;
 	createdAt: Date;
 	updatedAt: Date;
 }

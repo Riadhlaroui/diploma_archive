@@ -85,9 +85,22 @@ i18n
 							weakDesc:
 								"Password must be at least 8 characters long, include an uppercase letter and a number or special character.",
 							userCreatedError: "Failed to create user. Please try again.",
+							emailExistsTitle: "Email Already Exists",
+							emailExistsDesc:
+								"The email you entered is already registered. Please try another.",
 						},
 						cancelButton: "Cancel",
 						userCreatedSuccess: "User successfully created!",
+					},
+
+					inbox: {
+						title: "Inbox",
+						logs: "Logs",
+						fetchError: {
+							title: "Error fetching logs",
+							description:
+								"An error occurred while fetching the logs. Please try again later.",
+						},
 					},
 				},
 			},
@@ -168,6 +181,9 @@ i18n
 								"Le mot de passe doit comporter au moins 8 caractères, inclure une majuscule et un chiffre ou un caractère spécial.",
 							userCreatedError:
 								"Échec de la création de l'utilisateur. Veuillez réessayer.",
+							emailExistsTitle: "Email déjà utilisé",
+							emailExistsDesc:
+								"L'adresse email saisie est déjà enregistrée. Veuillez en essayer une autre.",
 						},
 						cancelButton: "Annuler",
 						userCreatedSuccess: "Utilisateur créé avec succès !",
