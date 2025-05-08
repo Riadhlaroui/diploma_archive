@@ -63,8 +63,6 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 	if (!isClient) return null; // Return nothing during SSR to prevent hydration issues
 	if (!user) return <p className="w-full">Not logged in</p>;
 
-	console.log("User info:", user);
-
 	const handleLogout = () => {
 		console.log("User logged out.");
 		clearAurthStore();

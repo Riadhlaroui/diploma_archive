@@ -62,9 +62,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 			toast.error(
 				<div className="flex items-center gap-2">
 					<div>
-						<div className="font-semibold">
-							{t("addStaffDialog.errors.mismatchTitle")}
-						</div>
+						<div className="">{t("addStaffDialog.errors.mismatchTitle")}</div>
 						<div className="text-sm ">
 							{t("addStaffDialog.errors.mismatchDesc")}
 						</div>
@@ -134,9 +132,26 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 			});
 			toast.success(t("addStaffDialog.userCreatedSuccess"));
 			onOpenChange(false);
-		} catch (error) {
-			console.error("Error creating user:", error);
-			toast.error(t("addStaffDialog.errors.userCreatedError"));
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (error: any) {
+			if (error.response?.status === 400) {
+				// Email already exists
+				toast.error(
+					<div className="flex items-center gap-2">
+						<div>
+							<div className="font-semibold">
+								{t("addStaffDialog.errors.emailExistsTitle")}
+							</div>
+							<div className="text-sm">
+								{t("addStaffDialog.errors.emailExistsDesc")}
+							</div>
+						</div>
+					</div>
+				);
+			} else {
+				console.error("Error creating user:", error);
+				toast.error(t("addStaffDialog.errors.userCreatedError"));
+			}
 		}
 	};
 
@@ -152,7 +167,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 						{t("addStaffDialog.title")}
 					</Dialog.Title>
 
-					<Dialog.Close className="absolute top-2 right-2 text-gray-500 hover:text-black">
+					<Dialog.Close className="absolute top-2 right-2 text-gray-500 hover:text-black hover:cursor-pointer">
 						<X />
 					</Dialog.Close>
 
