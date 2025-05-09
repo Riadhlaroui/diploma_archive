@@ -1,4 +1,6 @@
 "use client";
+import "@/lib/i18n"; // ✅ Forces i18n to initialize
+import { useTranslation } from "react-i18next";
 
 import { Search, Plus } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -11,7 +13,9 @@ import StudentFormDialog from "@/components/StudentFormDialog";
 
 const Dashboard = () => {
   const router = useRouter();
+
   const [showAddForm, setShowAddForm] = useState(false);
+  const { t, i18n } = useTranslation();
 
   const [checkingAuth, setCheckingAuth] = React.useState(true);
 
@@ -22,8 +26,21 @@ const Dashboard = () => {
       setCheckingAuth(false);
     }
   }, [router]);
+  
+    const switchLanguage = (lang: "en" | "fr") => {
+    i18n.changeLanguage(lang);
+    localStorage.setItem("lang", lang);
+  };
+
+  useEffect(() => {
+    const savedLang = localStorage.getItem("lang") as "en" | "fr" | null;
+    if (savedLang && savedLang !== i18n.language) {
+      i18n.changeLanguage(savedLang);
+    }
+  }, [i18n]);
 
   if (checkingAuth) return <Skeleton className="w-full h-full" />;
+
 
   return (
     <div className="w-full flex flex-col items-center justify-center gap-2 transition-colors duration-300">
@@ -57,7 +74,6 @@ const Dashboard = () => {
         onClose={() => setShowAddForm(false)}
       />
       <div className="w-full h-full border"></div>
-    </div>
   );
 };
 
