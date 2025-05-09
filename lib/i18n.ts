@@ -93,14 +93,24 @@ i18n
 						userCreatedSuccess: "User successfully created!",
 					},
 
-					inbox: {
-						title: "Inbox",
-						logs: "Logs",
-						fetchError: {
-							title: "Error fetching logs",
-							description:
-								"An error occurred while fetching the logs. Please try again later.",
-						},
+					auditLogs: {
+						title: "Audit Logs",
+						action: "Action",
+						userId: "User ID",
+						targetType: "Target Type",
+						targetId: "Target ID",
+						timestamp: "Timestamp",
+						copy: "Copy",
+					},
+					pagination: {
+						previous: "Previous",
+						next: "Next",
+						pageOf: "Page {{page}} of {{totalPages}}",
+					},
+					actions: {
+						create_user: "Create User",
+						delete_user: "Delete User",
+						update_user: "Update User",
 					},
 				},
 			},
@@ -187,6 +197,26 @@ i18n
 						},
 						cancelButton: "Annuler",
 						userCreatedSuccess: "Utilisateur créé avec succès !",
+					},
+
+					auditLogs: {
+						title: "Journaux d'audit",
+						action: "Action",
+						userId: "ID utilisateur",
+						targetType: "Type de cible",
+						targetId: "ID de la cible",
+						timestamp: "Horodatage",
+						copy: "Copier",
+					},
+					pagination: {
+						previous: "Précédent",
+						next: "Suivant",
+						pageOf: "Page {{page}} sur {{totalPages}}",
+					},
+					actions: {
+						create_user: "Créer un utilisateur",
+						delete_user: "Supprimer un utilisateur",
+						update_user: "Mettre à jour l'utilisateur",
 					},
 				},
 			},
