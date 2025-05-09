@@ -101,6 +101,9 @@ i18n
 						targetId: "Target ID",
 						timestamp: "Timestamp",
 						copy: "Copy",
+						loading: "Loading audit logs...",
+						fetchError: "An error occurred while fetching audit logs.",
+						noLogs: "No logs available.",
 					},
 					pagination: {
 						previous: "Previous",
@@ -207,6 +210,10 @@ i18n
 						targetId: "ID de la cible",
 						timestamp: "Horodatage",
 						copy: "Copier",
+						loading: "Chargement des journaux d'audit...",
+						fetchError:
+							"Une erreur est survenue lors du chargement des journaux d'audit.",
+						noLogs: "Aucun journal disponible.",
 					},
 					pagination: {
 						previous: "Précédent",
