@@ -24,8 +24,6 @@ const DeleteStaffDialog = ({ open, onOpenChange }: Props) => {
 		}
 	}, [open]);
 
-	console.log("staffList", staffList);
-
 	const toggleCheck = (id: string) => {
 		setSelectedIds((prev) =>
 			prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
