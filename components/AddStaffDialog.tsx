@@ -167,7 +167,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 						{t("addStaffDialog.title")}
 					</Dialog.Title>
 
-					<Dialog.Close className="absolute top-2 right-2 text-gray-500 hover:text-black hover:cursor-pointer">
+					<Dialog.Close className="absolute top-2 right-2 text-gray-500 hover:text-black hover:cursor-pointer transition-colors duration-200">
 						<X />
 					</Dialog.Close>
 
@@ -323,14 +323,14 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 							<Dialog.Close asChild>
 								<button
 									type="button"
-									className="bg-gray-300 text-black px-4 py-2 rounded-[3px] hover:cursor-pointer"
+									className="bg-gray-300 text-black px-4 py-2 rounded-[3px] hover:bg-gray-400 hover:cursor-pointer transition-colors duration-200"
 								>
 									{t("addStaffDialog.cancelButton")}
 								</button>
 							</Dialog.Close>
 							<button
 								type="submit"
-								className="bg-black text-white px-4 py-2 rounded-[3px] hover:cursor-pointer"
+								className="bg-black text-white px-4 py-2 rounded-[3px] hover:bg-gray-900 hover:cursor-pointer transition-colors duration-200"
 							>
 								{t("addStaffDialog.submitButton")}
 							</button>

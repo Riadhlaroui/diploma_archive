@@ -1,7 +1,6 @@
 "use client";
 
-import { RefreshCcw, ClipboardCopyIcon, Check, Copy } from "lucide-react";
-
+import { RefreshCcw, Check, Copy } from "lucide-react";
 import {
 	Table,
 	TableBody,
@@ -15,12 +14,14 @@ import React, { useEffect, useState } from "react";
 import { getInbox, InboxRecord } from "@/app/src/services/userService";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 const AuditLogTable = () => {
+	const { t } = useTranslation();
+
 	const [page, setPage] = useState(1);
 	const [logs, setLogs] = useState<InboxRecord[]>([]);
 	const [totalPages, setTotalPages] = useState(1);
-
 	const [copiedId, setCopiedId] = useState("");
 
 	const fetchData = async () => {
@@ -35,11 +36,11 @@ const AuditLogTable = () => {
 
 	return (
 		<div className="flex flex-col h-full mt-10 p-6 rounded-xl shadow-lg">
-			<div className="flex gap-2  mb-4">
-				<h3 className="text-2xl font-semibold mb-4">Audit Logs</h3>
+			<div className="flex gap-2 mb-4">
+				<h3 className="text-2xl font-semibold mb-4">{t("auditLogs.title")}</h3>
 				<Button
 					onClick={fetchData}
-					className="w-fit hover:cursor-pointer bg-transparent  hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2"
+					className="w-fit hover:cursor-pointer bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2"
 				>
 					<RefreshCcw className="text-black dark:text-white" />
 				</Button>
@@ -48,11 +49,11 @@ const AuditLogTable = () => {
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
 					<TableRow>
-						<TableHead>Action</TableHead>
-						<TableHead>User ID</TableHead>
-						<TableHead>Target Type</TableHead>
-						<TableHead>Target ID</TableHead>
-						<TableHead>Timestamp</TableHead>
+						<TableHead>{t("auditLogs.action")}</TableHead>
+						<TableHead>{t("auditLogs.userId")}</TableHead>
+						<TableHead>{t("auditLogs.targetType")}</TableHead>
+						<TableHead>{t("auditLogs.targetId")}</TableHead>
+						<TableHead>{t("auditLogs.timestamp")}</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
@@ -71,7 +72,9 @@ const AuditLogTable = () => {
 											: "bg-gray-100 text-gray-800"
 									)}
 								>
-									{log.action.replace(/_/g, " ")}
+									{t(`actions.${log.action}`, {
+										defaultValue: log.action.replace(/_/g, " "),
+									})}
 								</span>
 							</TableCell>
 
@@ -82,6 +85,7 @@ const AuditLogTable = () => {
 							</TableCell>
 
 							<TableCell>{log.targetType}</TableCell>
+
 							<TableCell>
 								<span className="inline-flex items-center gap-2 rounded-full bg-gray-200 px-3 py-1 text-sm font-medium">
 									{log.targetId}
@@ -94,7 +98,7 @@ const AuditLogTable = () => {
 												setCopiedId(log.targetId);
 												setTimeout(() => setCopiedId(""), 1500);
 											}}
-											title="Copy"
+											title={t("auditLogs.copy")}
 											className="hover:text-blue-500"
 										>
 											<Copy size={14} />
@@ -116,17 +120,17 @@ const AuditLogTable = () => {
 									onClick={() => setPage((p) => Math.max(1, p - 1))}
 									disabled={page === 1}
 								>
-									Previous
+									{t("pagination.previous")}
 								</Button>
 								<span className="text-sm">
-									Page {page} of {totalPages}
+									{t("pagination.pageOf", { page, totalPages })}
 								</span>
 								<Button
 									variant="outline"
 									onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
 									disabled={page === totalPages}
 								>
-									Next
+									{t("pagination.next")}
 								</Button>
 							</div>
 						</TableCell>

@@ -82,11 +82,11 @@ export async function createUser(data: createUserInput): Promise<User | null> {
 	}
 }
 
-export async function getInbox(page = 1, perPage = 5) {
+export async function getInbox(page = 1, perPage = 16) {
 	try {
 		const result = await pb
 			.collection("Archive_inbox")
-			.getList<InboxRecord>(page, perPage, { sort: "-timestamp" });
+			.getList<InboxRecord>(page, perPage, { sort: "-created" });
 		return result;
 	} catch (error) {
 		console.error("Failed to fetch audit logs:", error);
@@ -97,6 +97,30 @@ export async function getInbox(page = 1, perPage = 5) {
 			totalPages: 1,
 			totalItems: 0,
 		};
+	}
+}
+
+export async function getUsers() {
+	try {
+		const records = await pb.collection("Archive_users").getFullList({
+			sort: "-created",
+		});
+
+		return records.map((record) => ({
+			id: record.id,
+			firstName: record.firstName,
+			lastName: record.lastName,
+			email: record.email,
+			phone: record.phone,
+			role: record.role,
+			createdAt: new Date(record.created),
+			updatedAt: new Date(record.updated),
+		}));
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	} catch (error: any) {
+		console.error("Error response from PocketBase:", error?.response || error);
+		throw error;
 	}
 }
 
