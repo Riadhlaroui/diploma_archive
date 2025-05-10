@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 
 import { checkAuthOrRedirect } from "../../src/services/authService";
-import { ThemeToggle } from "@/components/theme-toggle";
+
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function DashboardPage() {
@@ -26,10 +26,6 @@ export default function DashboardPage() {
 
 	return (
 		<div className="w-full flex flex-col items-center justify-center gap-4 p-4">
-			<div className="absolute top-0 right-0 p-4">
-				<ThemeToggle />
-			</div>
-
 			<h1 className="text-2xl font-bold">{t("dashboard.title")}</h1>
 
 			<form className="flex items-center justify-center w-full">

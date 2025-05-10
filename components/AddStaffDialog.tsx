@@ -150,9 +150,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 					<X />
 				</button>
 
-				<h2 className="text-xl font-semibold mb-6">
-					{t("addStaffDialog.title")}
-				</h2>
+				<h2 className="text-xl font-semibold">{t("addStaffDialog.title")}</h2>
 
 				<form onSubmit={handleSubmit} className="space-y-4 mt-2">
 					{/* Your form inputs here */}
