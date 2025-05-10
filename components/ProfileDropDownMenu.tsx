@@ -113,7 +113,10 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 					<DropdownMenuSeparator />
 					{user?.role !== "staff" && (
 						<DropdownMenuGroup>
-							<DropdownMenuItem className=" hover:cursor-pointer">
+							<DropdownMenuItem
+								className=" hover:cursor-pointer"
+								onClick={() => router.replace("/team")}
+							>
 								<Users />
 								<span>{t("profile.team")}</span>
 							</DropdownMenuItem>

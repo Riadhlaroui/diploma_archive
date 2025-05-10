@@ -227,6 +227,114 @@ i18n
 					},
 				},
 			},
+			ar: {
+				translation: {
+					welcome: "مرحبًا بعودتك!",
+					email: "البريد الإلكتروني",
+					password: "كلمة المرور",
+					forgotPassword: "هل نسيت كلمة المرور؟",
+					"login.button": "تسجيل الدخول",
+					"login.success": "تم تسجيل الدخول بنجاح",
+					"login.welcome": "أهلًا وسهلًا!",
+					"login.failed": "فشل تسجيل الدخول",
+					"login.incorrect": "بيانات الدخول غير صحيحة",
+					noAccount: "ليس لديك حساب؟",
+					signUp: "سجّل الآن",
+					language: "اللغة",
+
+					dashboard: {
+						title: "لوحة التحكم",
+						searchPlaceholder: "ابحث...",
+					},
+
+					settings: {
+						title: "صفحة الإعدادات",
+					},
+
+					profile: {
+						myAccount: "حسابي",
+						profile: "الملف الشخصي",
+						settings: "الإعدادات",
+						team: "إدارة الموظفين",
+						addUser: "إضافة مستخدم",
+						addMember: "إضافة موظف جديد",
+						deleteMember: "حذف موظف",
+						logout: "تسجيل الخروج",
+						logoutConfirm: "تأكيد تسجيل الخروج",
+						logoutMessage: "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+						cancel: "إلغاء",
+					},
+
+					sidebar: {
+						home: "الرئيسية",
+						inbox: "الوارد",
+						search: "بحث",
+						settings: "الإعدادات",
+						students: "الطلاب",
+						application: "التطبيق",
+						manageStudents: "إدارة الطلاب",
+						connected: "متصل بالخادم",
+						disconnected: "غير متصل بالخادم",
+						checking: "جارٍ التحقق من حالة الخادم...",
+					},
+
+					addStaffDialog: {
+						triggerButton: "إضافة موظف",
+						title: "إضافة موظف جديد",
+						firstName: "الاسم الأول",
+						lastName: "اسم العائلة",
+						phoneNumber: "رقم الهاتف",
+						email: "البريد الإلكتروني",
+						password: "كلمة المرور",
+						confirmPassword: "تأكيد كلمة المرور",
+						roleLabel: "الدور",
+						selectRolePlaceholder: "اختر الدور",
+						staffRole: "موظف",
+						adminRole: "مسؤول",
+						submitButton: "إرسال",
+						errors: {
+							mismatchTitle: "كلمتا المرور غير متطابقتين",
+							mismatchDesc: "يرجى التأكد من تطابق كلمتي المرور.",
+							missingTitle: "حقول مطلوبة مفقودة",
+							missingDesc: "يرجى ملء جميع الحقول الإلزامية المحددة بـ *.",
+							weakTitle: "كلمة المرور ضعيفة",
+							weakDesc:
+								"يجب أن تكون كلمة المرور 8 أحرف على الأقل، وتحتوي على حرف كبير ورقم أو رمز خاص.",
+							userCreatedError: "فشل في إنشاء المستخدم. حاول مرة أخرى.",
+							emailExistsTitle: "البريد الإلكتروني مستخدم",
+							emailExistsDesc:
+								"البريد الإلكتروني المدخل مستخدم بالفعل. جرب بريدًا آخر.",
+						},
+						cancelButton: "إلغاء",
+						userCreatedSuccess: "تم إنشاء المستخدم بنجاح!",
+					},
+
+					auditLogs: {
+						title: "سجلات التدقيق",
+						action: "الإجراء",
+						userId: "معرّف المستخدم",
+						targetType: "نوع الهدف",
+						targetId: "معرّف الهدف",
+						timestamp: "الطابع الزمني",
+						copy: "نسخ",
+						loading: "جارٍ تحميل السجلات...",
+						fetchError: "حدث خطأ أثناء جلب سجلات التدقيق.",
+						noLogs: "لا توجد سجلات متاحة.",
+					},
+
+					pagination: {
+						previous: "السابق",
+						next: "التالي",
+						pageOf: "الصفحة {{page}} من {{totalPages}}",
+					},
+
+					actions: {
+						create_user: "إنشاء مستخدم",
+						delete_user: "حذف مستخدم",
+						update_user: "تحديث مستخدم",
+					},
+				},
+			},
 		},
 	});
 

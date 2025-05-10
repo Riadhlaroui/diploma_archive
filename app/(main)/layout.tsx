@@ -3,7 +3,6 @@ import { cookies } from "next/headers";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "sonner";
 
 export default async function MainLayout({
 	children,
@@ -25,7 +24,6 @@ export default async function MainLayout({
 					disableTransitionOnChange
 				>
 					{children}
-					<Toaster richColors />
 				</ThemeProvider>
 			</main>
 		</SidebarProvider>
