@@ -104,7 +104,7 @@ export default function SignIn() {
 						<div className="relative ">
 							<input
 								type="email"
-								className="peer w-full h-[4rem] bg-[#D7DDE3] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-md px-3 pt-6 pb-2 focus:outline-none"
+								className="peer w-full h-[4rem] bg-[#D7DDE3] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3.5px] px-3 pt-6 pb-2 focus:outline-none"
 								placeholder=""
 								onChange={(e) => setEmail(e.target.value)}
 							/>
@@ -117,7 +117,7 @@ export default function SignIn() {
 						<div className="relative w-[25rem]">
 							<input
 								type={isPasswordVisible ? "text" : "password"}
-								className="peer w-full bg-[#D7DDE3] h-[4rem] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-md px-3 pt-6 pb-2 focus:outline-none placeholder-transparent"
+								className="peer w-full bg-[#D7DDE3] h-[4rem] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3.5px] px-3 pt-6 pb-2 focus:outline-none placeholder-transparent"
 								onChange={(e) => setPassword(e.target.value)}
 							/>
 							<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
@@ -150,7 +150,7 @@ export default function SignIn() {
 
 					<span className="text-center mt-3">
 						{t("noAccount")}{" "}
-						<Link href="/sign-up" className="text-blue-500 hover:underline">
+						<Link href="#" className="text-blue-500 hover:underline">
 							{t("signUp")}
 						</Link>
 					</span>
