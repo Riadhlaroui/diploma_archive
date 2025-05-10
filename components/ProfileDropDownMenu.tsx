@@ -40,8 +40,10 @@ import { User } from "@/app/src/core/domain/entities/User";
 
 export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 	const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+
 	const [openAddDialog, setOpenAddDialog] = useState(false);
 	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
 	const [isClient, setIsClient] = useState(false);
 
 	const [user, setUser] = useState<User | null>(null);
@@ -174,6 +176,7 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 			{/* Add Staff Dialog */}
 			<AddStaffDialog open={openAddDialog} onOpenChange={setOpenAddDialog} />
 
+			{/* Delete Staff Dialog */}
 			<DeleteStaffDialog
 				open={openDeleteDialog}
 				onOpenChange={setOpenDeleteDialog}
