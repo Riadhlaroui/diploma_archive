@@ -133,7 +133,7 @@ const AuditLogTable = () => {
 												title={t("auditLogs.copy")}
 												className="hover:text-blue-500"
 											>
-												<Copy size={14} />
+												<Copy size={14} className=" hover:cursor-pointer" />
 											</button>
 										)}
 									</span>
