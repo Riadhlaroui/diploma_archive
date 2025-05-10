@@ -9,6 +9,7 @@ import { checkAuthOrRedirect } from "../../src/services/authService";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
+
 export default function DashboardPage() {
 	const { t } = useTranslation();
 
