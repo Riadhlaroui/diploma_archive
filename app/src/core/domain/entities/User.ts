@@ -8,5 +8,5 @@ export interface User {
 	role: UserRole;
 	phone: string;
 	createdAt: Date;
-	updatedAt: Date;
+	updatedAt?: Date;
 }
