@@ -4,12 +4,13 @@ import {
 	Github,
 	LifeBuoy,
 	LogOut,
-	Mail,
 	PlusCircle,
 	Settings,
-	User,
+	User as UserIcon,
 	User2,
 	Users,
+	UserRoundPlus,
+	UserRoundX,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -28,28 +29,41 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
 import { CircleUserRound } from "lucide-react";
-import { getUserInfo, clearAurthStore } from "../utils/getUserInfo";
+import { clearAurthStore } from "../app/src/shared/utils/getUserInfo";
 
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
+import AddStaffDialog from "./AddStaffDialog";
+import DeleteStaffDialog from "./DeleteStaffDialog";
+import { getCurrentUser } from "@/app/src/services/userService";
+import { User } from "@/app/src/core/domain/entities/User";
 
 export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 	const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+
+	const [openAddDialog, setOpenAddDialog] = useState(false);
+	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
 	const [isClient, setIsClient] = useState(false);
+
+	const [user, setUser] = useState<User | null>(null);
 
 	const router = useRouter();
 
 	const { t } = useTranslation();
 
-	const user = getUserInfo();
+	//The older way to get user info
+	//const user2 = getUserInfo();
 
+	// The newer way to get user info using the getCurrentUser function
 	useEffect(() => {
 		// Ensure we're rendering on the client
 		setIsClient(true);
+		getCurrentUser().then(setUser);
 	}, []);
 
 	if (!isClient) return null; // Return nothing during SSR to prevent hydration issues
-	if (!user) return <p>Not logged in</p>;
+	if (!user) return <p className="w-full">Not logged in</p>;
 
 	const handleLogout = () => {
 		console.log("User logged out.");
@@ -68,9 +82,12 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 							<>
 								<CircleUserRound className="ml-1.5 size-[2rem] flex-shrink-0 opacity-90" />
 								<div className=" flex flex-col items-start">
-									<p className=" font-semibold">{user.userName}</p>
+									<div className="flex items-start gap-1">
+										<p className=" font-semibold">{user?.firstName}</p>
+										<p className=" font-semibold">{user?.lastName}</p>
+									</div>
 									<span className="text-sm opacity-65 truncate max-w-fit overflow-hidden text-ellipsis whitespace-nowrap cursor-default">
-										{user.email}
+										{user?.email}
 									</span>
 								</div>
 							</>
@@ -85,45 +102,62 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 							className=" hover:cursor-pointer"
 							onClick={() => router.push("/profile")}
 						>
-							<User />
+							<UserIcon />
 							<span>{t("profile.profile")}</span>
 						</DropdownMenuItem>
-						<DropdownMenuItem>
+						<DropdownMenuItem className=" hover:cursor-pointer">
 							<Settings />
 							<span>{t("profile.settings")}</span>
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
 					<DropdownMenuSeparator />
-					<DropdownMenuGroup>
-						<DropdownMenuItem>
-							<Users />
-							<span>{t("profile.team")}</span>
-						</DropdownMenuItem>
-						<DropdownMenuSub>
-							<DropdownMenuSubTrigger>
-								<span>{t("profile.addUser")}</span>
-							</DropdownMenuSubTrigger>
-							<DropdownMenuPortal>
-								<DropdownMenuSubContent>
-									<DropdownMenuItem>
-										<Mail />
-										<span>{t("profile.team")}</span>
-									</DropdownMenuItem>
-									<DropdownMenuSeparator />
-									<DropdownMenuItem>
-										<PlusCircle />
-										<span>More...</span>
-									</DropdownMenuItem>
-								</DropdownMenuSubContent>
-							</DropdownMenuPortal>
-						</DropdownMenuSub>
-					</DropdownMenuGroup>
+					{user?.role !== "staff" && (
+						<DropdownMenuGroup>
+							<DropdownMenuItem
+								className=" hover:cursor-pointer"
+								onClick={() => router.replace("/team")}
+							>
+								<Users />
+								<span>{t("profile.team")}</span>
+							</DropdownMenuItem>
+							<DropdownMenuSub>
+								<DropdownMenuSubTrigger className=" hover:cursor-pointer">
+									<span>{t("profile.addUser")}</span>
+								</DropdownMenuSubTrigger>
+								<DropdownMenuPortal>
+									<DropdownMenuSubContent>
+										<DropdownMenuItem
+											className="hover:cursor-pointer"
+											onClick={() => setOpenAddDialog(true)}
+										>
+											<UserRoundPlus />
+											<span>{t("profile.addMember")}</span>
+										</DropdownMenuItem>
+										<DropdownMenuSeparator />
+										<DropdownMenuItem
+											className=" hover:cursor-pointer"
+											onClick={() => setOpenDeleteDialog(true)}
+										>
+											<UserRoundX />
+											<span>{t("profile.deleteMember")}</span>
+										</DropdownMenuItem>
+										<DropdownMenuSeparator />
+										<DropdownMenuItem>
+											<PlusCircle />
+											<span>More...</span>
+										</DropdownMenuItem>
+									</DropdownMenuSubContent>
+								</DropdownMenuPortal>
+							</DropdownMenuSub>
+						</DropdownMenuGroup>
+					)}
+
 					<DropdownMenuSeparator />
-					<DropdownMenuItem>
+					<DropdownMenuItem className=" hover:cursor-pointer">
 						<Github />
 						<span>GitHub</span>
 					</DropdownMenuItem>
-					<DropdownMenuItem>
+					<DropdownMenuItem className=" hover:cursor-pointer">
 						<LifeBuoy />
 						<span>Support</span>
 					</DropdownMenuItem>
@@ -132,12 +166,24 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 						<span>API</span>
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
-					<DropdownMenuItem onClick={() => setShowLogoutDialog(true)}>
+					<DropdownMenuItem
+						className="hover:cursor-pointer"
+						onClick={() => setShowLogoutDialog(true)}
+					>
 						<LogOut />
 						<span>{t("profile.logout")}</span>
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
+
+			{/* Add Staff Dialog */}
+			<AddStaffDialog open={openAddDialog} onOpenChange={setOpenAddDialog} />
+
+			{/* Delete Staff Dialog */}
+			<DeleteStaffDialog
+				open={openDeleteDialog}
+				onOpenChange={setOpenDeleteDialog}
+			/>
 
 			{/* Logout Dialog */}
 			{showLogoutDialog && (
@@ -151,12 +197,17 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 						</p>
 						<div className="flex justify-center gap-4 pt-4">
 							<Button
+								className=" hover:cursor-pointer"
 								variant="outline"
 								onClick={() => setShowLogoutDialog(false)}
 							>
 								{t("profile.cancel")}
 							</Button>
-							<Button variant="destructive" onClick={handleLogout}>
+							<Button
+								className="hover:cursor-pointer"
+								variant="destructive"
+								onClick={handleLogout}
+							>
 								{t("profile.logout")}
 							</Button>
 						</div>
