@@ -9,17 +9,9 @@ import { checkAuthOrRedirect } from "../../src/services/authService";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
-
 export default function DashboardPage() {
 	const { t } = useTranslation();
 
-const Dashboard = () => {
-	const router = useRouter();
-
-	const [showAddForm, setShowAddForm] = useState(false);
-	const { t, i18n } = useTranslation();
-
-	const [checkingAuth, setCheckingAuth] = React.useState(true);
 	const [checkingAuth, setCheckingAuth] = useState(true);
 	const router = useRouter();
 
