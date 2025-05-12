@@ -42,6 +42,7 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 	const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
 	const [openAddDialog, setOpenAddDialog] = useState(false);
+
 	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
 	const [isClient, setIsClient] = useState(false);

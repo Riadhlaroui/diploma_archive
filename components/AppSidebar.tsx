@@ -19,11 +19,16 @@ import {
 
 import { ProfileDropDownMenu } from "./ProfileDropDownMenu";
 import { ConnectionStatus } from "./ConnectionStatus";
+import i18n from "@/lib/i18n";
 
 export function AppSidebar() {
 	const { t } = useTranslation();
 	const { state } = useSidebar(); // 'collapsed' or 'expanded'
 	const isCollapsed = state === "collapsed";
+
+	const dir = i18n.dir();
+
+	console.log(dir);
 
 	// Menu items (translated)
 	const items = [
