@@ -30,6 +30,7 @@ import {
 import AddStaffDialog from "@/components/AddStaffDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { toast } from "sonner";
+import { UserUpdateDialog } from "@/components/UserUpdateDialog";
 
 const StaffList = () => {
 	const [logs, setLogs] = useState<UserList[]>([]);
@@ -38,10 +39,14 @@ const StaffList = () => {
 	const [totalPages, setTotalPages] = useState(1);
 	const [page, setPage] = useState(1);
 	const [copiedId, setCopiedId] = useState("");
+
 	const [openAddDialog, setOpenAddDialog] = useState(false);
+	const [openEditDialog, setOpenEditDialog] = useState(false);
 
 	const [confirmOpen, setConfirmOpen] = useState(false);
 	const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+
+	const [selectedUser, setSelectedUser] = useState<UserList | null>(null);
 
 	const { t } = useTranslation();
 
@@ -68,13 +73,14 @@ const StaffList = () => {
 	const handleRefresh = () => fetchData();
 
 	const handleEdit = (user: UserList) => {
-		console.log("Edit user", user);
-		// Open modal or navigate to edit form
+		setSelectedUser(user);
+		setOpenEditDialog(true);
 	};
 
 	const handleDelete = (id: string) => {
 		setSelectedUserId(id);
 		setConfirmOpen(true);
+		setSelectedUser(logs.find((user) => user.id === id) || null);
 	};
 
 	const confirmDelete = async () => {
@@ -242,12 +248,27 @@ const StaffList = () => {
 
 			<AddStaffDialog open={openAddDialog} onOpenChange={setOpenAddDialog} />
 
+			<UserUpdateDialog
+				open={openEditDialog}
+				onOpenChange={setOpenEditDialog}
+				user={selectedUser}
+			/>
+
 			<ConfirmDialog
 				open={confirmOpen}
 				onClose={() => setConfirmOpen(false)}
 				onConfirm={confirmDelete}
 				title={t("staffList.confirmDelete")}
-				description={t("staffList.confirmDeleteDesc")}
+				description={
+					selectedUser
+						? t("staffList.confirmDeleteDesc", {
+								email: selectedUser.email,
+								role: selectedUser.role,
+								firstName: selectedUser.firstName,
+								lastName: selectedUser.lastName,
+						  })
+						: ""
+				}
 			/>
 		</div>
 	);
