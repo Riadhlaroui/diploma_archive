@@ -146,7 +146,9 @@ i18n
 						lastName: "Last Name",
 						phoneNumber: "Phone Number",
 						email: "Email",
-						description: "Description",
+						description: "Update the selected user's information.",
+						successMessage: "User updated successfully!",
+						errorMessage: "Failed to update user. Please try again.",
 					},
 
 					deleteStaffDialog: {
@@ -341,6 +343,19 @@ i18n
 						cancel: "Annuler",
 						delete: "Supprimer",
 					},
+
+					editUserDialog: {
+						title: "Modifier l'utilisateur",
+						firstName: "Prénom",
+						lastName: "Nom de famille",
+						phoneNumber: "Numéro de téléphone",
+						email: "E-mail",
+						description:
+							"Mettre à jour les informations de l'utilisateur sélectionné.",
+						successMessage: "Utilisateur mis à jour avec succès !",
+						errorMessage:
+							"Échec de la mise à jour de l'utilisateur. Veuillez réessayer.",
+					},
 				},
 			},
 			ar: {
@@ -501,6 +516,17 @@ i18n
 					common: {
 						cancel: "إلغاء",
 						delete: "حذف",
+					},
+
+					editUserDialog: {
+						title: "تعديل المستخدم",
+						firstName: "الاسم الأول",
+						lastName: "اسم العائلة",
+						phoneNumber: "رقم الهاتف",
+						email: "البريد الإلكتروني",
+						description: "تحديث معلومات المستخدم المحدد.",
+						successMessage: "تم تحديث المستخدم بنجاح!",
+						errorMessage: "فشل في تحديث المستخدم. حاول مرة أخرى.",
 					},
 				},
 			},

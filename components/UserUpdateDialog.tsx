@@ -6,7 +6,7 @@ import {
 	SheetHeader,
 	SheetTitle,
 } from "@/components/ui/sheet";
-import { UserList } from "@/app/src/services/userService";
+import { UserList, updateUser } from "@/app/src/services/userService";
 import { useEffect, useState } from "react";
 import {
 	Select,
@@ -19,6 +19,7 @@ import {
 } from "./ui/select";
 import { Separator } from "./ui/separator";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 type Props = {
 	open: boolean;
@@ -45,23 +46,32 @@ export function UserUpdateDialog({ open, onOpenChange, user }: Props) {
 		}
 	}, [user]);
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log("Submit new values:", {
-			firstName,
-			lastName,
-			phoneNumber,
-			email,
-			role,
-		});
-		onOpenChange(false);
+		if (!user) return;
+
+		try {
+			await updateUser(user.id, {
+				firstName,
+				lastName,
+				phone: phoneNumber,
+				email,
+				role,
+			});
+
+			toast.success(t("editUserDialog.successMessage"));
+			onOpenChange(false);
+		} catch (error) {
+			console.error("Failed to update user:", error);
+			toast.error(t("editUserDialog.errorMessage"));
+		}
 	};
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
 			<SheetContent>
 				<SheetHeader>
-					<SheetTitle className=" text-xl font-semibold">
+					<SheetTitle className="text-xl font-semibold">
 						{t("editUserDialog.title")}
 					</SheetTitle>
 					<SheetDescription>{t("editUserDialog.description")}</SheetDescription>
