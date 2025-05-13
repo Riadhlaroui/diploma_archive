@@ -96,7 +96,7 @@ export async function createUser(data: createUserInput): Promise<User | null> {
 	}
 }
 
-export async function getInbox(page = 1, perPage = 15) {
+export async function getInbox(page = 1, perPage = 13) {
 	try {
 		const result = await pb
 			.collection("Archive_inbox")
@@ -170,6 +170,18 @@ export async function getUsers() {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (error: any) {
 		console.error("Error response from PocketBase:", error?.response || error);
+		throw error;
+	}
+}
+
+export async function deleteUsers(userIds: string[]): Promise<void> {
+	try {
+		// Delete users one by one (PocketBase doesn't support batch delete natively)
+		await Promise.all(
+			userIds.map((id) => pb.collection("Archive_users").delete(id))
+		);
+	} catch (error) {
+		console.error("Error deleting users:", error);
 		throw error;
 	}
 }

@@ -29,27 +29,30 @@ const SettingsPage = () => {
 
 	return (
 		<div className="w-full flex flex-col gap-4 p-4">
-			<span className="text-xl text-start font-semibold">
+			<span className="text-2xl text-start font-semibold mt-4">
 				{t("settings.title")}
 			</span>
 
-			<div className="flex items-center gap-2">
-				<label htmlFor="language-select" className="font-semibold text-lg">
-					{t("language")}
-				</label>
-				<Select
-					value={i18n.language}
-					onValueChange={(value: "en" | "fr" | "ar") => switchLanguage(value)}
-				>
-					<SelectTrigger className="w-[150px] h-fit dark:bg-[#1f1f1f] dark:text-white">
-						<SelectValue />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="en">English</SelectItem>
-						<SelectItem value="fr">Français</SelectItem>
-						<SelectItem value="ar">العربية</SelectItem>
-					</SelectContent>
-				</Select>
+			<div className="w-full max-w-[80%] mx-auto px-4 py-6 space-y-6">
+				{/* Language Setting */}
+				<div className="flex items-center justify-between border-b pb-4">
+					<label htmlFor="language-select" className="font-semibold text-lg">
+						{t("language")}
+					</label>
+					<Select
+						value={i18n.language}
+						onValueChange={(value: "en" | "fr" | "ar") => switchLanguage(value)}
+					>
+						<SelectTrigger className="w-[150px] h-fit dark:bg-[#1f1f1f] dark:text-white">
+							<SelectValue />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value="en">English</SelectItem>
+							<SelectItem value="fr">Français</SelectItem>
+							<SelectItem value="ar">العربية</SelectItem>
+						</SelectContent>
+					</Select>
+				</div>
 			</div>
 		</div>
 	);
