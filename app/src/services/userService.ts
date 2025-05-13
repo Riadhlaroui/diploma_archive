@@ -224,6 +224,9 @@ export async function updateUser(
 	data: Partial<createUserInput>
 ): Promise<User | null> {
 	try {
+		// Log the data being sent to ensure it is correct
+		console.log("Updating user with data:", data);
+
 		// Update user in the Archive_users collection
 		const updatedRecord = await pb.collection("Archive_users").update(id, data);
 
@@ -256,7 +259,10 @@ export async function updateUser(
 		};
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (error: any) {
-		console.error("Error updating user:", error?.response || error);
+		console.error(
+			"Error updating user:",
+			error?.response?.data || error.message || error
+		);
 		throw error;
 	}
 }

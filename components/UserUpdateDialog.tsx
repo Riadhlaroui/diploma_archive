@@ -33,7 +33,7 @@ export function UserUpdateDialog({ open, onOpenChange, user }: Props) {
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [phoneNumber, setPhoneNumber] = useState("");
-	const [email, setEmail] = useState("");
+
 	const [role, setRole] = useState<"admin" | "staff">("staff");
 
 	useEffect(() => {
@@ -41,7 +41,6 @@ export function UserUpdateDialog({ open, onOpenChange, user }: Props) {
 			setFirstName(user.firstName || "");
 			setLastName(user.lastName || "");
 			setPhoneNumber(user.phone || "");
-			setEmail(user.email || "");
 			setRole(user.role as "admin" | "staff");
 		}
 	}, [user]);
@@ -55,15 +54,30 @@ export function UserUpdateDialog({ open, onOpenChange, user }: Props) {
 				firstName,
 				lastName,
 				phone: phoneNumber,
-				email,
 				role,
 			});
 
 			toast.success(t("editUserDialog.successMessage"));
 			onOpenChange(false);
-		} catch (error) {
-			console.error("Failed to update user:", error);
-			toast.error(t("editUserDialog.errorMessage"));
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (error: any) {
+			if (error.response?.status === 400) {
+				toast.error(
+					<div className="flex items-center gap-2">
+						<div>
+							<div className="font-semibold">
+								{t("addStaffDialog.errors.emailExistsTitle")}
+							</div>
+							<div className="text-sm">
+								{t("addStaffDialog.errors.emailExistsDesc")}
+							</div>
+						</div>
+					</div>
+				);
+			} else {
+				console.error("Error creating user:", error);
+				toast.error(t("addStaffDialog.errors.userCreatedError"));
+			}
 		}
 	};
 
@@ -128,20 +142,6 @@ export function UserUpdateDialog({ open, onOpenChange, user }: Props) {
 					</div>
 
 					<div className="flex flex-col gap-[0.7rem]">
-						<div className="relative">
-							<input
-								type="email"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
-								className="peer w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none"
-								placeholder=""
-							/>
-							<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
-								{t("addStaffDialog.email")}
-								<span className="text-[#D81212]">*</span>
-							</label>
-						</div>
-
 						<div>
 							<Select
 								value={role}
