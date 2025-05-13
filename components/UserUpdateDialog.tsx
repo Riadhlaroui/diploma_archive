@@ -128,7 +128,7 @@ export function UserUpdateDialog({ open, onOpenChange, user }: Props) {
 
 						<div className="relative">
 							<input
-								type="tel"
+								type="number"
 								value={phoneNumber}
 								onChange={(e) => setPhoneNumber(e.target.value)}
 								className="peer w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none"

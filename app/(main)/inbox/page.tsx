@@ -160,6 +160,7 @@ const AuditLogTable = () => {
 									variant="outline"
 									onClick={() => setPage((p) => Math.max(1, p - 1))}
 									disabled={page === 1}
+									className=" hover:cursor-pointer"
 								>
 									{t("pagination.previous")}
 								</Button>
@@ -170,6 +171,7 @@ const AuditLogTable = () => {
 									variant="outline"
 									onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
 									disabled={page === totalPages}
+									className=" hover:cursor-pointer"
 								>
 									{t("pagination.next")}
 								</Button>

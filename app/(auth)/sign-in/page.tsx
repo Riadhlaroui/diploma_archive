@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import React, { useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
 import pb from "@/lib/pocketbase";
@@ -63,6 +62,7 @@ export default function SignIn() {
 					</div>
 				</div>
 			);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		} catch (err) {
 			toast.error(
 				<div className="flex items-center gap-2">
@@ -147,13 +147,6 @@ export default function SignIn() {
 					<Button className="font-semibold h-[4rem] text-[1rem] w-full dark:bg-[#E9E9E9] cursor-pointer">
 						{t("login.button")}
 					</Button>
-
-					<span className="text-center mt-3">
-						{t("noAccount")}{" "}
-						<Link href="#" className="text-blue-500 hover:underline">
-							{t("signUp")}
-						</Link>
-					</span>
 				</div>
 			</form>
 		</div>
