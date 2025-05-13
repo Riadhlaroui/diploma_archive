@@ -5,7 +5,9 @@ import { CheckCircle, XCircle, LoaderCircle } from "lucide-react";
 import { usePocketBaseStatus } from "@/hooks/usePocketBaseStatus";
 
 export function ConnectionStatus() {
-	const { isOnline, loading } = usePocketBaseStatus("http://127.0.0.1:8090");
+	const { isOnline, loading } = usePocketBaseStatus(
+		"process.env.NEXT_PUBLIC_PB_URL"
+	);
 	const { t } = useTranslation();
 
 	return (
