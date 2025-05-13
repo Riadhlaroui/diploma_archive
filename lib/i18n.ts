@@ -139,6 +139,44 @@ i18n
 						deleteSuccess: "User deleted successfully.",
 						deleteError: "Failed to delete user.",
 					},
+
+					editUserDialog: {
+						title: "Edit User",
+						firstName: "First Name",
+						lastName: "Last Name",
+						phoneNumber: "Phone Number",
+						email: "Email",
+						description: "Description",
+					},
+
+					deleteStaffDialog: {
+						title: "Delete Staff Member",
+						searchPlaceholder: "Search for a staff member",
+						noStaffFound: "No staff found.",
+						roleLabel: "Role",
+						errors: {
+							fetchFailed: "Failed to fetch staff list",
+							deleteFailed: "Failed to delete staff members",
+						},
+						success: "{{count}} staff member(s) deleted successfully",
+						warnings: {
+							noSelection: "Please select at least one staff member",
+						},
+						deleting: "Deleting...",
+						confirm: {
+							title: "Confirm Deletion",
+							description:
+								"Are you sure you want to delete {{count}} staff member(s)? This action cannot be undone.",
+						},
+					},
+					roles: {
+						admin: "Admin",
+						staff: "Staff",
+					},
+					common: {
+						cancel: "Cancel",
+						delete: "Delete",
+					},
 				},
 			},
 			fr: {
@@ -273,6 +311,36 @@ i18n
 						deleteSuccess: "Utilisateur supprimé avec succès.",
 						deleteError: "Échec de la suppression de l'utilisateur.",
 					},
+
+					deleteStaffDialog: {
+						title: "Supprimer un membre du personnel",
+						searchPlaceholder: "Rechercher un membre du personnel",
+						noStaffFound: "Aucun membre du personnel trouvé.",
+						roleLabel: "Rôle",
+						errors: {
+							fetchFailed: "Échec de la récupération de la liste du personnel",
+							deleteFailed: "Échec de la suppression des membres du personnel",
+						},
+						success: "{{count}} membre(s) du personnel supprimé(s) avec succès",
+						warnings: {
+							noSelection:
+								"Veuillez sélectionner au moins un membre du personnel",
+						},
+						deleting: "Suppression en cours...",
+						confirm: {
+							title: "Confirmer la suppression",
+							description:
+								"Êtes-vous sûr de vouloir supprimer {{count}} membre(s) du personnel ? Cette action est irréversible.",
+						},
+					},
+					roles: {
+						admin: "Administrateur",
+						staff: "Personnel",
+					},
+					common: {
+						cancel: "Annuler",
+						delete: "Supprimer",
+					},
 				},
 			},
 			ar: {
@@ -404,6 +472,35 @@ i18n
 							"هل أنت متأكد أنك تريد حذف المستخدم {{email}} الذي لديه دور {{role}}؟ هذا الإجراء لا يمكن التراجع عنه.",
 						deleteSuccess: "تم حذف المستخدم بنجاح.",
 						deleteError: "فشل في حذف المستخدم.",
+					},
+
+					deleteStaffDialog: {
+						title: "حذف عضو من الموظفين",
+						searchPlaceholder: "ابحث عن عضو من الموظفين",
+						noStaffFound: "لا يوجد موظفون.",
+						roleLabel: "الدور",
+						errors: {
+							fetchFailed: "فشل جلب قائمة الموظفين",
+							deleteFailed: "فشل حذف أعضاء الموظفين",
+						},
+						success: "تم حذف {{count}} من أعضاء الموظفين بنجاح",
+						warnings: {
+							noSelection: "الرجاء تحديد عضو واحد على الأقل من الموظفين",
+						},
+						deleting: "جاري الحذف...",
+						confirm: {
+							title: "تأكيد الحذف",
+							description:
+								"هل أنت متأكد أنك تريد حذف {{count}} عضو من الموظفين؟ لا يمكن التراجع عن هذا الإجراء.",
+						},
+					},
+					roles: {
+						admin: "مدير",
+						staff: "موظف",
+					},
+					common: {
+						cancel: "إلغاء",
+						delete: "حذف",
 					},
 				},
 			},

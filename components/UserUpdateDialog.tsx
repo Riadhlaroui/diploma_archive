@@ -61,10 +61,15 @@ export function UserUpdateDialog({ open, onOpenChange, user }: Props) {
 		<Sheet open={open} onOpenChange={onOpenChange}>
 			<SheetContent>
 				<SheetHeader>
-					<SheetTitle>{t("editUserDialog.title")}</SheetTitle>
+					<SheetTitle className=" text-xl font-semibold">
+						{t("editUserDialog.title")}
+					</SheetTitle>
 					<SheetDescription>{t("editUserDialog.description")}</SheetDescription>
 				</SheetHeader>
-				<form onSubmit={handleSubmit} className="space-y-4 mt-2 px-4 h-full">
+				<form
+					onSubmit={handleSubmit}
+					className="flex-1 flex flex-col px-4 gap-4"
+				>
 					<Separator />
 					<div className="flex flex-col gap-[0.7rem]">
 						<div className="flex gap-4">
@@ -154,17 +159,17 @@ export function UserUpdateDialog({ open, onOpenChange, user }: Props) {
 
 					<Separator />
 
-					<div className="flex justify-end gap-2 pt-4">
+					<div className="flex w-full gap-2 p-4 mt-auto">
 						<button
 							type="button"
 							onClick={() => onOpenChange(false)}
-							className="bg-gray-300 text-black px-4 py-2 rounded-[3px] hover:bg-gray-400 hover:cursor-pointer transition-colors duration-200"
+							className="bg-gray-300 text-black px-4 py-2 w-full rounded-[3px] hover:bg-gray-400 hover:cursor-pointer transition-colors duration-200"
 						>
 							{t("addStaffDialog.cancelButton")}
 						</button>
 						<button
 							type="submit"
-							className="bg-black text-white px-4 py-2 rounded-[3px] hover:bg-gray-900 hover:cursor-pointer transition-colors duration-200"
+							className="bg-black text-white px-4 py-2 w-full rounded-[3px] hover:bg-gray-900 hover:cursor-pointer transition-colors duration-200"
 						>
 							{t("addStaffDialog.submitButton")}
 						</button>
