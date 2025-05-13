@@ -27,7 +27,6 @@ export function AppSidebar() {
 	const isCollapsed = state === "collapsed";
 
 	const dir = i18n.dir();
-
 	console.log(dir);
 
 	// Menu items (translated)

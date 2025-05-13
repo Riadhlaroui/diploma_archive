@@ -218,3 +218,45 @@ export async function getCurrentUserRole(): Promise<"admin" | "staff" | null> {
 		return null;
 	}
 }
+
+export async function updateUser(
+	id: string,
+	data: Partial<createUserInput>
+): Promise<User | null> {
+	try {
+		// Update user in the Archive_users collection
+		const updatedRecord = await pb.collection("Archive_users").update(id, data);
+
+		// Log the action in Archive_inbox
+		const currentUser = pb.authStore.model;
+
+		if (currentUser) {
+			await pb.collection("Archive_inbox").create({
+				action: "update_user",
+				userEmail: currentUser.email,
+				targetType: "user",
+				targetId: id,
+				timestamp: new Date().toISOString(),
+				details: {
+					updatedFields: Object.keys(data),
+					updatedUserEmail: updatedRecord.email,
+				},
+			});
+		}
+
+		return {
+			id: updatedRecord.id,
+			firstName: updatedRecord.firstName,
+			lastName: updatedRecord.lastName,
+			email: updatedRecord.email,
+			phone: updatedRecord.phone,
+			role: updatedRecord.role,
+			createdAt: new Date(updatedRecord.created),
+			updatedAt: new Date(updatedRecord.updated),
+		};
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	} catch (error: any) {
+		console.error("Error updating user:", error?.response || error);
+		throw error;
+	}
+}
