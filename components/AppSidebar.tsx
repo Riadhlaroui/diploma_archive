@@ -33,12 +33,12 @@ export function AppSidebar() {
 	const items = [
 		{
 			title: t("sidebar.home"),
-			url: "dashboard",
+			url: "/dashboard",
 			icon: Home,
 		},
 		{
 			title: t("sidebar.inbox"),
-			url: "inbox",
+			url: "/inbox",
 			icon: Inbox,
 		},
 		{
@@ -48,7 +48,7 @@ export function AppSidebar() {
 		},
 		{
 			title: t("sidebar.settings"),
-			url: "settings",
+			url: "/settings",
 			icon: Settings,
 		},
 	];

@@ -24,7 +24,6 @@ const SettingsPage = () => {
 		const langToUse = savedLang || i18n.language;
 
 		i18n.changeLanguage(langToUse);
-		// 🔥 DO NOT update document.documentElement.dir here
 	}, [i18n]);
 
 	return (

@@ -27,10 +27,9 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	const currentLang = i18n.language;
-	const dir = currentLang === "ar" ? "rtl" : "ltr";
 
 	return (
-		<html lang={currentLang} dir={dir}>
+		<html lang={currentLang}>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
