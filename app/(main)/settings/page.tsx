@@ -43,7 +43,7 @@ const SettingsPage = () => {
 						onValueChange={(value: "en" | "fr" | "ar") => switchLanguage(value)}
 					>
 						<SelectTrigger className="w-[150px] h-fit dark:bg-[#1f1f1f] dark:text-white">
-							<SelectValue />
+							<SelectValue placeholder="select language" />
 						</SelectTrigger>
 						<SelectContent>
 							<SelectItem value="en">English</SelectItem>

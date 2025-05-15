@@ -2,7 +2,15 @@
 import "@/lib/i18n";
 import { useTranslation } from "react-i18next";
 
-import { Home, Inbox, Search, Settings, UsersRound } from "lucide-react";
+import {
+	Home,
+	Inbox,
+	MoreHorizontal,
+	Search,
+	Settings,
+	University,
+	UsersRound,
+} from "lucide-react";
 
 import {
 	Sidebar,
@@ -12,6 +20,7 @@ import {
 	SidebarGroupContent,
 	SidebarGroupLabel,
 	SidebarMenu,
+	SidebarMenuAction,
 	SidebarMenuButton,
 	SidebarMenuItem,
 	useSidebar,
@@ -19,15 +28,23 @@ import {
 
 import { ProfileDropDownMenu } from "./ProfileDropDownMenu";
 import { ConnectionStatus } from "./ConnectionStatus";
-import i18n from "@/lib/i18n";
+
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { useState } from "react";
+
+import StudentFormDialog from "./StudentFormDialog";
 
 export function AppSidebar() {
 	const { t } = useTranslation();
 	const { state } = useSidebar(); // 'collapsed' or 'expanded'
 	const isCollapsed = state === "collapsed";
 
-	const dir = i18n.dir();
-	console.log(dir);
+	const [openAddStudentDialog, setOpenAddStudentDialog] = useState(false);
 
 	// Menu items (translated)
 	const items = [
@@ -53,11 +70,11 @@ export function AppSidebar() {
 		},
 	];
 
-	const studentContent = [
+	const FacultiesContent = [
 		{
-			title: t("sidebar.students"),
-			url: "#",
-			icon: UsersRound,
+			title: "Faculties",
+			url: "/faculties",
+			icon: University,
 		},
 	];
 
@@ -85,12 +102,10 @@ export function AppSidebar() {
 				</SidebarGroup>
 
 				<SidebarGroup>
-					<SidebarGroupLabel>
-						{t("sidebar.manageStudents") || "Manage Students"}
-					</SidebarGroupLabel>
+					<SidebarGroupLabel>Manage Faculties</SidebarGroupLabel>
 					<SidebarGroupContent>
 						<SidebarMenu>
-							{studentContent.map((item) => (
+							{FacultiesContent.map((item) => (
 								<SidebarMenuItem key={item.title}>
 									<SidebarMenuButton asChild>
 										<a href={item.url}>
@@ -100,6 +115,40 @@ export function AppSidebar() {
 									</SidebarMenuButton>
 								</SidebarMenuItem>
 							))}
+						</SidebarMenu>
+					</SidebarGroupContent>
+				</SidebarGroup>
+
+				<SidebarGroup>
+					<SidebarGroupLabel>
+						{t("sidebar.manageStudents") || "Manage Students"}
+					</SidebarGroupLabel>
+					<SidebarGroupContent>
+						<SidebarMenu>
+							<SidebarMenuItem className="flex justify-between items-center">
+								<SidebarMenuButton asChild className="flex-1">
+									<a href="/students" className="flex items-center gap-2">
+										<UsersRound />
+										<span>{t("sidebar.students")}</span>
+									</a>
+								</SidebarMenuButton>
+
+								<DropdownMenu>
+									<DropdownMenuTrigger asChild>
+										<SidebarMenuAction>
+											<MoreHorizontal />
+										</SidebarMenuAction>
+									</DropdownMenuTrigger>
+									<DropdownMenuContent side="right" align="start">
+										<DropdownMenuItem
+											className=" hover:cursor-pointer"
+											onClick={() => setOpenAddStudentDialog(true)}
+										>
+											<span>Add Student</span>
+										</DropdownMenuItem>
+									</DropdownMenuContent>
+								</DropdownMenu>
+							</SidebarMenuItem>
 						</SidebarMenu>
 					</SidebarGroupContent>
 				</SidebarGroup>
@@ -113,6 +162,11 @@ export function AppSidebar() {
 					</SidebarMenuItem>
 				</SidebarMenu>
 			</SidebarFooter>
+
+			<StudentFormDialog
+				isOpen={openAddStudentDialog}
+				onClose={() => setOpenAddStudentDialog(false)}
+			/>
 		</Sidebar>
 	);
 }
