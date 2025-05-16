@@ -70,9 +70,17 @@ export function AppSidebar() {
 		},
 	];
 
+	const studentContent = [
+		{
+			title: t("sidebar.students"),
+			url: "/students",
+			icon: UsersRound,
+		},
+	];
+
 	const FacultiesContent = [
 		{
-			title: "Faculties",
+			title: t("sidebar.faculties"),
 			url: "/faculties",
 			icon: University,
 		},
@@ -102,7 +110,7 @@ export function AppSidebar() {
 				</SidebarGroup>
 
 				<SidebarGroup>
-					<SidebarGroupLabel>Manage Faculties</SidebarGroupLabel>
+					<SidebarGroupLabel>{t("sidebar.manageFaculties")}</SidebarGroupLabel>
 					<SidebarGroupContent>
 						<SidebarMenu>
 							{FacultiesContent.map((item) => (
@@ -113,6 +121,21 @@ export function AppSidebar() {
 											<span>{item.title}</span>
 										</a>
 									</SidebarMenuButton>
+									<DropdownMenu>
+										<DropdownMenuTrigger asChild>
+											<SidebarMenuAction>
+												<MoreHorizontal className="hover:cursor-pointer" />
+											</SidebarMenuAction>
+										</DropdownMenuTrigger>
+										<DropdownMenuContent side="right" align="start">
+											<DropdownMenuItem
+												className="hover:cursor-pointer"
+												onClick={() => console.log("Add new faculty")}
+											>
+												<span>{t("faculties.addFaculty")}</span>
+											</DropdownMenuItem>
+										</DropdownMenuContent>
+									</DropdownMenu>
 								</SidebarMenuItem>
 							))}
 						</SidebarMenu>
@@ -125,30 +148,35 @@ export function AppSidebar() {
 					</SidebarGroupLabel>
 					<SidebarGroupContent>
 						<SidebarMenu>
-							<SidebarMenuItem className="flex justify-between items-center">
-								<SidebarMenuButton asChild className="flex-1">
-									<a href="/students" className="flex items-center gap-2">
-										<UsersRound />
-										<span>{t("sidebar.students")}</span>
-									</a>
-								</SidebarMenuButton>
+							{studentContent.map((item) => (
+								<SidebarMenuItem
+									key={item.title}
+									className="flex justify-between items-center"
+								>
+									<SidebarMenuButton asChild className="flex-1">
+										<a href={item.url}>
+											<item.icon />
+											<span>{item.title}</span>
+										</a>
+									</SidebarMenuButton>
 
-								<DropdownMenu>
-									<DropdownMenuTrigger asChild>
-										<SidebarMenuAction>
-											<MoreHorizontal />
-										</SidebarMenuAction>
-									</DropdownMenuTrigger>
-									<DropdownMenuContent side="right" align="start">
-										<DropdownMenuItem
-											className=" hover:cursor-pointer"
-											onClick={() => setOpenAddStudentDialog(true)}
-										>
-											<span>Add Student</span>
-										</DropdownMenuItem>
-									</DropdownMenuContent>
-								</DropdownMenu>
-							</SidebarMenuItem>
+									<DropdownMenu>
+										<DropdownMenuTrigger asChild>
+											<SidebarMenuAction>
+												<MoreHorizontal className=" hover:cursor-pointer" />
+											</SidebarMenuAction>
+										</DropdownMenuTrigger>
+										<DropdownMenuContent side="right" align="start">
+											<DropdownMenuItem
+												className=" hover:cursor-pointer"
+												onClick={() => setOpenAddStudentDialog(true)}
+											>
+												<span>Add Student</span>
+											</DropdownMenuItem>
+										</DropdownMenuContent>
+									</DropdownMenu>
+								</SidebarMenuItem>
+							))}
 						</SidebarMenu>
 					</SidebarGroupContent>
 				</SidebarGroup>

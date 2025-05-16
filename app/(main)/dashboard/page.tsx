@@ -8,6 +8,7 @@ import { Search } from "lucide-react";
 import { checkAuthOrRedirect } from "../../src/services/authService";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import CreateStudentDialog from "@/components/CreateStudentDialog";
 
 export default function DashboardPage() {
 	const { t } = useTranslation();
@@ -41,6 +42,12 @@ export default function DashboardPage() {
 					<Search />
 				</button>
 			</form>
+
+			<CreateStudentDialog
+				onStudentCreated={function (): void {
+					throw new Error("Function not implemented.");
+				}}
+			/>
 
 			<div className="w-full h-full border">{/* content */}</div>
 		</div>
