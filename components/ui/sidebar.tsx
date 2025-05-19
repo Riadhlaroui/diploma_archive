@@ -259,8 +259,7 @@ type SidebarTriggerProps = React.ComponentProps<typeof Button> & {
 
 function SidebarTrigger({
 	className,
-	onClick,
-	side = "left", // default fallback
+	onClick, // default fallback
 	...props
 }: SidebarTriggerProps) {
 	const { toggleSidebar } = useSidebar();
@@ -268,8 +267,7 @@ function SidebarTrigger({
 	return (
 		<Button
 			data-sidebar="trigger"
-			data-slot="sidebar-trigger"
-			data-side={side} // optional: for debugging or styling
+			data-slot="sidebar-trigger" // optional: for debugging or styling
 			variant="ghost"
 			size="icon"
 			className={cn("size-7", className)}
@@ -279,7 +277,7 @@ function SidebarTrigger({
 			}}
 			{...props}
 		>
-			<PanelLeftIcon className={side === "right" ? "rotate-180" : ""} />
+			<PanelLeftIcon />
 			<span className="sr-only">Toggle Sidebar</span>
 		</Button>
 	);

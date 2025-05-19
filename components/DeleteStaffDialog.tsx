@@ -81,7 +81,7 @@ const DeleteStaffDialog = ({ open, onOpenChange }: Props) => {
 				onClick={() => onOpenChange(false)}
 			>
 				<div
-					className="bg-white w-full max-w-lg p-6 rounded-md shadow-lg relative max-h-[90vh] flex flex-col"
+					className="bg-white w-full max-w-lg p-6 rounded-[3px] shadow-lg relative max-h-[90vh] flex flex-col"
 					onClick={(e) => e.stopPropagation()}
 				>
 					<button

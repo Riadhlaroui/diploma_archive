@@ -17,7 +17,7 @@ export default function SignIn() {
 	// Multi-language support
 	const { t, i18n } = useTranslation();
 
-	const switchLanguage = (lang: "en" | "fr") => {
+	const switchLanguage = (lang: "en" | "fr" | "ar") => {
 		i18n.changeLanguage(lang);
 		localStorage.setItem("lang", lang);
 	};
@@ -85,10 +85,11 @@ export default function SignIn() {
 					id="language-select"
 					className="border rounded-md px-2 py-1 dark:bg-[#1f1f1f] dark:text-white"
 					value={i18n.language}
-					onChange={(e) => switchLanguage(e.target.value as "en" | "fr")}
+					onChange={(e) => switchLanguage(e.target.value as "en" | "fr" | "ar")}
 				>
 					<option value="en">English</option>
 					<option value="fr">Français</option>
+					<option value="ar">العربية</option>
 				</select>
 			</div>
 

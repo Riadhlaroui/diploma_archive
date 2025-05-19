@@ -23,9 +23,10 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	const currentLang = i18n.language;
+	const isRTL = currentLang === "ar";
 
 	return (
-		<html lang={currentLang}>
+		<html lang={currentLang} dir={isRTL ? "rtl" : "ltr"}>
 			<body className={inter.className}>
 				{children}
 				<Toaster richColors />
