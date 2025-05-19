@@ -7,5 +7,8 @@ module.exports = {
 	theme: {
 		extend: {},
 	},
-	plugins: [dir()],
+	plugins: [
+		require("tailwindcss-dir")(),
+		// ...other plugins
+	],
 };

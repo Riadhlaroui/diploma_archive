@@ -131,10 +131,10 @@ const CreateStudentDialog = ({
 
 			{isOpen && (
 				<div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-					<div className="bg-white dark:bg-zinc-900 w-full max-w-2xl rounded-xl shadow-lg p-6 relative">
+					<div className="bg-white dark:bg-zinc-900 w-full max-w-2xl rounded-[3px] shadow-lg p-6 relative">
 						{/* Close Button */}
 						<button
-							className="absolute top-4 right-4 text-gray-500 hover:text-red-500"
+							className="absolute top-4 right-4 text-gray-500 hover:text-red-500 hover:cursor-pointer"
 							onClick={() => setIsOpen(false)}
 						>
 							<X className="w-5 h-5" />

@@ -21,10 +21,9 @@ import {
 	UserRoundPen,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-
 import { FacultieList } from "@/app/src/services/facultieService";
-
 import { toast } from "sonner";
+import AddFacultyDialog from "@/components/AddFacultyDialog"; // Adjust path if necessary
 
 const FacultiesList = () => {
 	const [logs, setLogs] = useState<FacultieList[]>([]);
@@ -33,6 +32,7 @@ const FacultiesList = () => {
 	const [totalPages, setTotalPages] = useState(1);
 	const [page, setPage] = useState(1);
 	const [copiedId, setCopiedId] = useState("");
+	const [showDialog, setShowDialog] = useState(false);
 
 	const { t } = useTranslation();
 
@@ -53,7 +53,7 @@ const FacultiesList = () => {
 				</Button>
 				<Button
 					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
-					onClick={() => console.log("Add new faculty")}
+					onClick={() => setShowDialog(true)}
 				>
 					<SquarePlus className="text-black" />
 				</Button>
@@ -165,6 +165,9 @@ const FacultiesList = () => {
 					</TableRow>
 				</TableFooter>
 			</Table>
+
+			{/* AddFacultyDialog */}
+			{showDialog && <AddFacultyDialog onClose={() => setShowDialog(false)} />}
 		</div>
 	);
 };

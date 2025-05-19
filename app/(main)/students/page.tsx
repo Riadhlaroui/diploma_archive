@@ -16,9 +16,9 @@ import {
 	Copy,
 	Loader2,
 	RefreshCcw,
-	SquarePlus,
 	Trash2,
 	UserRoundPen,
+	UserRoundPlus,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -53,7 +53,7 @@ const StudentsList = () => {
 					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
 					onClick={() => console.log("Add new student")}
 				>
-					<SquarePlus className="text-black" />
+					<UserRoundPlus className=" text-black" />
 				</Button>
 			</div>
 

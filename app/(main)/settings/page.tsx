@@ -16,7 +16,7 @@ const SettingsPage = () => {
 	const switchLanguage = (lang: "en" | "fr" | "ar") => {
 		i18n.changeLanguage(lang);
 		localStorage.setItem("lang", lang);
-		// 🔥 DO NOT change document direction here
+		// The direction change will be handled by the DirectionProvider
 	};
 
 	useEffect(() => {
