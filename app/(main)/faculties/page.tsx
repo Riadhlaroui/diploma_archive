@@ -9,7 +9,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Check,
@@ -21,9 +21,10 @@ import {
 	UserRoundPen,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { FacultieList } from "@/app/src/services/facultieService";
-import { toast } from "sonner";
-import AddFacultyDialog from "@/components/AddFacultyDialog"; // Adjust path if necessary
+import { FacultieList, getFaculties } from "@/app/src/services/facultieService";
+import AddFacultyDialog from "@/components/AddFacultyDialog";
+import { FacultyUpdateDialog } from "@/components/FacultyUpdateDialog";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 const FacultiesList = () => {
 	const [logs, setLogs] = useState<FacultieList[]>([]);
@@ -34,15 +35,65 @@ const FacultiesList = () => {
 	const [copiedId, setCopiedId] = useState("");
 	const [showDialog, setShowDialog] = useState(false);
 
+	const [selectedFaculty, setSelectedFaculty] = useState<FacultieList | null>(
+		null
+	);
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+	const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+	const [facultyToDelete, setFacultyToDelete] = useState<FacultieList | null>(
+		null
+	);
+
+	const handleEdit = (faculty: FacultieList) => {
+		setSelectedFaculty(faculty);
+		setIsDialogOpen(true);
+	};
+
+	const handleDelete = (faculty: FacultieList) => {
+		setFacultyToDelete(faculty);
+		setShowConfirmDialog(true);
+	};
+
+	const confirmDelete = async () => {
+		if (!facultyToDelete) return;
+
+		// TODO: Replace this with actual delete logic
+		console.log("Deleting faculty:", facultyToDelete.id);
+
+		setShowConfirmDialog(false);
+		setFacultyToDelete(null);
+		await fetchFaculties(); // Refresh after deletion
+	};
+
 	const { t } = useTranslation();
+
+	useEffect(() => {
+		fetchFaculties();
+	}, [page]); // re-fetch when page changes
+
+	const fetchFaculties = async () => {
+		setLoading(true);
+		setError(null);
+		try {
+			const { items, totalPages } = await getFaculties(page, 10); // 10 items per page
+			setLogs(items);
+			setTotalPages(totalPages);
+		} catch (err) {
+			setError("Failed to load faculties.");
+			console.error(err);
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	return (
 		<div className="flex flex-col h-full mt-10 p-6 rounded-md shadow-lg">
 			<div className="flex gap-2 mb-4 items-center">
 				<h3 className="text-2xl font-semibold">{t("faculties.title")}</h3>
 				<Button
-					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
-					onClick={() => {}}
+					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2"
+					onClick={fetchFaculties}
 					disabled={loading}
 				>
 					{loading ? (
@@ -52,7 +103,7 @@ const FacultiesList = () => {
 					)}
 				</Button>
 				<Button
-					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
+					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2"
 					onClick={() => setShowDialog(true)}
 				>
 					<SquarePlus className="text-black" />
@@ -115,14 +166,14 @@ const FacultiesList = () => {
 										<Button
 											size="sm"
 											variant="outline"
-											onClick={() => console.log("Edit faculty")}
+											onClick={() => handleEdit(faculty)}
 										>
 											<UserRoundPen />
 										</Button>
 										<Button
 											size="sm"
 											variant="destructive"
-											onClick={() => console.log("Delete faculty")}
+											onClick={() => handleDelete(faculty)}
 											className="bg-[#f44336] text-white"
 										>
 											<Trash2 />
@@ -166,8 +217,35 @@ const FacultiesList = () => {
 				</TableFooter>
 			</Table>
 
-			{/* AddFacultyDialog */}
-			{showDialog && <AddFacultyDialog onClose={() => setShowDialog(false)} />}
+			<FacultyUpdateDialog
+				open={isDialogOpen}
+				onOpenChange={setIsDialogOpen}
+				user={selectedFaculty}
+			/>
+
+			<ConfirmDialog
+				open={showConfirmDialog}
+				onClose={() => {
+					setShowConfirmDialog(false);
+					setFacultyToDelete(null);
+				}}
+				onConfirm={confirmDelete}
+				title={t("confirm.title")}
+				description={
+					t("confirm.description", {
+						name: facultyToDelete?.name || "",
+					}) || `Are you sure you want to delete ${facultyToDelete?.name}?`
+				}
+			/>
+
+			{showDialog && (
+				<AddFacultyDialog
+					onClose={() => {
+						setShowDialog(false);
+						fetchFaculties(); // refresh after adding
+					}}
+				/>
+			)}
 		</div>
 	);
 };

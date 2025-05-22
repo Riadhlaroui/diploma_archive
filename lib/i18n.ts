@@ -216,6 +216,12 @@ i18n
 						copyId: "Copy Matricule",
 					},
 					loading: "Loading...",
+
+					confirm: {
+						title: "Confirm Deletion",
+						description:
+							"Are you sure you want to delete the faculty {{name}}? This action cannot be undone.",
+					},
 				},
 			},
 			fr: {
@@ -430,6 +436,12 @@ i18n
 						copyId: "Copier le matricule",
 					},
 					loading: "Chargement...",
+
+					confirm: {
+						title: "Confirmer la suppression",
+						description:
+							"Êtes-vous sûr de vouloir supprimer {{count}} membre(s) du personnel ? Cette action est irréversible.",
+					},
 				},
 			},
 			ar: {
@@ -639,6 +651,12 @@ i18n
 						copyId: "نسخ الرقم الجامعي",
 					},
 					loading: "جارٍ التحميل...",
+
+					confirm: {
+						title: "تأكيد الحذف",
+						description:
+							"هل أنت متأكد أنك تريد حذف الكلية {{name}}؟ لا يمكن التراجع عن هذا الإجراء.",
+					},
 				},
 			},
 		},

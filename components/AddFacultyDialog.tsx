@@ -1,11 +1,52 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { Separator } from "./ui/separator";
 import { X } from "lucide-react";
+import { addFaculty } from "../app/src/services/facultieService"; // Adjust path if needed
+import { toast } from "sonner";
 
 const AddFacultyDialog = ({ onClose }: { onClose: () => void }) => {
-	const handleSubmit = (e: React.FormEvent) => {
+	const [name, setName] = useState("");
+
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		// handle submit logic
+
+		if (!name.trim()) {
+			alert("Faculty name is required.");
+			return;
+		}
+
+		try {
+			await addFaculty(name);
+			alert("Faculty added successfully!");
+			onClose(); // close dialog
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (error: any) {
+			if (error.response?.status === 400) {
+				toast.error(
+					<div className="flex items-center gap-2">
+						<div>
+							<div className="font-semibold text-[15px]">
+								A faculty with this name already exists.
+							</div>
+							<div className="text-sm">Please choose a different name.</div>
+						</div>
+					</div>
+				);
+			} else {
+				console.error("Error creating user:", error);
+				toast.error(
+					<div className="flex items-center gap-2">
+						<div>
+							<div className="font-semibold">An error occurred.</div>
+							<div className="text-sm">Please try again later.</div>
+						</div>
+					</div>
+				);
+			}
+		}
 	};
 
 	return (
@@ -26,6 +67,8 @@ const AddFacultyDialog = ({ onClose }: { onClose: () => void }) => {
 						<div className="relative w-full">
 							<input
 								type="text"
+								value={name}
+								onChange={(e) => setName(e.target.value)}
 								className="peer w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none"
 								placeholder=""
 							/>
