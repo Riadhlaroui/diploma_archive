@@ -121,7 +121,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 				toast.error(
 					<div className="flex items-center gap-2">
 						<div>
-							<div className="font-semibold">
+							<div className="font-semibold text-[15px]">
 								{t("addStaffDialog.errors.emailExistsTitle")}
 							</div>
 							<div className="text-sm">
