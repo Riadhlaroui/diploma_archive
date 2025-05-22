@@ -25,15 +25,17 @@ import { FacultieList, getFaculties } from "@/app/src/services/facultieService";
 import AddFacultyDialog from "@/components/AddFacultyDialog";
 import { FacultyUpdateDialog } from "@/components/FacultyUpdateDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import { useRouter } from "next/navigation";
 
 const FacultiesList = () => {
 	const [logs, setLogs] = useState<FacultieList[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
-	const [error, setError] = useState<string | null>(null);
 	const [totalPages, setTotalPages] = useState(1);
 	const [page, setPage] = useState(1);
 	const [copiedId, setCopiedId] = useState("");
 	const [showDialog, setShowDialog] = useState(false);
+
+	const router = useRouter();
 
 	const [selectedFaculty, setSelectedFaculty] = useState<FacultieList | null>(
 		null
@@ -74,13 +76,11 @@ const FacultiesList = () => {
 
 	const fetchFaculties = async () => {
 		setLoading(true);
-		setError(null);
 		try {
 			const { items, totalPages } = await getFaculties(page, 10); // 10 items per page
 			setLogs(items);
 			setTotalPages(totalPages);
 		} catch (err) {
-			setError("Failed to load faculties.");
 			console.error(err);
 		} finally {
 			setLoading(false);
@@ -92,7 +92,7 @@ const FacultiesList = () => {
 			<div className="flex gap-2 mb-4 items-center">
 				<h3 className="text-2xl font-semibold">{t("faculties.title")}</h3>
 				<Button
-					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2"
+					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
 					onClick={fetchFaculties}
 					disabled={loading}
 				>
@@ -103,16 +103,12 @@ const FacultiesList = () => {
 					)}
 				</Button>
 				<Button
-					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2"
+					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
 					onClick={() => setShowDialog(true)}
 				>
 					<SquarePlus className="text-black" />
 				</Button>
 			</div>
-
-			{error && (
-				<div className="text-red-500 text-sm mb-4 text-center">{error}</div>
-			)}
 
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
@@ -138,6 +134,7 @@ const FacultiesList = () => {
 							<TableRow
 								key={faculty.id}
 								className="hover:bg-gray-100 dark:hover:bg-zinc-800"
+								onDoubleClick={() => router.push(`/faculties/${faculty.id}`)}
 							>
 								<TableCell>
 									<span className="inline-flex items-center gap-2 rounded-full bg-gray-200 px-3 py-1 text-sm font-medium">

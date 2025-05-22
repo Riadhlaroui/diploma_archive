@@ -25,6 +25,39 @@ export async function addFaculty(name: string) {
 	}
 }
 
+export async function getDepartments(
+	facultyId: string,
+	page = 1,
+	perPage = 10
+) {
+	if (!facultyId) {
+		console.error("Missing facultyId!");
+		return { items: [], totalPages: 1 };
+	}
+
+	try {
+		console.log("Fetching departments for facultyId:", facultyId);
+
+		const result = await pb
+			.collection("Archive_departments")
+			.getList(page, perPage, {
+				filter: `facultyId="${facultyId}"`,
+				sort: "-created",
+			});
+
+		return {
+			items: result.items,
+			totalPages: result.totalPages,
+		};
+	} catch (error) {
+		console.error("Error fetching departments:", error);
+		return {
+			items: [],
+			totalPages: 1,
+		};
+	}
+}
+
 export async function getFacultyByName(name: string) {
 	try {
 		const result = await pb
