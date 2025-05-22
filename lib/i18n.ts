@@ -199,6 +199,7 @@ i18n
 						successDelete: "Faculty deleted successfully!",
 						error: "An error occurred. Please try again.",
 						notFound: "No faculties found.",
+						departmentsOf: "Departments of {{name}}",
 					},
 
 					students: {
@@ -221,6 +222,24 @@ i18n
 						title: "Confirm Deletion",
 						description:
 							"Are you sure you want to delete the faculty {{name}}? This action cannot be undone.",
+					},
+
+					breadcrumbs: {
+						home: "Home",
+						faculties: "Faculties",
+					},
+
+					departments: {
+						title: "Departments",
+						code: "Code",
+						name: "Name",
+						createdAt: "Created At",
+						updatedAt: "Updated At",
+						actions: "Actions",
+						notFound: "No departments found",
+					},
+					navigation: {
+						home: "Home",
 					},
 				},
 			},
