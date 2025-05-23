@@ -133,8 +133,10 @@ const FacultiesList = () => {
 						logs.map((faculty) => (
 							<TableRow
 								key={faculty.id}
-								className="hover:bg-gray-100 dark:hover:bg-zinc-800"
-								onDoubleClick={() => router.push(`/faculties/${faculty.id}`)}
+								className="hover:bg-gray-100 dark:hover:bg-zinc-800 hover:cursor-pointer"
+								onDoubleClick={() =>
+									router.push(`/faculties/departments?facultyId=${faculty.id}`)
+								}
 							>
 								<TableCell>
 									<span className="inline-flex items-center gap-2 rounded-full bg-gray-200 px-3 py-1 text-sm font-medium">
