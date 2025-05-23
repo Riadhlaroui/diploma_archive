@@ -23,3 +23,34 @@ export const createStudent = async (data: {
 }) => {
 	return await pb.collection("Archive_students").create(data);
 };
+
+export async function getStudentsByDepartment(
+	departmentId: string,
+	page = 1,
+	perPage = 10
+) {
+	if (!departmentId) {
+		console.error("Missing departmentId!");
+		return { items: [], totalPages: 1 };
+	}
+
+	try {
+		const result = await pb
+			.collection("Archive_students")
+			.getList(page, perPage, {
+				filter: `departmentId="${departmentId}"`,
+				sort: "-created",
+			});
+
+		return {
+			items: result.items,
+			totalPages: result.totalPages,
+		};
+	} catch (error) {
+		console.error("Error fetching students by department:", error);
+		return {
+			items: [],
+			totalPages: 1,
+		};
+	}
+}

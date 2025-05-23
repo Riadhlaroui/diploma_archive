@@ -215,6 +215,14 @@ i18n
 						actions: "Actions",
 						notFound: "No students found",
 						copyId: "Copy Matricule",
+						inDepartment: "Students in {{department}}",
+						noStudentsFound: "No students found.",
+						table: {
+							id: "ID",
+							name: "Name",
+							email: "Email",
+							createdAt: "Created At",
+						},
 					},
 					loading: "Loading...",
 
@@ -237,6 +245,7 @@ i18n
 						updatedAt: "Updated At",
 						actions: "Actions",
 						notFound: "No departments found",
+						unknown: "Unknown Department",
 					},
 					navigation: {
 						home: "Home",

@@ -30,11 +30,11 @@ import { Loader2, Check, Copy, Trash2, UserRoundPen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getDepartments } from "@/app/src/services/facultieService";
-import { useParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function DepartmentsPage() {
-	const params = useParams(); // get route params
-	const facultyId = typeof params.id === "string" ? params.id : undefined;
+	const searchParams = useSearchParams();
+	const facultyId = searchParams.get("facultyId");
 
 	console.log("Faculty ID:", facultyId);
 
@@ -44,6 +44,7 @@ export default function DepartmentsPage() {
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
 	const [copiedId, setCopiedId] = useState("");
+	const router = useRouter();
 
 	useEffect(() => {
 		async function fetchDepartments() {
@@ -73,11 +74,12 @@ export default function DepartmentsPage() {
 
 	return (
 		<div className="p-6 space-y-6">
-			{/* Breadcrumb */}
 			<Breadcrumb>
 				<BreadcrumbList>
 					<BreadcrumbItem>
-						<BreadcrumbLink href="/">{t("navigation.home")}</BreadcrumbLink>
+						<BreadcrumbLink href="/dashboard">
+							{t("navigation.home")}
+						</BreadcrumbLink>
 					</BreadcrumbItem>
 					<BreadcrumbSeparator />
 					<BreadcrumbItem>
@@ -103,7 +105,6 @@ export default function DepartmentsPage() {
 				</BreadcrumbList>
 			</Breadcrumb>
 
-			{/* Table */}
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
 					<TableRow>
@@ -128,6 +129,11 @@ export default function DepartmentsPage() {
 							<TableRow
 								key={department.id}
 								className="hover:bg-gray-100 dark:hover:bg-zinc-800"
+								onClick={() => {
+									router.push(
+										`/faculties/departments/students?departmentId=${department.id}`
+									);
+								}}
 							>
 								<TableCell>
 									<span className="inline-flex items-center gap-2 rounded-full bg-gray-200 px-3 py-1 text-sm font-medium">
