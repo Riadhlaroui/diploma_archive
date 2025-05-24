@@ -38,6 +38,7 @@ import {
 import { useState } from "react";
 
 import StudentFormDialog from "./StudentFormDialog";
+import { useRouter } from "next/navigation";
 
 export function AppSidebar() {
 	const { t } = useTranslation();
@@ -73,7 +74,7 @@ export function AppSidebar() {
 	const studentContent = [
 		{
 			title: t("sidebar.students"),
-			url: "/students",
+			url: "/manageStudents/studentList",
 			icon: UsersRound,
 		},
 	];
@@ -85,6 +86,8 @@ export function AppSidebar() {
 			icon: University,
 		},
 	];
+
+	const router = useRouter();
 
 	return (
 		<Sidebar collapsible="icon">
@@ -169,7 +172,7 @@ export function AppSidebar() {
 										<DropdownMenuContent side="right" align="start">
 											<DropdownMenuItem
 												className=" hover:cursor-pointer"
-												onClick={() => setOpenAddStudentDialog(true)}
+												onClick={() => router.push("/manageStudents")}
 											>
 												<span>Add Student</span>
 											</DropdownMenuItem>

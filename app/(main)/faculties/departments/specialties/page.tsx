@@ -3,8 +3,11 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getStudentsByDepartment } from "@/app/src/services/studentService";
-import { getDepartmentById } from "@/app/src/services/departmentService";
+
+import {
+	getDepartmentById,
+	getSpecialtiesByDepartment,
+} from "@/app/src/services/departmentService";
 import {
 	Table,
 	TableHeader,
@@ -14,7 +17,7 @@ import {
 	TableCell,
 	TableFooter,
 } from "@/components/ui/table";
-import { Loader2 } from "lucide-react";
+import { Check, Copy, Loader2, Trash2, UserRoundPen } from "lucide-react";
 
 import {
 	Breadcrumb,
@@ -24,27 +27,28 @@ import {
 	BreadcrumbSeparator,
 	BreadcrumbPage,
 	BreadcrumbEllipsis,
-} from "@/components/ui/breadcrumb"; // adjust path if needed
+} from "@/components/ui/breadcrumb";
 
 import {
 	DropdownMenu,
 	DropdownMenuTrigger,
 	DropdownMenuContent,
 	DropdownMenuItem,
-} from "@/components/ui/dropdown-menu"; // adjust path if needed
+} from "@/components/ui/dropdown-menu";
 
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 
-export default function StudentsPage() {
+export default function SpecialtiesPage() {
 	const { t } = useTranslation();
 	const searchParams = useSearchParams();
 	const departmentId = searchParams.get("departmentId");
 
-	const [students, setStudents] = useState<any[]>([]);
+	const [specialties, setSpecialties] = useState<any[]>([]);
 	const [departmentName, setDepartmentName] = useState<string>("");
 	const [loading, setLoading] = useState(true);
 	const [loadingDept, setLoadingDept] = useState(true);
+	const [copiedId, setCopiedId] = useState("");
 
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
@@ -53,19 +57,19 @@ export default function StudentsPage() {
 	useEffect(() => {
 		if (!departmentId) return;
 
-		async function fetchStudents() {
+		async function fetchSpecialties() {
 			setLoading(true);
-			const data = await getStudentsByDepartment(
+			const data = await getSpecialtiesByDepartment(
 				departmentId as string,
 				page,
 				perPage
 			);
-			setStudents(data.items);
+			setSpecialties(data.items);
 			setTotalPages(data.totalPages);
 			setLoading(false);
 		}
 
-		fetchStudents();
+		fetchSpecialties();
 	}, [departmentId, page]);
 
 	const router = useRouter();
@@ -86,6 +90,14 @@ export default function StudentsPage() {
 
 		fetchDepartmentName();
 	}, [departmentId, t]);
+
+	function handleEdit(): void {
+		throw new Error("Function not implemented.");
+	}
+
+	function handleDelete(): void {
+		throw new Error("Function not implemented.");
+	}
 
 	return (
 		<div className="p-6">
@@ -123,50 +135,90 @@ export default function StudentsPage() {
 				</BreadcrumbList>
 			</Breadcrumb>
 
-			<h1 className="text-2xl font-bold mb-4">
-				{t("students.inDepartment", {
-					department: departmentName || departmentId,
-				})}
+			<h1 className="text-2xl font-semibold mb-4">
+				Specialties in {departmentName}
 			</h1>
 
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
 					<TableRow>
-						<TableHead>{t("students.table.id")}</TableHead>
-						<TableHead>{t("students.table.name")}</TableHead>
-						<TableHead>{t("students.table.email")}</TableHead>
-						<TableHead>{t("students.table.createdAt")}</TableHead>
+						<TableHead>Code</TableHead>
+						<TableHead>Name</TableHead>
+						<TableHead>Major</TableHead>
+						<TableHead>Created At</TableHead>
+						<TableHead>{t("actions.title")}</TableHead>{" "}
+						{/* New Actions Header */}
 					</TableRow>
 				</TableHeader>
 				<TableBody>
 					{loading ? (
 						<TableRow>
-							<TableCell colSpan={4} className="text-center py-6">
+							<TableCell colSpan={5} className="text-center py-6">
 								<Loader2 className="mx-auto animate-spin text-gray-500" />
 							</TableCell>
 						</TableRow>
-					) : students.length > 0 ? (
-						students.map((student) => (
-							<TableRow key={student.id}>
-								<TableCell>{student.id}</TableCell>
-								<TableCell>{student.name}</TableCell>
-								<TableCell>{student.email}</TableCell>
+					) : specialties.length > 0 ? (
+						specialties.map((specialtie) => (
+							<TableRow key={specialtie.id}>
 								<TableCell>
-									{new Date(student.created).toLocaleDateString()}
+									<span className="inline-flex items-center gap-2 rounded-full bg-gray-200 px-3 py-1 text-sm font-medium">
+										{specialtie.id}
+										{copiedId === specialtie.id ? (
+											<Check size={14} className="text-green-600" />
+										) : (
+											<button
+												onClick={() => {
+													navigator.clipboard.writeText(specialtie.id);
+													setCopiedId(specialtie.id);
+													setTimeout(() => setCopiedId(""), 1500);
+												}}
+												aria-label={t("actions.copyId")}
+												className="hover:text-blue-500"
+											>
+												<Copy size={14} />
+											</button>
+										)}
+									</span>
+								</TableCell>
+								<TableCell>{specialtie.name}</TableCell>
+								<TableCell>{specialtie.major}</TableCell>
+								<TableCell>
+									{new Date(specialtie.created).toLocaleDateString()}
+								</TableCell>
+								<TableCell>
+									<div className="flex gap-2">
+										<Button
+											className="hover:cursor-pointer"
+											size="sm"
+											variant="outline"
+											onClick={() => handleEdit()}
+										>
+											<UserRoundPen />
+										</Button>
+										<Button
+											size="sm"
+											variant="destructive"
+											onClick={() => handleDelete()}
+											className="bg-[#f44336] text-white hover:cursor-pointer"
+										>
+											<Trash2 />
+										</Button>
+									</div>
 								</TableCell>
 							</TableRow>
 						))
 					) : (
 						<TableRow>
-							<TableCell colSpan={4} className="text-center py-6 text-gray-500">
-								{t("students.noStudentsFound")}
+							<TableCell colSpan={5} className="text-center py-6 text-gray-500">
+								{t("specialties.notFound")}
 							</TableCell>
 						</TableRow>
 					)}
 				</TableBody>
+
 				<TableFooter>
 					<TableRow>
-						<TableCell colSpan={4} className="text-center py-3">
+						<TableCell colSpan={5} className="text-center py-3">
 							<div className="flex items-center justify-center gap-4">
 								<Button
 									variant="outline"

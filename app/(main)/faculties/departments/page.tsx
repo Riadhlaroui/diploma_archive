@@ -26,7 +26,15 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Loader2, Check, Copy, Trash2, UserRoundPen } from "lucide-react";
+import {
+	Loader2,
+	Check,
+	Copy,
+	Trash2,
+	UserRoundPen,
+	RefreshCcw,
+	SquarePlus,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getDepartments } from "@/app/src/services/facultieService";
@@ -105,6 +113,23 @@ export default function DepartmentsPage() {
 				</BreadcrumbList>
 			</Breadcrumb>
 
+			<div className="flex gap-2 mb-4 items-center">
+				<h3 className="text-2xl font-semibold">{t("departments.title")}</h3>
+				<Button
+					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
+					disabled={loading}
+				>
+					{loading ? (
+						<Loader2 className="animate-spin text-black dark:text-white" />
+					) : (
+						<RefreshCcw className="text-black dark:text-white" />
+					)}
+				</Button>
+				<Button className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer">
+					<SquarePlus className="text-black" />
+				</Button>
+			</div>
+
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
 					<TableRow>
@@ -128,10 +153,10 @@ export default function DepartmentsPage() {
 						departments.map((department) => (
 							<TableRow
 								key={department.id}
-								className="hover:bg-gray-100 dark:hover:bg-zinc-800"
-								onClick={() => {
+								className="hover:bg-gray-100 dark:hover:bg-zinc-800 hover:cursor-pointer"
+								onDoubleClick={() => {
 									router.push(
-										`/faculties/departments/students?departmentId=${department.id}`
+										`/faculties/departments/specialties?departmentId=${department.id}`
 									);
 								}}
 							>
@@ -162,6 +187,7 @@ export default function DepartmentsPage() {
 								<TableCell>
 									<div className="flex gap-2">
 										<Button
+											className=" hover:cursor-pointer"
 											size="sm"
 											variant="outline"
 											onClick={() => handleEdit(department)}
@@ -172,7 +198,7 @@ export default function DepartmentsPage() {
 											size="sm"
 											variant="destructive"
 											onClick={() => handleDelete(department)}
-											className="bg-[#f44336] text-white"
+											className="bg-[#f44336] text-white hover:cursor-pointer"
 										>
 											<Trash2 />
 										</Button>

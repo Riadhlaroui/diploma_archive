@@ -163,6 +163,7 @@ const FacultiesList = () => {
 								<TableCell>
 									<div className="flex gap-2">
 										<Button
+											className=" hover:cursor-pointer"
 											size="sm"
 											variant="outline"
 											onClick={() => handleEdit(faculty)}
@@ -173,7 +174,7 @@ const FacultiesList = () => {
 											size="sm"
 											variant="destructive"
 											onClick={() => handleDelete(faculty)}
-											className="bg-[#f44336] text-white"
+											className="bg-[#f44336] text-white hover:cursor-pointer"
 										>
 											<Trash2 />
 										</Button>

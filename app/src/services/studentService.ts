@@ -1,27 +1,35 @@
 import pb from "@/lib/pocketbase";
 
-export interface Student {
-	id: string;
+interface CreateStudentInput {
 	matricule: string;
 	firstName: string;
 	lastName: string;
-	enrollmentYear: number;
-	dateOfBirth: Date;
+	dateOfBirth: string; // ISO string
+	enrollmentYear: string; // ISO string
 	specialtyId: string;
-	year: Date;
-	createdAt: Date;
-	updatedAt: Date;
+	file?: File | null; // Optional file for document upload
 }
 
-export const createStudent = async (data: {
-	matricule: string;
-	firstName: string;
-	lastName: string;
-	dateOfBirth: string;
-	enrollmentYear: string;
-	specialtyId: string;
-}) => {
-	return await pb.collection("Archive_students").create(data);
+export const createStudent = async (data: CreateStudentInput) => {
+	try {
+		// Step 1: Create the student
+		const { file, ...studentData } = data;
+		const student = await pb.collection("Archive_students").create(studentData);
+
+		// Step 2: Upload document if a file is provided
+		if (file) {
+			const formData = new FormData();
+			formData.append("studentId", student.id);
+			formData.append("file", file);
+
+			await pb.collection("Archive_documents").create(formData);
+		}
+
+		return student;
+	} catch (error) {
+		console.error("Failed to create student or upload document:", error);
+		throw error;
+	}
 };
 
 export async function getStudentsByDepartment(

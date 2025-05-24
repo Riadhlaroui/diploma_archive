@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
+import React from "react";
 
 import { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
+
 import { Button } from "@/components/ui/button";
 import {
 	Select,
@@ -15,16 +15,12 @@ import {
 	SelectItem,
 } from "@/components/ui/select";
 import { useTranslation } from "react-i18next";
-import { createStudent } from "@/app/src/services/studentService";
+
 import pb from "@/lib/pocketbase";
 import { toast } from "sonner";
 import { X } from "lucide-react";
 
-const CreateStudentDialog = ({
-	onStudentCreated,
-}: {
-	onStudentCreated: () => void;
-}) => {
+const CreateStudentPage = () => {
 	const { t } = useTranslation();
 
 	const [isOpen, setIsOpen] = useState(false);
@@ -35,8 +31,6 @@ const CreateStudentDialog = ({
 	const [selectedFaculty, setSelectedFaculty] = useState("");
 	const [selectedDepartment, setSelectedDepartment] = useState("");
 	const [selectedSpecialty, setSelectedSpecialty] = useState<any>(null);
-
-	const [file, setFile] = useState<File | null>(null);
 
 	const [form, setForm] = useState({
 		matricule: "",
@@ -126,7 +120,6 @@ const CreateStudentDialog = ({
 
 		console.log("Form submitted:", form);
 	};
-
 	return (
 		<>
 			<Button onClick={() => setIsOpen(true)}>Add Student</Button>
@@ -342,4 +335,4 @@ const CreateStudentDialog = ({
 	);
 };
 
-export default CreateStudentDialog;
+export default CreateStudentPage;
