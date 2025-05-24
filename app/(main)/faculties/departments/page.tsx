@@ -40,6 +40,8 @@ import { useTranslation } from "react-i18next";
 import { getDepartments } from "@/app/src/services/facultieService";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import AddDepartmentDialog from "@/components/AddDepartmentDialog"; // Adjust path if needed
+
 export default function DepartmentsPage() {
 	const searchParams = useSearchParams();
 	const facultyId = searchParams.get("facultyId");
@@ -52,23 +54,26 @@ export default function DepartmentsPage() {
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
 	const [copiedId, setCopiedId] = useState("");
+
+	const [showAddDialog, setShowAddDialog] = useState(false);
+
 	const router = useRouter();
 
-	useEffect(() => {
-		async function fetchDepartments() {
-			if (!facultyId) {
-				setDepartments([]);
-				setTotalPages(1);
-				setLoading(false);
-				return;
-			}
-			setLoading(true);
-			const data = await getDepartments(facultyId, page);
-			setDepartments(data.items);
-			setTotalPages(data.totalPages);
+	const fetchDepartments = async () => {
+		if (!facultyId) {
+			setDepartments([]);
+			setTotalPages(1);
 			setLoading(false);
+			return;
 		}
+		setLoading(true);
+		const data = await getDepartments(facultyId, page);
+		setDepartments(data.items);
+		setTotalPages(data.totalPages);
+		setLoading(false);
+	};
 
+	useEffect(() => {
 		fetchDepartments();
 	}, [facultyId, page]);
 
@@ -108,6 +113,15 @@ export default function DepartmentsPage() {
 					</BreadcrumbItem>
 					<BreadcrumbSeparator />
 					<BreadcrumbItem>
+						<BreadcrumbLink
+							href="/faculties"
+							className="hover:underline hover:cursor-pointer"
+						>
+							{t("faculties.title")}
+						</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
 						<BreadcrumbPage>{t("departments.title")}</BreadcrumbPage>
 					</BreadcrumbItem>
 				</BreadcrumbList>
@@ -125,7 +139,10 @@ export default function DepartmentsPage() {
 						<RefreshCcw className="text-black dark:text-white" />
 					)}
 				</Button>
-				<Button className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer">
+				<Button
+					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
+					onClick={() => setShowAddDialog(true)}
+				>
 					<SquarePlus className="text-black" />
 				</Button>
 			</div>
@@ -222,6 +239,7 @@ export default function DepartmentsPage() {
 									variant="outline"
 									onClick={() => setPage((p) => Math.max(p - 1, 1))}
 									disabled={page === 1 || loading}
+									className="hover:cursor-pointer"
 								>
 									{t("pagination.previous")}
 								</Button>
@@ -232,6 +250,7 @@ export default function DepartmentsPage() {
 									variant="outline"
 									onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
 									disabled={page >= totalPages || loading}
+									className="hover:cursor-pointer"
 								>
 									{t("pagination.next")}
 								</Button>
@@ -240,6 +259,16 @@ export default function DepartmentsPage() {
 					</TableRow>
 				</TableFooter>
 			</Table>
+
+			{showAddDialog && facultyId && (
+				<AddDepartmentDialog
+					facultyId={facultyId}
+					onClose={() => {
+						setShowAddDialog(false);
+						fetchDepartments(); // Optional: refresh list after adding
+					}}
+				/>
+			)}
 		</div>
 	);
 }

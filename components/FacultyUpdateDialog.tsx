@@ -111,13 +111,13 @@ export function FacultyUpdateDialog({ open, onOpenChange, user }: Props) {
 						<button
 							type="button"
 							onClick={() => onOpenChange(false)}
-							className="bg-gray-300 text-black px-4 py-2 w-full rounded-[3px] hover:bg-gray-400 transition"
+							className="bg-gray-300 text-black px-4 py-2 w-full rounded-[3px] hover:bg-gray-400 transition hover:cursor-pointer"
 						>
 							{t("editFacultyDialog.cancelButton", "Cancel")}
 						</button>
 						<button
 							type="submit"
-							className="bg-black text-white px-4 py-2 w-full rounded-[3px] hover:bg-gray-900 transition"
+							className="bg-black text-white px-4 py-2 w-full rounded-[3px] hover:bg-gray-900 transition hover:cursor-pointer"
 						>
 							{t("editFacultyDialog.saveButton", "Save")}
 						</button>

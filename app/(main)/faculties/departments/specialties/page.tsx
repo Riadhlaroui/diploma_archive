@@ -17,7 +17,15 @@ import {
 	TableCell,
 	TableFooter,
 } from "@/components/ui/table";
-import { Check, Copy, Loader2, Trash2, UserRoundPen } from "lucide-react";
+import {
+	Check,
+	Copy,
+	Loader2,
+	RefreshCcw,
+	SquarePlus,
+	Trash2,
+	UserRoundPen,
+} from "lucide-react";
 
 import {
 	Breadcrumb,
@@ -127,6 +135,24 @@ export default function SpecialtiesPage() {
 						</DropdownMenu>
 					</BreadcrumbItem>
 					<BreadcrumbSeparator />
+					<BreadcrumbItem className="cursor-pointer">
+						<BreadcrumbLink
+							href="/faculties"
+							className="hover:underline hover:cursor-pointer"
+						>
+							{t("faculties.title")}
+						</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem className="cursor-pointer">
+						<BreadcrumbLink
+							onClick={() => router.back()}
+							className="hover:underline hover:cursor-pointer"
+						>
+							{t("departments.title")}
+						</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
 					<BreadcrumbItem>
 						<BreadcrumbPage>
 							{loadingDept ? t("loading") : departmentName}
@@ -135,9 +161,24 @@ export default function SpecialtiesPage() {
 				</BreadcrumbList>
 			</Breadcrumb>
 
-			<h1 className="text-2xl font-semibold mb-4">
-				Specialties in {departmentName}
-			</h1>
+			<div className="flex gap-2 mb-4 items-center mt-4">
+				<h3 className="text-2xl font-semibold">
+					Specialties in {departmentName}
+				</h3>
+				<Button
+					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
+					disabled={loading}
+				>
+					{loading ? (
+						<Loader2 className="animate-spin text-black dark:text-white" />
+					) : (
+						<RefreshCcw className="text-black dark:text-white" />
+					)}
+				</Button>
+				<Button className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer">
+					<SquarePlus className="text-black" />
+				</Button>
+			</div>
 
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>

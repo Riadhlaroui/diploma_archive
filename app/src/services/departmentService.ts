@@ -36,3 +36,19 @@ export async function getSpecialtiesByDepartment(
 		throw new Error("Failed to fetch specialties.");
 	}
 }
+
+export async function addDepartment(data: {
+	name: string;
+	code: string;
+	facultyId: string;
+}) {
+	try {
+		const newDepartment = await pb
+			.collection("Archive_departments")
+			.create(data);
+		return newDepartment;
+	} catch (error) {
+		console.error("Error adding department:", error);
+		throw new Error("Failed to add department.");
+	}
+}

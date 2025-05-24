@@ -208,6 +208,7 @@ const FacultiesList = () => {
 									variant="outline"
 									onClick={() => setPage((p) => Math.max(p - 1, 1))}
 									disabled={page === 1 || loading}
+									className="hover:cursor-pointer"
 								>
 									{t("pagination.previous")}
 								</Button>
@@ -218,6 +219,7 @@ const FacultiesList = () => {
 									variant="outline"
 									onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
 									disabled={page >= totalPages || loading}
+									className="hover:cursor-pointer"
 								>
 									{t("pagination.next")}
 								</Button>
