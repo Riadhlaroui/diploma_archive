@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
+import React from "react";
 
 import { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
+
 import { Button } from "@/components/ui/button";
 import {
 	Select,
@@ -15,28 +15,24 @@ import {
 	SelectItem,
 } from "@/components/ui/select";
 import { useTranslation } from "react-i18next";
-import { createStudent } from "@/app/src/services/studentService";
+
 import pb from "@/lib/pocketbase";
 import { toast } from "sonner";
-import { X } from "lucide-react";
+import { createStudent } from "@/app/src/services/studentService"; // adjust the path accordingly
 
-const CreateStudentDialog = ({
-	onStudentCreated,
-}: {
-	onStudentCreated: () => void;
-}) => {
+import { Separator } from "@/components/ui/separator";
+
+const CreateStudentPage = () => {
 	const { t } = useTranslation();
 
-	const [isOpen, setIsOpen] = useState(false);
 	const [faculties, setFaculties] = useState<any[]>([]);
 	const [departments, setDepartments] = useState<any[]>([]);
 	const [specialties, setSpecialties] = useState<any[]>([]);
 
 	const [selectedFaculty, setSelectedFaculty] = useState("");
 	const [selectedDepartment, setSelectedDepartment] = useState("");
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [selectedSpecialty, setSelectedSpecialty] = useState<any>(null);
-
-	const [file, setFile] = useState<File | null>(null);
 
 	const [form, setForm] = useState({
 		matricule: "",
@@ -47,6 +43,7 @@ const CreateStudentDialog = ({
 		specialtyId: "",
 		field: "",
 		major: "",
+		file: null as File | null,
 	});
 
 	useEffect(() => {
@@ -98,52 +95,94 @@ const CreateStudentDialog = ({
 		setForm((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleCreate = () => {
-		// Validate dateOfBirth
-		if (!form.dateOfBirth) {
-			toast.error("Date of Birth is required");
+	const handleCreate = async () => {
+		const requiredFields = [
+			"matricule",
+			"firstName",
+			"lastName",
+			"dateOfBirth",
+			"enrollmentYear",
+			"specialtyId",
+			"field",
+			"major",
+		];
+
+		// Check for missing fields
+		const missingField = requiredFields.find(
+			(key) => !form[key as keyof typeof form]
+		);
+		if (missingField) {
+			toast.error(`Please fill in the required field: ${missingField}`);
 			return;
 		}
 
+		// Validate dateOfBirth
 		const dob = new Date(form.dateOfBirth);
 		if (isNaN(dob.getTime())) {
-			toast.error("Date of Birth is invalid");
+			toast.error("Invalid date of birth format.");
 			return;
 		}
-
-		const today = new Date();
-		if (dob > today) {
-			toast.error("Date of Birth cannot be in the future");
+		if (dob > new Date()) {
+			toast.error("Date of birth cannot be in the future.");
 			return;
 		}
 
 		// Validate enrollmentYear
 		const year = parseInt(form.enrollmentYear);
-		if (!year || year < 1900 || year > today.getFullYear()) {
-			toast.error("Enrollment Year must be a valid year");
+		const currentYear = new Date().getFullYear();
+		if (
+			!form.enrollmentYear ||
+			isNaN(year) ||
+			year < 1900 ||
+			year > currentYear
+		) {
+			toast.error(`Enrollment year must be between 1900 and ${currentYear}.`);
 			return;
 		}
 
-		console.log("Form submitted:", form);
+		console.log("Form data before submission:", form);
+
+		try {
+			await createStudent(form);
+			toast.success("Student created successfully.");
+			// Optional: Reset form
+			setForm({
+				matricule: "",
+				firstName: "",
+				lastName: "",
+				dateOfBirth: "",
+				enrollmentYear: "",
+				specialtyId: "",
+				field: "",
+				major: "",
+				file: null,
+			});
+			setSelectedFaculty("");
+			setSelectedDepartment("");
+			setSelectedSpecialty(null);
+			setDepartments([]);
+			setSpecialties([]);
+		} catch (error: any) {
+			console.error("Create student error:", error);
+			toast.error(error?.message || "Failed to create student.");
+		}
 	};
 
 	return (
 		<>
-			<Button onClick={() => setIsOpen(true)}>Add Student</Button>
+			<div className="min-h-screen flex items-start justify-start dark:bg-zinc-950 p-2">
+				<div className="bg-white dark:bg-zinc-900 w-full max-w-4xl rounded-[3px] p-6 relative">
+					<h2 className="text-xl font-semibold mb-4">Add Student</h2>
 
-			{isOpen && (
-				<div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-					<div className="bg-white dark:bg-zinc-900 w-full max-w-2xl rounded-[3px] shadow-lg p-6 relative">
-						{/* Close Button */}
-						<button
-							className="absolute top-4 right-4 text-gray-500 hover:text-red-500 hover:cursor-pointer"
-							onClick={() => setIsOpen(false)}
-						>
-							<X className="w-5 h-5" />
-						</button>
+					<Separator className=" mb-2.5" />
 
-						<h2 className="text-xl font-semibold mb-4">Add Student</h2>
-
+					<form
+						onSubmit={(e) => {
+							e.preventDefault(); // prevent default form submit
+							handleCreate(); // your create logic
+						}}
+						className="bg-white dark:bg-zinc-900 w-full max-w-4xl rounded-[3px] p-6 relative"
+					>
 						<div className="grid grid-cols-2 gap-4 mb-4">
 							{/* Faculty */}
 							<div>
@@ -235,31 +274,28 @@ const CreateStudentDialog = ({
 						{/* First and Last Name */}
 						<div className="flex flex-col gap-[0.7rem] mt-2">
 							<div className="flex gap-4">
-								{/* First Name */}
 								<div className="relative w-1/2">
 									<input
 										type="text"
 										name="firstName"
 										value={form.firstName}
+										onChange={handleChange}
 										className="peer w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none"
 										placeholder=""
-										onChange={handleChange}
 									/>
 									<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm">
 										{t("addStaffDialog.firstName")}
 										<span className="text-[#D81212]">*</span>
 									</label>
 								</div>
-
-								{/* Last Name */}
 								<div className="relative w-1/2">
 									<input
 										type="text"
 										name="lastName"
 										value={form.lastName}
+										onChange={handleChange}
 										className="peer w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none"
 										placeholder=""
-										onChange={handleChange}
 									/>
 									<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm">
 										{t("addStaffDialog.lastName")}
@@ -300,6 +336,7 @@ const CreateStudentDialog = ({
 							</div>
 						</div>
 
+						{/* Date of Birth and Enrollment Year */}
 						<div className="grid grid-cols-2 gap-4 mt-4">
 							<div className="relative">
 								<input
@@ -307,7 +344,7 @@ const CreateStudentDialog = ({
 									name="dateOfBirth"
 									value={form.dateOfBirth}
 									onChange={handleChange}
-									className="peer w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none"
+									className="peer w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none not-focus:text-[#697079]"
 									placeholder=""
 								/>
 								<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm">
@@ -332,14 +369,33 @@ const CreateStudentDialog = ({
 							</div>
 						</div>
 
-						<div className="flex justify-end mt-6">
-							<Button onClick={handleCreate}>Create</Button>
+						<div className="relative mt-4 ">
+							<label className="block text-sm mb-1 font-semibold text-[#697079]">
+								Document (optional)
+							</label>
+							<input
+								type="file"
+								accept="application/pdf"
+								onChange={(e) =>
+									setForm((prev) => ({
+										...prev,
+										file: e.target.files?.[0] || null,
+									}))
+								}
+								className="w-full h-[4rem] text-black dark:text-white bg-[#E3E8ED] dark:bg-transparent dark:border-2 border rounded px-3 py-2"
+							/>
 						</div>
-					</div>
+
+						<Separator className="mt-2.5" />
+
+						<div className="flex justify-end mt-6">
+							<Button type="submit">Create</Button>
+						</div>
+					</form>
 				</div>
-			)}
+			</div>
 		</>
 	);
 };
 
-export default CreateStudentDialog;
+export default CreateStudentPage;
