@@ -13,13 +13,13 @@ const AddFacultyDialog = ({ onClose }: { onClose: () => void }) => {
 		e.preventDefault();
 
 		if (!name.trim()) {
-			alert("Faculty name is required.");
+			toast.error("Faculty name is required.");
 			return;
 		}
 
 		try {
 			await addFaculty(name);
-			alert("Faculty added successfully!");
+			toast.success("Faculty added successfully!");
 			onClose(); // close dialog
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,7 +36,6 @@ const AddFacultyDialog = ({ onClose }: { onClose: () => void }) => {
 					</div>
 				);
 			} else {
-				console.error("Error creating user:", error);
 				toast.error(
 					<div className="flex items-center gap-2">
 						<div>

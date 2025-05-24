@@ -21,11 +21,16 @@ import {
 	UserRoundPen,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { FacultieList, getFaculties } from "@/app/src/services/facultieService";
+import {
+	FacultieList,
+	getFaculties,
+	deleteFaculty,
+} from "@/app/src/services/facultieService";
 import AddFacultyDialog from "@/components/AddFacultyDialog";
 import { FacultyUpdateDialog } from "@/components/FacultyUpdateDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const FacultiesList = () => {
 	const [logs, setLogs] = useState<FacultieList[]>([]);
@@ -60,12 +65,17 @@ const FacultiesList = () => {
 	const confirmDelete = async () => {
 		if (!facultyToDelete) return;
 
-		// TODO: Replace this with actual delete logic
-		console.log("Deleting faculty:", facultyToDelete.id);
+		try {
+			await deleteFaculty(facultyToDelete.id);
+			toast.success(`Faculty '${facultyToDelete.name}' deleted successfully!`);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		} catch (error) {
+			toast.error(`Failed to delete faculty '${facultyToDelete.name}'.`);
+		}
 
 		setShowConfirmDialog(false);
 		setFacultyToDelete(null);
-		await fetchFaculties(); // Refresh after deletion
+		await fetchFaculties(); // Refresh the list
 	};
 
 	const { t } = useTranslation();

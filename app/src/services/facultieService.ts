@@ -25,6 +25,16 @@ export async function addFaculty(name: string) {
 	}
 }
 
+export async function deleteFaculty(id: string) {
+	try {
+		await pb.collection("Archive_faculties").delete(id);
+		console.log(`Faculty with ID ${id} deleted successfully.`);
+	} catch (error) {
+		console.error(`Error deleting faculty with ID ${id}:`, error);
+		throw error;
+	}
+}
+
 export async function getDepartments(
 	facultyId: string,
 	page = 1,
