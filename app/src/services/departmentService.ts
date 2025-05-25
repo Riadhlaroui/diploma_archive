@@ -84,9 +84,8 @@ export async function getDepartmentByName(name: string) {
 		return result;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (error: any) {
-		// Handle "not found" (404) as a valid case
 		if (error.status === 404) {
-			return null; // No department found with this name
+			return null;
 		}
 		console.error("Error fetching department by name:", error);
 		throw new Error("Failed to fetch department by name.");

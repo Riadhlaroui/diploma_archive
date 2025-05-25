@@ -46,25 +46,42 @@ export async function getDepartments(
 	}
 
 	try {
-		console.log("Fetching departments for facultyId:", facultyId);
-
-		const result = await pb
+		// Fetch paginated departments for the given faculty
+		const departmentsResponse = await pb
 			.collection("Archive_departments")
 			.getList(page, perPage, {
 				filter: `facultyId="${facultyId}"`,
 				sort: "-created",
 			});
 
+		// Fetch all specialties to count them per department
+		const allSpecialties = await pb
+			.collection("Archive_specialties")
+			.getFullList();
+
+		// Count specialties by department ID
+		const specialtyCountMap: Record<string, number> = {};
+		for (const specialty of allSpecialties) {
+			const deptId = specialty.departmentId;
+			if (specialtyCountMap[deptId]) {
+				specialtyCountMap[deptId]++;
+			} else {
+				specialtyCountMap[deptId] = 1;
+			}
+		}
+
+		const items = departmentsResponse.items.map((dept: any) => ({
+			...dept,
+			specialtiesCount: specialtyCountMap[dept.id] || 0, // <-- match the name used in UI
+		}));
+
 		return {
-			items: result.items,
-			totalPages: result.totalPages,
+			items,
+			totalPages: departmentsResponse.totalPages,
 		};
 	} catch (error) {
 		console.error("Error fetching departments:", error);
-		return {
-			items: [],
-			totalPages: 1,
-		};
+		return { items: [], totalPages: 1 };
 	}
 }
 

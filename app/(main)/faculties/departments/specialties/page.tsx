@@ -47,6 +47,9 @@ import { Button } from "@/components/ui/button";
 import AddSpecialtyDialog from "@/components/AddSpecialtyDialog";
 
 import { SpecialtyUpdateDialog } from "@/components/SpecialtyUpdateDialog";
+import ConfirmDialog from "@/components/ConfirmDialog";
+import { toast } from "sonner";
+import { deleteSpecialtyById } from "@/app/src/services/specialtyService";
 
 export default function SpecialtiesPage() {
 	const { t } = useTranslation();
@@ -68,6 +71,9 @@ export default function SpecialtiesPage() {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [selectedSpecialty, setSelectedSpecialty] = useState<any | null>(null);
 
+	const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+	const [specialtyToDelete, setSpecialtyToDelete] = useState<any | null>(null);
+
 	const fetchSpecialties = async () => {
 		if (!departmentId) return;
 		setLoading(true);
@@ -81,6 +87,21 @@ export default function SpecialtiesPage() {
 	const setEditDialogData = (specialty: any) => {
 		setSelectedSpecialty(specialty);
 		setIsDialogOpen(true);
+	};
+
+	const confirmDelete = async () => {
+		if (!specialtyToDelete) return;
+		try {
+			await deleteSpecialtyById(specialtyToDelete.id);
+			toast.success(
+				`Specialty '${specialtyToDelete.name}' deleted successfully!`
+			);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		} catch (error) {
+			toast.error(`Failed to delete specialty '${specialtyToDelete.name}'.`);
+		}
+		setShowConfirmDialog(false);
+		setSpecialtyToDelete(null);
 	};
 
 	useEffect(() => {
@@ -229,10 +250,19 @@ export default function SpecialtiesPage() {
 											size="sm"
 											variant="outline"
 											onClick={() => setEditDialogData(specialtie)}
+											className=" hover:cursor-pointer"
 										>
 											<UserRoundPen />
 										</Button>
-										<Button size="sm" variant="destructive">
+										<Button
+											size="sm"
+											variant="destructive"
+											className="hover:cursor-pointer"
+											onClick={() => {
+												setSpecialtyToDelete(specialtie);
+												setShowConfirmDialog(true);
+											}}
+										>
 											<Trash2 />
 										</Button>
 									</div>
@@ -255,6 +285,7 @@ export default function SpecialtiesPage() {
 									variant="outline"
 									onClick={() => setPage((p) => Math.max(p - 1, 1))}
 									disabled={page === 1 || loading}
+									className=" hover:cursor-pointer"
 								>
 									{t("pagination.previous")}
 								</Button>
@@ -265,6 +296,7 @@ export default function SpecialtiesPage() {
 									variant="outline"
 									onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
 									disabled={page >= totalPages || loading}
+									className=" hover:cursor-pointer"
 								>
 									{t("pagination.next")}
 								</Button>
@@ -283,6 +315,21 @@ export default function SpecialtiesPage() {
 					}}
 				/>
 			)}
+
+			<ConfirmDialog
+				open={showConfirmDialog}
+				onClose={() => {
+					setShowConfirmDialog(false);
+					setSpecialtyToDelete(null);
+				}}
+				onConfirm={confirmDelete}
+				title={t("confirm.title")}
+				description={
+					t("confirm.description", {
+						name: specialtyToDelete?.name || "",
+					}) || `Are you sure you want to delete ${specialtyToDelete?.name}?`
+				}
+			/>
 
 			<SpecialtyUpdateDialog
 				open={isDialogOpen}

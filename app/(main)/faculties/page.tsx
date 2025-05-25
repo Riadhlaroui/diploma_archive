@@ -82,7 +82,7 @@ const FacultiesList = () => {
 
 	useEffect(() => {
 		fetchFaculties();
-	}, [page]); // re-fetch when page changes
+	}, [page]);
 
 	const fetchFaculties = async () => {
 		setLoading(true);

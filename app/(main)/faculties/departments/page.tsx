@@ -202,6 +202,7 @@ export default function DepartmentsPage() {
 					<TableRow>
 						<TableHead>{t("departments.code")}</TableHead>
 						<TableHead>{t("departments.name")}</TableHead>
+						<TableHead>{t("departments.specialtiesCount")}</TableHead>
 						<TableHead>{t("departments.createdAt")}</TableHead>
 						<TableHead>{t("departments.actions")}</TableHead>
 					</TableRow>
@@ -209,7 +210,7 @@ export default function DepartmentsPage() {
 				<TableBody>
 					{loading ? (
 						<TableRow>
-							<TableCell colSpan={4} className="text-center py-6">
+							<TableCell colSpan={5} className="text-center py-6">
 								<Loader2 className="mx-auto animate-spin text-gray-500" />
 								<span className="text-sm text-gray-500 mt-2 block">
 									{t("loading")}
@@ -248,9 +249,11 @@ export default function DepartmentsPage() {
 									</span>
 								</TableCell>
 								<TableCell>{department.name}</TableCell>
+								<TableCell>{department.specialtiesCount ?? 0}</TableCell>
 								<TableCell>
 									{new Date(department.created).toLocaleDateString()}
 								</TableCell>
+
 								<TableCell>
 									<div className="flex gap-2">
 										<Button
@@ -275,7 +278,7 @@ export default function DepartmentsPage() {
 						))
 					) : (
 						<TableRow>
-							<TableCell colSpan={4} className="text-center py-6 text-gray-500">
+							<TableCell colSpan={5} className="text-center py-6 text-gray-500">
 								{t("departments.notFound")}
 							</TableCell>
 						</TableRow>

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Separator } from "./ui/separator";
 import { X } from "lucide-react";
-import { addFaculty } from "../app/src/services/facultieService"; // Adjust path if needed
+import { addFaculty } from "../app/src/services/facultieService";
 import { toast } from "sonner";
 
 const AddFacultyDialog = ({ onClose }: { onClose: () => void }) => {
@@ -20,7 +20,7 @@ const AddFacultyDialog = ({ onClose }: { onClose: () => void }) => {
 		try {
 			await addFaculty(name);
 			toast.success("Faculty added successfully!");
-			onClose(); // close dialog
+			onClose();
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
