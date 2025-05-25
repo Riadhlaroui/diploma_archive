@@ -241,6 +241,7 @@ i18n
 						title: "Departments",
 						code: "Code",
 						name: "Name",
+						specialtiesCount: "Number of Specialties",
 						createdAt: "Created At",
 						updatedAt: "Updated At",
 						actions: "Actions",

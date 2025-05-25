@@ -36,3 +36,12 @@ export const updateSpecialty = async (
 ) => {
 	return await pb.collection("Archive_specialties").update(id, data);
 };
+
+export async function deleteSpecialtyById(id: string) {
+	try {
+		await pb.collection("Archive_specialties").delete(id);
+	} catch (error) {
+		console.error("Error deleting specialty:", error);
+		throw new Error("Failed to delete specialty.");
+	}
+}
