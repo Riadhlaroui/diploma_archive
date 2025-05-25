@@ -36,6 +36,57 @@ export async function getSpecialtiesByDepartment(
 	}
 }
 
+export async function getDepartments(
+	facultyId: string,
+	page = 1,
+	perPage = 10
+) {
+	if (!facultyId) {
+		console.error("Missing facultyId!");
+		return { items: [], totalPages: 1 };
+	}
+
+	try {
+		// Fetch paginated departments for the given faculty
+		const departmentsResponse = await pb
+			.collection("Archive_departments")
+			.getList(page, perPage, {
+				filter: `facultyId="${facultyId}"`,
+				sort: "-created",
+			});
+
+		// Fetch all specialties to count them per department
+		const allSpecialties = await pb
+			.collection("Archive_specialties")
+			.getFullList();
+
+		// Count specialties by department ID
+		const specialtyCountMap: Record<string, number> = {};
+		for (const specialty of allSpecialties) {
+			const deptId = specialty.departmentId;
+			if (specialtyCountMap[deptId]) {
+				specialtyCountMap[deptId]++;
+			} else {
+				specialtyCountMap[deptId] = 1;
+			}
+		}
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const items = departmentsResponse.items.map((dept: any) => ({
+			...dept,
+			specialtiesCount: specialtyCountMap[dept.id] || 0, // <-- match the name used in UI
+		}));
+
+		return {
+			items,
+			totalPages: departmentsResponse.totalPages,
+		};
+	} catch (error) {
+		console.error("Error fetching departments:", error);
+		return { items: [], totalPages: 1 };
+	}
+}
+
 export async function addDepartment(data: {
 	name: string;
 	code: string;
