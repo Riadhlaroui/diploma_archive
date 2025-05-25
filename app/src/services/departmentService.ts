@@ -25,7 +25,6 @@ export async function getSpecialtiesByDepartment(
 				sort: "-created",
 			});
 
-		// Map for clean pagination and total
 		return {
 			items: result.items,
 			totalPages: result.totalPages,
@@ -50,5 +49,46 @@ export async function addDepartment(data: {
 	} catch (error) {
 		console.error("Error adding department:", error);
 		throw new Error("Failed to add department.");
+	}
+}
+
+export async function deleteDepartment(departmentId: string) {
+	try {
+		await pb.collection("Archive_departments").delete(departmentId);
+	} catch (error) {
+		console.error("Error deleting department:", error);
+		throw new Error("Failed to delete department.");
+	}
+}
+
+export async function updateDepartment(
+	departmentId: string,
+	data: { name: string }
+) {
+	try {
+		const updatedDepartment = await pb
+			.collection("Archive_departments")
+			.update(departmentId, data);
+		return updatedDepartment;
+	} catch (error) {
+		console.error("Error updating department:", error);
+		throw new Error("Failed to update department.");
+	}
+}
+
+export async function getDepartmentByName(name: string) {
+	try {
+		const result = await pb
+			.collection("Archive_departments")
+			.getFirstListItem(`name = "${name}"`);
+		return result;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	} catch (error: any) {
+		// Handle "not found" (404) as a valid case
+		if (error.status === 404) {
+			return null; // No department found with this name
+		}
+		console.error("Error fetching department by name:", error);
+		throw new Error("Failed to fetch department by name.");
 	}
 }
