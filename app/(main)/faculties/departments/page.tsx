@@ -37,16 +37,22 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { getDepartments } from "@/app/src/services/facultieService";
+import {
+	getDepartments,
+	getFacultyById,
+} from "@/app/src/services/facultieService";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import AddDepartmentDialog from "@/components/AddDepartmentDialog"; // Adjust path if needed
+import AddDepartmentDialog from "@/components/AddDepartmentDialog";
+import { DepartmentUpdateDialog } from "@/components/DepartmentUpdateDialog";
+import ConfirmDialog from "@/components/ConfirmDialog";
+import { toast } from "sonner";
+
+import { deleteDepartment } from "@/app/src/services/departmentService";
 
 export default function DepartmentsPage() {
 	const searchParams = useSearchParams();
 	const facultyId = searchParams.get("facultyId");
-
-	console.log("Faculty ID:", facultyId);
 
 	const { t } = useTranslation();
 	const [departments, setDepartments] = useState<any[]>([]);
@@ -57,7 +63,31 @@ export default function DepartmentsPage() {
 
 	const [showAddDialog, setShowAddDialog] = useState(false);
 
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+
+	const [selectedDepartment, setSelectedDepartment] = useState<any | null>(
+		null
+	);
+	const [departmentToDelete, setDepartmentToDelete] = useState<any | null>(
+		null
+	);
+
 	const router = useRouter();
+
+	const [facultyName, setFacultyName] = useState<string>("");
+
+	useEffect(() => {
+		if (facultyId) {
+			getFacultyById(facultyId)
+				.then((faculty) => {
+					setFacultyName(faculty?.name || "");
+				})
+				.catch(() => {
+					setFacultyName("");
+				});
+		}
+	}, [facultyId]);
 
 	const fetchDepartments = async () => {
 		if (!facultyId) {
@@ -78,11 +108,31 @@ export default function DepartmentsPage() {
 	}, [facultyId, page]);
 
 	const handleEdit = (department: any) => {
-		console.log("Edit", department);
+		setSelectedDepartment(department);
+		setIsDialogOpen(true);
 	};
 
 	const handleDelete = (department: any) => {
-		console.log("Delete", department);
+		setDepartmentToDelete(department);
+		setShowConfirmDialog(true);
+	};
+
+	const confirmDelete = async () => {
+		if (!departmentToDelete) return;
+
+		try {
+			await deleteDepartment(departmentToDelete.id);
+			toast.success(
+				`Department '${departmentToDelete.name}' deleted successfully!`
+			);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		} catch (error) {
+			toast.error(`Failed to delete department '${departmentToDelete.name}'.`);
+		}
+
+		setShowConfirmDialog(false);
+		setDepartmentToDelete(null);
+		await fetchDepartments();
 	};
 
 	return (
@@ -113,10 +163,7 @@ export default function DepartmentsPage() {
 					</BreadcrumbItem>
 					<BreadcrumbSeparator />
 					<BreadcrumbItem>
-						<BreadcrumbLink
-							href="/faculties"
-							className="hover:underline hover:cursor-pointer"
-						>
+						<BreadcrumbLink href="/faculties">
 							{t("faculties.title")}
 						</BreadcrumbLink>
 					</BreadcrumbItem>
@@ -128,10 +175,13 @@ export default function DepartmentsPage() {
 			</Breadcrumb>
 
 			<div className="flex gap-2 mb-4 items-center">
-				<h3 className="text-2xl font-semibold">{t("departments.title")}</h3>
+				<h3 className="text-2xl font-semibold">
+					{t("departments.title")} in {facultyName}
+				</h3>
 				<Button
-					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
+					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2"
 					disabled={loading}
+					onClick={fetchDepartments}
 				>
 					{loading ? (
 						<Loader2 className="animate-spin text-black dark:text-white" />
@@ -140,7 +190,7 @@ export default function DepartmentsPage() {
 					)}
 				</Button>
 				<Button
-					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
+					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2"
 					onClick={() => setShowAddDialog(true)}
 				>
 					<SquarePlus className="text-black" />
@@ -204,18 +254,18 @@ export default function DepartmentsPage() {
 								<TableCell>
 									<div className="flex gap-2">
 										<Button
-											className=" hover:cursor-pointer"
 											size="sm"
 											variant="outline"
 											onClick={() => handleEdit(department)}
+											className="hover:cursor-pointer"
 										>
 											<UserRoundPen />
 										</Button>
 										<Button
 											size="sm"
 											variant="destructive"
-											onClick={() => handleDelete(department)}
 											className="bg-[#f44336] text-white hover:cursor-pointer"
+											onClick={() => handleDelete(department)}
 										>
 											<Trash2 />
 										</Button>
@@ -260,12 +310,33 @@ export default function DepartmentsPage() {
 				</TableFooter>
 			</Table>
 
+			<DepartmentUpdateDialog
+				open={isDialogOpen}
+				onOpenChange={setIsDialogOpen}
+				user={selectedDepartment}
+			/>
+
+			<ConfirmDialog
+				open={showConfirmDialog}
+				onClose={() => {
+					setShowConfirmDialog(false);
+					setDepartmentToDelete(null);
+				}}
+				onConfirm={confirmDelete}
+				title={t("confirm.title")}
+				description={
+					t("confirm.description", {
+						name: departmentToDelete?.name || "",
+					}) || `Are you sure you want to delete ${departmentToDelete?.name}?`
+				}
+			/>
+
 			{showAddDialog && facultyId && (
 				<AddDepartmentDialog
 					facultyId={facultyId}
 					onClose={() => {
 						setShowAddDialog(false);
-						fetchDepartments(); // Optional: refresh list after adding
+						fetchDepartments();
 					}}
 				/>
 			)}

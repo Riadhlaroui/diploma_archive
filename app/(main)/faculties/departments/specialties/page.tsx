@@ -8,6 +8,7 @@ import {
 	getDepartmentById,
 	getSpecialtiesByDepartment,
 } from "@/app/src/services/departmentService";
+
 import {
 	Table,
 	TableHeader,
@@ -26,7 +27,6 @@ import {
 	Trash2,
 	UserRoundPen,
 } from "lucide-react";
-
 import {
 	Breadcrumb,
 	BreadcrumbList,
@@ -36,21 +36,23 @@ import {
 	BreadcrumbPage,
 	BreadcrumbEllipsis,
 } from "@/components/ui/breadcrumb";
-
 import {
 	DropdownMenu,
 	DropdownMenuTrigger,
 	DropdownMenuContent,
 	DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
+import AddSpecialtyDialog from "@/components/AddSpecialtyDialog";
+
+import { SpecialtyUpdateDialog } from "@/components/SpecialtyUpdateDialog";
 
 export default function SpecialtiesPage() {
 	const { t } = useTranslation();
 	const searchParams = useSearchParams();
 	const departmentId = searchParams.get("departmentId");
+	const router = useRouter();
 
 	const [specialties, setSpecialties] = useState<any[]>([]);
 	const [departmentName, setDepartmentName] = useState<string>("");
@@ -62,29 +64,31 @@ export default function SpecialtiesPage() {
 	const [totalPages, setTotalPages] = useState(1);
 	const perPage = 10;
 
-	useEffect(() => {
+	const [showAddDialog, setShowAddDialog] = useState(false);
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const [selectedSpecialty, setSelectedSpecialty] = useState<any | null>(null);
+
+	const fetchSpecialties = async () => {
 		if (!departmentId) return;
+		setLoading(true);
+		const data = await getSpecialtiesByDepartment(departmentId, page, perPage);
+		setSpecialties(data.items);
+		setTotalPages(data.totalPages);
+		setLoading(false);
+	};
 
-		async function fetchSpecialties() {
-			setLoading(true);
-			const data = await getSpecialtiesByDepartment(
-				departmentId as string,
-				page,
-				perPage
-			);
-			setSpecialties(data.items);
-			setTotalPages(data.totalPages);
-			setLoading(false);
-		}
+	// Fix the setEditDialogData handler
+	const setEditDialogData = (specialty: any) => {
+		setSelectedSpecialty(specialty);
+		setIsDialogOpen(true);
+	};
 
+	useEffect(() => {
 		fetchSpecialties();
 	}, [departmentId, page]);
 
-	const router = useRouter();
-
 	useEffect(() => {
 		if (!departmentId) return;
-
 		async function fetchDepartmentName() {
 			setLoadingDept(true);
 			try {
@@ -95,17 +99,8 @@ export default function SpecialtiesPage() {
 			}
 			setLoadingDept(false);
 		}
-
 		fetchDepartmentName();
 	}, [departmentId, t]);
-
-	function handleEdit(): void {
-		throw new Error("Function not implemented.");
-	}
-
-	function handleDelete(): void {
-		throw new Error("Function not implemented.");
-	}
 
 	return (
 		<div className="p-6">
@@ -168,6 +163,7 @@ export default function SpecialtiesPage() {
 				<Button
 					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
 					disabled={loading}
+					onClick={fetchSpecialties}
 				>
 					{loading ? (
 						<Loader2 className="animate-spin text-black dark:text-white" />
@@ -175,7 +171,10 @@ export default function SpecialtiesPage() {
 						<RefreshCcw className="text-black dark:text-white" />
 					)}
 				</Button>
-				<Button className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer">
+				<Button
+					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
+					onClick={() => setShowAddDialog(true)}
+				>
 					<SquarePlus className="text-black" />
 				</Button>
 			</div>
@@ -187,8 +186,7 @@ export default function SpecialtiesPage() {
 						<TableHead>Name</TableHead>
 						<TableHead>Major</TableHead>
 						<TableHead>Created At</TableHead>
-						<TableHead>{t("actions.title")}</TableHead>{" "}
-						{/* New Actions Header */}
+						<TableHead>Actions</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
@@ -202,7 +200,7 @@ export default function SpecialtiesPage() {
 						specialties.map((specialtie) => (
 							<TableRow key={specialtie.id}>
 								<TableCell>
-									<span className="inline-flex items-center gap-2 rounded-full bg-gray-200 px-3 py-1 text-sm font-medium">
+									<span className="inline-flex items-center gap-2 bg-gray-200 px-3 py-1 rounded-full">
 										{specialtie.id}
 										{copiedId === specialtie.id ? (
 											<Check size={14} className="text-green-600" />
@@ -214,7 +212,6 @@ export default function SpecialtiesPage() {
 													setTimeout(() => setCopiedId(""), 1500);
 												}}
 												aria-label={t("actions.copyId")}
-												className="hover:text-blue-500"
 											>
 												<Copy size={14} />
 											</button>
@@ -229,19 +226,13 @@ export default function SpecialtiesPage() {
 								<TableCell>
 									<div className="flex gap-2">
 										<Button
-											className="hover:cursor-pointer"
 											size="sm"
 											variant="outline"
-											onClick={() => handleEdit()}
+											onClick={() => setEditDialogData(specialtie)}
 										>
 											<UserRoundPen />
 										</Button>
-										<Button
-											size="sm"
-											variant="destructive"
-											onClick={() => handleDelete()}
-											className="bg-[#f44336] text-white hover:cursor-pointer"
-										>
+										<Button size="sm" variant="destructive">
 											<Trash2 />
 										</Button>
 									</div>
@@ -251,16 +242,15 @@ export default function SpecialtiesPage() {
 					) : (
 						<TableRow>
 							<TableCell colSpan={5} className="text-center py-6 text-gray-500">
-								{t("specialties.notFound")}
+								Specialties not found
 							</TableCell>
 						</TableRow>
 					)}
 				</TableBody>
-
 				<TableFooter>
 					<TableRow>
 						<TableCell colSpan={5} className="text-center py-3">
-							<div className="flex items-center justify-center gap-4">
+							<div className="flex justify-center items-center gap-4">
 								<Button
 									variant="outline"
 									onClick={() => setPage((p) => Math.max(p - 1, 1))}
@@ -283,6 +273,25 @@ export default function SpecialtiesPage() {
 					</TableRow>
 				</TableFooter>
 			</Table>
+
+			{showAddDialog && (
+				<AddSpecialtyDialog
+					departmentId={departmentId!}
+					onClose={() => {
+						setShowAddDialog(false);
+						fetchSpecialties();
+					}}
+				/>
+			)}
+
+			<SpecialtyUpdateDialog
+				open={isDialogOpen}
+				onOpenChange={(open) => {
+					setIsDialogOpen(open);
+					if (!open) setSelectedSpecialty(null); // Reset on close
+				}}
+				specialty={selectedSpecialty}
+			/>
 		</div>
 	);
 }

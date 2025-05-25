@@ -174,14 +174,14 @@ const CreateStudentPage = () => {
 				<div className="bg-white dark:bg-zinc-900 w-full max-w-4xl rounded-[3px] p-6 relative">
 					<h2 className="text-xl font-semibold mb-4">Add Student</h2>
 
-					<Separator className=" mb-2.5" />
+					<Separator className=" mb-2" />
 
 					<form
 						onSubmit={(e) => {
-							e.preventDefault(); // prevent default form submit
-							handleCreate(); // your create logic
+							e.preventDefault();
+							handleCreate();
 						}}
-						className="bg-white dark:bg-zinc-900 w-full max-w-4xl rounded-[3px] p-6 relative"
+						className="bg-white dark:bg-zinc-900 w-full max-w-4xl rounded-[3px] p-2 relative"
 					>
 						<div className="grid grid-cols-2 gap-4 mb-4">
 							{/* Faculty */}

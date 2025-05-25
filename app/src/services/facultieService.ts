@@ -80,6 +80,16 @@ export async function getFacultyByName(name: string) {
 	}
 }
 
+export async function getFacultyById(facultyId: string) {
+	try {
+		const faculty = await pb.collection("Archive_faculties").getOne(facultyId);
+		return faculty;
+	} catch (error) {
+		console.error("Error fetching faculty:", error);
+		return null;
+	}
+}
+
 export async function updateFaculty(id: string, data: { name: string }) {
 	return await pb.collection("Archive_faculties").update(id, data);
 }
