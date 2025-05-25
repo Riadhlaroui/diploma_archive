@@ -37,10 +37,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-	getDepartments,
-	getFacultyById,
-} from "@/app/src/services/facultieService";
+import { getFacultyById } from "@/app/src/services/facultieService";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import AddDepartmentDialog from "@/components/AddDepartmentDialog";
@@ -48,7 +45,10 @@ import { DepartmentUpdateDialog } from "@/components/DepartmentUpdateDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { toast } from "sonner";
 
-import { deleteDepartment } from "@/app/src/services/departmentService";
+import {
+	deleteDepartment,
+	getDepartments,
+} from "@/app/src/services/departmentService";
 
 export default function DepartmentsPage() {
 	const searchParams = useSearchParams();
@@ -286,7 +286,7 @@ export default function DepartmentsPage() {
 				</TableBody>
 				<TableFooter>
 					<TableRow>
-						<TableCell colSpan={4} className="text-center py-3">
+						<TableCell colSpan={5} className="text-center py-3">
 							<div className="flex items-center justify-center gap-4">
 								<Button
 									variant="outline"
