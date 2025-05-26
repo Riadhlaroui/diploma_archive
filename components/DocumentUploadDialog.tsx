@@ -82,7 +82,7 @@ export default function DocumentUploadDialog({
 
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-			<div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl w-full max-w-lg p-6 relative">
+			<div className="bg-white dark:bg-gray-900 rounded-[3px] shadow-xl w-full max-w-lg p-6 relative">
 				{/* Close Button */}
 				<button
 					onClick={closeDialog}
