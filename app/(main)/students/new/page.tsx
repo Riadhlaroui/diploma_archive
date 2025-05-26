@@ -189,8 +189,10 @@ const CreateStudentPage = () => {
 		<>
 			<div className="min-h-screen flex items-start justify-start dark:bg-zinc-950 p-2">
 				<div className="bg-white dark:bg-zinc-900 w-full max-w-4xl rounded-[3px] p-6 relative">
-					<h2 className="text-xl font-semibold mb-4">Add Student</h2>
-
+					<h2 className="text-xl font-semibold mb-2">Add new Student</h2>
+					<p className="text-sm text-gray-500 mb-4">
+						Please fill in the details below to create a new student record.
+					</p>
 					<Separator className=" mb-2" />
 
 					<form
@@ -386,6 +388,7 @@ const CreateStudentPage = () => {
 							</div>
 						</div>
 
+						{/* File Upload Button */}
 						<button
 							type="button"
 							onClick={() => setOpenDialog(true)}
@@ -403,6 +406,7 @@ const CreateStudentPage = () => {
 				</div>
 			</div>
 
+			{/* Document Upload Dialog */}
 			<DocumentUploadDialog
 				open={openDialog}
 				onOpenChange={setOpenDialog}

@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { X } from "lucide-react";
+import { Separator } from "./ui/separator";
 
 //Here is where call the function to upload the document
 //TODO: Implement the actual upload logic in the onUpload function
@@ -95,7 +96,9 @@ export default function DocumentUploadDialog({
 					<X className="w-5 h-5" />
 				</button>
 
-				<h2 className="text-lg font-semibold mb-4">Upload Documents</h2>
+				<h2 className="text-lg font-semibold mb-2">Upload Documents</h2>
+
+				<Separator className="mb-2.5" />
 
 				{/* Drop Zone */}
 				<div
@@ -169,6 +172,8 @@ export default function DocumentUploadDialog({
 						</li>
 					))}
 				</ul>
+
+				<Separator className="mt-2.5" />
 
 				{/* Action Buttons */}
 				<div className="mt-6 flex justify-end space-x-2">
