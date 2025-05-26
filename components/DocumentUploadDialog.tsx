@@ -1,6 +1,9 @@
 import React, { useRef, useState } from "react";
 import { X } from "lucide-react";
 
+//Here is where call the function to upload the document
+//TODO: Implement the actual upload logic in the onUpload function
+
 interface DocumentItem {
 	file: File;
 	type: string;
@@ -76,6 +79,7 @@ export default function DocumentUploadDialog({
 	const confirmUpload = () => {
 		onUpload(fileItems.map((item) => item.file));
 		closeDialog();
+		//call the function to upload the document
 	};
 
 	if (!open) return null;
