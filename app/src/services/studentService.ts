@@ -4,30 +4,45 @@ interface CreateStudentInput {
 	matricule: string;
 	firstName: string;
 	lastName: string;
-	dateOfBirth: string; // ISO string
-	enrollmentYear: string; // ISO string
+	dateOfBirth: string;
+	enrollmentYear: string;
 	specialtyId: string;
-	file?: File | null; // Optional file for document upload
+	field: string;
+	major: string;
 }
 
-export const createStudent = async (data: CreateStudentInput) => {
+export const createStudent = async (
+	data: CreateStudentInput,
+	files: File[] = []
+) => {
 	try {
-		// Step 1: Create the student
-		const { file, ...studentData } = data;
-		const student = await pb.collection("Archive_students").create(studentData);
+		console.log("Data sent to PocketBase:", data);
+		console.log("Files sent to PocketBase:", files);
 
-		// Step 2: Upload document if a file is provided
-		if (file) {
-			const formData = new FormData();
-			formData.append("studentId", student.id);
-			formData.append("file", file);
+		// Disable auto-cancel for student creation
+		const student = await pb.collection("Archive_students").create(data, {
+			$autoCancel: false,
+		});
 
-			await pb.collection("Archive_documents").create(formData);
+		// Upload each document and link to student
+		if (files.length > 0) {
+			const uploadPromises = files.map((file) => {
+				const formData = new FormData();
+				formData.append("studentId", student.id); // relation field to student record
+				formData.append("file", file); // file field to upload file
+
+				// Disable auto-cancel for document uploads
+				return pb.collection("Archive_documents").create(formData, {
+					$autoCancel: false,
+				});
+			});
+
+			await Promise.all(uploadPromises);
 		}
 
 		return student;
 	} catch (error) {
-		console.error("Failed to create student or upload document:", error);
+		console.error("Failed to create student or upload documents:", error);
 		throw error;
 	}
 };

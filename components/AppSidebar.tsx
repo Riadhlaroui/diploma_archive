@@ -74,7 +74,7 @@ export function AppSidebar() {
 	const studentContent = [
 		{
 			title: t("sidebar.students"),
-			url: "/manageStudents/studentList",
+			url: "/students",
 			icon: UsersRound,
 		},
 	];
@@ -172,7 +172,7 @@ export function AppSidebar() {
 										<DropdownMenuContent side="right" align="start">
 											<DropdownMenuItem
 												className=" hover:cursor-pointer"
-												onClick={() => router.push("/manageStudents")}
+												onClick={() => router.push("/students/new")}
 											>
 												<span>Add Student</span>
 											</DropdownMenuItem>

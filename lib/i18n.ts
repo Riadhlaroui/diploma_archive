@@ -229,7 +229,7 @@ i18n
 					confirm: {
 						title: "Confirm Deletion",
 						description:
-							"Are you sure you want to delete the faculty {{name}}? This action cannot be undone.",
+							"Are you sure you want to delete {{name}}? This action cannot be undone.",
 					},
 
 					breadcrumbs: {
