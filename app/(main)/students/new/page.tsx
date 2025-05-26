@@ -2,7 +2,7 @@
 "use client";
 import React from "react";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,10 +21,12 @@ import { toast } from "sonner";
 import { createStudent } from "@/app/src/services/studentService"; // adjust the path accordingly
 
 import { Separator } from "@/components/ui/separator";
-import { X } from "lucide-react";
+import DocumentUploadDialog from "@/components/DocumentUploadDialog";
 
 const CreateStudentPage = () => {
 	const { t } = useTranslation();
+
+	const [openDialog, setOpenDialog] = useState(false);
 
 	const [faculties, setFaculties] = useState<any[]>([]);
 	const [departments, setDepartments] = useState<any[]>([]);
@@ -36,7 +38,6 @@ const CreateStudentPage = () => {
 	const [selectedSpecialty, setSelectedSpecialty] = useState<any>(null);
 
 	const [files, setFiles] = useState<File[]>([]);
-	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const [form, setForm] = useState({
 		matricule: "",
@@ -49,25 +50,6 @@ const CreateStudentPage = () => {
 		major: "",
 		file: null as File | null,
 	});
-
-	const handleFilesChange = (newFiles: FileList | null) => {
-		if (!newFiles) return;
-		const fileArray = Array.from(newFiles);
-		// Avoid duplicates by name
-		const unique = fileArray.filter(
-			(file) => !files.find((f) => f.name === file.name)
-		);
-		setFiles((prev) => [...prev, ...unique]);
-	};
-
-	const handleRemove = (filename: string) => {
-		setFiles((prev) => prev.filter((file) => file.name !== filename));
-	};
-
-	const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-		e.preventDefault();
-		handleFilesChange(e.dataTransfer.files);
-	};
 
 	useEffect(() => {
 		pb.collection("Archive_faculties")
@@ -404,49 +386,13 @@ const CreateStudentPage = () => {
 							</div>
 						</div>
 
-						<div className="relative mt-4">
-							<label className="block text-sm mb-1 font-semibold text-[#697079]">
-								Documents (optional)
-							</label>
-
-							{/* Drag and Drop Zone */}
-							<div
-								className="w-full h-[4rem] border-2 border-dashed border-gray-400 dark:border-gray-600 rounded-lg flex items-center justify-center bg-[#E3E8ED] dark:bg-transparent text-gray-600 dark:text-white cursor-pointer"
-								onClick={() => fileInputRef.current?.click()}
-								onDrop={handleDrop}
-								onDragOver={(e) => e.preventDefault()}
-							>
-								<p>Click or drag and drop PDF files here</p>
-								<input
-									type="file"
-									accept="application/pdf"
-									multiple
-									ref={fileInputRef}
-									onChange={(e) => handleFilesChange(e.target.files)}
-									className="hidden"
-								/>
-							</div>
-
-							{/* File List */}
-							{files.length > 0 && (
-								<ul className="mt-3 space-y-2">
-									{files.map((file) => (
-										<li
-											key={file.name}
-											className="flex items-center justify-between bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded shadow-sm"
-										>
-											<span className="text-sm truncate">{file.name}</span>
-											<button
-												onClick={() => handleRemove(file.name)}
-												className="text-red-500 hover:text-red-700"
-											>
-												<X className="w-4 h-4" />
-											</button>
-										</li>
-									))}
-								</ul>
-							)}
-						</div>
+						<button
+							type="button"
+							onClick={() => setOpenDialog(true)}
+							className="mt-4 w-full outline-none bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] h-[4rem] flex items-center justify-center font-semibold"
+						>
+							Upload Documents
+						</button>
 
 						<Separator className="mt-2.5" />
 
@@ -456,6 +402,14 @@ const CreateStudentPage = () => {
 					</form>
 				</div>
 			</div>
+
+			<DocumentUploadDialog
+				open={openDialog}
+				onOpenChange={setOpenDialog}
+				onUpload={(files) => {
+					console.log("Uploaded files:", files);
+				}}
+			/>
 		</>
 	);
 };
