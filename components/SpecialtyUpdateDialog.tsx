@@ -47,7 +47,7 @@ export function SpecialtyUpdateDialog({
 		if (!specialty) return;
 
 		try {
-			const existing = await getSpecialtyByName(name);
+			const existing = await getSpecialtyByName(name, specialty.major);
 			if (existing && existing.id !== specialty.id) {
 				toast.error(
 					<div>
@@ -68,7 +68,7 @@ export function SpecialtyUpdateDialog({
 				return;
 			}
 
-			await updateSpecialty(specialty.id, { name });
+			updateSpecialty(specialty.id, { name });
 
 			toast.success(
 				t(

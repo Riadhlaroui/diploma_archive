@@ -180,7 +180,12 @@ export default function FieldsPage() {
 			</Breadcrumb>
 
 			<div className="flex gap-2 mb-4 items-center">
-				<h3 className="text-2xl font-semibold">Fields in {departmentName}</h3>
+				<h3
+					className="text-2xl font-semibold cursor-pointer hover:underline"
+					onClick={() => window.location.reload()}
+				>
+					Fields in {departmentName}
+				</h3>
 				<Button
 					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
 					disabled={loading}

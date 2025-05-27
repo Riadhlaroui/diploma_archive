@@ -14,20 +14,33 @@ export async function addField(data: {
 	}
 }
 
-export const isFieldNameTaken = async (name: string, departmentId: string) => {
+export async function isFieldNameTaken(
+	name: string,
+	departmentId: string
+): Promise<boolean> {
+	if (!name.trim() || !departmentId.trim()) {
+		console.error(
+			"Name and departmentId are required to check for field name."
+		);
+		return false;
+	}
+
 	try {
-		const result = await pb
+		await pb
 			.collection("Archive_fields")
-			.getFirstListItem(`name="${name}" && department="${departmentId}"`);
-		return !!result; // Returns true if a record is found
+			.getFirstListItem(
+				`name="${name.trim()}" && departmentId="${departmentId.trim()}"`
+			);
+		return true; // A field with the same name exists in this department
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (error: any) {
-		if (error?.status === 404) {
-			return false; // No field with the same name found
+		if (error.status === 404) {
+			return false; // No matching field found
 		}
-		throw error; // Unexpected error, rethrow it
+		console.error("Error checking field name:", error);
+		throw error;
 	}
-};
+}
 
 export async function getFieldById(fieldId: string) {
 	try {
@@ -105,7 +118,7 @@ export async function getFieldByName(name: string, departmentId: string) {
 		if (error.status === 404) {
 			return null; // No field with that name
 		}
-		throw error; // Unexpected error
+		throw error;
 	}
 }
 
@@ -121,7 +134,7 @@ export async function updateField(id: string, data: { name: string }) {
 
 export async function deleteField(fieldId: string) {
 	try {
-		await pb.collection("fields").delete(fieldId);
+		await pb.collection("Archive_fields").delete(fieldId);
 	} catch (error) {
 		console.error("Error deleting field:", error);
 		throw error;

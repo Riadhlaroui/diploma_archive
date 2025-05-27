@@ -187,10 +187,19 @@ export default function MajorsPage() {
 			</Breadcrumb>
 
 			<div className="flex gap-2 mb-4 items-center">
-				<h3 className="text-2xl font-semibold">Majors in {fieldName}</h3>
+				<h3
+					className="text-2xl font-semibold cursor-pointer hover:underline"
+					onClick={() => window.location.reload()}
+				>
+					Majors in {fieldName}
+				</h3>
 				<Button
 					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
 					disabled={loading}
+					onClick={() => {
+						setLoading(true);
+						fetchMajors();
+					}}
 				>
 					{loading ? (
 						<Loader2 className="animate-spin text-black dark:text-white" />
@@ -233,6 +242,7 @@ export default function MajorsPage() {
 					<TableRow>
 						<TableHead>Code</TableHead>
 						<TableHead>Name</TableHead>
+						<TableHead>Numbe of specialties</TableHead>
 						<TableHead>Created At</TableHead>
 						<TableHead>Actions</TableHead>
 					</TableRow>
@@ -240,7 +250,7 @@ export default function MajorsPage() {
 				<TableBody>
 					{loading ? (
 						<TableRow>
-							<TableCell colSpan={4} className="text-center py-6">
+							<TableCell colSpan={5} className="text-center py-6">
 								<Loader2 className="animate-spin mx-auto text-gray-500" />
 								<span>{t("loading")}</span>
 							</TableCell>
@@ -276,6 +286,7 @@ export default function MajorsPage() {
 									</span>
 								</TableCell>
 								<TableCell>{major.name}</TableCell>
+								<TableCell>{major.specialtiesCount ?? 0}</TableCell>
 								<TableCell>
 									{new Date(major.created).toLocaleDateString()}
 								</TableCell>
@@ -285,6 +296,7 @@ export default function MajorsPage() {
 											size="sm"
 											variant="outline"
 											onClick={() => handleEdit(major)}
+											className=" hover:cursor-pointer"
 										>
 											<UserRoundPen />
 										</Button>
@@ -292,6 +304,7 @@ export default function MajorsPage() {
 											size="sm"
 											variant="destructive"
 											onClick={() => handleDelete(major)}
+											className=" hover:cursor-pointer"
 										>
 											<Trash2 />
 										</Button>
@@ -301,7 +314,7 @@ export default function MajorsPage() {
 						))
 					) : (
 						<TableRow>
-							<TableCell colSpan={4} className="text-center py-6 text-gray-500">
+							<TableCell colSpan={5} className="text-center py-6 text-gray-500">
 								Majors not found
 							</TableCell>
 						</TableRow>
@@ -309,7 +322,7 @@ export default function MajorsPage() {
 				</TableBody>
 				<TableFooter>
 					<TableRow>
-						<TableCell colSpan={4} className="text-center py-3">
+						<TableCell colSpan={5} className="text-center py-3">
 							<div className="flex items-center justify-center gap-4">
 								<Button
 									variant="outline"
