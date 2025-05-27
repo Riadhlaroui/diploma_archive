@@ -16,6 +16,7 @@ import {
 	Copy,
 	Loader2,
 	RefreshCcw,
+	Search,
 	Trash2,
 	UserRoundPen,
 	UserRoundPlus,
@@ -43,6 +44,9 @@ const StaffList = () => {
 	const [openAddDialog, setOpenAddDialog] = useState(false);
 	const [openEditDialog, setOpenEditDialog] = useState(false);
 
+	const [inputValue, setInputValue] = useState(""); // What user types
+	const [searchTerm, setSearchTerm] = useState(""); // Triggers search
+
 	const [confirmOpen, setConfirmOpen] = useState(false);
 	const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
@@ -54,7 +58,7 @@ const StaffList = () => {
 		try {
 			setError(null);
 			setLoading(true);
-			const result = await getUsersList(page);
+			const result = await getUsersList(page || 1, 13, searchTerm);
 			setLogs(result.items);
 			setTotalPages(result.totalPages);
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -68,7 +72,7 @@ const StaffList = () => {
 
 	useEffect(() => {
 		fetchData();
-	}, [page]);
+	}, [page, searchTerm]);
 
 	const handleRefresh = () => fetchData();
 
@@ -102,7 +106,12 @@ const StaffList = () => {
 	return (
 		<div className="flex flex-col h-full mt-10 p-6 rounded-md shadow-lg">
 			<div className="flex gap-2 mb-4 items-center">
-				<h3 className="text-2xl font-semibold">{t("staffList.title")}</h3>
+				<h3
+					className="text-2xl font-semibold cursor-pointer hover:underline"
+					onClick={() => window.location.reload()}
+				>
+					{t("staffList.title")}
+				</h3>
 				<Button
 					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
 					onClick={handleRefresh}
@@ -120,6 +129,28 @@ const StaffList = () => {
 				>
 					<UserRoundPlus className=" text-black text-center" />
 				</Button>
+			</div>
+
+			<div className="flex gap-2 mb-4">
+				<div className="relative w-full">
+					<Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+					<input
+						type="text"
+						placeholder="Search departments..."
+						value={inputValue}
+						onChange={(e) => setInputValue(e.target.value)}
+						className="pl-9 pr-3 py-1 w-full border rounded dark:bg-zinc-800 dark:text-white transition-colors"
+					/>
+				</div>
+				<button
+					onClick={() => {
+						setPage(1);
+						setSearchTerm(inputValue.trim());
+					}}
+					className="px-4 py-1 rounded border hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
+				>
+					Search
+				</button>
 			</div>
 
 			{error && (

@@ -5,11 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import {
-	getDepartmentById,
-	getSpecialtiesByDepartment,
-} from "@/app/src/services/departmentService";
-
-import {
 	Table,
 	TableHeader,
 	TableRow,
@@ -23,6 +18,7 @@ import {
 	Copy,
 	Loader2,
 	RefreshCcw,
+	Search,
 	SquarePlus,
 	Trash2,
 	UserRoundPen,
@@ -44,7 +40,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import AddSpecialtyDialog from "@/components/AddSpecialtyDialog";
+
+import { getMajorById } from "@/app/src/services/majorService";
+import { getSpecialtiesByMajor } from "@/app/src/services/specialtyService";
 
 import { SpecialtyUpdateDialog } from "@/components/SpecialtyUpdateDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
@@ -52,21 +50,26 @@ import { toast } from "sonner";
 import { deleteSpecialtyById } from "@/app/src/services/specialtyService";
 
 export default function SpecialtiesPage() {
-	const { t } = useTranslation();
 	const searchParams = useSearchParams();
-	const departmentId = searchParams.get("departmentId");
 	const router = useRouter();
+	const { t } = useTranslation();
+
+	const majorId = searchParams.get("majorId");
 
 	const [specialties, setSpecialties] = useState<any[]>([]);
-	const [departmentName, setDepartmentName] = useState<string>("");
+	const [majorName, setMajorName] = useState<string>("");
 	const [loading, setLoading] = useState(true);
-	const [loadingDept, setLoadingDept] = useState(true);
+
 	const [copiedId, setCopiedId] = useState("");
+
+	const [inputValue, setInputValue] = useState(""); // What user types
+	const [searchTerm, setSearchTerm] = useState(""); // Triggers search
 
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
 	const perPage = 10;
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [showAddDialog, setShowAddDialog] = useState(false);
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [selectedSpecialty, setSelectedSpecialty] = useState<any | null>(null);
@@ -75,11 +78,16 @@ export default function SpecialtiesPage() {
 	const [specialtyToDelete, setSpecialtyToDelete] = useState<any | null>(null);
 
 	const fetchSpecialties = async () => {
-		if (!departmentId) return;
+		if (!majorId) return;
 		setLoading(true);
-		const data = await getSpecialtiesByDepartment(departmentId, page, perPage);
-		setSpecialties(data.items);
-		setTotalPages(data.totalPages);
+		const data = await getSpecialtiesByMajor(majorId, page, perPage);
+		if (Array.isArray(data)) {
+			setSpecialties(data);
+			setTotalPages(1);
+		} else {
+			setSpecialties(data.items);
+			setTotalPages(data.totalPages);
+		}
 		setLoading(false);
 	};
 
@@ -106,26 +114,25 @@ export default function SpecialtiesPage() {
 
 	useEffect(() => {
 		fetchSpecialties();
-	}, [departmentId, page]);
+	}, [majorId, page, searchTerm]);
 
 	useEffect(() => {
-		if (!departmentId) return;
+		if (!majorId) return;
 		async function fetchDepartmentName() {
-			setLoadingDept(true);
+			setLoading(true);
 			try {
-				const dept = await getDepartmentById(departmentId as string);
-				setDepartmentName(dept?.name || t("departments.unknown"));
+				const major = await getMajorById(majorId as string);
+				setMajorName(major?.name || "Unknown major");
 			} catch {
-				setDepartmentName(t("departments.unknown"));
+				setMajorName("Unknown major");
 			}
-			setLoadingDept(false);
+			setLoading(false);
 		}
 		fetchDepartmentName();
-	}, [departmentId, t]);
+	}, [majorId, t]);
 
 	return (
 		<div className="p-6">
-			{/* Breadcrumbs */}
 			<Breadcrumb>
 				<BreadcrumbList>
 					<BreadcrumbItem>
@@ -170,16 +177,37 @@ export default function SpecialtiesPage() {
 					</BreadcrumbItem>
 					<BreadcrumbSeparator />
 					<BreadcrumbItem>
-						<BreadcrumbPage>
-							{loadingDept ? t("loading") : departmentName}
+						<BreadcrumbLink
+							onClick={() => router.back()}
+							className="hover:underline hover:cursor-pointer"
+						>
+							Fields
+						</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
+						<BreadcrumbLink
+							onClick={() => router.back()}
+							className="hover:underline hover:cursor-pointer"
+						>
+							Majors
+						</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
+						<BreadcrumbPage className="text-gray-500">
+							Specialties
 						</BreadcrumbPage>
 					</BreadcrumbItem>
 				</BreadcrumbList>
 			</Breadcrumb>
 
 			<div className="flex gap-2 mb-4 items-center mt-4">
-				<h3 className="text-2xl font-semibold">
-					Specialties in {departmentName}
+				<h3
+					className="text-2xl font-semibold cursor-pointer hover:underline"
+					onClick={() => window.location.reload()}
+				>
+					Specialties in {majorName}
 				</h3>
 				<Button
 					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
@@ -200,12 +228,33 @@ export default function SpecialtiesPage() {
 				</Button>
 			</div>
 
+			<div className="flex gap-2 mb-4">
+				<div className="relative w-full">
+					<Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+					<input
+						type="text"
+						placeholder="Search specialties..."
+						value={inputValue}
+						onChange={(e) => setInputValue(e.target.value)}
+						className="pl-9 pr-3 py-1 w-full border rounded dark:bg-zinc-800 dark:text-white transition-colors"
+					/>
+				</div>
+				<button
+					onClick={() => {
+						setPage(1);
+						setSearchTerm(inputValue.trim());
+					}}
+					className="px-4 py-1 rounded border hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
+				>
+					Search
+				</button>
+			</div>
+
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
 					<TableRow>
 						<TableHead>Code</TableHead>
 						<TableHead>Name</TableHead>
-						<TableHead>Major</TableHead>
 						<TableHead>Created At</TableHead>
 						<TableHead>Actions</TableHead>
 					</TableRow>
@@ -213,7 +262,7 @@ export default function SpecialtiesPage() {
 				<TableBody>
 					{loading ? (
 						<TableRow>
-							<TableCell colSpan={5} className="text-center py-6">
+							<TableCell colSpan={4} className="text-center py-6">
 								<Loader2 className="mx-auto animate-spin text-gray-500" />
 							</TableCell>
 						</TableRow>
@@ -240,7 +289,7 @@ export default function SpecialtiesPage() {
 									</span>
 								</TableCell>
 								<TableCell>{specialtie.name}</TableCell>
-								<TableCell>{specialtie.major}</TableCell>
+
 								<TableCell>
 									{new Date(specialtie.created).toLocaleDateString()}
 								</TableCell>
@@ -271,7 +320,7 @@ export default function SpecialtiesPage() {
 						))
 					) : (
 						<TableRow>
-							<TableCell colSpan={5} className="text-center py-6 text-gray-500">
+							<TableCell colSpan={4} className="text-center py-6 text-gray-500">
 								Specialties not found
 							</TableCell>
 						</TableRow>
@@ -279,7 +328,7 @@ export default function SpecialtiesPage() {
 				</TableBody>
 				<TableFooter>
 					<TableRow>
-						<TableCell colSpan={5} className="text-center py-3">
+						<TableCell colSpan={4} className="text-center py-3">
 							<div className="flex justify-center items-center gap-4">
 								<Button
 									variant="outline"
@@ -305,16 +354,6 @@ export default function SpecialtiesPage() {
 					</TableRow>
 				</TableFooter>
 			</Table>
-
-			{showAddDialog && (
-				<AddSpecialtyDialog
-					departmentId={departmentId!}
-					onClose={() => {
-						setShowAddDialog(false);
-						fetchSpecialties();
-					}}
-				/>
-			)}
 
 			<ConfirmDialog
 				open={showConfirmDialog}

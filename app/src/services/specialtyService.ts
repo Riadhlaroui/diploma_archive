@@ -1,5 +1,30 @@
 import pb from "@/lib/pocketbase";
 
+export async function getSpecialtiesByMajor(
+	majorId: string,
+	page: number = 1,
+	perPage: number = 10
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+) {
+	try {
+		const result = await pb
+			.collection("Archive_specialties")
+			.getList(page, perPage, {
+				filter: `majorId = "${majorId}"`,
+				sort: "-created",
+			});
+
+		return {
+			items: result.items,
+			totalPages: result.totalPages,
+		};
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	} catch (error: any) {
+		console.error("Error fetching specialties by major:", error);
+		throw error;
+	}
+}
+
 export const addSpecialty = async ({
 	name,
 	major,
@@ -30,10 +55,7 @@ export const getSpecialtyByName = async (name: string) => {
 	}
 };
 
-export const updateSpecialty = async (
-	id: string,
-	data: { name?: string; major?: string }
-) => {
+export const updateSpecialty = async (id: string, data: { name?: string }) => {
 	return await pb.collection("Archive_specialties").update(id, data);
 };
 
