@@ -30,7 +30,12 @@ const CreateStudentPage = () => {
 
 	const [faculties, setFaculties] = useState<any[]>([]);
 	const [departments, setDepartments] = useState<any[]>([]);
+	const [fields, setFields] = useState<any[]>([]);
+	const [majors, setMajors] = useState<any[]>([]);
 	const [specialties, setSpecialties] = useState<any[]>([]);
+
+	const [selectedField, setSelectedField] = useState<string>("");
+	const [selectedMajor, setSelectedMajor] = useState<string>("");
 
 	const [selectedFaculty, setSelectedFaculty] = useState("");
 	const [selectedDepartment, setSelectedDepartment] = useState("");
@@ -71,17 +76,49 @@ const CreateStudentPage = () => {
 		setSelectedSpecialty(null);
 	}, [selectedFaculty]);
 
+	// Get fields by department
 	useEffect(() => {
 		if (selectedDepartment) {
-			pb.collection("Archive_specialties")
+			pb.collection("Archive_fields")
 				.getFullList({ filter: `departmentId="${selectedDepartment}"` })
+				.then(setFields);
+		} else {
+			setFields([]);
+		}
+		setSelectedField("");
+		setMajors([]);
+		setSpecialties([]);
+		setSelectedSpecialty(null);
+		setForm((prev) => ({ ...prev, field: "", major: "", specialtyId: "" }));
+	}, [selectedDepartment]);
+
+	// Get majors by field
+	useEffect(() => {
+		if (selectedField) {
+			pb.collection("Archive_majors")
+				.getFullList({ filter: `fieldId="${selectedField}"` })
+				.then(setMajors);
+		} else {
+			setMajors([]);
+		}
+		setSelectedMajor("");
+		setSpecialties([]);
+		setSelectedSpecialty(null);
+		setForm((prev) => ({ ...prev, major: "", specialtyId: "" }));
+	}, [selectedField]);
+
+	// Get specialties by major
+	useEffect(() => {
+		if (selectedMajor) {
+			pb.collection("Archive_specialties")
+				.getFullList({ filter: `majorId="${selectedMajor}"` })
 				.then(setSpecialties);
 		} else {
 			setSpecialties([]);
-			setForm((prev) => ({ ...prev, specialtyId: "", field: "", major: "" }));
-			setSelectedSpecialty(null);
 		}
-	}, [selectedDepartment]);
+		setSelectedSpecialty(null);
+		setForm((prev) => ({ ...prev, specialtyId: "" }));
+	}, [selectedMajor]);
 
 	const handleSpecialtyChange = (value: string) => {
 		const spec = specialties.find((s) => s.id === value);
@@ -243,6 +280,69 @@ const CreateStudentPage = () => {
 											{departments.map((d) => (
 												<SelectItem key={d.id} value={d.id}>
 													{d.name}
+												</SelectItem>
+											))}
+										</SelectGroup>
+									</SelectContent>
+								</Select>
+							</div>
+
+							{/* Fields */}
+
+							<div>
+								<label className="block text-sm mb-1">Fields</label>
+								<Select
+									value={selectedField}
+									onValueChange={(value) => {
+										setSelectedField(value);
+										const selected = fields.find((f) => f.id === value);
+										setForm((prev) => ({
+											...prev,
+											field: selected?.name || "",
+										}));
+									}}
+									disabled={!selectedDepartment}
+								>
+									<SelectTrigger className="w-full h-14 bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded focus:outline-none">
+										<SelectValue placeholder={t("select")} />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectGroup>
+											<SelectLabel>Fields</SelectLabel>
+											{fields.map((f) => (
+												<SelectItem key={f.id} value={f.id}>
+													{f.name}
+												</SelectItem>
+											))}
+										</SelectGroup>
+									</SelectContent>
+								</Select>
+							</div>
+
+							{/* Major */}
+							<div>
+								<label className="block text-sm mb-1">Major</label>
+								<Select
+									value={selectedMajor}
+									onValueChange={(value) => {
+										setSelectedMajor(value);
+										const selected = majors.find((m) => m.id === value);
+										setForm((prev) => ({
+											...prev,
+											major: selected?.name || "",
+										}));
+									}}
+									disabled={!selectedField}
+								>
+									<SelectTrigger className="w-full h-14 bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded focus:outline-none">
+										<SelectValue placeholder={t("select")} />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectGroup>
+											<SelectLabel>Majors</SelectLabel>
+											{majors.map((m) => (
+												<SelectItem key={m.id} value={m.id}>
+													{m.name}
 												</SelectItem>
 											))}
 										</SelectGroup>
