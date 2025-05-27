@@ -16,7 +16,7 @@ import { getMajorByName, updateMajor } from "@/app/src/services/majorService";
 type Major = {
 	id: string;
 	name: string;
-	departmentId: string;
+	fieldId: string;
 };
 
 type Props = {
@@ -40,7 +40,7 @@ export function MajorUpdateDialog({ open, onOpenChange, major }: Props) {
 		if (!major) return;
 
 		try {
-			const existing = await getMajorByName(name, major.departmentId);
+			const existing = await getMajorByName(name, major.fieldId);
 			if (existing && existing.id !== major.id) {
 				toast.error(
 					<div>

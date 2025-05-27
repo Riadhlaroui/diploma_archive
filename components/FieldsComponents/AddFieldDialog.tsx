@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Separator } from "@/components/ui/separator"; // Adjust path as needed
+import { Separator } from "@/components/ui/separator";
 import { X } from "lucide-react";
 import {
 	addField,
 	isFieldNameTaken,
-} from "../../app/src/services/fieldService"; // Adjust path as needed
+} from "../../app/src/services/fieldService";
 import { toast } from "sonner";
 
 const AddFieldDialog = ({
@@ -17,36 +18,36 @@ const AddFieldDialog = ({
 	departmentId: string;
 }) => {
 	const [name, setName] = useState("");
-
 	const [nameTaken, setNameTaken] = useState(false);
+	const [checking, setChecking] = useState(false);
 
 	useEffect(() => {
-		let isMounted = true;
+		if (!name.trim()) {
+			setNameTaken(false);
+			return;
+		}
 
-		const checkName = async () => {
-			if (!name.trim()) {
-				setNameTaken(false);
-				return;
-			}
+		const delayDebounce = setTimeout(async () => {
+			setChecking(true);
 			try {
-				const taken = await isFieldNameTaken(name, departmentId);
-				if (isMounted) setNameTaken(taken);
+				const taken = await isFieldNameTaken(name.trim(), departmentId);
+				setNameTaken(taken);
 			} catch {
-				if (isMounted) setNameTaken(false);
+				setNameTaken(false);
+			} finally {
+				setChecking(false);
 			}
-		};
+		}, 500); // debounce delay
 
-		checkName();
-
-		return () => {
-			isMounted = false;
-		};
+		return () => clearTimeout(delayDebounce);
 	}, [name, departmentId]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		if (!name.trim()) {
+		const trimmedName = name.trim();
+
+		if (!trimmedName) {
 			toast.error("Field name is required.");
 			return;
 		}
@@ -67,13 +68,13 @@ const AddFieldDialog = ({
 
 		try {
 			await addField({
-				name,
-				code: name.substring(0, 3).toUpperCase(), // Optional logic for code
+				name: trimmedName,
+				code: trimmedName.substring(0, 3).toUpperCase(),
 				departmentId,
 			});
 			toast.success("Field added successfully!");
 			onClose();
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			toast.error(
 				<div className="flex items-center gap-2">
@@ -101,8 +102,7 @@ const AddFieldDialog = ({
 
 				<form onSubmit={handleSubmit} className="space-y-4 mt-2" noValidate>
 					<Separator />
-					<div className="flex flex-col gap-4 w-full">
-						{/* Name input */}
+					<div className="flex gap-4 w-full">
 						<div className="relative w-full">
 							<input
 								type="text"
@@ -142,9 +142,9 @@ const AddFieldDialog = ({
 						</button>
 						<button
 							type="submit"
-							disabled={nameTaken}
+							disabled={nameTaken || checking}
 							className={`bg-black text-white px-4 py-2 rounded-[3px] hover:bg-gray-900 hover:cursor-pointer transition-colors duration-200 ${
-								nameTaken ? "opacity-50 cursor-not-allowed" : ""
+								nameTaken || checking ? "opacity-50 cursor-not-allowed" : ""
 							}`}
 						>
 							Submit

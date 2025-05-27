@@ -312,7 +312,7 @@ export default function DepartmentsPage() {
 					) : (
 						<TableRow>
 							<TableCell colSpan={5} className="text-center py-6 text-gray-500">
-								{t("departments.notFound")}
+								No departments found.
 							</TableCell>
 						</TableRow>
 					)}

@@ -48,6 +48,7 @@ import { SpecialtyUpdateDialog } from "@/components/SpecialtyUpdateDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { toast } from "sonner";
 import { deleteSpecialtyById } from "@/app/src/services/specialtyService";
+import AddSpecialtyDialog from "@/components/AddSpecialtyDialog";
 
 export default function SpecialtiesPage() {
 	const searchParams = useSearchParams();
@@ -354,6 +355,12 @@ export default function SpecialtiesPage() {
 					</TableRow>
 				</TableFooter>
 			</Table>
+
+			<AddSpecialtyDialog
+				open={showAddDialog}
+				onOpenChange={setShowAddDialog}
+				majorId={majorId}
+			/>
 
 			<ConfirmDialog
 				open={showConfirmDialog}

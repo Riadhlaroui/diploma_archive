@@ -1,23 +1,98 @@
 import pb from "@/lib/pocketbase";
 
+export async function addMajor(name: string, fieldId: string) {
+	if (!name.trim() || !fieldId.trim()) {
+		console.error("Name and fieldId are required to add a major.");
+		return null;
+	}
+
+	try {
+		const newMajor = await pb.collection("Archive_majors").create({
+			name: name.trim(),
+			fieldId: fieldId.trim(),
+		});
+
+		return newMajor;
+	} catch (error) {
+		console.error("Failed to add major:", error);
+		throw error;
+	}
+}
+
+export async function isMajorNameTaken(
+	name: string,
+	fieldId: string
+): Promise<boolean> {
+	if (!name.trim() || !fieldId.trim()) {
+		console.error("Name and fieldId are required to check for major name.");
+		return false;
+	}
+
+	try {
+		await pb
+			.collection("Archive_majors")
+			.getFirstListItem(`name="${name.trim()}" && fieldId="${fieldId.trim()}"`);
+		return true; // Found a matching major
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	} catch (error: any) {
+		if (error.status === 404) {
+			return false; // No matching major found
+		}
+		console.error("Error checking major name:", error);
+		throw error; // Unexpected error
+	}
+}
+
 export async function getMajors(
 	fieldId: string,
-	page: number = 1,
-	perPage: number = 10,
-	search: string = ""
+	page = 1,
+	perPage = 10,
+	search = ""
 ) {
+	if (!fieldId) {
+		console.error("Missing fieldId!");
+		return { items: [], totalPages: 1 };
+	}
+
+	// Build filter string for majors
+	let filter = `fieldId="${fieldId}"`;
+	if (search.trim()) {
+		filter += ` && name ~ "${search.trim()}"`;
+	}
+
 	try {
-		const result = await pb
+		// Fetch paginated majors for the given field
+		const majorsResponse = await pb
 			.collection("Archive_majors")
 			.getList(page, perPage, {
-				filter:
-					`fieldId="${fieldId}"` + (search ? ` && name ~ "${search}"` : ""),
+				filter,
 				sort: "-created",
 			});
 
+		// Fetch all specialties to count them by major
+		const allSpecialties = await pb
+			.collection("Archive_specialties")
+			.getFullList({
+				fields: "majorId",
+			});
+
+		// Count specialties by majorId
+		const specialtiesCountMap: Record<string, number> = {};
+		for (const specialty of allSpecialties) {
+			const majorId = specialty.majorId;
+			specialtiesCountMap[majorId] = (specialtiesCountMap[majorId] || 0) + 1;
+		}
+
+		// Add specialtiesCount to each major item
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const items = majorsResponse.items.map((major: any) => ({
+			...major,
+			specialtiesCount: specialtiesCountMap[major.id] || 0,
+		}));
+
 		return {
-			items: result.items,
-			totalPages: result.totalPages,
+			items,
+			totalPages: majorsResponse.totalPages,
 		};
 	} catch (error) {
 		console.error("Failed to fetch majors:", error);
@@ -31,7 +106,7 @@ export async function getMajors(
 export async function getMajorByName(name: string, fieldId: string) {
 	try {
 		const result = await pb
-			.collection("Archive_fields")
+			.collection("Archive_majors")
 			.getFirstListItem(`name="${name}" && fieldId="${fieldId}"`, {});
 		return result;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any

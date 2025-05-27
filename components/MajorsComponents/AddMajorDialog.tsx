@@ -63,7 +63,7 @@ const AddMajorDialog = ({
 		}
 
 		try {
-			await addMajor({ name, fieldId });
+			await addMajor(name, fieldId);
 			toast.success("Major added successfully!");
 			onClose();
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
