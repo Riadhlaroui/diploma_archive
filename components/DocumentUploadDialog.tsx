@@ -2,9 +2,6 @@ import React, { useRef, useState } from "react";
 import { X } from "lucide-react";
 import { Separator } from "./ui/separator";
 
-//Here is where call the function to upload the document
-//TODO: Implement the actual upload logic in the onUpload function
-
 interface DocumentItem {
 	file: File;
 	type: string;
@@ -13,22 +10,16 @@ interface DocumentItem {
 interface DocumentUploadDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	onUpload: (files: File[]) => void;
-	existingFiles?: File[];
+	onConfirm: (files: File[]) => void;
 }
 
 export default function DocumentUploadDialog({
 	open,
 	onOpenChange,
-	onUpload,
-	existingFiles = [],
+	onConfirm,
 }: DocumentUploadDialogProps) {
 	const inputRef = useRef<HTMLInputElement>(null);
-
-	const [fileItems, setFileItems] = useState<DocumentItem[]>(
-		existingFiles.map((file) => ({ file, type: "Birth Certificate" }))
-	);
-
+	const [fileItems, setFileItems] = useState<DocumentItem[]>([]);
 	const [documentTypes, setDocumentTypes] = useState([
 		"Birth Certificate",
 		"BAC",
@@ -40,9 +31,9 @@ export default function DocumentUploadDialog({
 
 	const handleFiles = (files: FileList | null) => {
 		if (!files) return;
-		const newItems = Array.from(files).map((file) => ({
+		const newItems: DocumentItem[] = Array.from(files).map((file) => ({
 			file,
-			type: documentTypes[0],
+			type: documentTypes[0], // default type
 		}));
 		setFileItems((prev) => [...prev, ...newItems]);
 	};
@@ -59,14 +50,17 @@ export default function DocumentUploadDialog({
 
 	const confirmNewType = () => {
 		if (!newTypeName.trim() || editingIndex === null) return;
+
 		if (!documentTypes.includes(newTypeName)) {
 			setDocumentTypes((prev) => [...prev, newTypeName]);
 		}
+
 		setFileItems((prev) =>
 			prev.map((item, i) =>
 				i === editingIndex ? { ...item, type: newTypeName } : item
 			)
 		);
+
 		setNewTypeName("");
 		setEditingIndex(null);
 	};
@@ -78,17 +72,15 @@ export default function DocumentUploadDialog({
 	const closeDialog = () => onOpenChange(false);
 
 	const confirmUpload = () => {
-		onUpload(fileItems.map((item) => item.file));
+		onConfirm(fileItems.map((item) => item.file));
 		closeDialog();
-		//call the function to upload the document
 	};
 
 	if (!open) return null;
 
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-			<div className="bg-white dark:bg-gray-900 rounded-[3px] shadow-xl w-full max-w-lg p-6 relative">
-				{/* Close Button */}
+			<div className="bg-white dark:bg-gray-900 rounded shadow-xl w-full max-w-lg p-6 relative">
 				<button
 					onClick={closeDialog}
 					className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 dark:hover:text-white"
@@ -97,7 +89,6 @@ export default function DocumentUploadDialog({
 				</button>
 
 				<h2 className="text-lg font-semibold mb-2">Upload Documents</h2>
-
 				<Separator className="mb-2.5" />
 
 				{/* Drop Zone */}
@@ -114,7 +105,7 @@ export default function DocumentUploadDialog({
 					<input
 						ref={inputRef}
 						type="file"
-						accept="application/pdf"
+						accept="application/pdf,image/png,image/jpeg"
 						multiple
 						className="hidden"
 						onChange={(e) => handleFiles(e.target.files)}
