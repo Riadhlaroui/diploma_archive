@@ -15,13 +15,25 @@ export async function getDepartmentById(departmentId: string) {
 export async function getSpecialtiesByDepartment(
 	departmentId: string,
 	page: number = 1,
-	perPage: number = 10
+	perPage: number = 10,
+	searchTerm: string = ""
 ) {
+	if (!departmentId) {
+		console.error("Missing departmentId!");
+		return { items: [], totalPages: 1, totalItems: 0 };
+	}
+
+	// Build filter string
+	let filter = `departmentId = "${departmentId}"`;
+	if (searchTerm.trim()) {
+		filter += ` && name ~ "${searchTerm.trim()}"`;
+	}
+
 	try {
 		const result = await pb
 			.collection("Archive_specialties")
 			.getList(page, perPage, {
-				filter: `departmentId = "${departmentId}"`,
+				filter,
 				sort: "-created",
 			});
 
@@ -39,11 +51,18 @@ export async function getSpecialtiesByDepartment(
 export async function getDepartments(
 	facultyId: string,
 	page = 1,
-	perPage = 10
+	perPage = 10,
+	searchTerm: string = ""
 ) {
 	if (!facultyId) {
 		console.error("Missing facultyId!");
 		return { items: [], totalPages: 1 };
+	}
+
+	// Build filter string
+	let filter = `facultyId="${facultyId}"`;
+	if (searchTerm.trim()) {
+		filter += ` && name ~ "${searchTerm.trim()}"`;
 	}
 
 	try {
@@ -51,30 +70,26 @@ export async function getDepartments(
 		const departmentsResponse = await pb
 			.collection("Archive_departments")
 			.getList(page, perPage, {
-				filter: `facultyId="${facultyId}"`,
+				filter,
 				sort: "-created",
 			});
 
-		// Fetch all specialties to count them per department
-		const allSpecialties = await pb
-			.collection("Archive_specialties")
-			.getFullList();
+		// Fetch all fields to count them by department
+		const allFields = await pb
+			.collection("Archive_fields")
+			.getFullList({ fields: "departmentId" });
 
-		// Count specialties by department ID
-		const specialtyCountMap: Record<string, number> = {};
-		for (const specialty of allSpecialties) {
-			const deptId = specialty.departmentId;
-			if (specialtyCountMap[deptId]) {
-				specialtyCountMap[deptId]++;
-			} else {
-				specialtyCountMap[deptId] = 1;
-			}
+		// Count fields by departmentId
+		const fieldsCountMap: Record<string, number> = {};
+		for (const field of allFields) {
+			const deptId = field.departmentId;
+			fieldsCountMap[deptId] = (fieldsCountMap[deptId] || 0) + 1;
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const items = departmentsResponse.items.map((dept: any) => ({
 			...dept,
-			specialtiesCount: specialtyCountMap[dept.id] || 0, // <-- match the name used in UI
+			fieldsCount: fieldsCountMap[dept.id] || 0,
 		}));
 
 		return {

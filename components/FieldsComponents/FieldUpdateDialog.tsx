@@ -11,55 +11,48 @@ import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import {
-	getSpecialtyByName,
-	updateSpecialty,
-} from "@/app/src/services/specialtyService";
+import { getFieldByName, updateField } from "@/app/src/services/fieldService";
 
-type Specialty = {
+type Field = {
 	id: string;
 	name: string;
-	major: string;
+	departmentId: string;
 };
 
 type Props = {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	specialty: Specialty | null;
+	user: Field | null;
 };
 
-export function SpecialtyUpdateDialog({
-	open,
-	onOpenChange,
-	specialty,
-}: Props) {
+export function FieldUpdateDialog({ open, onOpenChange, user }: Props) {
 	const { t } = useTranslation();
 	const [name, setName] = useState("");
 
 	useEffect(() => {
-		if (specialty) {
-			setName(specialty.name);
+		if (user) {
+			setName(user.name);
 		}
-	}, [specialty]);
+	}, [user]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		if (!specialty) return;
+		if (!user) return;
 
 		try {
-			const existing = await getSpecialtyByName(name);
-			if (existing && existing.id !== specialty.id) {
+			const existing = await getFieldByName(name, user.departmentId);
+			if (existing && existing.id !== user.id) {
 				toast.error(
 					<div>
 						<div className="font-semibold">
 							{t(
-								"editSpecialtyDialog.errors.nameExistsTitle",
-								"Specialty name already exists"
+								"editFieldDialog.errors.nameExistsTitle",
+								"Field name already exists"
 							)}
 						</div>
 						<div className="text-sm">
 							{t(
-								"editSpecialtyDialog.errors.nameExistsDesc",
+								"editFieldDialog.errors.nameExistsDesc",
 								"Please choose a different name."
 							)}
 						</div>
@@ -68,20 +61,14 @@ export function SpecialtyUpdateDialog({
 				return;
 			}
 
-			await updateSpecialty(specialty.id, { name });
-
+			await updateField(user.id, { name });
 			toast.success(
-				t(
-					"editSpecialtyDialog.successMessage",
-					"Specialty updated successfully"
-				)
+				t("editFieldDialog.successMessage", "Field updated successfully")
 			);
 			onOpenChange(false);
 		} catch (error) {
-			console.error("Error updating Specialty:", error);
-			toast.error(
-				t("editSpecialtyDialog.errorMessage", "Failed to update Specialty")
-			);
+			console.error("Error updating field:", error);
+			toast.error(t("editFieldDialog.errorMessage", "Failed to update field"));
 		}
 	};
 
@@ -90,10 +77,10 @@ export function SpecialtyUpdateDialog({
 			<SheetContent>
 				<SheetHeader>
 					<SheetTitle className="text-xl font-semibold">
-						{t("editSpecialtyDialog.title", "Edit Specialty")}
+						{t("editFieldDialog.title", "Edit Field")}
 					</SheetTitle>
 					<SheetDescription>
-						{t("editSpecialtyDialog.description", "Update the Specialty name.")}
+						{t("editFieldDialog.description", "Update the field name.")}
 					</SheetDescription>
 				</SheetHeader>
 
@@ -109,7 +96,7 @@ export function SpecialtyUpdateDialog({
 							className="peer w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none"
 						/>
 						<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm peer-focus:text-black dark:peer-focus:text-white">
-							{t("editSpecialtyDialog.specialtyName", "Specialty Name")}
+							{t("editFieldDialog.fieldName", "Field Name")}
 							<span className="text-[#D81212]">*</span>
 						</label>
 					</div>
@@ -122,13 +109,13 @@ export function SpecialtyUpdateDialog({
 							onClick={() => onOpenChange(false)}
 							className="bg-gray-300 text-black px-4 py-2 w-full rounded-[3px] hover:bg-gray-400 transition hover:cursor-pointer"
 						>
-							{t("editSpecialtyDialog.cancelButton", "Cancel")}
+							{t("editFieldDialog.cancelButton", "Cancel")}
 						</button>
 						<button
 							type="submit"
 							className="bg-black text-white px-4 py-2 w-full rounded-[3px] hover:bg-gray-900 transition hover:cursor-pointer"
 						>
-							{t("editSpecialtyDialog.saveButton", "Save")}
+							{t("editFieldDialog.saveButton", "Save")}
 						</button>
 					</div>
 				</form>

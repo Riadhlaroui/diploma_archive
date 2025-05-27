@@ -114,11 +114,21 @@ export async function getInbox(page = 1, perPage = 13) {
 	}
 }
 
-export async function getUsersList(page = 1, perPage = 13) {
+export async function getUsersList(
+	page = 1,
+	perPage = 13,
+	searchTerm: string = ""
+) {
 	try {
-		const result = await pb
-			.collection("Archive_users")
-			.getList(page, perPage, { sort: "-created" });
+		// Build filter if searchTerm exists (search in firstName, lastName, or email)
+		const filter = searchTerm
+			? `firstName ~ "${searchTerm}" || lastName ~ "${searchTerm}" || email ~ "${searchTerm}"`
+			: "";
+
+		const result = await pb.collection("Archive_users").getList(page, perPage, {
+			sort: "-created",
+			filter,
+		});
 
 		const users: UserList[] = result.items.map((item) => ({
 			id: item.id,

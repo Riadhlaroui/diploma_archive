@@ -17,7 +17,6 @@ import {
 	BreadcrumbItem,
 	BreadcrumbLink,
 	BreadcrumbList,
-	BreadcrumbPage,
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import {
@@ -38,106 +37,95 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { getFacultyById } from "@/app/src/services/facultieService";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import AddDepartmentDialog from "@/components/AddDepartmentDialog";
-import { DepartmentUpdateDialog } from "@/components/DepartmentUpdateDialog";
+import AddFieldDialog from "@/components/FieldsComponents/AddFieldDialog";
+import { FieldUpdateDialog } from "@/components/FieldsComponents/FieldUpdateDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
+
 import { toast } from "sonner";
 
-import {
-	deleteDepartment,
-	getDepartments,
-} from "@/app/src/services/departmentService";
+import { deleteField, getFields } from "@/app/src/services/fieldService";
 
-export default function DepartmentsPage() {
+import { getDepartmentById } from "@/app/src/services/departmentService";
+
+export default function FieldsPage() {
 	const searchParams = useSearchParams();
-	const facultyId = searchParams.get("facultyId");
+	const departmentId = searchParams.get("departmentId");
 
 	const { t } = useTranslation();
-	const [departments, setDepartments] = useState<any[]>([]);
+	const router = useRouter();
+
+	const [fields, setFields] = useState<any[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
 	const [copiedId, setCopiedId] = useState("");
 
-	const [inputValue, setInputValue] = useState(""); // What user types
-	const [searchTerm, setSearchTerm] = useState(""); // Triggers search
+	const [inputValue, setInputValue] = useState("");
+	const [searchTerm, setSearchTerm] = useState("");
 
 	const [showAddDialog, setShowAddDialog] = useState(false);
-
-	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
+	const [selectedField, setSelectedField] = useState<any | null>(null);
 	const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
-	const [selectedDepartment, setSelectedDepartment] = useState<any | null>(
-		null
-	);
-	const [departmentToDelete, setDepartmentToDelete] = useState<any | null>(
-		null
-	);
+	const [fieldToDelete, setFieldToDelete] = useState<any | null>(null);
 
-	const router = useRouter();
-
-	const [facultyName, setFacultyName] = useState<string>("");
+	const [departmentName, setDepartmentName] = useState<string>("");
 
 	useEffect(() => {
-		if (facultyId) {
-			getFacultyById(facultyId)
-				.then((faculty) => {
-					setFacultyName(faculty?.name || "");
+		if (departmentId) {
+			getDepartmentById(departmentId)
+				.then((department) => {
+					setDepartmentName(department?.name || "");
 				})
 				.catch(() => {
-					setFacultyName("");
+					setDepartmentName("");
 				});
 		}
-	}, [facultyId]);
+	}, [departmentId]);
 
-	const fetchDepartments = async () => {
-		if (!facultyId) {
-			setDepartments([]);
+	const fetchFields = async () => {
+		if (!departmentId) {
+			setFields([]);
 			setTotalPages(1);
 			setLoading(false);
 			return;
 		}
 		setLoading(true);
-		const data = await getDepartments(facultyId, page, 10, searchTerm);
-
-		setDepartments(data.items);
+		const data = await getFields(departmentId, page, 10, searchTerm);
+		setFields(data.items);
 		setTotalPages(data.totalPages);
 		setLoading(false);
 	};
 
 	useEffect(() => {
-		fetchDepartments();
-	}, [facultyId, page, searchTerm]);
+		fetchFields();
+	}, [departmentId, page, searchTerm]);
 
-	const handleEdit = (department: any) => {
-		setSelectedDepartment(department);
-		setIsDialogOpen(true);
+	const handleEdit = (field: any) => {
+		setSelectedField(field);
+		setOpenUpdateDialog(true);
 	};
 
-	const handleDelete = (department: any) => {
-		setDepartmentToDelete(department);
+	const handleDelete = (field: any) => {
+		setFieldToDelete(field);
 		setShowConfirmDialog(true);
 	};
 
 	const confirmDelete = async () => {
-		if (!departmentToDelete) return;
-
+		if (!fieldToDelete) return;
 		try {
-			await deleteDepartment(departmentToDelete.id);
-			toast.success(
-				`Department '${departmentToDelete.name}' deleted successfully!`
-			);
+			await deleteField(fieldToDelete.id);
+			toast.success(`Field '${fieldToDelete.name}' deleted successfully!`);
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		} catch (error) {
-			toast.error(`Failed to delete department '${departmentToDelete.name}'.`);
+			toast.error(`Failed to delete field '${fieldToDelete.name}'.`);
 		}
-
 		setShowConfirmDialog(false);
-		setDepartmentToDelete(null);
-		await fetchDepartments();
+		setFieldToDelete(null);
+		await fetchFields();
 	};
 
 	return (
@@ -157,7 +145,7 @@ export default function DepartmentsPage() {
 								<span className="sr-only">Toggle menu</span>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align="start">
-								<DropdownMenuItem className=" cursor-pointer">
+								<DropdownMenuItem>
 									<BreadcrumbLink href="/faculties">
 										{t("faculties.title")}
 									</BreadcrumbLink>
@@ -177,22 +165,26 @@ export default function DepartmentsPage() {
 					</BreadcrumbItem>
 					<BreadcrumbSeparator />
 					<BreadcrumbItem>
-						<BreadcrumbPage>{t("departments.title")}</BreadcrumbPage>
+						<BreadcrumbLink
+							onClick={() => router.back()}
+							className="hover:underline hover:cursor-pointer"
+						>
+							{t("departments.title")}
+						</BreadcrumbLink>
+					</BreadcrumbItem>
+					<BreadcrumbSeparator />
+					<BreadcrumbItem>
+						<BreadcrumbLink>Fields</BreadcrumbLink>
 					</BreadcrumbItem>
 				</BreadcrumbList>
 			</Breadcrumb>
 
 			<div className="flex gap-2 mb-4 items-center">
-				<h3
-					className="text-2xl font-semibold cursor-pointer hover:underline"
-					onClick={() => window.location.reload()}
-				>
-					{t("departments.title")} in {facultyName}
-				</h3>
+				<h3 className="text-2xl font-semibold">Fields in {departmentName}</h3>
 				<Button
-					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2"
+					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
 					disabled={loading}
-					onClick={fetchDepartments}
+					onClick={fetchFields}
 				>
 					{loading ? (
 						<Loader2 className="animate-spin text-black dark:text-white" />
@@ -201,7 +193,7 @@ export default function DepartmentsPage() {
 					)}
 				</Button>
 				<Button
-					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2"
+					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
 					onClick={() => setShowAddDialog(true)}
 				>
 					<SquarePlus className="text-black" />
@@ -213,31 +205,31 @@ export default function DepartmentsPage() {
 					<Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
 					<input
 						type="text"
-						placeholder="Search departments..."
+						placeholder="Search fields..."
 						value={inputValue}
 						onChange={(e) => setInputValue(e.target.value)}
 						className="pl-9 pr-3 py-1 w-full border rounded dark:bg-zinc-800 dark:text-white transition-colors"
 					/>
 				</div>
-				<button
+				<Button
 					onClick={() => {
 						setPage(1);
 						setSearchTerm(inputValue.trim());
 					}}
-					className="px-4 py-1 rounded border hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
+					variant="outline"
 				>
 					Search
-				</button>
+				</Button>
 			</div>
 
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
 					<TableRow>
-						<TableHead>{t("departments.code")}</TableHead>
-						<TableHead>{t("departments.name")}</TableHead>
-						<TableHead>Number of fields</TableHead>
-						<TableHead>{t("departments.createdAt")}</TableHead>
-						<TableHead>{t("departments.actions")}</TableHead>
+						<TableHead>Code</TableHead>
+						<TableHead>Name</TableHead>
+						<TableHead>Majors Count</TableHead>
+						<TableHead>Created At</TableHead>
+						<TableHead>Actions</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
@@ -250,30 +242,29 @@ export default function DepartmentsPage() {
 								</span>
 							</TableCell>
 						</TableRow>
-					) : departments.length > 0 ? (
-						departments.map((department) => (
+					) : fields.length > 0 ? (
+						fields.map((field) => (
 							<TableRow
-								key={department.id}
+								key={field.id}
 								className="hover:bg-gray-100 dark:hover:bg-zinc-800 hover:cursor-pointer"
 								onDoubleClick={() => {
 									router.push(
-										`/faculties/departments/fields?departmentId=${department.id}`
+										`/faculties/departments/fields/majors?fieldId=${field.id}`
 									);
 								}}
 							>
 								<TableCell>
 									<span className="inline-flex items-center gap-2 rounded-full bg-gray-200 px-3 py-1 text-sm font-medium">
-										{department.id}
-										{copiedId === department.id ? (
+										{field.id}
+										{copiedId === field.id ? (
 											<Check size={14} className="text-green-600" />
 										) : (
 											<button
 												onClick={() => {
-													navigator.clipboard.writeText(department.id);
-													setCopiedId(department.id);
+													navigator.clipboard.writeText(field.id);
+													setCopiedId(field.id);
 													setTimeout(() => setCopiedId(""), 1500);
 												}}
-												aria-label={t("actions.copyId")}
 												className="hover:text-blue-500"
 											>
 												<Copy size={14} />
@@ -281,27 +272,24 @@ export default function DepartmentsPage() {
 										)}
 									</span>
 								</TableCell>
-								<TableCell>{department.name}</TableCell>
-								<TableCell>{department.fieldsCount ?? 0}</TableCell>
+								<TableCell>{field.name}</TableCell>
+								<TableCell>{field.majorsCount ?? 0}</TableCell>
 								<TableCell>
-									{new Date(department.created).toLocaleDateString()}
+									{new Date(field.created).toLocaleDateString()}
 								</TableCell>
-
 								<TableCell>
 									<div className="flex gap-2">
 										<Button
 											size="sm"
 											variant="outline"
-											onClick={() => handleEdit(department)}
-											className="hover:cursor-pointer"
+											onClick={() => handleEdit(field)}
 										>
 											<UserRoundPen />
 										</Button>
 										<Button
 											size="sm"
 											variant="destructive"
-											className="bg-[#f44336] text-white hover:cursor-pointer"
-											onClick={() => handleDelete(department)}
+											onClick={() => handleDelete(field)}
 										>
 											<Trash2 />
 										</Button>
@@ -312,7 +300,7 @@ export default function DepartmentsPage() {
 					) : (
 						<TableRow>
 							<TableCell colSpan={5} className="text-center py-6 text-gray-500">
-								{t("departments.notFound")}
+								Fields not found
 							</TableCell>
 						</TableRow>
 					)}
@@ -325,7 +313,6 @@ export default function DepartmentsPage() {
 									variant="outline"
 									onClick={() => setPage((p) => Math.max(p - 1, 1))}
 									disabled={page === 1 || loading}
-									className="hover:cursor-pointer"
 								>
 									{t("pagination.previous")}
 								</Button>
@@ -336,7 +323,6 @@ export default function DepartmentsPage() {
 									variant="outline"
 									onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
 									disabled={page >= totalPages || loading}
-									className="hover:cursor-pointer"
 								>
 									{t("pagination.next")}
 								</Button>
@@ -346,33 +332,31 @@ export default function DepartmentsPage() {
 				</TableFooter>
 			</Table>
 
-			<DepartmentUpdateDialog
-				open={isDialogOpen}
-				onOpenChange={setIsDialogOpen}
-				user={selectedDepartment}
+			<FieldUpdateDialog
+				open={openUpdateDialog}
+				onOpenChange={setOpenUpdateDialog}
+				user={selectedField}
 			/>
 
 			<ConfirmDialog
 				open={showConfirmDialog}
 				onClose={() => {
 					setShowConfirmDialog(false);
-					setDepartmentToDelete(null);
+					setFieldToDelete(null);
 				}}
 				onConfirm={confirmDelete}
 				title={t("confirm.title")}
-				description={
-					t("confirm.description", {
-						name: departmentToDelete?.name || "",
-					}) || `Are you sure you want to delete ${departmentToDelete?.name}?`
-				}
+				description={t("confirm.description", {
+					name: fieldToDelete?.name || "",
+				})}
 			/>
 
-			{showAddDialog && facultyId && (
-				<AddDepartmentDialog
-					facultyId={facultyId}
+			{showAddDialog && departmentId && (
+				<AddFieldDialog
+					departmentId={departmentId}
 					onClose={() => {
 						setShowAddDialog(false);
-						fetchDepartments();
+						fetchFields();
 					}}
 				/>
 			)}

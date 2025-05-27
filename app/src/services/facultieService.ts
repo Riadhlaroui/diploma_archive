@@ -63,12 +63,16 @@ export async function updateFaculty(id: string, data: { name: string }) {
 
 export async function getFaculties(
 	page: number = 1,
-	perPage: number = 10
+	perPage: number = 10,
+	searchTerm: string = ""
 ): Promise<{ items: FacultieList[]; totalPages: number }> {
+	const filter = searchTerm ? `name ~ "${searchTerm}"` : "";
+
 	const facultiesResponse = await pb
 		.collection("Archive_faculties")
 		.getList(page, perPage, {
 			sort: "-created",
+			filter: filter || undefined, // only include filter if it's not empty
 		});
 
 	const departments = await pb.collection("Archive_departments").getFullList();

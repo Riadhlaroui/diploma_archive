@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import {
@@ -16,6 +17,7 @@ import {
 	Copy,
 	Loader2,
 	RefreshCcw,
+	Search,
 	SquarePlus,
 	Trash2,
 	UserRoundPen,
@@ -39,6 +41,8 @@ const FacultiesList = () => {
 	const [page, setPage] = useState(1);
 	const [copiedId, setCopiedId] = useState("");
 	const [showDialog, setShowDialog] = useState(false);
+	const [inputValue, setInputValue] = useState("");
+	const [searchTerm, setSearchTerm] = useState("");
 
 	const router = useRouter();
 
@@ -68,7 +72,6 @@ const FacultiesList = () => {
 		try {
 			await deleteFaculty(facultyToDelete.id);
 			toast.success(`Faculty '${facultyToDelete.name}' deleted successfully!`);
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		} catch (error) {
 			toast.error(`Failed to delete faculty '${facultyToDelete.name}'.`);
 		}
@@ -82,12 +85,12 @@ const FacultiesList = () => {
 
 	useEffect(() => {
 		fetchFaculties();
-	}, [page]);
+	}, [page, searchTerm]);
 
 	const fetchFaculties = async () => {
 		setLoading(true);
 		try {
-			const { items, totalPages } = await getFaculties(page, 10); // 10 items per page
+			const { items, totalPages } = await getFaculties(page, 10, searchTerm);
 			setLogs(items);
 			setTotalPages(totalPages);
 		} catch (err) {
@@ -100,7 +103,13 @@ const FacultiesList = () => {
 	return (
 		<div className="flex flex-col h-full mt-10 p-6 rounded-md shadow-lg">
 			<div className="flex gap-2 mb-4 items-center">
-				<h3 className="text-2xl font-semibold">{t("faculties.title")}</h3>
+				<h3
+					className="text-2xl font-semibold cursor-pointer hover:underline"
+					onClick={() => window.location.reload()}
+				>
+					{t("faculties.title")}
+				</h3>
+
 				<Button
 					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
 					onClick={fetchFaculties}
@@ -118,6 +127,28 @@ const FacultiesList = () => {
 				>
 					<SquarePlus className="text-black" />
 				</Button>
+			</div>
+
+			<div className="flex gap-2 mb-4">
+				<div className="relative w-full">
+					<Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+					<input
+						type="text"
+						placeholder="Search faculties..."
+						value={inputValue}
+						onChange={(e) => setInputValue(e.target.value)}
+						className="pl-9 pr-3 py-1 w-full border rounded dark:bg-zinc-800 dark:text-white transition-colors"
+					/>
+				</div>
+				<button
+					onClick={() => {
+						setPage(1);
+						setSearchTerm(inputValue.trim());
+					}}
+					className="px-4 py-1 rounded border hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
+				>
+					Search
+				</button>
 			</div>
 
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
@@ -173,7 +204,7 @@ const FacultiesList = () => {
 								<TableCell>
 									<div className="flex gap-2">
 										<Button
-											className=" hover:cursor-pointer"
+											className="hover:cursor-pointer"
 											size="sm"
 											variant="outline"
 											onClick={() => handleEdit(faculty)}
