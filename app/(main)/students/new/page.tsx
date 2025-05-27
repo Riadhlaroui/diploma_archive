@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next";
 
 import pb from "@/lib/pocketbase";
 import { toast } from "sonner";
-import { createStudent } from "@/app/src/services/studentService"; // adjust the path accordingly
+import { createStudentWithDocuments } from "@/app/src/services/studentService"; // adjust the path accordingly
 
 import { Separator } from "@/components/ui/separator";
 import DocumentUploadDialog from "@/components/DocumentUploadDialog";
@@ -183,7 +183,14 @@ const CreateStudentPage = () => {
 		console.log("Files to upload:", files);
 
 		try {
-			await createStudent(form, files);
+			await createStudentWithDocuments(
+				form,
+				files.map((file) => ({
+					file,
+					fileType: file.type || "unknown",
+				}))
+			);
+
 			toast.success("Student created successfully.");
 
 			setForm({
@@ -461,7 +468,7 @@ const CreateStudentPage = () => {
 						<button
 							type="button"
 							onClick={() => setOpenDialog(true)}
-							className="mt-4 w-full outline-none bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] h-[4rem] flex items-center justify-center font-semibold"
+							className="mt-4 w-full p-2 outline-none bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] h-fit flex items-center justify-center font-semibold"
 						>
 							Upload Documents
 						</button>

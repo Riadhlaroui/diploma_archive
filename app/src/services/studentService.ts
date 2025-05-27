@@ -1,51 +1,52 @@
 import pb from "@/lib/pocketbase";
 
-interface CreateStudentInput {
+type StudentPayload = {
 	matricule: string;
 	firstName: string;
 	lastName: string;
-	dateOfBirth: string;
+	dateOfBirth?: string;
 	enrollmentYear: string;
-	specialtyId: string;
 	field: string;
 	major: string;
-}
+	specialtyId: string;
+};
 
-export const createStudent = async (
-	data: CreateStudentInput,
-	files: File[] = []
-) => {
+export type FileWithType = {
+	file: File;
+	fileType: string;
+};
+
+export async function createStudentWithDocuments(
+	studentData: StudentPayload,
+	files: FileWithType[]
+) {
 	try {
-		console.log("Data sent to PocketBase:", data);
-		console.log("Files sent to PocketBase:", files);
+		// Step 1: Create the student
+		const student = await pb.collection("Archive_students").create(studentData);
 
-		// Disable auto-cancel for student creation
-		const student = await pb.collection("Archive_students").create(data, {
-			$autoCancel: false,
-		});
+		// Step 2: Upload files and link them
+		for (const fileItem of files) {
+			const { file, fileType } = fileItem;
 
-		// Upload each document and link to student
-		if (files.length > 0) {
-			const uploadPromises = files.map((file) => {
-				const formData = new FormData();
-				formData.append("studentId", student.id); // relation field to student record
-				formData.append("file", file); // file field to upload file
-
-				// Disable auto-cancel for document uploads
-				return pb.collection("Archive_documents").create(formData, {
-					$autoCancel: false,
-				});
+			// Step 2.1: Upload file to Archive_files
+			const fileRecord = await pb.collection("Archive_files").create({
+				file,
+				fileType,
 			});
 
-			await Promise.all(uploadPromises);
+			// Step 2.2: Link file with student in Archive_documents
+			await pb.collection("Archive_documents").create({
+				studentId: student.id,
+				fileId: fileRecord.id,
+			});
 		}
 
-		return student;
+		return { success: true, studentId: student.id };
 	} catch (error) {
-		console.error("Failed to create student or upload documents:", error);
-		throw error;
+		console.error("Error creating student with documents:", error);
+		return { success: false, error };
 	}
-};
+}
 
 export async function getStudentsByDepartment(
 	departmentId: string,
