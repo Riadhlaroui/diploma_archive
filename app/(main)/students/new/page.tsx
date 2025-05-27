@@ -424,37 +424,6 @@ const CreateStudentPage = () => {
 							</div>
 						</div>
 
-						{/* Field and Major */}
-						<div className="grid grid-cols-2 gap-4 mt-4">
-							<div className="relative">
-								<input
-									type="text"
-									name="field"
-									value={form.field}
-									onChange={handleChange}
-									className="peer w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none"
-									placeholder=""
-								/>
-								<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm">
-									Field<span className="text-[#D81212]">*</span>
-								</label>
-							</div>
-
-							<div className="relative">
-								<input
-									type="text"
-									name="major"
-									value={form.major}
-									onChange={handleChange}
-									className="peer w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none"
-									placeholder=""
-								/>
-								<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm">
-									Major<span className="text-[#D81212]">*</span>
-								</label>
-							</div>
-						</div>
-
 						{/* Date of Birth and Enrollment Year */}
 						<div className="grid grid-cols-2 gap-4 mt-4">
 							<div className="relative">
@@ -497,6 +466,25 @@ const CreateStudentPage = () => {
 							Upload Documents
 						</button>
 
+						{files.length > 0 && (
+							<div className="mt-6 border p-4 rounded bg-gray-50 dark:bg-zinc-800">
+								<h3 className="text-lg font-semibold mb-2">
+									Uploaded Documents
+								</h3>
+								<ul className="space-y-2">
+									{files.map((file, index) => (
+										<li
+											key={index}
+											className="text-sm text-gray-700 dark:text-gray-200"
+										>
+											📄 <strong>{file.name}</strong> —{" "}
+											{file.type || "Unknown type"}
+										</li>
+									))}
+								</ul>
+							</div>
+						)}
+
 						<Separator className="mt-2.5" />
 
 						<div className="flex justify-end mt-6">
@@ -510,9 +498,7 @@ const CreateStudentPage = () => {
 			<DocumentUploadDialog
 				open={openDialog}
 				onOpenChange={setOpenDialog}
-				onUpload={(files) => {
-					console.log("Uploaded files:", files);
-				}}
+				onConfirm={(confirmedFiles) => setFiles(confirmedFiles)}
 			/>
 		</>
 	);
