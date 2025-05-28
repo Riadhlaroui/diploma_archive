@@ -22,6 +22,7 @@ import { createStudentWithDocuments } from "@/app/src/services/studentService"; 
 
 import { Separator } from "@/components/ui/separator";
 import DocumentUploadDialog from "@/components/DocumentUploadDialog";
+import { Upload, X } from "lucide-react";
 
 const CreateStudentPage = () => {
 	const { t } = useTranslation();
@@ -42,7 +43,9 @@ const CreateStudentPage = () => {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [selectedSpecialty, setSelectedSpecialty] = useState<any>(null);
 
-	const [files, setFiles] = useState<File[]>([]);
+	const [documents, setDocuments] = useState<{ file: File; type: string }[]>(
+		[]
+	);
 
 	const [form, setForm] = useState({
 		matricule: "",
@@ -180,15 +183,17 @@ const CreateStudentPage = () => {
 		}
 
 		console.log("Form data before submission:", form);
-		console.log("Files to upload:", files);
+		console.log("Files to upload:", documents);
+
+		console.log(
+			"Files being sent with types:",
+			documents.map(({ file, type }) => ({ file, fileType: type }))
+		);
 
 		try {
 			await createStudentWithDocuments(
 				form,
-				files.map((file) => ({
-					file,
-					fileType: file.type || "unknown",
-				}))
+				documents.map(({ file, type }) => ({ file, fileType: type }))
 			);
 
 			toast.success("Student created successfully.");
@@ -209,7 +214,7 @@ const CreateStudentPage = () => {
 			setSelectedSpecialty(null);
 			setDepartments([]);
 			setSpecialties([]);
-			setFiles([]);
+			setDocuments([]);
 		} catch (error: any) {
 			console.error("Create student error:", error);
 			if (error.response?.status === 400) {
@@ -468,24 +473,39 @@ const CreateStudentPage = () => {
 						<button
 							type="button"
 							onClick={() => setOpenDialog(true)}
-							className="mt-4 w-full p-2 outline-none bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] h-fit flex items-center justify-center font-semibold"
+							className="hover:cursor-pointer mt-4 w-full p-2 outline-none bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] h-fit flex gap-2 items-center justify-center font-semibold"
 						>
+							<Upload className=" w-5 h-5 opacity-65" />
 							Upload Documents
 						</button>
 
-						{files.length > 0 && (
+						{documents.length > 0 && (
 							<div className="mt-6 border p-4 rounded bg-gray-50 dark:bg-zinc-800">
 								<h3 className="text-lg font-semibold mb-2">
 									Uploaded Documents
 								</h3>
 								<ul className="space-y-2">
-									{files.map((file, index) => (
+									{documents.map(({ file, type }, index) => (
 										<li
 											key={index}
-											className="text-sm text-gray-700 dark:text-gray-200"
+											className="flex items-center justify-between text-sm text-gray-700 dark:text-gray-200"
 										>
-											📄 <strong>{file.name}</strong> —{" "}
-											{file.type || "Unknown type"}
+											<span>
+												📄 <strong>{type}</strong> - {file.name} —{" "}
+												{file.type || "Unknown"}
+											</span>
+											<button
+												onClick={() => {
+													setDocuments((prev) =>
+														prev.filter((_, i) => i !== index)
+													);
+												}}
+												className="ml-4 text-red-500 hover:text-red-700 font-bold"
+												aria-label={`Remove ${file.name}`}
+												type="button"
+											>
+												<X className="w-4 h-4" />
+											</button>
 										</li>
 									))}
 								</ul>
@@ -505,7 +525,7 @@ const CreateStudentPage = () => {
 			<DocumentUploadDialog
 				open={openDialog}
 				onOpenChange={setOpenDialog}
-				onConfirm={(confirmedFiles) => setFiles(confirmedFiles)}
+				onConfirm={(docs) => setDocuments(docs)}
 			/>
 		</>
 	);

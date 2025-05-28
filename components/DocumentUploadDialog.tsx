@@ -1,183 +1,251 @@
-import React, { useRef, useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { X } from "lucide-react";
 import { Separator } from "./ui/separator";
 
 interface DocumentItem {
 	file: File;
-	type: string;
+	type: string; // Document type e.g. BAC
 }
 
 interface DocumentUploadDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	onConfirm: (files: File[]) => void;
+	onConfirm: (documents: DocumentItem[]) => void;
 }
 
-export default function DocumentUploadDialog({
+const predefinedTypes = [
+	"Birth Certificate",
+	"BAC",
+	"National ID",
+	"Enrollment Certificate",
+];
+
+const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
 	open,
 	onOpenChange,
 	onConfirm,
-}: DocumentUploadDialogProps) {
-	const inputRef = useRef<HTMLInputElement>(null);
-	const [fileItems, setFileItems] = useState<DocumentItem[]>([]);
-	const [documentTypes, setDocumentTypes] = useState([
-		"Birth Certificate",
-		"BAC",
-		"National ID",
-		"Enrollment Certificate",
-	]);
-	const [editingIndex, setEditingIndex] = useState<number | null>(null);
-	const [newTypeName, setNewTypeName] = useState("");
+}) => {
+	const fileInputRef = useRef<HTMLInputElement>(null);
+	const [documents, setDocuments] = useState<DocumentItem[]>([]);
+	const [types, setTypes] = useState(predefinedTypes);
+	const [newType, setNewType] = useState("");
+	const [addingType, setAddingType] = useState(false);
+	const [dragActive, setDragActive] = useState(false);
 
-	const handleFiles = (files: FileList | null) => {
-		if (!files) return;
-		const newItems: DocumentItem[] = Array.from(files).map((file) => ({
+	// Add files to documents state
+	const addFiles = useCallback((files: FileList) => {
+		const newDocs: DocumentItem[] = Array.from(files).map((file) => ({
 			file,
-			type: documentTypes[0], // default type
+			type: "",
 		}));
-		setFileItems((prev) => [...prev, ...newItems]);
+		setDocuments((prev) => [...prev, ...newDocs]);
+	}, []);
+
+	const onFilesSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (!e.target.files) return;
+		addFiles(e.target.files);
+		if (fileInputRef.current) fileInputRef.current.value = "";
 	};
 
-	const updateType = (index: number, type: string) => {
-		if (type === "__new__") {
-			setEditingIndex(index);
-		} else {
-			setFileItems((prev) =>
-				prev.map((item, i) => (i === index ? { ...item, type } : item))
-			);
+	// Drag and Drop handlers
+	const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+		e.preventDefault();
+		setDragActive(true);
+	};
+
+	const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+		e.preventDefault();
+		setDragActive(false);
+	};
+
+	const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+		e.preventDefault();
+		setDragActive(false);
+		if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+			addFiles(e.dataTransfer.files);
+			e.dataTransfer.clearData();
 		}
 	};
 
-	const confirmNewType = () => {
-		if (!newTypeName.trim() || editingIndex === null) return;
+	const setDocumentType = (index: number, type: string) => {
+		setDocuments((prev) => {
+			const copy = [...prev];
+			copy[index].type = type;
+			return copy;
+		});
+	};
 
-		if (!documentTypes.includes(newTypeName)) {
-			setDocumentTypes((prev) => [...prev, newTypeName]);
+	const removeDocument = (index: number) => {
+		setDocuments((prev) => prev.filter((_, i) => i !== index));
+	};
+
+	const handleConfirm = () => {
+		if (documents.some((doc) => doc.type.trim() === "")) {
+			alert("Please specify a type for all documents");
+			return;
 		}
-
-		setFileItems((prev) =>
-			prev.map((item, i) =>
-				i === editingIndex ? { ...item, type: newTypeName } : item
-			)
-		);
-
-		setNewTypeName("");
-		setEditingIndex(null);
+		onConfirm(documents);
+		setDocuments([]);
+		onOpenChange(false);
 	};
 
-	const removeFile = (index: number) => {
-		setFileItems((prev) => prev.filter((_, i) => i !== index));
-	};
-
-	const closeDialog = () => onOpenChange(false);
-
-	const confirmUpload = () => {
-		onConfirm(fileItems.map((item) => item.file));
-		closeDialog();
+	const addNewType = () => {
+		const trimmed = newType.trim();
+		if (!trimmed) return;
+		if (types.includes(trimmed)) {
+			alert("This type already exists");
+			return;
+		}
+		setTypes((prev) => [...prev, trimmed]);
+		setNewType("");
+		setAddingType(false);
 	};
 
 	if (!open) return null;
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-			<div className="bg-white dark:bg-gray-900 rounded shadow-xl w-full max-w-lg p-6 relative">
-				<button
-					onClick={closeDialog}
-					className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 dark:hover:text-white"
-				>
-					<X className="w-5 h-5" />
-				</button>
+		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+			<div className="bg-white dark:bg-gray-900 rounded shadow-xl w-full max-w-lg p-6 relative max-h-[90vh] overflow-auto">
+				<h3 className="text-xl font-semibold mb-4">Upload Documents</h3>
 
-				<h2 className="text-lg font-semibold mb-2">Upload Documents</h2>
-				<Separator className="mb-2.5" />
-
-				{/* Drop Zone */}
+				{/* Drag and drop area */}
 				<div
-					onClick={() => inputRef.current?.click()}
-					onDrop={(e) => {
-						e.preventDefault();
-						handleFiles(e.dataTransfer.files);
-					}}
-					onDragOver={(e) => e.preventDefault()}
-					className="w-full h-24 border-2 border-dashed border-gray-400 dark:border-gray-600 rounded-lg flex items-center justify-center text-gray-600 dark:text-white bg-[#f0f4f8] dark:bg-gray-800 cursor-pointer mb-4"
+					onDragOver={onDragOver}
+					onDragLeave={onDragLeave}
+					onDrop={onDrop}
+					onClick={() => fileInputRef.current?.click()}
+					className={`mb-4 cursor-pointer border-2 rounded border-dashed flex flex-col items-center justify-center p-10 text-center select-none
+            ${
+							dragActive
+								? "border-blue-600 bg-blue-50 dark:bg-blue-900"
+								: "border-gray-300 dark:border-gray-700 bg-transparent"
+						}
+            hover:border-blue-600 dark:hover:border-blue-400 transition-colors`}
 				>
-					<p>Click or drag and drop PDF files here</p>
+					<p className="text-gray-600 dark:text-gray-300 mb-2">
+						Drag & drop files here, or click to select
+					</p>
+					<p className="text-sm text-gray-500 dark:text-gray-400">
+						Supported formats: pdf, png, jpg, jpeg, doc, docx
+					</p>
 					<input
-						ref={inputRef}
 						type="file"
-						accept="application/pdf,image/png,image/jpeg"
 						multiple
+						ref={fileInputRef}
+						onChange={onFilesSelected}
+						accept=".pdf,.png,.jpg,.jpeg,.doc,.docx"
 						className="hidden"
-						onChange={(e) => handleFiles(e.target.files)}
 					/>
 				</div>
 
-				{/* File List */}
-				<ul className="space-y-2 max-h-60 overflow-y-auto">
-					{fileItems.map((item, index) => (
-						<li
-							key={index}
-							className="flex items-center justify-between gap-2 bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded"
-						>
-							<div className="flex flex-col w-full">
-								<span className="text-sm truncate">{item.file.name}</span>
+				{documents.length > 0 && (
+					<ul className="space-y-3 max-h-64 overflow-auto">
+						{documents.map((doc, idx) => (
+							<li
+								key={idx}
+								className="flex items-center justify-between border p-3 rounded shadow-sm"
+							>
+								<div className="flex flex-col w-full">
+									<span className="truncate font-medium text-gray-800 dark:text-gray-200">
+										📄 {doc.file.name}
+									</span>
 
-								{editingIndex === index ? (
-									<div className="flex gap-2 mt-1">
-										<input
-											type="text"
-											className="p-1 text-sm border rounded w-full bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
-											placeholder="New document type"
-											value={newTypeName}
-											onChange={(e) => setNewTypeName(e.target.value)}
-										/>
-										<button
-											onClick={confirmNewType}
-											className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1 rounded"
-										>
-											Save
-										</button>
-									</div>
-								) : (
 									<select
-										className="mt-1 text-sm p-1 rounded bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600"
-										value={item.type}
-										onChange={(e) => updateType(index, e.target.value)}
+										className="mt-1 rounded border px-3 py-1 w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+										value={doc.type}
+										onChange={(e) => setDocumentType(idx, e.target.value)}
 									>
-										{documentTypes.map((type) => (
+										<option value="" disabled>
+											Select document type
+										</option>
+										{types.map((type) => (
 											<option key={type} value={type}>
 												{type}
 											</option>
 										))}
-										<option value="__new__">+ Create new type</option>
 									</select>
-								)}
-							</div>
+								</div>
 
+								<button
+									onClick={() => removeDocument(idx)}
+									className="ml-4 text-red-600 hover:text-red-900"
+									aria-label={`Remove ${doc.file.name}`}
+									type="button"
+								>
+									<X className="w-5 h-5" />
+								</button>
+							</li>
+						))}
+					</ul>
+				)}
+
+				<Separator className="my-5" />
+
+				{/* Add new document type section */}
+				<div className="mb-4">
+					{!addingType ? (
+						<button
+							type="button"
+							onClick={() => setAddingType(true)}
+							className="text-sm text-blue-600 hover:underline"
+						>
+							+ Add new document type
+						</button>
+					) : (
+						<div className="flex items-center gap-2">
+							<input
+								type="text"
+								placeholder="New type name"
+								className="rounded border px-3 py-1 flex-grow dark:bg-gray-800 dark:text-gray-100"
+								value={newType}
+								onChange={(e) => setNewType(e.target.value)}
+								onKeyDown={(e) => {
+									if (e.key === "Enter") {
+										e.preventDefault();
+										addNewType();
+									} else if (e.key === "Escape") {
+										setAddingType(false);
+										setNewType("");
+									}
+								}}
+							/>
 							<button
-								onClick={() => removeFile(index)}
-								className="text-red-500 hover:text-red-700"
+								type="button"
+								onClick={addNewType}
+								className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
 							>
-								<X className="w-4 h-4" />
+								Add
 							</button>
-						</li>
-					))}
-				</ul>
+							<button
+								type="button"
+								onClick={() => {
+									setAddingType(false);
+									setNewType("");
+								}}
+								className="px-3 py-1 rounded border border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700"
+							>
+								Cancel
+							</button>
+						</div>
+					)}
+				</div>
 
-				<Separator className="mt-2.5" />
-
-				{/* Action Buttons */}
-				<div className="mt-6 flex justify-end space-x-2">
+				<div className="flex justify-end gap-3">
 					<button
-						onClick={closeDialog}
-						className="px-4 py-2 rounded bg-gray-300 dark:bg-gray-700 text-sm"
+						type="button"
+						onClick={() => {
+							setDocuments([]);
+							onOpenChange(false);
+						}}
+						className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
 					>
 						Cancel
 					</button>
 					<button
-						onClick={confirmUpload}
-						disabled={fileItems.length === 0}
-						className="px-4 py-2 rounded bg-blue-600 text-white text-sm hover:bg-blue-700 disabled:opacity-50"
+						type="button"
+						onClick={handleConfirm}
+						className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed"
+						disabled={documents.length === 0}
 					>
 						Confirm
 					</button>
@@ -185,4 +253,6 @@ export default function DocumentUploadDialog({
 			</div>
 		</div>
 	);
-}
+};
+
+export default DocumentUploadDialog;
