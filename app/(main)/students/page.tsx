@@ -72,13 +72,11 @@ const StudentPage = () => {
 						<RefreshCcw className="text-black dark:text-white" />
 					)}
 				</Button>
-				<Button className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer">
-					<SquarePlus
-						className="text-black"
-						onClick={() => {
-							router.push("/students/new");
-						}}
-					/>
+				<Button
+					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
+					onClick={() => router.push("/students/new")}
+				>
+					<SquarePlus className="text-black" />
 				</Button>
 			</div>
 
