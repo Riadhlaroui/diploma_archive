@@ -45,9 +45,9 @@ const CreateStudentPage = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedSpecialty, setSelectedSpecialty] = useState<any>(null);
 
-  const [documents, setDocuments] = useState<{ file: File; type: string }[]>(
-    []
-  );
+  const [documents, setDocuments] = useState<
+    { file: File; typeId: string; typeName: string }[]
+  >([]);
 
   const [form, setForm] = useState({
     matricule: "",
@@ -200,7 +200,7 @@ const CreateStudentPage = () => {
     try {
       await createStudentWithDocuments(
         form,
-        documents.map(({ file, type }) => ({ file, fileType: type }))
+        documents.map(({ file, typeId }) => ({ file, fileType: typeId }))
       );
 
       toast.success("Student created successfully.");
@@ -570,7 +570,7 @@ const CreateStudentPage = () => {
                 {/* Documents List */}
                 {documents.length > 0 ? (
                   <div className="space-y-2 max-h-96 overflow-y-auto">
-                    {documents.map(({ file, type }, index) => (
+                    {documents.map(({ file, typeName }, index) => (
                       <div
                         key={index}
                         className="group bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded p-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
@@ -589,7 +589,7 @@ const CreateStudentPage = () => {
                                   {file.name}
                                 </p>
                                 <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mt-1">
-                                  {type}
+                                  {typeName}
                                 </p>
                                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                                   {formatFileSize(file.size)}

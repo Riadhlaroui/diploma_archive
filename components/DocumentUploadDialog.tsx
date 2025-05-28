@@ -1,13 +1,19 @@
 "use client";
 
 import type React from "react";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { X, Upload, FileText, ImageIcon, File, Plus } from "lucide-react";
 import { Separator } from "./ui/separator";
+import {
+  getAllDocumentTypes,
+  addDocumentType,
+  type DocumentTypeList,
+} from "@/app/src/services/documentTypesServices";
 
 interface DocumentItem {
   file: File;
-  type: string; // Document type e.g. BAC
+  typeId: string; // the actual relation ID
+  typeName: string; // the display name
 }
 
 interface DocumentUploadDialogProps {
@@ -16,13 +22,6 @@ interface DocumentUploadDialogProps {
   onConfirm: (documents: DocumentItem[]) => void;
 }
 
-const predefinedTypes = [
-  "Birth Certificate",
-  "BAC",
-  "National ID",
-  "Enrollment Certificate",
-];
-
 const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
   open,
   onOpenChange,
@@ -30,16 +29,35 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
-  const [types, setTypes] = useState(predefinedTypes);
+  const [documentTypes, setDocumentTypes] = useState<DocumentTypeList[]>([]);
   const [newType, setNewType] = useState("");
   const [addingType, setAddingType] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // Add files to documents state
+  useEffect(() => {
+    const fetchDocumentTypes = async () => {
+      try {
+        setLoading(true);
+        const types = await getAllDocumentTypes();
+        setDocumentTypes(types);
+      } catch (error) {
+        console.error("Error fetching document types:", error);
+        setDocumentTypes([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (open) {
+      fetchDocumentTypes();
+    }
+  }, [open]);
+
   const addFiles = useCallback((files: FileList) => {
     const newDocs: DocumentItem[] = Array.from(files).map((file) => ({
       file,
-      type: "",
+      typeId: "",
+      typeName: "",
     }));
     setDocuments((prev) => [...prev, ...newDocs]);
   }, []);
@@ -50,30 +68,12 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  // Drag and Drop handlers
-  const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setDragActive(true);
-  };
-
-  const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setDragActive(false);
-  };
-
-  const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setDragActive(false);
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      addFiles(e.dataTransfer.files);
-      e.dataTransfer.clearData();
-    }
-  };
-
-  const setDocumentType = (index: number, type: string) => {
+  const setDocumentType = (index: number, typeId: string) => {
+    const type = documentTypes.find((t) => t.id === typeId);
     setDocuments((prev) => {
       const copy = [...prev];
-      copy[index].type = type;
+      copy[index].typeId = typeId;
+      copy[index].typeName = type?.name || "";
       return copy;
     });
   };
@@ -83,7 +83,7 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
   };
 
   const handleConfirm = () => {
-    if (documents.some((doc) => doc.type.trim() === "")) {
+    if (documents.some((doc) => doc.typeId.trim() === "")) {
       alert("Please specify a type for all documents");
       return;
     }
@@ -92,16 +92,37 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
     onOpenChange(false);
   };
 
-  const addNewType = () => {
+  const addNewType = async () => {
     const trimmed = newType.trim();
     if (!trimmed) return;
-    if (types.includes(trimmed)) {
+    if (
+      documentTypes.some(
+        (type) => type.name.toLowerCase() === trimmed.toLowerCase()
+      )
+    ) {
       alert("This type already exists");
       return;
     }
-    setTypes((prev) => [...prev, trimmed]);
-    setNewType("");
-    setAddingType(false);
+    try {
+      setLoading(true);
+      const newDocumentType = await addDocumentType(trimmed);
+      setDocumentTypes((prev) => [
+        ...prev,
+        {
+          id: newDocumentType.id,
+          name: newDocumentType.name,
+          createdAt: newDocumentType.created,
+          updatedAt: newDocumentType.updated,
+        },
+      ]);
+      setNewType("");
+      setAddingType(false);
+    } catch (error) {
+      console.error("Error adding document type:", error);
+      alert("Failed to add document type. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getFileIcon = (fileName: string) => {
@@ -149,16 +170,28 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
           {/* Drag and drop area */}
           <div
-            onDragOver={onDragOver}
-            onDragLeave={onDragLeave}
-            onDrop={onDrop}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setDragActive(true);
+            }}
+            onDragLeave={(e) => {
+              e.preventDefault();
+              setDragActive(false);
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              setDragActive(false);
+              if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                addFiles(e.dataTransfer.files);
+                e.dataTransfer.clearData();
+              }
+            }}
             onClick={() => fileInputRef.current?.click()}
-            className={`mb-6 cursor-pointer border-2 border-dashed rounded-md flex flex-col items-center justify-center p-8 text-center transition-all
-							${
-                dragActive
-                  ? "border-gray-400 bg-gray-50 dark:bg-gray-800"
-                  : "border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500"
-              }`}
+            className={`mb-6 cursor-pointer border-2 border-dashed rounded-md flex flex-col items-center justify-center p-8 text-center transition-all ${
+              dragActive
+                ? "border-gray-400 bg-gray-50 dark:bg-gray-800"
+                : "border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500"
+            }`}
           >
             <div className="w-12 h-12 mx-auto mb-3 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
               <Upload className="w-6 h-6 text-gray-400 dark:text-gray-500" />
@@ -212,30 +245,31 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
                             onClick={() => removeDocument(idx)}
                             className="ml-2 p-1 text-gray-400 hover:text-red-500 transition-colors"
                             aria-label={`Remove ${doc.file.name}`}
-                            type="button"
                           >
                             <X className="w-4 h-4" />
                           </button>
                         </div>
-
                         <div className="space-y-2">
                           <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
                             Document Type{" "}
                             <span className="text-red-500">*</span>
                           </label>
                           <select
-                            className="w-full h-9 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-900 dark:text-white focus:outline-none focus:border-gray-500 dark:focus:border-gray-400"
-                            value={doc.type}
+                            value={doc.typeId}
                             onChange={(e) =>
                               setDocumentType(idx, e.target.value)
                             }
+                            disabled={loading}
+                            className="w-full h-9 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-900 dark:text-white focus:outline-none focus:border-gray-500 dark:focus:border-gray-400"
                           >
                             <option value="" disabled>
-                              Select document type
+                              {loading
+                                ? "Loading types..."
+                                : "Select document type"}
                             </option>
-                            {types.map((type) => (
-                              <option key={type} value={type}>
-                                {type}
+                            {documentTypes.map((type) => (
+                              <option key={type.id} value={type.id}>
+                                {type.name}
                               </option>
                             ))}
                           </select>
@@ -250,7 +284,7 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
 
           <Separator className="my-6" />
 
-          {/* Add new document type section */}
+          {/* Add new document type */}
           <div className="space-y-4">
             <h4 className="text-sm font-medium text-gray-900 dark:text-white">
               Document Types
@@ -260,9 +294,9 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
                 type="button"
                 onClick={() => setAddingType(true)}
                 className="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium"
+                disabled={loading}
               >
-                <Plus className="w-4 h-4" />
-                Add new document type
+                <Plus className="w-4 h-4" /> Add new document type
               </button>
             ) : (
               <div className="flex items-center gap-2">
@@ -272,6 +306,7 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
                   className="flex-1 h-9 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-sm text-gray-900 dark:text-white focus:outline-none focus:border-gray-500 dark:focus:border-gray-400"
                   value={newType}
                   onChange={(e) => setNewType(e.target.value)}
+                  disabled={loading}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
@@ -285,9 +320,10 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
                 <button
                   type="button"
                   onClick={addNewType}
-                  className="px-3 py-2 bg-gray-900 dark:bg-gray-700 text-white text-sm font-medium rounded hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors"
+                  disabled={loading || !newType.trim()}
+                  className="px-3 py-2 bg-gray-900 dark:bg-gray-700 text-white text-sm font-medium rounded hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Add
+                  {loading ? "Adding..." : "Add"}
                 </button>
                 <button
                   type="button"
@@ -295,7 +331,8 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
                     setAddingType(false);
                     setNewType("");
                   }}
-                  className="px-3 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                  disabled={loading}
+                  className="px-3 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
                 >
                   Cancel
                 </button>
@@ -307,20 +344,19 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
         {/* Footer */}
         <div className="px-6 py-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3">
           <button
-            type="button"
             onClick={() => {
               setDocuments([]);
               onOpenChange(false);
             }}
             className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+            disabled={loading}
           >
             Cancel
           </button>
           <button
-            type="button"
             onClick={handleConfirm}
             className="px-4 py-2 bg-gray-900 dark:bg-gray-700 text-white font-medium rounded hover:bg-gray-800 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            disabled={documents.length === 0}
+            disabled={documents.length === 0 || loading}
           >
             Confirm ({documents.length})
           </button>
