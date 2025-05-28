@@ -22,16 +22,40 @@ import {
 	Trash2,
 	UserRoundPen,
 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { fetchStudents } from "@/app/src/services/studentService";
 
 const StudentPage = () => {
 	const { t } = useTranslation();
 
+	const router = useRouter();
+
 	const [loading, setLoading] = useState(true);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const [students, setStudents] = useState<any[]>([]);
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
 	const [copiedId, setCopiedId] = useState("");
+
+	const loadStudents = async () => {
+		setLoading(true);
+		try {
+			const data = await fetchStudents(page, 10);
+			console.log("Fetched students:", data.items);
+			setStudents(data.items);
+			setTotalPages(data.totalPages);
+		} catch (err) {
+			// handle error, maybe set an error state
+			console.error(err);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		loadStudents();
+	}, [page]);
 
 	return (
 		<div className="p-6 space-y-6">
@@ -40,6 +64,7 @@ const StudentPage = () => {
 				<Button
 					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
 					disabled={loading}
+					onClick={() => loadStudents()}
 				>
 					{loading ? (
 						<Loader2 className="animate-spin text-black dark:text-white" />
@@ -48,7 +73,12 @@ const StudentPage = () => {
 					)}
 				</Button>
 				<Button className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer">
-					<SquarePlus className="text-black" />
+					<SquarePlus
+						className="text-black"
+						onClick={() => {
+							router.push("/students/new");
+						}}
+					/>
 				</Button>
 			</div>
 
@@ -63,12 +93,15 @@ const StudentPage = () => {
 						<TableHead>Field</TableHead>
 						<TableHead>Enrollment Year</TableHead>
 						<TableHead>Specialty</TableHead>
+						<TableHead>Number of documents</TableHead>
+						<TableHead>Created At</TableHead>
+						<TableHead>Actions</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
 					{loading ? (
 						<TableRow>
-							<TableCell colSpan={8} className="text-center py-6">
+							<TableCell colSpan={11} className="text-center py-6">
 								<Loader2 className="mx-auto animate-spin text-gray-500" />
 								<span className="text-sm text-gray-500 mt-2 block">
 									{t("loading")}
@@ -107,7 +140,10 @@ const StudentPage = () => {
 								<TableCell>{student.major}</TableCell>
 								<TableCell>{student.field}</TableCell>
 								<TableCell>{student.enrollmentYear}</TableCell>
-								<TableCell>{student.specialtyId}</TableCell>
+								<TableCell>
+									{student.expand?.specialtyId?.name ?? "N/A"}
+								</TableCell>
+								<TableCell>{student.documentsCount}</TableCell>
 								<TableCell>
 									{new Date(student.created).toLocaleDateString()}
 								</TableCell>
@@ -134,7 +170,10 @@ const StudentPage = () => {
 						))
 					) : (
 						<TableRow>
-							<TableCell colSpan={8} className="text-center py-6 text-gray-500">
+							<TableCell
+								colSpan={11}
+								className="text-center py-6 text-gray-500"
+							>
 								Studens not found
 							</TableCell>
 						</TableRow>
@@ -142,7 +181,7 @@ const StudentPage = () => {
 				</TableBody>
 				<TableFooter>
 					<TableRow>
-						<TableCell colSpan={8} className="text-center py-3">
+						<TableCell colSpan={11} className="text-center py-3">
 							<div className="flex items-center justify-center gap-4">
 								<Button
 									variant="outline"
