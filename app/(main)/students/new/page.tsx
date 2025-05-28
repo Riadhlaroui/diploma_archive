@@ -189,6 +189,9 @@ const CreateStudentPage = () => {
 			return;
 		}
 
+		console.log("Creating student with data:", form);
+		console.log("Documents to upload:", documents);
+
 		try {
 			await createStudentWithDocuments(
 				form,
