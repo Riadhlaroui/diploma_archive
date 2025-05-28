@@ -1,7 +1,5 @@
 import pb from "@/lib/pocketbase";
 
-import PocketBase from "pocketbase";
-
 type StudentPayload = {
 	matricule: string;
 	firstName: string;
@@ -30,11 +28,15 @@ export async function createStudentWithDocuments(
 		for (const fileItem of files) {
 			const { file, fileType } = fileItem;
 
-			// Step 2.1: Upload file to Archive_files
-			const fileRecord = await pb.collection("Archive_files").create({
-				file,
-				fileType,
-			});
+			// Ensure file is not empty
+			if (!file || file.size === 0) continue;
+
+			// Step 2.1: Upload file using FormData
+			const fileForm = new FormData();
+			fileForm.append("file", file);
+			fileForm.append("fileType", fileType);
+
+			const fileRecord = await pb.collection("Archive_files").create(fileForm);
 
 			// Step 2.2: Link file with student in Archive_documents
 			await pb.collection("Archive_documents").create({
@@ -45,7 +47,13 @@ export async function createStudentWithDocuments(
 
 		return { success: true, studentId: student.id };
 	} catch (error) {
-		console.error("Error creating student with documents:", error);
+		console.error(
+			"Error creating student with documents:",
+			typeof error === "object" && error !== null && "response" in error
+				? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+				  (error as any).response
+				: error
+		);
 		return { success: false, error };
 	}
 }
@@ -114,35 +122,40 @@ export async function getStudentsWithSpecialtyAndDocumentCount() {
 	}
 }
 
-export const fetchStudents = async (page: number, perPage: number) => {
-	const pb = new PocketBase("http://127.0.0.1:8090");
-
-	const res = await pb.collection("Archive_students").getList(page, perPage, {
-		expand: "specialtyId",
-	});
-
-	const studentsWithExtras = await Promise.all(
-		res.items.map(async (student) => {
-			res.items.map((student) => {
-				console.log(student.specialty); // Should log the expanded specialty object or null
+export async function fetchStudents(page = 1, perPage = 10) {
+	try {
+		// Fetch paginated students with expanded specialty
+		const studentsResponse = await pb
+			.collection("Archive_students")
+			.getList(page, perPage, {
+				expand: "specialtyId",
+				sort: "-created",
 			});
 
-			const pbInstance = new PocketBase("http://127.0.0.1:8090"); // new instance
-			const documents = await pbInstance
-				.collection("Archive_documents")
-				.getFullList({
-					filter: `studentId="${student.id}"`,
-					fields: "id",
-				});
-			return {
-				...student,
-				documentsCount: documents.length,
-			};
-		})
-	);
+		// Fetch all documents to count them by student
+		const allDocuments = await pb.collection("Archive_documents").getFullList({
+			fields: "studentId",
+		});
 
-	return {
-		items: studentsWithExtras,
-		totalPages: res.totalPages,
-	};
-};
+		// Count documents by studentId
+		const documentsCountMap: Record<string, number> = {};
+		for (const doc of allDocuments) {
+			const studentId = doc.studentId;
+			documentsCountMap[studentId] = (documentsCountMap[studentId] || 0) + 1;
+		}
+
+		// Add documentsCount to each student
+		const items = studentsResponse.items.map((student) => ({
+			...student,
+			documentsCount: documentsCountMap[student.id] || 0,
+		}));
+
+		return {
+			items,
+			totalPages: studentsResponse.totalPages,
+		};
+	} catch (error) {
+		console.error("Error fetching students:", error);
+		return { items: [], totalPages: 1 };
+	}
+}
