@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next";
 
 import pb from "@/lib/pocketbase";
 import { toast } from "sonner";
-import { createStudentWithDocuments } from "@/app/src/services/studentService"; // adjust the path accordingly
+import { createStudentWithDocuments } from "@/app/src/services/studentService";
 
 import { Separator } from "@/components/ui/separator";
 import DocumentUploadDialog from "@/components/DocumentUploadDialog";
@@ -162,6 +162,11 @@ const CreateStudentPage = () => {
 			return;
 		}
 
+		if (documents.length === 0) {
+			toast.error("Please upload at least one document.");
+			return;
+		}
+
 		const dob = new Date(form.dateOfBirth);
 		if (isNaN(dob.getTime())) {
 			toast.error("Invalid date of birth format.");
@@ -184,14 +189,6 @@ const CreateStudentPage = () => {
 			return;
 		}
 
-		console.log("Form data before submission:", form);
-		console.log("Files to upload:", documents);
-
-		console.log(
-			"Files being sent with types:",
-			documents.map(({ file, type }) => ({ file, fileType: type }))
-		);
-
 		try {
 			await createStudentWithDocuments(
 				form,
@@ -200,6 +197,7 @@ const CreateStudentPage = () => {
 
 			toast.success("Student created successfully.");
 
+			// Reset form and selections
 			setForm({
 				matricule: "",
 				firstName: "",
