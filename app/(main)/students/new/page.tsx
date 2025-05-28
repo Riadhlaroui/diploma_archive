@@ -22,10 +22,12 @@ import { createStudentWithDocuments } from "@/app/src/services/studentService"; 
 
 import { Separator } from "@/components/ui/separator";
 import DocumentUploadDialog from "@/components/DocumentUploadDialog";
-import { Upload, X } from "lucide-react";
+import { ArrowLeft, Upload, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const CreateStudentPage = () => {
 	const { t } = useTranslation();
+	const router = useRouter();
 
 	const [openDialog, setOpenDialog] = useState(false);
 
@@ -237,7 +239,15 @@ const CreateStudentPage = () => {
 	return (
 		<>
 			<div className="min-h-screen flex items-start justify-start dark:bg-zinc-950 p-2">
-				<div className="bg-white dark:bg-zinc-900 w-full max-w-4xl rounded-[3px] p-6 relative">
+				{/* Main content area */}
+				<div className="bg-white dark:bg-zinc-900 w-full max-w-4xl rounded-[6px] p-6 relative">
+					<button
+						onClick={() => router.back()}
+						className="mb-4 inline-flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-white hover:text-black dark:hover:text-gray-300 transition-colors hover:cursor-pointer"
+					>
+						<ArrowLeft className="h-4 w-4" />
+						<span>Back</span>
+					</button>
 					<h2 className="text-xl font-semibold mb-2">Add new Student</h2>
 					<p className="text-sm text-gray-500 mb-4">
 						Please fill in the details below to create a new student record.
