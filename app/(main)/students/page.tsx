@@ -134,9 +134,11 @@ const StudentPage = () => {
 								</TableCell>
 								<TableCell>{student.firstName}</TableCell>
 								<TableCell>{student.lastName}</TableCell>
-								<TableCell>{student.dateOfBirth}</TableCell>
-								<TableCell>{student.major}</TableCell>
-								<TableCell>{student.field}</TableCell>
+								<TableCell>
+									{new Date(student.dateOfBirth).toLocaleDateString()}
+								</TableCell>
+								<TableCell>{student.expand?.majorId?.name ?? "N/A"}</TableCell>
+								<TableCell>{student.expand?.fieldId?.name ?? "N/A"}</TableCell>
 								<TableCell>{student.enrollmentYear}</TableCell>
 								<TableCell>
 									{student.expand?.specialtyId?.name ?? "N/A"}
