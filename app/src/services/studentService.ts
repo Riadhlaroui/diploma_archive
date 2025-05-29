@@ -34,7 +34,7 @@ export async function createStudentWithDocuments(
 			// Step 2.1: Upload file using FormData
 			const fileForm = new FormData();
 			fileForm.append("file", file);
-			fileForm.append("fileType", fileType);
+			fileForm.append("typeId", fileType);
 
 			const fileRecord = await pb.collection("Archive_files").create(fileForm);
 
