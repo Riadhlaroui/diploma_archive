@@ -6,8 +6,8 @@ type StudentPayload = {
 	lastName: string;
 	dateOfBirth?: string;
 	enrollmentYear: string;
-	field: string;
-	major: string;
+	fieldId: string;
+	majorId: string;
 	specialtyId: string;
 };
 
@@ -124,11 +124,11 @@ export async function getStudentsWithSpecialtyAndDocumentCount() {
 
 export async function fetchStudents(page = 1, perPage = 10) {
 	try {
-		// Fetch paginated students with expanded specialty
+		// Fetch paginated students with expanded specialty, field, and major
 		const studentsResponse = await pb
 			.collection("Archive_students")
 			.getList(page, perPage, {
-				expand: "specialtyId",
+				expand: "specialtyId,fieldId,majorId",
 				sort: "-created",
 			});
 
