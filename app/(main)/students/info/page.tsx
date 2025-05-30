@@ -214,7 +214,7 @@ const StudentInfoPage = () => {
 		<div className="p-4 md:p-6 mx-auto w-full">
 			<button
 				onClick={() => router.back()}
-				className="mb-4 flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-gray-100"
+				className="mb-4 flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-gray-100 hover:underline transition-colors hover:cursor-pointer"
 			>
 				<ArrowLeft className="h-4 w-4" />
 				Back
@@ -436,7 +436,7 @@ const DocumentsSection: React.FC<DocumentsSectionProps> = ({
 						</div>
 						<button
 							onClick={() => onViewDocument(fileData, fileName)}
-							className="flex-shrink-0 flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors px-3 py-1.5 rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/30"
+							className="flex-shrink-0 flex items-center gap-1 text-sm font-medium hover:bg-gray-200 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors px-3 py-1.5 rounded-md dark:hover:bg-blue-900/30 hover:cursor-pointer"
 						>
 							<Eye className="h-4 w-4" />
 							View
