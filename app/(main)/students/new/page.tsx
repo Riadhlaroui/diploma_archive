@@ -230,14 +230,29 @@ const CreateStudentPage = () => {
 		console.log("Documents to upload:", documents);
 
 		try {
-			await createStudentWithDocuments(
+			const result = await createStudentWithDocuments(
 				form,
 				documents.map(({ file, typeId }) => ({ file, fileType: typeId }))
 			);
 
+			// If your create function returns something indicating failure, handle it here
+			if (result?.error) {
+				toast.error(
+					<div className="flex items-center gap-2">
+						<div>
+							<div className="font-semibold text-[15px]">
+								A student with matricule already exists.
+							</div>
+							<div className="text-sm">Please choose a different matricule</div>
+						</div>
+					</div>
+				);
+				return;
+			}
+
 			toast.success("Student created successfully.");
 
-			// Reset form and selections
+			// Reset form and selections...
 			setForm({
 				matricule: "",
 				firstName: "",
@@ -257,20 +272,15 @@ const CreateStudentPage = () => {
 			setDocuments([]);
 		} catch (error: any) {
 			console.error("Create student error:", error);
-			if (error.response?.status === 400) {
-				toast.error(
-					<div className="flex items-center gap-2">
-						<div>
-							<div className="font-semibold text-[15px]">
-								A student with matricule already exists.
-							</div>
-							<div className="text-sm">Please choose a different name.</div>
+			toast.error(
+				<div className="flex items-center gap-2">
+					<div>
+						<div className="font-semibold text-[15px]">
+							<p>Error creating student.</p>
 						</div>
 					</div>
-				);
-				return;
-			}
-			toast.error(error?.message || "Failed to create student.");
+				</div>
+			);
 		}
 	};
 
