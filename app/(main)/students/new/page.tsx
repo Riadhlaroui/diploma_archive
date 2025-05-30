@@ -42,7 +42,7 @@ const CreateStudentPage = () => {
 
 	const [selectedFaculty, setSelectedFaculty] = useState("");
 	const [selectedDepartment, setSelectedDepartment] = useState("");
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 	const [selectedSpecialty, setSelectedSpecialty] = useState<any>(null);
 
 	const [documents, setDocuments] = useState<
