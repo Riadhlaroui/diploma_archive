@@ -25,7 +25,10 @@ import {
 } from "lucide-react";
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { fetchStudents } from "@/app/src/services/studentService";
+import {
+	fetchStudents,
+	searchStudents,
+} from "@/app/src/services/studentService";
 import pb from "@/lib/pocketbase";
 import {
 	Select,
@@ -38,12 +41,21 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 
+interface StudentFilter {
+	matricule?: string;
+	searchQuery?: string; // for searching name or matricule
+	facultyId?: string;
+	departmentId?: string;
+	fieldId?: string;
+	majorId?: string;
+	specialtyId?: string;
+}
+
 const StudentPage = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
 
 	const [loading, setLoading] = useState(true);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const [students, setStudents] = useState<any[]>([]);
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
@@ -58,7 +70,7 @@ const StudentPage = () => {
 	const [departments, setDepartments] = useState<any[]>([]);
 	const [fields, setFields] = useState<any[]>([]);
 	const [majors, setMajors] = useState<any[]>([]);
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 	const [specialties, setSpecialties] = useState<any[]>([]);
 
 	const [selectedField, setSelectedField] = useState<string>("");
@@ -67,6 +79,8 @@ const StudentPage = () => {
 	const [selectedFaculty, setSelectedFaculty] = useState("");
 	const [selectedDepartment, setSelectedDepartment] = useState("");
 	const [selectedSpecialty, setSelectedSpecialty] = useState<string>("");
+
+	const [matricule, setMatricule] = useState("");
 
 	useEffect(() => {
 		pb.collection("Archive_faculties")
@@ -149,6 +163,34 @@ const StudentPage = () => {
 		}
 	}, [selectedMajor]);
 
+	const handleSearch = async () => {
+		if (!selectedDepartment) return;
+
+		setLoading(true);
+		try {
+			const filter: StudentFilter = {
+				facultyId: selectedFaculty || undefined,
+				departmentId: selectedDepartment || undefined,
+				fieldId: selectedField || undefined,
+				majorId: selectedMajor || undefined,
+				specialtyId: selectedSpecialty || undefined,
+				searchQuery: searchQuery.trim() || undefined,
+				matricule: matricule.trim() || undefined,
+			};
+
+			const result = await searchStudents(filter);
+
+			setStudents(result.items); // ✅ Correct usage
+			setTotalPages(result.totalPages);
+			setPage(1);
+			setIsFilterOpen(false);
+		} catch (err) {
+			console.error("Search failed:", err);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	const loadStudents = async () => {
 		setLoading(true);
 		try {
@@ -167,12 +209,8 @@ const StudentPage = () => {
 	}, [page]);
 
 	return (
-		// 1. ADD 'relative' TO THIS MAIN PAGE CONTAINER
 		<div className="relative p-6 space-y-6">
-			{/* Full-width container for filter trigger + panel */}
-
 			<div className="relative w-full">
-				{/* Row containing buttons including the filter trigger */}
 				<div ref={buttonRowRef} className="flex gap-2 mb-4 items-center">
 					<h3 className="text-2xl font-semibold">Students</h3>
 					<Button
@@ -201,6 +239,10 @@ const StudentPage = () => {
 						className="bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2"
 					>
 						<Search className="h-5 w-5 text-black" />
+					</Button>
+
+					<Button onClick={handleSearch} disabled={!selectedDepartment}>
+						Search
 					</Button>
 				</div>
 
@@ -298,7 +340,10 @@ const StudentPage = () => {
 									placeholder="Enter search query..."
 									value={searchQuery}
 									onChange={(e) => setSearchQuery(e.target.value)}
-									className="w-full pl-10 pr-3 py-2.5 text-sm border border-gray-300 dark:border-zinc-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+									disabled={!selectedDepartment}
+									className={`w-full pl-10 pr-3 py-2.5 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${
+										!selectedDepartment ? "opacity-50 cursor-not-allowed" : ""
+									}`}
 								/>
 							</div>
 						</div>
@@ -317,7 +362,8 @@ const StudentPage = () => {
 							<input
 								type="text"
 								name="matricule"
-								value={searchQuery}
+								value={matricule}
+								onChange={(e) => setMatricule(e.target.value)}
 								className="w-full h-9 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-gray-500 dark:focus:border-gray-400 text-gray-900 dark:text-white"
 								placeholder="Enter matricule"
 							/>
