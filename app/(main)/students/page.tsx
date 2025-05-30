@@ -180,7 +180,7 @@ const StudentPage = () => {
 
 			const result = await searchStudents(filter);
 
-			setStudents(result.items); // ✅ Correct usage
+			setStudents(result.items);
 			setTotalPages(result.totalPages);
 			setPage(1);
 			setIsFilterOpen(false);
