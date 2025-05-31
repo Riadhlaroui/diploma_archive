@@ -238,15 +238,17 @@ i18n
 					},
 
 					departments: {
+						titleWithFaculty: "Departments in {{faculty}}",
 						title: "Departments",
-						code: "Code",
 						name: "Name",
-						specialtiesCount: "Number of Specialties",
-						createdAt: "Created At",
-						updatedAt: "Updated At",
+						code: "Code",
+						createdAt: "Created at",
 						actions: "Actions",
-						notFound: "No departments found",
-						unknown: "Unknown Department",
+						fieldsCount: "Number of fields",
+						noDepartments: "No departments found.",
+						searchPlaceholder: "Search departments...",
+						deleteSuccess: "Department '{{name}}' deleted successfully!",
+						deleteFail: "Failed to delete department '{{name}}'.",
 					},
 					navigation: {
 						home: "Home",
@@ -466,10 +468,28 @@ i18n
 					},
 					loading: "Chargement...",
 
+					departments: {
+						titleWithFaculty: "Départements de {{faculty}}",
+						title: "Départements",
+						name: "Nom",
+						code: "Code",
+						createdAt: "Créé le",
+						actions: "Actions",
+						fieldsCount: "Nombre de filières",
+						noDepartments: "Aucun département trouvé.",
+						searchPlaceholder: "Rechercher des départements...",
+						deleteSuccess: "Département '{{name}}' supprimé avec succès !",
+						deleteFail: "Échec de la suppression du département '{{name}}'.",
+					},
+
 					confirm: {
 						title: "Confirmer la suppression",
 						description:
 							"Êtes-vous sûr de vouloir supprimer {{count}} membre(s) du personnel ? Cette action est irréversible.",
+					},
+
+					navigation: {
+						home: "Accueil",
 					},
 				},
 			},
@@ -653,7 +673,7 @@ i18n
 						deleteFaculty: "حذف الكلية",
 						confirmDelete: "هل أنت متأكد من أنك تريد حذف هذه الكلية؟",
 						name: "الاسم",
-						code: "الرمز",
+						code: "المعرف",
 						departmentCount: "عدد الإدارات",
 						actions: "الإجراءات",
 						submit: "إرسال",
@@ -681,10 +701,29 @@ i18n
 					},
 					loading: "جارٍ التحميل...",
 
+					departments: {
+						titleWithFaculty: "الاقسام في {{faculty}}",
+						title: "الأقسام",
+						name: "الاسم",
+						code: "الرمز",
+						createdAt: "تاريخ الإنشاء",
+						actions: "الإجراءات",
+						fieldsCount: "عدد التخصصات",
+						noDepartments: "لم يتم العثور على أقسام.",
+						searchPlaceholder: "ابحث عن الأقسام...",
+						deleteSuccess: "تم حذف القسم '{{name}}' بنجاح!",
+						deleteFail: "فشل في حذف القسم '{{name}}'.",
+						NumberofFields: "عدد الميادين",
+					},
+
 					confirm: {
 						title: "تأكيد الحذف",
 						description:
 							"هل أنت متأكد أنك تريد حذف الكلية {{name}}؟ لا يمكن التراجع عن هذا الإجراء.",
+					},
+
+					navigation: {
+						home: "الرئيسية",
 					},
 				},
 			},
