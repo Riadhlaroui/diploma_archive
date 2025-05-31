@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import {
 	Check,
 	Copy,
+	Funnel,
 	Loader2,
 	RefreshCcw,
 	Search,
@@ -214,7 +215,7 @@ const StudentPage = () => {
 				<div ref={buttonRowRef} className="flex gap-2 mb-4 items-center">
 					<h3 className="text-2xl font-semibold">Students</h3>
 					<Button
-						className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2"
+						className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:shadow-md"
 						disabled={loading}
 						onClick={() => loadStudents()}
 						aria-label="Refresh student list"
@@ -226,23 +227,29 @@ const StudentPage = () => {
 						)}
 					</Button>
 					<Button
-						className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2"
+						className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:shadow-md"
 						onClick={() => router.push("/students/new")}
 						aria-label="Add new student"
 					>
 						<SquarePlus className="text-black dark:text-white" />
 					</Button>
 
+					<Separator orientation="vertical" />
+
 					{/* Search button */}
 					<Button
 						onClick={() => setIsFilterOpen(!isFilterOpen)}
-						className="bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2"
+						className="bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:shadow-md"
 					>
-						<Search className="h-5 w-5 text-black" />
+						<Funnel className="text-black " />
 					</Button>
 
-					<Button onClick={handleSearch} disabled={!selectedDepartment}>
-						Search
+					<Button
+						onClick={handleSearch}
+						disabled={!selectedDepartment}
+						className="bg-transparent border hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+					>
+						<Search className="text-black" />
 					</Button>
 				</div>
 
