@@ -122,7 +122,7 @@ export async function getStudentsWithSpecialtyAndDocumentCount() {
 	}
 }
 
-export async function fetchStudents(page = 1, perPage = 20) {
+export async function fetchStudents(page = 1, perPage = 15) {
 	try {
 		// Fetch paginated students with expanded specialty, field, and major
 		const studentsResponse = await pb
@@ -173,7 +173,7 @@ interface StudentFilter {
 export async function searchStudents(
 	filter: StudentFilter,
 	page = 1,
-	perPage = 20
+	perPage = 15
 ) {
 	const filters: string[] = [];
 

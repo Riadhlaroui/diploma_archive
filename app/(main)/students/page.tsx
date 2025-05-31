@@ -195,7 +195,7 @@ const StudentPage = () => {
 	const loadStudents = async () => {
 		setLoading(true);
 		try {
-			const data = await fetchStudents(page, 10);
+			const data = await fetchStudents(page, 15);
 			setStudents(data.items);
 			setTotalPages(data.totalPages);
 		} catch (err) {
