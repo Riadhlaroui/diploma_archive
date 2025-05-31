@@ -162,7 +162,7 @@ export async function fetchStudents(page = 1, perPage = 15) {
 
 interface StudentFilter {
 	matricule?: string;
-	searchQuery?: string; // for searching name or matricule
+	searchQuery?: string;
 	facultyId?: string;
 	departmentId?: string;
 	fieldId?: string;
