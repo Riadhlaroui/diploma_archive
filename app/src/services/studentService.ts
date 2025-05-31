@@ -175,33 +175,37 @@ export async function searchStudents(
 	page = 1,
 	perPage = 20
 ) {
-	let fieldIds: string[] | undefined;
+	const filters: string[] = [];
 
-	if (filter.departmentId) {
+	// ✅ PRIORITIZE fieldId if present (no need to resolve from department/faculty)
+	if (filter.fieldId) {
+		filters.push(`fieldId.id="${filter.fieldId}"`);
+	}
+	// ✅ Else resolve fieldIds from department/faculty
+	else if (filter.departmentId || filter.facultyId) {
+		const departmentFilter = filter.departmentId
+			? `departmentId.id="${filter.departmentId}"`
+			: "";
+
 		const fieldsRes = await pb
 			.collection("Archive_fields")
 			.getFullList(undefined, {
-				filter: `departmentId.id="${filter.departmentId}"`,
+				filter: departmentFilter,
 				expand: "departmentId,departmentId.facultyId",
 			});
 
-		console.log("Fields res:", fieldsRes);
+		let filteredFields = fieldsRes;
 
 		if (filter.facultyId) {
-			fieldIds = fieldsRes
-				.filter(
-					(field) =>
-						field.expand?.departmentId?.expand?.facultyId?.id ===
-						filter.facultyId
-				)
-				.map((field) => field.id);
-		} else {
-			fieldIds = fieldsRes.map((field) => field.id);
+			filteredFields = filteredFields.filter(
+				(field) =>
+					field.expand?.departmentId?.expand?.facultyId?.id === filter.facultyId
+			);
 		}
 
-		console.log("Filtered field IDs:", fieldIds);
+		const fieldIds = filteredFields.map((field) => field.id);
 
-		if (!fieldIds.length) {
+		if (fieldIds.length === 0) {
 			return {
 				items: [],
 				page,
@@ -210,21 +214,15 @@ export async function searchStudents(
 				totalPages: 0,
 			};
 		}
-	}
 
-	const filters: string[] = [];
-
-	if (fieldIds) {
 		const fieldFilters = fieldIds.map((id) => `fieldId.id="${id}"`);
 		filters.push(`(${fieldFilters.join(" || ")})`);
-	} else if (filter.fieldId) {
-		filters.push(`fieldId.id="${filter.fieldId}"`);
 	}
 
+	// Other filters
 	if (filter.majorId) filters.push(`majorId.id="${filter.majorId}"`);
 	if (filter.specialtyId)
 		filters.push(`specialtyId.id="${filter.specialtyId}"`);
-
 	if (filter.matricule) filters.push(`matricule~"${filter.matricule}"`);
 	if (filter.searchQuery) {
 		filters.push(
@@ -233,10 +231,8 @@ export async function searchStudents(
 	}
 
 	const filterString = filters.length > 0 ? filters.join(" && ") : undefined;
-
 	console.log("Constructed filter string:", filterString);
 
-	// Fetch filtered students with expansions
 	const studentsResponse = await pb
 		.collection("Archive_students")
 		.getList(page, perPage, {
@@ -244,19 +240,17 @@ export async function searchStudents(
 			expand: "specialtyId,fieldId,majorId",
 		});
 
-	// Fetch all documents to count them by student
+	// Document counting
 	const allDocuments = await pb.collection("Archive_documents").getFullList({
 		fields: "studentId",
 	});
 
-	// Count documents per studentId
 	const documentsCountMap: Record<string, number> = {};
 	for (const doc of allDocuments) {
 		const studentId = doc.studentId;
 		documentsCountMap[studentId] = (documentsCountMap[studentId] || 0) + 1;
 	}
 
-	// Add documentsCount to each student
 	const items = studentsResponse.items.map((student) => ({
 		...student,
 		documentsCount: documentsCountMap[student.id] || 0,
