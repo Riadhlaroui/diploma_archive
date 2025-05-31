@@ -87,6 +87,11 @@ Same as Résumé, written in English.
 - Lessons Learned
 - Suggested Future Improvements
 
+
+
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Riadhlaroui/diploma_archive)
+
 ---
 
 
