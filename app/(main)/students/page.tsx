@@ -541,8 +541,8 @@ const StudentPage = () => {
 						<TableHead>First Name</TableHead>
 						<TableHead>Last Name</TableHead>
 						<TableHead>Date Of Birth</TableHead>
-						<TableHead>Major</TableHead>
 						<TableHead>Field</TableHead>
+						<TableHead>Major</TableHead>
 						<TableHead>Enrollment Year</TableHead>
 						<TableHead>Specialty</TableHead>
 						<TableHead>Number of documents</TableHead>
@@ -604,8 +604,8 @@ const StudentPage = () => {
 								<TableCell>
 									{new Date(student.dateOfBirth).toLocaleDateString()}
 								</TableCell>
-								<TableCell>{student.expand?.majorId?.name ?? "N/A"}</TableCell>
 								<TableCell>{student.expand?.fieldId?.name ?? "N/A"}</TableCell>
+								<TableCell>{student.expand?.majorId?.name ?? "N/A"}</TableCell>
 								<TableCell>{student.enrollmentYear}</TableCell>
 								<TableCell>
 									{student.expand?.specialtyId?.name ?? "N/A"}
