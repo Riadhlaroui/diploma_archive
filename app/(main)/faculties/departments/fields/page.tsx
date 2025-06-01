@@ -54,6 +54,8 @@ export default function FieldsPage() {
 	const departmentId = searchParams.get("departmentId");
 
 	const { t, i18n } = useTranslation();
+
+	const isRtl = i18n.language === "ar";
 	const router = useRouter();
 
 	const [fields, setFields] = useState<any[]>([]);
@@ -231,11 +233,21 @@ export default function FieldsPage() {
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
 					<TableRow>
-						<TableHead>{t("fields.code")}</TableHead>
-						<TableHead>{t("fields.name")}</TableHead>
-						<TableHead>{t("fields.MajorsCount")}</TableHead>
-						<TableHead>{t("fields.createdAt")}</TableHead>
-						<TableHead>{t("fields.actions")}</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("fields.code")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("fields.name")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("fields.MajorsCount")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("fields.createdAt")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("fields.actions")}
+						</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>

@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 
 const AddFacultyDialog = ({ onClose }: { onClose: () => void }) => {
 	const { t, i18n } = useTranslation();
+	const isRtl = i18n.language === "ar";
 	const [name, setName] = useState("");
 
 	const isArabic = i18n.language === "ar";
@@ -56,7 +57,9 @@ const AddFacultyDialog = ({ onClose }: { onClose: () => void }) => {
 			<div className="bg-white dark:bg-gray-900 rounded-[3px] shadow-lg w-full max-w-md p-6 relative">
 				<button
 					onClick={onClose}
-					className="absolute top-3 right-3 text-gray-500 hover:text-black dark:hover:text-white hover:cursor-pointer"
+					className={`absolute top-3 ${
+						isRtl ? "left-3" : "right-3"
+					} text-gray-500 hover:text-black dark:hover:text-white hover:cursor-pointer`}
 				>
 					<X />
 				</button>

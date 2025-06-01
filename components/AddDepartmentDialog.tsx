@@ -17,7 +17,7 @@ const AddDepartmentDialog = ({
 	const [name, setName] = useState("");
 	const { t, i18n } = useTranslation();
 
-	const isArabic = i18n.language === "ar";
+	const isRtl = i18n.language === "ar";
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -68,7 +68,9 @@ const AddDepartmentDialog = ({
 			<div className="bg-white dark:bg-gray-900 rounded-[3px] shadow-lg w-full max-w-md p-6 relative">
 				<button
 					onClick={onClose}
-					className="absolute top-3 right-3 text-gray-500 hover:text-black dark:hover:text-white hover:cursor-pointer"
+					className={`absolute top-3 ${
+						isRtl ? "left-3" : "right-3"
+					} text-gray-500 hover:text-black dark:hover:text-white hover:cursor-pointer`}
 				>
 					<X />
 				</button>
@@ -84,9 +86,9 @@ const AddDepartmentDialog = ({
 								value={name}
 								onChange={(e) => setName(e.target.value)}
 								className={`peer w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none ${
-									isArabic ? "text-right" : "text-left"
+									isRtl ? "text-right" : "text-left"
 								}`}
-								dir={isArabic ? "rtl" : "ltr"}
+								dir={isRtl ? "rtl" : "ltr"}
 								placeholder=""
 							/>
 							<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">

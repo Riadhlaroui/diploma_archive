@@ -41,7 +41,8 @@ import StudentFormDialog from "./StudentFormDialog";
 import { useRouter } from "next/navigation";
 
 export function AppSidebar() {
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
+	const isRtl = i18n.language === "ar";
 	const { state } = useSidebar(); // 'collapsed' or 'expanded'
 	const isCollapsed = state === "collapsed";
 
@@ -90,7 +91,7 @@ export function AppSidebar() {
 	const router = useRouter();
 
 	return (
-		<Sidebar collapsible="icon">
+		<Sidebar collapsible="icon" side={isRtl ? "right" : "left"}>
 			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupLabel>
@@ -130,7 +131,10 @@ export function AppSidebar() {
 												<MoreHorizontal className="hover:cursor-pointer" />
 											</SidebarMenuAction>
 										</DropdownMenuTrigger>
-										<DropdownMenuContent side="right" align="start">
+										<DropdownMenuContent
+											side={isRtl ? "left" : "right"}
+											align="start"
+										>
 											<DropdownMenuItem
 												className="hover:cursor-pointer"
 												onClick={() => console.log("Add new faculty")}
@@ -169,7 +173,10 @@ export function AppSidebar() {
 												<MoreHorizontal className=" hover:cursor-pointer" />
 											</SidebarMenuAction>
 										</DropdownMenuTrigger>
-										<DropdownMenuContent side="right" align="start">
+										<DropdownMenuContent
+											side={isRtl ? "left" : "right"}
+											align="start"
+										>
 											<DropdownMenuItem
 												className=" hover:cursor-pointer"
 												onClick={() => router.push("/students/new")}

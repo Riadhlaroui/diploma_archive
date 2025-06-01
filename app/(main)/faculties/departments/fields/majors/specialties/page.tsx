@@ -55,6 +55,8 @@ export default function SpecialtiesPage() {
 	const router = useRouter();
 	const { t, i18n } = useTranslation();
 
+	const isRtl = i18n.language === "ar";
+
 	const majorId = searchParams.get("majorId");
 
 	const [specialties, setSpecialties] = useState<any[]>([]);
@@ -255,10 +257,18 @@ export default function SpecialtiesPage() {
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
 					<TableRow>
-						<TableHead>{t("specialties.code")}</TableHead>
-						<TableHead>{t("specialties.name")}</TableHead>
-						<TableHead>{t("specialties.createdAt")}</TableHead>
-						<TableHead>{t("specialties.actions")}</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("specialties.code")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("specialties.name")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("specialties.createdAt")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("specialties.actions")}
+						</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
