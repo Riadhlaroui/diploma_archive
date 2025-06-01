@@ -533,19 +533,12 @@ const StudentPage = () => {
 						<Separator className="my-4" />
 
 						{/* Actions */}
-						<div className="pt-4 flex flex-col-reverse sm:flex-row sm:justify-between items-center gap-3">
-							<Button
-								type="button"
-								variant="ghost"
-								className="text-sm text-blue-600 hover:underline"
-							>
-								Reset Filters
-							</Button>
+						<div className="pt-4 flex justify-end">
 							<Button
 								onClick={() => setIsFilterOpen(false)}
 								className="text-sm"
 							>
-								Apply Filters
+								{t("filterPanel.apply")}
 							</Button>
 						</div>
 					</div>
