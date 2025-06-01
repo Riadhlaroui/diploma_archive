@@ -307,7 +307,7 @@ const CreateStudentPage = () => {
 
 	return (
 		<>
-			<div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-4">
+			<div className="min-h-full  bg-gray-100 dark:bg-gray-900 p-4">
 				<div className="max-w-7xl mx-auto">
 					{/* Header */}
 					<div className="mb-6">
@@ -316,13 +316,13 @@ const CreateStudentPage = () => {
 							className="mb-4 inline-flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
 						>
 							<ArrowLeft className="h-4 w-4" />
-							<span>Back</span>
+							<span>{t("addStudent.back")}</span>
 						</button>
 						<h1 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
-							Add New Student
+							{t("addStudent.title")}
 						</h1>
 						<p className="text-sm text-gray-600 dark:text-gray-400">
-							Please fill in the details below to create a new student record.
+							{t("addStudent.description")}
 						</p>
 					</div>
 
@@ -340,25 +340,30 @@ const CreateStudentPage = () => {
 									{/* Academic Information Section */}
 									<div className="space-y-4">
 										<h2 className="text-base font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
-											Academic Information
+											{t("addStudent.academicInfo")}
 										</h2>
 
 										<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 											{/* Faculty */}
 											<div className="space-y-1">
 												<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-													Faculty <span className="text-red-500">*</span>
+													{t("addStudent.faculty")}{" "}
+													<span className="text-red-500">*</span>
 												</label>
 												<Select
 													value={selectedFaculty}
 													onValueChange={setSelectedFaculty}
 												>
 													<SelectTrigger className="w-full h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-gray-500 dark:focus:border-gray-400">
-														<SelectValue placeholder="Select faculty" />
+														<SelectValue
+															placeholder={t("addStudent.selectFaculty")}
+														/>
 													</SelectTrigger>
 													<SelectContent>
 														<SelectGroup>
-															<SelectLabel>Faculty</SelectLabel>
+															<SelectLabel>
+																{t("addStudent.faculty")}
+															</SelectLabel>
 															{faculties.map((f) => (
 																<SelectItem key={f.id} value={f.id}>
 																	{f.name}
@@ -372,7 +377,8 @@ const CreateStudentPage = () => {
 											{/* Department */}
 											<div className="space-y-1">
 												<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-													Department <span className="text-red-500">*</span>
+													{t("addStudent.department")}{" "}
+													<span className="text-red-500">*</span>
 												</label>
 												<Select
 													value={selectedDepartment}
@@ -380,11 +386,15 @@ const CreateStudentPage = () => {
 													disabled={!selectedFaculty}
 												>
 													<SelectTrigger className="w-full h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-gray-500 dark:focus:border-gray-400 disabled:opacity-50">
-														<SelectValue placeholder="Select department" />
+														<SelectValue
+															placeholder={t("addStudent.selectDepartment")}
+														/>
 													</SelectTrigger>
 													<SelectContent>
 														<SelectGroup>
-															<SelectLabel>Department</SelectLabel>
+															<SelectLabel>
+																{t("addStudent.department")}
+															</SelectLabel>
 															{departments.map((d) => (
 																<SelectItem key={d.id} value={d.id}>
 																	{d.name}
@@ -398,7 +408,8 @@ const CreateStudentPage = () => {
 											{/* Fields */}
 											<div className="space-y-1">
 												<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-													Field <span className="text-red-500">*</span>
+													{t("addStudent.field")}{" "}
+													<span className="text-red-500">*</span>
 												</label>
 												<Select
 													value={selectedField}
@@ -413,11 +424,13 @@ const CreateStudentPage = () => {
 													disabled={!selectedDepartment}
 												>
 													<SelectTrigger className="w-full h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-gray-500 dark:focus:border-gray-400 disabled:opacity-50">
-														<SelectValue placeholder="Select field" />
+														<SelectValue
+															placeholder={t("addStudent.selectField")}
+														/>
 													</SelectTrigger>
 													<SelectContent>
 														<SelectGroup>
-															<SelectLabel>Fields</SelectLabel>
+															<SelectLabel>{t("addStudent.field")}</SelectLabel>
 															{fields.map((f) => (
 																<SelectItem key={f.id} value={f.id}>
 																	{f.name}
@@ -431,7 +444,8 @@ const CreateStudentPage = () => {
 											{/* Major */}
 											<div className="space-y-1">
 												<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-													Major <span className="text-red-500">*</span>
+													{t("addStudent.major")}{" "}
+													<span className="text-red-500">*</span>
 												</label>
 												<Select
 													value={selectedMajor}
@@ -446,11 +460,13 @@ const CreateStudentPage = () => {
 													disabled={!selectedField}
 												>
 													<SelectTrigger className="w-full h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-gray-500 dark:focus:border-gray-400 disabled:opacity-50">
-														<SelectValue placeholder="Select major" />
+														<SelectValue
+															placeholder={t("addStudent.selectMajor")}
+														/>
 													</SelectTrigger>
 													<SelectContent>
 														<SelectGroup>
-															<SelectLabel>Majors</SelectLabel>
+															<SelectLabel>{t("addStudent.major")}</SelectLabel>
 															{majors.map((m) => (
 																<SelectItem key={m.id} value={m.id}>
 																	{m.name}
@@ -465,7 +481,8 @@ const CreateStudentPage = () => {
 										{/* Specialty */}
 										<div className="space-y-1">
 											<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-												Specialty <span className="text-red-500">*</span>
+												{t("addStudent.specialty")}{" "}
+												<span className="text-red-500">*</span>
 											</label>
 											<Select
 												value={form.specialtyId}
@@ -473,11 +490,15 @@ const CreateStudentPage = () => {
 												disabled={!selectedDepartment}
 											>
 												<SelectTrigger className="w-full h-9 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-gray-500 dark:focus:border-gray-400 text-gray-900 dark:text-white">
-													<SelectValue placeholder="Select specialty" />
+													<SelectValue
+														placeholder={t("addStudent.selectSpecialty")}
+													/>
 												</SelectTrigger>
 												<SelectContent>
 													<SelectGroup>
-														<SelectLabel>Specialty</SelectLabel>
+														<SelectLabel>
+															{t("addStudent.specialty")}
+														</SelectLabel>
 														{specialties.map((s) => (
 															<SelectItem key={s.id} value={s.id}>
 																{s.name}
@@ -492,13 +513,14 @@ const CreateStudentPage = () => {
 									{/* Personal Information Section */}
 									<div className="space-y-4">
 										<h2 className="text-base font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
-											Personal Information
+											{t("addStudent.personalInfo")}
 										</h2>
 
 										{/* Matricule */}
 										<div className="space-y-1">
 											<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-												Matricule <span className="text-red-500">*</span>
+												{t("addStudent.matricule")}{" "}
+												<span className="text-red-500">*</span>
 											</label>
 											<input
 												type="text"
@@ -506,7 +528,7 @@ const CreateStudentPage = () => {
 												value={form.matricule}
 												onChange={handleChange}
 												className="w-full h-9 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-gray-500 dark:focus:border-gray-400 text-gray-900 dark:text-white"
-												placeholder="Enter matricule"
+												placeholder={t("addStudent.enterMatricule")}
 											/>
 										</div>
 
@@ -514,7 +536,8 @@ const CreateStudentPage = () => {
 										<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 											<div className="space-y-1">
 												<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-													First Name <span className="text-red-500">*</span>
+													{t("addStudent.firstName")}{" "}
+													<span className="text-red-500">*</span>
 												</label>
 												<input
 													type="text"
@@ -522,12 +545,13 @@ const CreateStudentPage = () => {
 													value={form.firstName}
 													onChange={handleChange}
 													className="w-full h-9 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-gray-500 dark:focus:border-gray-400 text-gray-900 dark:text-white"
-													placeholder="Enter first name"
+													placeholder={t("addStudent.enterFirstName")}
 												/>
 											</div>
 											<div className="space-y-1">
 												<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-													Last Name <span className="text-red-500">*</span>
+													{t("addStudent.lastName")}{" "}
+													<span className="text-red-500">*</span>
 												</label>
 												<input
 													type="text"
@@ -535,7 +559,7 @@ const CreateStudentPage = () => {
 													value={form.lastName}
 													onChange={handleChange}
 													className="w-full h-9 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-gray-500 dark:focus:border-gray-400 text-gray-900 dark:text-white"
-													placeholder="Enter last name"
+													placeholder={t("addStudent.enterLastName")}
 												/>
 											</div>
 										</div>
@@ -544,7 +568,8 @@ const CreateStudentPage = () => {
 										<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 											<div className="space-y-1">
 												<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-													Date of Birth <span className="text-red-500">*</span>
+													{t("addStudent.dateOfBirth")}{" "}
+													<span className="text-red-500">*</span>
 												</label>
 												<input
 													type="date"
@@ -557,7 +582,7 @@ const CreateStudentPage = () => {
 
 											<div className="space-y-1">
 												<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-													Enrollment Year{" "}
+													{t("addStudent.enrollmentYear")}{" "}
 													<span className="text-red-500">*</span>
 												</label>
 												<input
@@ -568,7 +593,7 @@ const CreateStudentPage = () => {
 													min="1900"
 													max={new Date().getFullYear()}
 													className="w-full h-9 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-gray-500 dark:focus:border-gray-400 text-gray-900 dark:text-white"
-													placeholder="Enter enrollment year"
+													placeholder={t("addStudent.enterEnrollmentYear")}
 												/>
 											</div>
 										</div>
@@ -580,7 +605,7 @@ const CreateStudentPage = () => {
 											type="submit"
 											className="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded transition-colors"
 										>
-											Create Student
+											{t("addStudent.createStudent")}
 										</Button>
 									</div>
 								</form>
@@ -592,10 +617,13 @@ const CreateStudentPage = () => {
 							<div className="bg-white dark:bg-gray-800 rounded-md shadow-sm border border-gray-300 dark:border-gray-700 p-6 sticky top-4">
 								<div className="flex items-center justify-between mb-4">
 									<h2 className="text-base font-medium text-gray-900 dark:text-white">
-										Documents
+										{t("documents.title")}
 									</h2>
 									<span className="text-sm text-gray-500 dark:text-gray-400">
-										{documents.length} file{documents.length !== 1 ? "s" : ""}
+										{t("documents.count", {
+											count: documents.length,
+											pluralSuffix: documents.length !== 1 ? "s" : "",
+										})}
 									</span>
 								</div>
 
@@ -606,7 +634,9 @@ const CreateStudentPage = () => {
 									className="w-full h-10 border border-dashed border-gray-300 dark:border-gray-600 rounded bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center justify-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-4"
 								>
 									<Upload className="w-4 h-4" />
-									<span className="text-sm font-medium">Upload Documents</span>
+									<span className="text-sm font-medium">
+										{t("documents.upload")}
+									</span>
 								</button>
 
 								{/* Documents List */}
@@ -662,10 +692,10 @@ const CreateStudentPage = () => {
 											<FileText className="w-5 h-5 text-gray-400 dark:text-gray-500" />
 										</div>
 										<h3 className="text-sm font-medium text-gray-900 dark:text-white mb-1">
-											No documents uploaded
+											{t("documents.emptyTitle")}
 										</h3>
 										<p className="text-xs text-gray-500 dark:text-gray-400">
-											Upload student documents to get started
+											{t("documents.emptyDescription")}
 										</p>
 									</div>
 								)}
