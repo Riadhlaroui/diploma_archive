@@ -25,7 +25,7 @@ const AddSpecialtyDialog = ({
 }: AddSpecialtyDialogProps) => {
 	const { t, i18n } = useTranslation();
 
-	const isArabic = i18n.language === "ar";
+	const isRtl = i18n.language === "ar";
 	const [name, setName] = useState("");
 	const [nameTaken, setNameTaken] = useState(false);
 
@@ -111,9 +111,10 @@ const AddSpecialtyDialog = ({
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
 			<div className="bg-white dark:bg-gray-900 rounded-[3px] shadow-lg w-full max-w-md p-6 relative">
 				<button
-					onClick={() => onOpenChange(false)}
-					className="absolute top-3 right-3 text-gray-500 hover:text-black dark:hover:text-white hover:cursor-pointer"
-					aria-label={t("addSpecialty.close")}
+					onClick={onClose}
+					className={`absolute top-3 ${
+						isRtl ? "left-3" : "right-3"
+					} text-gray-500 hover:text-black dark:hover:text-white hover:cursor-pointer`}
 				>
 					<X />
 				</button>
@@ -131,7 +132,7 @@ const AddSpecialtyDialog = ({
 								className={`peer w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none ${
 									nameTaken ? "border-red-600" : ""
 								}`}
-								dir={isArabic ? "rtl" : "ltr"}
+								dir={isRtl ? "rtl" : "ltr"}
 								placeholder=""
 								aria-invalid={nameTaken}
 								aria-describedby="name-error"

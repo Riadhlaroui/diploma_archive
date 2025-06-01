@@ -3,7 +3,6 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search } from "lucide-react";
 
 import { checkAuthOrRedirect } from "../../src/services/authService";
 
@@ -34,12 +33,6 @@ export default function DashboardPage() {
 					placeholder={t("dashboard.searchPlaceholder")}
 					className="border p-3 w-[40%] h-[2.5rem] focus:outline-none"
 				/>
-				<button
-					type="submit"
-					className="border-b border-t border-r p-2 h-[2.5rem] rounded-r-lg"
-				>
-					<Search />
-				</button>
 			</form>
 
 			<div className="w-full h-full border">{/* content */}</div>

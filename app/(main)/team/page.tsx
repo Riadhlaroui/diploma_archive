@@ -52,7 +52,9 @@ const StaffList = () => {
 
 	const [selectedUser, setSelectedUser] = useState<UserList | null>(null);
 
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
+
+	const isRtl = i18n.language === "ar";
 
 	const fetchData = async () => {
 		try {
@@ -160,14 +162,30 @@ const StaffList = () => {
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
 					<TableRow>
-						<TableHead>{t("staffList.id")}</TableHead>
-						<TableHead>{t("staffList.firstName")}</TableHead>
-						<TableHead>{t("staffList.lastName")}</TableHead>
-						<TableHead>{t("staffList.email")}</TableHead>
-						<TableHead>{t("staffList.role")}</TableHead>
-						<TableHead>{t("staffList.phone")}</TableHead>
-						<TableHead>{t("staffList.created")}</TableHead>
-						<TableHead>{t("staffList.actions")}</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("staffList.id")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("staffList.firstName")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("staffList.lastName")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("staffList.email")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("staffList.role")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("staffList.phone")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("staffList.created")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("staffList.actions")}
+						</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>

@@ -54,6 +54,8 @@ export default function MajorsPage() {
 	const fieldId = searchParams.get("fieldId");
 
 	const { t, i18n } = useTranslation();
+
+	const isRtl = i18n.language === "ar";
 	const router = useRouter();
 
 	const [majors, setMajors] = useState<any[]>([]);
@@ -241,11 +243,21 @@ export default function MajorsPage() {
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
 					<TableRow>
-						<TableHead>{t("majors.table.code")}</TableHead>
-						<TableHead>{t("majors.table.name")}</TableHead>
-						<TableHead>{t("majors.table.specialtiesCount")}</TableHead>
-						<TableHead>{t("majors.table.createdAt")}</TableHead>
-						<TableHead>{t("majors.table.actions")}</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("majors.table.code")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("majors.table.name")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("majors.table.specialtiesCount")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("majors.table.createdAt")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("majors.table.actions")}
+						</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>

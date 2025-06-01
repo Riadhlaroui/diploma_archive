@@ -56,6 +56,8 @@ export default function DepartmentsPage() {
 	const facultyId = searchParams.get("facultyId");
 
 	const { t, i18n } = useTranslation();
+
+	const isRtl = i18n.language === "ar";
 	const [departments, setDepartments] = useState<any[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [page, setPage] = useState(1);
@@ -235,13 +237,24 @@ export default function DepartmentsPage() {
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
 					<TableRow>
-						<TableHead>{t("departments.code")}</TableHead>
-						<TableHead>{t("departments.name")}</TableHead>
-						<TableHead>{t("departments.fieldsCount")}</TableHead>
-						<TableHead>{t("departments.createdAt")}</TableHead>
-						<TableHead>{t("departments.actions")}</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("departments.code")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("departments.name")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("departments.fieldsCount")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("departments.createdAt")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("departments.actions")}
+						</TableHead>
 					</TableRow>
 				</TableHeader>
+
 				<TableBody>
 					{loading ? (
 						<TableRow>
