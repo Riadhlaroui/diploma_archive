@@ -53,7 +53,9 @@ interface StudentFilter {
 }
 
 const StudentPage = () => {
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
+
+	const isRtl = i18n.language === "ar";
 	const router = useRouter();
 
 	const [loading, setLoading] = useState(true);
@@ -537,17 +539,39 @@ const StudentPage = () => {
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
 					<TableRow>
-						<TableHead>Matricule</TableHead>
-						<TableHead>First Name</TableHead>
-						<TableHead>Last Name</TableHead>
-						<TableHead>Date Of Birth</TableHead>
-						<TableHead>Field</TableHead>
-						<TableHead>Major</TableHead>
-						<TableHead>Enrollment Year</TableHead>
-						<TableHead>Specialty</TableHead>
-						<TableHead>Number of documents</TableHead>
-						<TableHead>Created At</TableHead>
-						<TableHead>Actions</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("students.matricule")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("students.firstName")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("students.lastName")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("students.dateOfBirth")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("students.field")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("students.major")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("students.enrollmentYear")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("students.specialty")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("students.numberOfDocuments")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("students.createdAt")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("students.actions")}
+						</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>

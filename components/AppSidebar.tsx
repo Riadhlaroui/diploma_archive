@@ -118,13 +118,13 @@ export function AppSidebar() {
 					<SidebarGroupContent>
 						<SidebarMenu>
 							{FacultiesContent.map((item) => (
-								<SidebarMenuItem key={item.title}>
-									<SidebarMenuButton asChild>
-										<a href={item.url}>
-											<item.icon />
-											<span>{item.title}</span>
-										</a>
-									</SidebarMenuButton>
+								<SidebarMenuItem
+									key={item.title}
+									className={`flex items-center justify-between ${
+										isRtl ? "flex-row-reverse" : "flex-row"
+									}`}
+								>
+									{/* Three dots trigger */}
 									<DropdownMenu>
 										<DropdownMenuTrigger asChild>
 											<SidebarMenuAction>
@@ -143,6 +143,14 @@ export function AppSidebar() {
 											</DropdownMenuItem>
 										</DropdownMenuContent>
 									</DropdownMenu>
+
+									{/* The main link */}
+									<SidebarMenuButton asChild>
+										<a href={item.url} className="flex items-center gap-2">
+											<item.icon />
+											<span>{item.title}</span>
+										</a>
+									</SidebarMenuButton>
 								</SidebarMenuItem>
 							))}
 						</SidebarMenu>
