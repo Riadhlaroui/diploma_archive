@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Separator } from "@/components/ui/separator";
 import { X } from "lucide-react";
 import { toast } from "sonner";
@@ -14,6 +15,10 @@ const AddMajorDialog = ({
 	onClose: () => void;
 	fieldId: string;
 }) => {
+	const { t, i18n } = useTranslation();
+
+	const isArabic = i18n.language === "ar";
+
 	const [name, setName] = useState("");
 	const [nameTaken, setNameTaken] = useState(false);
 
@@ -44,7 +49,7 @@ const AddMajorDialog = ({
 		e.preventDefault();
 
 		if (!name.trim()) {
-			toast.error("Major name is required.");
+			toast.error(t("addMajor.errors.nameRequired"));
 			return;
 		}
 
@@ -53,9 +58,9 @@ const AddMajorDialog = ({
 				<div className="flex items-center gap-2">
 					<div>
 						<div className="font-semibold text-[15px]">
-							A major with this name already exists.
+							{t("addMajor.errors.nameTaken.title")}
 						</div>
-						<div className="text-sm">Please choose a different name.</div>
+						<div className="text-sm">{t("addMajor.errors.nameTaken.desc")}</div>
 					</div>
 				</div>
 			);
@@ -64,15 +69,17 @@ const AddMajorDialog = ({
 
 		try {
 			await addMajor(name, fieldId);
-			toast.success("Major added successfully!");
+			toast.success(t("addMajor.success"));
 			onClose();
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		} catch (error: any) {
 			toast.error(
 				<div className="flex items-center gap-2">
 					<div>
-						<div className="font-semibold">An error occurred.</div>
-						<div className="text-sm">Please try again later.</div>
+						<div className="font-semibold">
+							{t("addMajor.errors.general.title")}
+						</div>
+						<div className="text-sm">{t("addMajor.errors.general.desc")}</div>
 					</div>
 				</div>
 			);
@@ -85,12 +92,12 @@ const AddMajorDialog = ({
 				<button
 					onClick={onClose}
 					className="absolute top-3 right-3 text-gray-500 hover:text-black dark:hover:text-white hover:cursor-pointer"
-					aria-label="Close dialog"
+					aria-label={t("addMajor.close")}
 				>
 					<X />
 				</button>
 
-				<h2 className="text-xl font-semibold">Add a new major</h2>
+				<h2 className="text-xl font-semibold">{t("addMajor.title")}</h2>
 
 				<form onSubmit={handleSubmit} className="space-y-4 mt-2" noValidate>
 					<Separator />
@@ -104,11 +111,12 @@ const AddMajorDialog = ({
 									nameTaken ? "border-red-600" : ""
 								}`}
 								placeholder=""
+								dir={isArabic ? "rtl" : "ltr"}
 								aria-invalid={nameTaken}
 								aria-describedby="name-error"
 							/>
 							<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
-								Name
+								{t("addMajor.nameLabel")}
 								<span className="text-[#D81212]">*</span>
 							</label>
 							{nameTaken && (
@@ -116,7 +124,7 @@ const AddMajorDialog = ({
 									id="name-error"
 									className="text-red-600 text-sm mt-1 select-none"
 								>
-									A major with this name already exists.
+									{t("addMajor.errors.nameTaken.title")}
 								</p>
 							)}
 						</div>
@@ -130,7 +138,7 @@ const AddMajorDialog = ({
 							onClick={onClose}
 							className="bg-gray-300 text-black px-4 py-2 rounded-[3px] hover:bg-gray-400 hover:cursor-pointer transition-colors duration-200"
 						>
-							Cancel
+							{t("addMajor.cancel")}
 						</button>
 						<button
 							type="submit"
@@ -139,7 +147,7 @@ const AddMajorDialog = ({
 								nameTaken ? "opacity-50 cursor-not-allowed" : ""
 							}`}
 						>
-							Submit
+							{t("addMajor.submit")}
 						</button>
 					</div>
 				</form>

@@ -202,6 +202,19 @@ i18n
 						departmentsOf: "Departments of {{name}}",
 					},
 
+					addFaculty: {
+						title: "Add a new faculty",
+						name: "Name",
+						cancel: "Cancel",
+						submit: "Submit",
+						nameRequired: "Faculty name is required.",
+						success: "Faculty added successfully!",
+						duplicateTitle: "A faculty with this name already exists.",
+						duplicateSubtitle: "Please choose a different name.",
+						errorTitle: "An error occurred.",
+						errorSubtitle: "Please try again later.",
+					},
+
 					students: {
 						title: "Students",
 						matricule: "Matricule",
@@ -230,6 +243,10 @@ i18n
 						title: "Confirm Deletion",
 						description:
 							"Are you sure you want to delete {{name}}? This action cannot be undone.",
+						major: {
+							description:
+								"Are you sure you want to delete this major? This action cannot be undone.",
+						},
 					},
 
 					breadcrumbs: {
@@ -238,7 +255,7 @@ i18n
 					},
 
 					departments: {
-						titleWithFaculty: "Departments in {{faculty}}",
+						titleWithFaculty: "Departments in: {{faculty}}",
 						title: "Departments",
 						name: "Name",
 						code: "Code",
@@ -250,8 +267,125 @@ i18n
 						deleteSuccess: "Department '{{name}}' deleted successfully!",
 						deleteFail: "Failed to delete department '{{name}}'.",
 					},
+
+					addDepartment: {
+						title: "Add a new department",
+						name: "Name",
+						nameRequired: "Department name is required.",
+						success: "Department added successfully!",
+						duplicateTitle: "A department with this name already exists.",
+						duplicateMessage: "Please choose a different name.",
+					},
+
+					error: {
+						title: "An error occurred.",
+						message: "Please try again later.",
+					},
+
+					actionsDep: {
+						cancel: "Cancel",
+						submit: "Submit",
+					},
+
 					navigation: {
 						home: "Home",
+					},
+
+					fields: {
+						title: "Fields",
+						search_placeholder: "Search fields...",
+						majors_count: "Majors Count",
+						created_at: "Created At",
+						actions: "Actions",
+						not_found: "Fields not found",
+						deleted_success: "Field '{{name}}' deleted successfully!",
+						deleted_fail: "Failed to delete field '{{name}}'.",
+						titleWithDepartment: "Fields in: {{department}}",
+						code: "Code",
+						name: "Name",
+						MajorsCount: "Number of Majors",
+						createdAt: "Created At",
+					},
+
+					AddFieldDialog: {
+						title: "Add a new field",
+						nameLabel: "Name",
+						cancel: "Cancel",
+						submit: "Submit",
+						close: "Close dialog",
+						errors: {
+							nameRequired: "Field name is required.",
+							nameTakenTitle: "A field with this name already exists.",
+							nameTakenDesc: "Please choose a different name.",
+							genericTitle: "An error occurred.",
+							genericDesc: "Please try again later.",
+						},
+						success: {
+							added: "Field added successfully!",
+						},
+					},
+
+					majors: {
+						title: "Majors",
+						titleWithfield: "Majors in: {{field}}",
+						table: {
+							code: "Code",
+							name: "Name",
+							specialtiesCount: "Number of specialties",
+							createdAt: "Created At",
+							actions: "Actions",
+						},
+						notFound: "Majors not found",
+					},
+
+					addMajor: {
+						title: "Add a new major",
+						nameLabel: "Name",
+						cancel: "Cancel",
+						submit: "Submit",
+						close: "Close dialog",
+						success: "Major added successfully!",
+						errors: {
+							nameRequired: "Major name is required.",
+							nameTaken: {
+								title: "A major with this name already exists.",
+								desc: "Please choose a different name.",
+							},
+							general: {
+								title: "An error occurred.",
+								desc: "Please try again later.",
+							},
+						},
+					},
+
+					specialties: {
+						title: "Specialties",
+						titleWithMajor: "Specialties in: {{major}}",
+						code: "Code",
+						name: "Name",
+						createdAt: "Created At",
+						actions: "Actions",
+						notFound: "Specialties not found",
+					},
+
+					addSpecialty: {
+						title: "Add New Specialty",
+						nameLabel: "Name",
+						cancel: "Cancel",
+						submit: "Submit",
+						close: "Close Window",
+						success: "Specialty added successfully!",
+						errors: {
+							nameRequired: "Specialty name is required.",
+							nameTaken: {
+								title: "A specialty with this name already exists.",
+								desc: "Please choose a different name.",
+							},
+							general: {
+								title: "Something went wrong.",
+								desc: "Please try again later.",
+							},
+						},
 					},
 				},
 			},
@@ -360,6 +494,7 @@ i18n
 						next: "Suivant",
 						pageOf: "Page {{page}} sur {{totalPages}}",
 					},
+
 					actions: {
 						create_user: "Créer un utilisateur",
 						delete_user: "Supprimer un utilisateur",
@@ -452,6 +587,19 @@ i18n
 						notFound: "Aucune faculté trouvée.",
 					},
 
+					addFaculty: {
+						title: "Ajouter une nouvelle faculté",
+						name: "Nom",
+						cancel: "Annuler",
+						submit: "Soumettre",
+						nameRequired: "Le nom de la faculté est requis.",
+						success: "Faculté ajoutée avec succès !",
+						duplicateTitle: "Une faculté avec ce nom existe déjà.",
+						duplicateSubtitle: "Veuillez choisir un nom différent.",
+						errorTitle: "Une erreur s'est produite.",
+						errorSubtitle: "Veuillez réessayer plus tard.",
+					},
+
 					students: {
 						title: "Étudiants",
 						matricule: "Matricule",
@@ -469,7 +617,7 @@ i18n
 					loading: "Chargement...",
 
 					departments: {
-						titleWithFaculty: "Départements de {{faculty}}",
+						titleWithFaculty: "Départements dans: {{faculty}}",
 						title: "Départements",
 						name: "Nom",
 						code: "Code",
@@ -482,14 +630,135 @@ i18n
 						deleteFail: "Échec de la suppression du département '{{name}}'.",
 					},
 
+					addDepartment: {
+						title: "Ajouter un nouveau département",
+						name: "Nom",
+						nameRequired: "Le nom du département est requis.",
+						success: "Département ajouté avec succès !",
+						duplicateTitle: "Un département avec ce nom existe déjà.",
+						duplicateMessage: "Veuillez choisir un nom différent.",
+					},
+
+					error: {
+						title: "Une erreur s'est produite.",
+						message: "Veuillez réessayer plus tard.",
+					},
+
+					actionsDep: {
+						cancel: "Annuler",
+						submit: "Valider",
+					},
+
 					confirm: {
 						title: "Confirmer la suppression",
 						description:
 							"Êtes-vous sûr de vouloir supprimer {{count}} membre(s) du personnel ? Cette action est irréversible.",
+						major: {
+							description:
+								"Êtes-vous sûr de vouloir supprimer cette filière ? Cette action est irréversible.",
+						},
 					},
 
 					navigation: {
 						home: "Accueil",
+					},
+
+					fields: {
+						title: "Domaine",
+						search_placeholder: "Rechercher des Domaine...",
+						majors_count: "Nombre de filiales",
+						created_at: "Date de création",
+						actions: "Actions",
+						not_found: "Aucun Domaine trouvé",
+						deleted_success:
+							"Le domaine '{{name}}' a été supprimé avec succès !",
+						deleted_fail: "Échec de la suppression du domaine '{{name}}'.",
+						titleWithDepartment: "Les domaine dans: {{department}}",
+						code: "Code",
+						name: "Nom",
+						MajorsCount: "Nombre de filiales",
+						createdAt: "Créé le",
+					},
+
+					AddFieldDialog: {
+						title: "Ajouter un nouveau champs",
+						nameLabel: "Nom",
+						cancel: "Annuler",
+						submit: "Soumettre",
+						close: "Fermer la boîte de dialogue",
+						errors: {
+							nameRequired: "Le nom du champs est requis.",
+							nameTakenTitle: "Un champs avec ce nom existe déjà.",
+							nameTakenDesc: "Veuillez choisir un nom différent.",
+							genericTitle: "Une erreur s'est produite.",
+							genericDesc: "Veuillez réessayer plus tard.",
+						},
+						success: {
+							added: "Champs ajouté avec succès !",
+						},
+					},
+
+					majors: {
+						title: "Filières",
+						titleWithfield: "Les filiales dans: {{field}}",
+						table: {
+							code: "Code",
+							name: "Nom",
+							specialtiesCount: "Nombre de spécialités",
+							createdAt: "Créé le",
+							actions: "Actions",
+						},
+						notFound: "Aucune filière trouvée",
+					},
+
+					addMajor: {
+						title: "Ajouter un nouveau branche",
+						nameLabel: "Nom",
+						cancel: "Annuler",
+						submit: "Envoyer",
+						close: "Fermer la fenêtre",
+						success: "Branche ajoutée avec succès !",
+						errors: {
+							nameRequired: "Le nom de la branche est requis.",
+							nameTaken: {
+								title: "Une branche avec ce nom existe déjà.",
+								desc: "Veuillez choisir un nom différent.",
+							},
+							general: {
+								title: "Une erreur s'est produite.",
+								desc: "Veuillez réessayer plus tard.",
+							},
+						},
+					},
+
+					specialties: {
+						title: "Spécialités",
+						titleWithMajor: "Spécialités dans: {{major}}",
+						code: "Code",
+						name: "Nom",
+						createdAt: "Créé le",
+						actions: "Actions",
+						notFound: "Aucune spécialité trouvée",
+					},
+
+					addSpecialty: {
+						title: "Ajouter une nouvelle spécialité",
+						nameLabel: "Nom",
+						cancel: "Annuler",
+						submit: "Envoyer",
+						close: "Fermer la fenêtre",
+						success: "Spécialité ajoutée avec succès !",
+						errors: {
+							nameRequired: "Le nom de la spécialité est requis.",
+							nameTaken: {
+								title: "Une spécialité avec ce nom existe déjà.",
+								desc: "Veuillez choisir un nom différent.",
+							},
+							general: {
+								title: "Une erreur s'est produite.",
+								desc: "Veuillez réessayer plus tard.",
+							},
+						},
 					},
 				},
 			},
@@ -674,7 +943,7 @@ i18n
 						confirmDelete: "هل أنت متأكد من أنك تريد حذف هذه الكلية؟",
 						name: "الاسم",
 						code: "المعرف",
-						departmentCount: "عدد الإدارات",
+						departmentCount: "عدد الأقسام",
 						actions: "الإجراءات",
 						submit: "إرسال",
 						cancel: "إلغاء",
@@ -683,6 +952,19 @@ i18n
 						successDelete: "تم حذف الكلية بنجاح!",
 						error: "حدث خطأ. يرجى المحاولة مرة أخرى.",
 						notFound: "لم يتم العثور على كليات.",
+					},
+
+					addFaculty: {
+						title: "إضافة كلية جديدة",
+						name: "الاسم",
+						cancel: "إلغاء",
+						submit: "إرسال",
+						nameRequired: "اسم الكلية مطلوب.",
+						success: "تمت إضافة الكلية بنجاح!",
+						duplicateTitle: "كلية بهذا الاسم موجودة بالفعل.",
+						duplicateSubtitle: "يرجى اختيار اسم مختلف.",
+						errorTitle: "حدث خطأ.",
+						errorSubtitle: "يرجى المحاولة مرة أخرى لاحقًا.",
 					},
 
 					students: {
@@ -702,13 +984,13 @@ i18n
 					loading: "جارٍ التحميل...",
 
 					departments: {
-						titleWithFaculty: "الاقسام في {{faculty}}",
+						titleWithFaculty: "الاقسام في: {{faculty}}",
 						title: "الأقسام",
 						name: "الاسم",
 						code: "الرمز",
 						createdAt: "تاريخ الإنشاء",
 						actions: "الإجراءات",
-						fieldsCount: "عدد التخصصات",
+						fieldsCount: "عدد الميادين",
 						noDepartments: "لم يتم العثور على أقسام.",
 						searchPlaceholder: "ابحث عن الأقسام...",
 						deleteSuccess: "تم حذف القسم '{{name}}' بنجاح!",
@@ -716,14 +998,134 @@ i18n
 						NumberofFields: "عدد الميادين",
 					},
 
+					addDepartment: {
+						title: "إضافة قسم جديد",
+						name: "الاسم",
+						nameRequired: "اسم القسم مطلوب.",
+						success: "تمت إضافة القسم بنجاح!",
+						duplicateTitle: "يوجد قسم بهذا الاسم بالفعل.",
+						duplicateMessage: "يرجى اختيار اسم مختلف.",
+					},
+
+					error: {
+						title: "حدث خطأ.",
+						message: "يرجى المحاولة لاحقًا.",
+					},
+
+					actionsDep: {
+						cancel: "إلغاء",
+						submit: "إرسال",
+					},
+
 					confirm: {
 						title: "تأكيد الحذف",
 						description:
 							"هل أنت متأكد أنك تريد حذف الكلية {{name}}؟ لا يمكن التراجع عن هذا الإجراء.",
+						major: {
+							description:
+								"هل أنت متأكد أنك تريد حذف هذا التخصص؟ لا يمكن التراجع عن هذا الإجراء.",
+						},
 					},
 
 					navigation: {
 						home: "الرئيسية",
+					},
+
+					fields: {
+						title: "الميادين",
+						search_placeholder: "ابحث في الميادين...",
+						majors_count: "عدد التخصصات",
+						created_at: "تاريخ الإنشاء",
+						actions: "الإجراءات",
+						not_found: "لم يتم العثور على ميادين",
+						deleted_success: "تم حذف الميدان '{{name}}' بنجاح!",
+						deleted_fail: "فشل في حذف الميدان '{{name}}'.",
+						titleWithDepartment: "الميادين في: {{department}}",
+						code: "الرمز",
+						name: "الاسم",
+						MajorsCount: "عدد الفروع",
+						createdAt: "تاريخ الإنشاء",
+					},
+
+					AddFieldDialog: {
+						title: "إضافة ميدان جديد",
+						nameLabel: "الاسم",
+						cancel: "إلغاء",
+						submit: "إرسال",
+						close: "إغلاق النافذة",
+						errors: {
+							nameRequired: "اسم ميدان مطلوب.",
+							nameTakenTitle: "يوجد ميدان بهذا الاسم بالفعل.",
+							nameTakenDesc: "يرجى اختيار اسم مختلف.",
+							genericTitle: "حدث خطأ.",
+							genericDesc: "يرجى المحاولة مرة أخرى لاحقًا.",
+						},
+						success: {
+							added: "تم إضافة ميدان بنجاح!",
+						},
+					},
+
+					majors: {
+						title: "الفروع",
+						titleWithfield: "الفروع في: {{field}}",
+						table: {
+							code: "الرمز",
+							name: "الاسم",
+							specialtiesCount: "عدد التخصصات",
+							createdAt: "تاريخ الإنشاء",
+							actions: "الإجراءات",
+						},
+						notFound: "لم يتم العثور على الفروع",
+					},
+
+					addMajor: {
+						title: "إضافة فرع جديد",
+						nameLabel: "الاسم",
+						cancel: "إلغاء",
+						submit: "إرسال",
+						close: "إغلاق النافذة",
+						success: "تمت إضافة الفرع بنجاح!",
+						errors: {
+							nameRequired: "اسم الفرع مطلوب.",
+							nameTaken: {
+								title: "يوجد فرع بنفس الاسم.",
+								desc: "يرجى اختيار اسم مختلف.",
+							},
+							general: {
+								title: "حدث خطأ ما.",
+								desc: "يرجى المحاولة مرة أخرى لاحقًا.",
+							},
+						},
+					},
+
+					specialties: {
+						title: "التخصصات",
+						titleWithMajor: "التخصصات في: {{major}}",
+						code: "الرمز",
+						name: "الاسم",
+						createdAt: "تاريخ الإنشاء",
+						actions: "الإجراءات",
+						notFound: "لم يتم العثور على تخصصات",
+					},
+
+					addSpecialty: {
+						title: "إضافة تخصص جديد",
+						nameLabel: "الاسم",
+						cancel: "إلغاء",
+						submit: "إرسال",
+						close: "إغلاق النافذة",
+						success: "تمت إضافة التخصص بنجاح!",
+						errors: {
+							nameRequired: "اسم التخصص مطلوب.",
+							nameTaken: {
+								title: "يوجد تخصص بنفس الاسم.",
+								desc: "يرجى اختيار اسم مختلف.",
+							},
+							general: {
+								title: "حدث خطأ ما.",
+								desc: "يرجى المحاولة مرة أخرى لاحقًا.",
+							},
+						},
 					},
 				},
 			},
