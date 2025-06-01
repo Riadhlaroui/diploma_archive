@@ -53,7 +53,9 @@ export default function MajorsPage() {
 	const searchParams = useSearchParams();
 	const fieldId = searchParams.get("fieldId");
 
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
+
+	const isRtl = i18n.language === "ar";
 	const router = useRouter();
 
 	const [majors, setMajors] = useState<any[]>([]);
@@ -176,12 +178,12 @@ export default function MajorsPage() {
 							onClick={() => router.back()}
 							className="hover:underline hover:cursor-pointer"
 						>
-							Fields
+							{t("fields.title")}
 						</BreadcrumbLink>
 					</BreadcrumbItem>
 					<BreadcrumbSeparator />
 					<BreadcrumbItem>
-						<BreadcrumbLink>Majors</BreadcrumbLink>
+						<BreadcrumbLink>{t("majors.title")}</BreadcrumbLink>
 					</BreadcrumbItem>
 				</BreadcrumbList>
 			</Breadcrumb>
@@ -189,9 +191,10 @@ export default function MajorsPage() {
 			<div className="flex gap-2 mb-4 items-center">
 				<h3
 					className="text-2xl font-semibold cursor-pointer hover:underline"
+					dir={i18n.language === "ar" ? "rtl" : "ltr"}
 					onClick={() => window.location.reload()}
 				>
-					Majors in {fieldName}
+					{t("majors.titleWithfield", { field: fieldName })}
 				</h3>
 				<Button
 					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
@@ -240,11 +243,21 @@ export default function MajorsPage() {
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
 					<TableRow>
-						<TableHead>Code</TableHead>
-						<TableHead>Name</TableHead>
-						<TableHead>Numbe of specialties</TableHead>
-						<TableHead>Created At</TableHead>
-						<TableHead>Actions</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("majors.table.code")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("majors.table.name")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("majors.table.specialtiesCount")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("majors.table.createdAt")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("majors.table.actions")}
+						</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
@@ -315,7 +328,7 @@ export default function MajorsPage() {
 					) : (
 						<TableRow>
 							<TableCell colSpan={5} className="text-center py-6 text-gray-500">
-								Majors not found
+								{t("majors.notFound")}
 							</TableCell>
 						</TableRow>
 					)}
@@ -361,7 +374,7 @@ export default function MajorsPage() {
 				}}
 				onConfirm={confirmDelete}
 				title={t("confirm.title")}
-				description={t("confirm.description", {
+				description={t("confirm.major.description", {
 					name: majorToDelete?.name || "",
 				})}
 			/>

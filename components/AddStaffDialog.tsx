@@ -20,7 +20,9 @@ type Props = {
 };
 
 const AddStaffDialog = ({ open, onOpenChange }: Props) => {
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
+
+	const isRtl = i18n.language === "ar";
 
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 	const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
@@ -144,7 +146,9 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 			<div className="bg-white dark:bg-gray-900 rounded-none shadow-lg w-full max-w-md p-6 relative">
 				<button
 					onClick={() => onOpenChange(false)}
-					className="absolute top-3 right-3 text-gray-500 hover:text-black dark:hover:text-white hover:cursor-pointer"
+					className={`absolute top-3 ${
+						isRtl ? "left-3" : "right-3"
+					} text-gray-500 hover:text-black dark:hover:text-white hover:cursor-pointer`}
 					aria-label={t("addStaffDialog.close")}
 				>
 					<X />

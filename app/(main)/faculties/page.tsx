@@ -81,7 +81,9 @@ const FacultiesList = () => {
 		await fetchFaculties(); // Refresh the list
 	};
 
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
+
+	const isRtl = i18n.language === "ar";
 
 	useEffect(() => {
 		fetchFaculties();
@@ -154,16 +156,25 @@ const FacultiesList = () => {
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
 					<TableRow>
-						<TableHead>{t("faculties.code")}</TableHead>
-						<TableHead>{t("faculties.name")}</TableHead>
-						<TableHead>{t("faculties.departmentCount")}</TableHead>
-						<TableHead>{t("faculties.actions")}</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("faculties.code")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("faculties.name")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("faculties.departmentCount")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("faculties.actions")}
+						</TableHead>
 					</TableRow>
 				</TableHeader>
+
 				<TableBody>
 					{loading ? (
 						<TableRow>
-							<TableCell colSpan={5} className="text-center py-6">
+							<TableCell colSpan={4} className="text-center py-6">
 								<Loader2 className="mx-auto animate-spin text-gray-500" />
 								<span className="text-sm text-gray-500 mt-2 block">
 									{t("loading")}
@@ -225,7 +236,7 @@ const FacultiesList = () => {
 						))
 					) : (
 						<TableRow>
-							<TableCell colSpan={5} className="text-center py-6 text-gray-500">
+							<TableCell colSpan={4} className="text-center py-6 text-gray-500">
 								{t("faculties.notFound")}
 							</TableCell>
 						</TableRow>
@@ -233,7 +244,7 @@ const FacultiesList = () => {
 				</TableBody>
 				<TableFooter>
 					<TableRow>
-						<TableCell colSpan={5} className="text-center py-3">
+						<TableCell colSpan={4} className="text-center py-3">
 							<div className="flex items-center justify-center gap-4">
 								<Button
 									variant="outline"

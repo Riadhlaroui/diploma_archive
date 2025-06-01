@@ -1,6 +1,7 @@
 // components/ConfirmDialog.tsx
 "use client";
 
+import { useTranslation } from "react-i18next";
 import { Button } from "./ui/button";
 
 interface ConfirmDialogProps {
@@ -18,6 +19,8 @@ export default function ConfirmDialog({
 	title,
 	description,
 }: ConfirmDialogProps) {
+	const { t } = useTranslation();
+
 	if (!open) return null;
 
 	return (
@@ -33,14 +36,14 @@ export default function ConfirmDialog({
 						onClick={onClose}
 						className="hover:bg-gray-200 dark:hover:bg-zinc-800 hover:cursor-pointer"
 					>
-						Cancel
+						{t("common.cancel")}
 					</Button>
 					<Button
 						variant="destructive"
 						onClick={onConfirm}
-						className="  hover:bg-red-600 hover:cursor-pointer"
+						className="hover:bg-red-600 hover:cursor-pointer"
 					>
-						Delete
+						{t("common.delete")}
 					</Button>
 				</div>
 			</div>
