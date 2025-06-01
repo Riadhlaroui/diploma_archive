@@ -23,6 +23,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DocumentViewer from "@/components/DocumentViewr";
 import { fetchStudentDocuments } from "@/app/src/services/documentTypesServices";
+import { useTranslation } from "react-i18next";
 
 interface Student {
 	id: string;
@@ -65,6 +66,8 @@ const StudentInfoPage = () => {
 	const [viewerFile, setViewerFile] = useState<File | null>(null);
 	const [viewerFileName, setViewerFileName] = useState("");
 
+	const { t } = useTranslation();
+
 	const fetchFileFromUrl = useCallback(
 		async (url: string, fileName: string): Promise<File> => {
 			const response = await fetch(url);
@@ -94,6 +97,9 @@ const StudentInfoPage = () => {
 			const [studentData, docs] = await Promise.all([
 				pb.collection("Archive_students").getOne(studentId, {
 					expand: "fieldId,majorId,specialtyId",
+					requestOptions: {
+						signal: null,
+					},
 				}),
 				fetchStudentDocuments(studentId),
 			]);
@@ -119,7 +125,6 @@ const StudentInfoPage = () => {
 			);
 		} catch (err) {
 			console.error("Failed to fetch student or document info:", err);
-			toast.error("Failed to fetch student or document info.");
 		} finally {
 			setLoading(false);
 		}
@@ -164,7 +169,7 @@ const StudentInfoPage = () => {
 	};
 
 	const handleEdit = () => {
-		router.push(`/edit-student?stuId=${studentId}`);
+		console.log("Edit");
 	};
 
 	const handleDelete = async () => {
@@ -205,7 +210,7 @@ const StudentInfoPage = () => {
 	if (!student) {
 		return (
 			<div className="flex items-center justify-center h-screen text-gray-500">
-				Student not found.
+				{t("students.notFound")}
 			</div>
 		);
 	}
@@ -217,13 +222,13 @@ const StudentInfoPage = () => {
 				className="mb-4 flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-gray-100 hover:underline transition-colors hover:cursor-pointer"
 			>
 				<ArrowLeft className="h-4 w-4" />
-				Back
+				{t("common.back")}
 			</button>
 
 			<div className="bg-white dark:bg-zinc-900 shadow rounded-lg p-4 md:p-6">
 				<div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
 					<h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
-						Student Profile
+						{t("students.profile")}
 					</h2>
 					<div className="flex gap-2 w-full md:w-auto">
 						<Button
@@ -232,7 +237,7 @@ const StudentInfoPage = () => {
 							className="flex-1 md:flex-none"
 						>
 							<UserRound className="w-4 h-4 mr-2" />
-							Edit
+							{t("common.edit")}
 						</Button>
 						<Button
 							onClick={handleDelete}
@@ -240,7 +245,7 @@ const StudentInfoPage = () => {
 							className="flex-1 md:flex-none"
 						>
 							<Trash2 className="w-4 h-4 mr-2" />
-							Delete
+							{t("common.delete")}
 						</Button>
 					</div>
 				</div>
@@ -249,8 +254,10 @@ const StudentInfoPage = () => {
 
 				<Tabs defaultValue="info">
 					<TabsList className="mb-4">
-						<TabsTrigger value="info">Student Info</TabsTrigger>
-						<TabsTrigger value="documents">Documents</TabsTrigger>
+						<TabsTrigger value="info">{t("students.info")}</TabsTrigger>
+						<TabsTrigger value="documents">
+							{t("students.documents")}
+						</TabsTrigger>
 					</TabsList>
 
 					<TabsContent value="info">
@@ -294,40 +301,53 @@ const StudentInfoSection: React.FC<StudentInfoSectionProps> = ({
 	student,
 	copied,
 	onCopyMatricule,
-}) => (
-	<div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 dark:bg-gray-800 rounded-lg">
-		<div className="space-y-4">
-			<InfoField
-				label="Matricule"
-				value={student.matricule}
-				isCopyable
-				copied={copied}
-				onCopy={onCopyMatricule}
-			/>
-			<InfoField
-				label="Name"
-				value={`${student.firstName} ${student.lastName}`}
-			/>
-			<InfoField
-				label="Date of Birth"
-				value={new Date(student.dateOfBirth).toLocaleDateString()}
-			/>
-			<InfoField label="Enrollment Year" value={student.enrollmentYear} />
+}) => {
+	const { t } = useTranslation();
+
+	return (
+		<div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 dark:bg-gray-800 rounded-lg">
+			<div className="space-y-4">
+				<InfoField
+					label={t("students.matricule")}
+					value={student.matricule}
+					isCopyable
+					copied={copied}
+					onCopy={onCopyMatricule}
+				/>
+				<InfoField
+					label={t("students.name")}
+					value={`${student.firstName} ${student.lastName}`}
+				/>
+				<InfoField
+					label={t("students.dateOfBirth")}
+					value={new Date(student.dateOfBirth).toLocaleDateString()}
+				/>
+				<InfoField
+					label={t("students.enrollmentYear")}
+					value={student.enrollmentYear}
+				/>
+			</div>
+			<div className="space-y-4">
+				<InfoField
+					label={t("students.field")}
+					value={student.expand?.fieldId?.name || "N/A"}
+				/>
+				<InfoField
+					label={t("students.major")}
+					value={student.expand?.majorId?.name || "N/A"}
+				/>
+				<InfoField
+					label={t("students.specialty")}
+					value={student.expand?.specialtyId?.name || "N/A"}
+				/>
+				<InfoField
+					label={t("students.createdAt")}
+					value={new Date(student.created).toLocaleDateString()}
+				/>
+			</div>
 		</div>
-		<div className="space-y-4">
-			<InfoField label="Field" value={student.expand?.fieldId?.name || "N/A"} />
-			<InfoField label="Major" value={student.expand?.majorId?.name || "N/A"} />
-			<InfoField
-				label="Specialty"
-				value={student.expand?.specialtyId?.name || "N/A"}
-			/>
-			<InfoField
-				label="Created"
-				value={new Date(student.created).toLocaleDateString()}
-			/>
-		</div>
-	</div>
-);
+	);
+};
 
 interface InfoFieldProps {
 	label: string;
@@ -386,13 +406,15 @@ const DocumentsSection: React.FC<DocumentsSectionProps> = ({
 	getFileTypeColor,
 	onViewDocument,
 }) => {
+	const { t } = useTranslation();
+
 	if (documents.length === 0) {
 		return (
 			<div className="flex flex-col items-center justify-center py-12 text-center">
 				<FolderOpen className="h-10 w-10 text-gray-400 mb-3" />
-				<p className="text-gray-500">No documents uploaded yet</p>
+				<p className="text-gray-500">{t("students.noDocuments")}</p>
 				<p className="text-sm text-gray-400 mt-1">
-					Upload documents to get started
+					{t("students.uploadToGetStarted")}
 				</p>
 			</div>
 		);
@@ -439,7 +461,7 @@ const DocumentsSection: React.FC<DocumentsSectionProps> = ({
 							className="flex-shrink-0 flex items-center gap-1 text-sm font-medium hover:bg-gray-200 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors px-3 py-1.5 rounded-md dark:hover:bg-blue-900/30 hover:cursor-pointer"
 						>
 							<Eye className="h-4 w-4" />
-							View
+							{t("common.view")}
 						</button>
 					</li>
 				);

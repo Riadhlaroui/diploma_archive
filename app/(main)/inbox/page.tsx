@@ -17,7 +17,9 @@ import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 
 const AuditLogTable = () => {
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
+
+	const isRtl = i18n.language === "ar";
 
 	const [page, setPage] = useState(1);
 	const [logs, setLogs] = useState<InboxRecord[]>([]);
@@ -71,11 +73,21 @@ const AuditLogTable = () => {
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
 					<TableRow>
-						<TableHead>{t("auditLogs.action")}</TableHead>
-						<TableHead>{t("auditLogs.userId")}</TableHead>
-						<TableHead>{t("auditLogs.targetType")}</TableHead>
-						<TableHead>{t("auditLogs.targetId")}</TableHead>
-						<TableHead>{t("auditLogs.timestamp")}</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("auditLogs.action")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("auditLogs.userId")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("auditLogs.targetType")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("auditLogs.targetId")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("auditLogs.timestamp")}
+						</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>

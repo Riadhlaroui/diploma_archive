@@ -1,8 +1,6 @@
 "use client";
 import {
-	Cloud,
 	Github,
-	LifeBuoy,
 	LogOut,
 	PlusCircle,
 	Settings,
@@ -157,14 +155,6 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 					<DropdownMenuItem className=" hover:cursor-pointer">
 						<Github />
 						<span>GitHub</span>
-					</DropdownMenuItem>
-					<DropdownMenuItem className=" hover:cursor-pointer">
-						<LifeBuoy />
-						<span>Support</span>
-					</DropdownMenuItem>
-					<DropdownMenuItem disabled>
-						<Cloud />
-						<span>API</span>
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem

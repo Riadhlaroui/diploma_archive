@@ -53,7 +53,9 @@ export default function FieldsPage() {
 	const searchParams = useSearchParams();
 	const departmentId = searchParams.get("departmentId");
 
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
+
+	const isRtl = i18n.language === "ar";
 	const router = useRouter();
 
 	const [fields, setFields] = useState<any[]>([]);
@@ -174,7 +176,7 @@ export default function FieldsPage() {
 					</BreadcrumbItem>
 					<BreadcrumbSeparator />
 					<BreadcrumbItem>
-						<BreadcrumbLink>Fields</BreadcrumbLink>
+						<BreadcrumbLink>{t("fields.title")}</BreadcrumbLink>
 					</BreadcrumbItem>
 				</BreadcrumbList>
 			</Breadcrumb>
@@ -182,9 +184,10 @@ export default function FieldsPage() {
 			<div className="flex gap-2 mb-4 items-center">
 				<h3
 					className="text-2xl font-semibold cursor-pointer hover:underline"
+					dir={i18n.language === "ar" ? "rtl" : "ltr"}
 					onClick={() => window.location.reload()}
 				>
-					Fields in {departmentName}
+					{t("fields.titleWithDepartment", { department: departmentName })}
 				</h3>
 				<Button
 					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
@@ -230,11 +233,21 @@ export default function FieldsPage() {
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
 					<TableRow>
-						<TableHead>Code</TableHead>
-						<TableHead>Name</TableHead>
-						<TableHead>Majors Count</TableHead>
-						<TableHead>Created At</TableHead>
-						<TableHead>Actions</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("fields.code")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("fields.name")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("fields.MajorsCount")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("fields.createdAt")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("fields.actions")}
+						</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
@@ -351,8 +364,9 @@ export default function FieldsPage() {
 				}}
 				onConfirm={confirmDelete}
 				title={t("confirm.title")}
-				description={t("confirm.description", {
+				description={t("confirm.field.description", {
 					name: fieldToDelete?.name || "",
+					entity: t("confirm.field.entities.field"),
 				})}
 			/>
 

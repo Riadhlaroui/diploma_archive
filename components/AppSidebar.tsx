@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import {
 	Home,
 	Inbox,
-	MoreHorizontal,
 	Search,
 	Settings,
 	University,
@@ -20,7 +19,6 @@ import {
 	SidebarGroupContent,
 	SidebarGroupLabel,
 	SidebarMenu,
-	SidebarMenuAction,
 	SidebarMenuButton,
 	SidebarMenuItem,
 	useSidebar,
@@ -29,19 +27,13 @@ import {
 import { ProfileDropDownMenu } from "./ProfileDropDownMenu";
 import { ConnectionStatus } from "./ConnectionStatus";
 
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
 import { useState } from "react";
 
 import StudentFormDialog from "./StudentFormDialog";
-import { useRouter } from "next/navigation";
 
 export function AppSidebar() {
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
+	const isRtl = i18n.language === "ar";
 	const { state } = useSidebar(); // 'collapsed' or 'expanded'
 	const isCollapsed = state === "collapsed";
 
@@ -87,10 +79,8 @@ export function AppSidebar() {
 		},
 	];
 
-	const router = useRouter();
-
 	return (
-		<Sidebar collapsible="icon">
+		<Sidebar collapsible="icon" side={isRtl ? "right" : "left"}>
 			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupLabel>
@@ -117,28 +107,19 @@ export function AppSidebar() {
 					<SidebarGroupContent>
 						<SidebarMenu>
 							{FacultiesContent.map((item) => (
-								<SidebarMenuItem key={item.title}>
+								<SidebarMenuItem
+									key={item.title}
+									className={`flex items-center justify-between ${
+										isRtl ? "flex-row-reverse" : "flex-row"
+									}`}
+								>
+									{/* The main link */}
 									<SidebarMenuButton asChild>
-										<a href={item.url}>
+										<a href={item.url} className="flex items-center gap-2">
 											<item.icon />
 											<span>{item.title}</span>
 										</a>
 									</SidebarMenuButton>
-									<DropdownMenu>
-										<DropdownMenuTrigger asChild>
-											<SidebarMenuAction>
-												<MoreHorizontal className="hover:cursor-pointer" />
-											</SidebarMenuAction>
-										</DropdownMenuTrigger>
-										<DropdownMenuContent side="right" align="start">
-											<DropdownMenuItem
-												className="hover:cursor-pointer"
-												onClick={() => console.log("Add new faculty")}
-											>
-												<span>{t("faculties.addFaculty")}</span>
-											</DropdownMenuItem>
-										</DropdownMenuContent>
-									</DropdownMenu>
 								</SidebarMenuItem>
 							))}
 						</SidebarMenu>
@@ -162,22 +143,6 @@ export function AppSidebar() {
 											<span>{item.title}</span>
 										</a>
 									</SidebarMenuButton>
-
-									<DropdownMenu>
-										<DropdownMenuTrigger asChild>
-											<SidebarMenuAction>
-												<MoreHorizontal className=" hover:cursor-pointer" />
-											</SidebarMenuAction>
-										</DropdownMenuTrigger>
-										<DropdownMenuContent side="right" align="start">
-											<DropdownMenuItem
-												className=" hover:cursor-pointer"
-												onClick={() => router.push("/students/new")}
-											>
-												<span>Add Student</span>
-											</DropdownMenuItem>
-										</DropdownMenuContent>
-									</DropdownMenu>
 								</SidebarMenuItem>
 							))}
 						</SidebarMenu>

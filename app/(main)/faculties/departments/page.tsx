@@ -55,7 +55,9 @@ export default function DepartmentsPage() {
 	const searchParams = useSearchParams();
 	const facultyId = searchParams.get("facultyId");
 
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
+
+	const isRtl = i18n.language === "ar";
 	const [departments, setDepartments] = useState<any[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [page, setPage] = useState(1);
@@ -185,10 +187,12 @@ export default function DepartmentsPage() {
 			<div className="flex gap-2 mb-4 items-center">
 				<h3
 					className="text-2xl font-semibold cursor-pointer hover:underline"
+					dir={i18n.language === "ar" ? "rtl" : "ltr"}
 					onClick={() => window.location.reload()}
 				>
-					{t("departments.title")} in {facultyName}
+					{t("departments.titleWithFaculty", { faculty: facultyName })}
 				</h3>
+
 				<Button
 					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2"
 					disabled={loading}
@@ -233,13 +237,24 @@ export default function DepartmentsPage() {
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
 					<TableRow>
-						<TableHead>{t("departments.code")}</TableHead>
-						<TableHead>{t("departments.name")}</TableHead>
-						<TableHead>Number of fields</TableHead>
-						<TableHead>{t("departments.createdAt")}</TableHead>
-						<TableHead>{t("departments.actions")}</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("departments.code")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("departments.name")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("departments.fieldsCount")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("departments.createdAt")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("departments.actions")}
+						</TableHead>
 					</TableRow>
 				</TableHeader>
+
 				<TableBody>
 					{loading ? (
 						<TableRow>
@@ -312,7 +327,7 @@ export default function DepartmentsPage() {
 					) : (
 						<TableRow>
 							<TableCell colSpan={5} className="text-center py-6 text-gray-500">
-								No departments found.
+								{t("departments.noDepartments")}
 							</TableCell>
 						</TableRow>
 					)}
@@ -361,9 +376,11 @@ export default function DepartmentsPage() {
 				onConfirm={confirmDelete}
 				title={t("confirm.title")}
 				description={
-					t("confirm.description", {
+					t("confirm.department.description", {
 						name: departmentToDelete?.name || "",
-					}) || `Are you sure you want to delete ${departmentToDelete?.name}?`
+						entity: t("confirm.department.entities.department"),
+					}) ||
+					`هل أنت متأكد من حذف الـ القسم "${departmentToDelete?.name}"؟ لا يمكن التراجع عن هذا الإجراء.`
 				}
 			/>
 
