@@ -53,7 +53,7 @@ import AddSpecialtyDialog from "@/components/AddSpecialtyDialog";
 export default function SpecialtiesPage() {
 	const searchParams = useSearchParams();
 	const router = useRouter();
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
 
 	const majorId = searchParams.get("majorId");
 
@@ -182,7 +182,7 @@ export default function SpecialtiesPage() {
 							onClick={() => router.back()}
 							className="hover:underline hover:cursor-pointer"
 						>
-							Fields
+							{t("fields.title")}
 						</BreadcrumbLink>
 					</BreadcrumbItem>
 					<BreadcrumbSeparator />
@@ -191,13 +191,13 @@ export default function SpecialtiesPage() {
 							onClick={() => router.back()}
 							className="hover:underline hover:cursor-pointer"
 						>
-							Majors
+							{t("majors.title")}
 						</BreadcrumbLink>
 					</BreadcrumbItem>
 					<BreadcrumbSeparator />
 					<BreadcrumbItem>
 						<BreadcrumbPage className="text-gray-500">
-							Specialties
+							{t("specialties.title")}
 						</BreadcrumbPage>
 					</BreadcrumbItem>
 				</BreadcrumbList>
@@ -206,9 +206,10 @@ export default function SpecialtiesPage() {
 			<div className="flex gap-2 mb-4 items-center mt-4">
 				<h3
 					className="text-2xl font-semibold cursor-pointer hover:underline"
+					dir={i18n.language === "ar" ? "rtl" : "ltr"}
 					onClick={() => window.location.reload()}
 				>
-					Specialties in {majorName}
+					{t("specialties.titleWithMajor", { major: majorName })}
 				</h3>
 				<Button
 					className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:cursor-pointer"
@@ -254,10 +255,10 @@ export default function SpecialtiesPage() {
 			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
 				<TableHeader>
 					<TableRow>
-						<TableHead>Code</TableHead>
-						<TableHead>Name</TableHead>
-						<TableHead>Created At</TableHead>
-						<TableHead>Actions</TableHead>
+						<TableHead>{t("specialties.code")}</TableHead>
+						<TableHead>{t("specialties.name")}</TableHead>
+						<TableHead>{t("specialties.createdAt")}</TableHead>
+						<TableHead>{t("specialties.actions")}</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
@@ -322,7 +323,7 @@ export default function SpecialtiesPage() {
 					) : (
 						<TableRow>
 							<TableCell colSpan={4} className="text-center py-6 text-gray-500">
-								Specialties not found
+								{t("specialties.notFound")}
 							</TableCell>
 						</TableRow>
 					)}
@@ -356,11 +357,17 @@ export default function SpecialtiesPage() {
 				</TableFooter>
 			</Table>
 
-			<AddSpecialtyDialog
-				open={showAddDialog}
-				onOpenChange={setShowAddDialog}
-				majorId={majorId}
-			/>
+			{showAddDialog && majorId && (
+				<AddSpecialtyDialog
+					open={showAddDialog}
+					onOpenChange={setShowAddDialog}
+					majorId={majorId}
+					onClose={() => {
+						setShowAddDialog(false);
+						fetchSpecialties();
+					}}
+				/>
+			)}
 
 			<ConfirmDialog
 				open={showConfirmDialog}

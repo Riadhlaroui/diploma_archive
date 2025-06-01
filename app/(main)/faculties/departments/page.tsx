@@ -237,7 +237,7 @@ export default function DepartmentsPage() {
 					<TableRow>
 						<TableHead>{t("departments.code")}</TableHead>
 						<TableHead>{t("departments.name")}</TableHead>
-						<TableHead>{t("departments.NumberofFields")}</TableHead>
+						<TableHead>{t("departments.fieldsCount")}</TableHead>
 						<TableHead>{t("departments.createdAt")}</TableHead>
 						<TableHead>{t("departments.actions")}</TableHead>
 					</TableRow>

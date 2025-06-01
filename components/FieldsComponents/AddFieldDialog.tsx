@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Separator } from "@/components/ui/separator";
 import { X } from "lucide-react";
 import {
@@ -17,6 +18,9 @@ const AddFieldDialog = ({
 	onClose: () => void;
 	departmentId: string;
 }) => {
+	const { t, i18n } = useTranslation();
+
+	const isArabic = i18n.language === "ar";
 	const [name, setName] = useState("");
 	const [nameTaken, setNameTaken] = useState(false);
 	const [checking, setChecking] = useState(false);
@@ -48,7 +52,7 @@ const AddFieldDialog = ({
 		const trimmedName = name.trim();
 
 		if (!trimmedName) {
-			toast.error("Field name is required.");
+			toast.error(t("AddFieldDialog.errors.nameRequired"));
 			return;
 		}
 
@@ -57,9 +61,11 @@ const AddFieldDialog = ({
 				<div className="flex items-center gap-2">
 					<div>
 						<div className="font-semibold text-[15px]">
-							A field with this name already exists.
+							{t("AddFieldDialog.errors.nameTakenTitle")}
 						</div>
-						<div className="text-sm">Please choose a different name.</div>
+						<div className="text-sm">
+							{t("AddFieldDialog.errors.nameTakenDesc")}
+						</div>
 					</div>
 				</div>
 			);
@@ -72,15 +78,19 @@ const AddFieldDialog = ({
 				code: trimmedName.substring(0, 3).toUpperCase(),
 				departmentId,
 			});
-			toast.success("Field added successfully!");
+			toast.success(t("AddFieldDialog.success.added"));
 			onClose();
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			toast.error(
 				<div className="flex items-center gap-2">
 					<div>
-						<div className="font-semibold">An error occurred.</div>
-						<div className="text-sm">Please try again later.</div>
+						<div className="font-semibold">
+							{t("AddFieldDialog.errors.genericTitle")}
+						</div>
+						<div className="text-sm">
+							{t("AddFieldDialog.errors.genericDesc")}
+						</div>
 					</div>
 				</div>
 			);
@@ -93,12 +103,12 @@ const AddFieldDialog = ({
 				<button
 					onClick={onClose}
 					className="absolute top-3 right-3 text-gray-500 hover:text-black dark:hover:text-white hover:cursor-pointer"
-					aria-label="Close dialog"
+					aria-label={t("AddFieldDialog.close")}
 				>
 					<X />
 				</button>
 
-				<h2 className="text-xl font-semibold">Add a new field</h2>
+				<h2 className="text-xl font-semibold">{t("AddFieldDialog.title")}</h2>
 
 				<form onSubmit={handleSubmit} className="space-y-4 mt-2" noValidate>
 					<Separator />
@@ -112,11 +122,12 @@ const AddFieldDialog = ({
 									nameTaken ? "border-red-600" : ""
 								}`}
 								placeholder=""
+								dir={isArabic ? "rtl" : "ltr"}
 								aria-invalid={nameTaken}
 								aria-describedby="name-error"
 							/>
 							<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
-								Name
+								{t("AddFieldDialog.nameLabel")}
 								<span className="text-[#D81212]">*</span>
 							</label>
 							{nameTaken && (
@@ -124,7 +135,7 @@ const AddFieldDialog = ({
 									id="name-error"
 									className="text-red-600 text-sm mt-1 select-none"
 								>
-									A field with this name already exists.
+									{t("AddFieldDialog.errors.nameTakenTitle")}
 								</p>
 							)}
 						</div>
@@ -138,7 +149,7 @@ const AddFieldDialog = ({
 							onClick={onClose}
 							className="bg-gray-300 text-black px-4 py-2 rounded-[3px] hover:bg-gray-400 hover:cursor-pointer transition-colors duration-200"
 						>
-							Cancel
+							{t("AddFieldDialog.cancel")}
 						</button>
 						<button
 							type="submit"
@@ -147,7 +158,7 @@ const AddFieldDialog = ({
 								nameTaken || checking ? "opacity-50 cursor-not-allowed" : ""
 							}`}
 						>
-							Submit
+							{t("AddFieldDialog.submit")}
 						</button>
 					</div>
 				</form>
