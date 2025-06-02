@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import {
 	Home,
 	Inbox,
-	MoreHorizontal,
 	Search,
 	Settings,
 	University,
@@ -20,7 +19,6 @@ import {
 	SidebarGroupContent,
 	SidebarGroupLabel,
 	SidebarMenu,
-	SidebarMenuAction,
 	SidebarMenuButton,
 	SidebarMenuItem,
 	useSidebar,
@@ -29,16 +27,9 @@ import {
 import { ProfileDropDownMenu } from "./ProfileDropDownMenu";
 import { ConnectionStatus } from "./ConnectionStatus";
 
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
 import { useState } from "react";
 
 import StudentFormDialog from "./StudentFormDialog";
-import { useRouter } from "next/navigation";
 
 export function AppSidebar() {
 	const { t, i18n } = useTranslation();
@@ -88,8 +79,6 @@ export function AppSidebar() {
 		},
 	];
 
-	const router = useRouter();
-
 	return (
 		<Sidebar collapsible="icon" side={isRtl ? "right" : "left"}>
 			<SidebarContent>
@@ -124,26 +113,6 @@ export function AppSidebar() {
 										isRtl ? "flex-row-reverse" : "flex-row"
 									}`}
 								>
-									{/* Three dots trigger */}
-									<DropdownMenu>
-										<DropdownMenuTrigger asChild>
-											<SidebarMenuAction>
-												<MoreHorizontal className="hover:cursor-pointer" />
-											</SidebarMenuAction>
-										</DropdownMenuTrigger>
-										<DropdownMenuContent
-											side={isRtl ? "left" : "right"}
-											align="start"
-										>
-											<DropdownMenuItem
-												className="hover:cursor-pointer"
-												onClick={() => console.log("Add new faculty")}
-											>
-												<span>{t("faculties.addFaculty")}</span>
-											</DropdownMenuItem>
-										</DropdownMenuContent>
-									</DropdownMenu>
-
 									{/* The main link */}
 									<SidebarMenuButton asChild>
 										<a href={item.url} className="flex items-center gap-2">
@@ -174,25 +143,6 @@ export function AppSidebar() {
 											<span>{item.title}</span>
 										</a>
 									</SidebarMenuButton>
-
-									<DropdownMenu>
-										<DropdownMenuTrigger asChild>
-											<SidebarMenuAction>
-												<MoreHorizontal className=" hover:cursor-pointer" />
-											</SidebarMenuAction>
-										</DropdownMenuTrigger>
-										<DropdownMenuContent
-											side={isRtl ? "left" : "right"}
-											align="start"
-										>
-											<DropdownMenuItem
-												className=" hover:cursor-pointer"
-												onClick={() => router.push("/students/new")}
-											>
-												<span>Add Student</span>
-											</DropdownMenuItem>
-										</DropdownMenuContent>
-									</DropdownMenu>
 								</SidebarMenuItem>
 							))}
 						</SidebarMenu>

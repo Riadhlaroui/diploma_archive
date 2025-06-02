@@ -453,6 +453,76 @@ i18n
 							},
 						},
 					},
+
+					editFacultyDialog: {
+						title: "Edit Faculty",
+						description: "Update the faculty name.",
+						facultyName: "Faculty Name",
+						cancelButton: "Cancel",
+						saveButton: "Save",
+						successMessage: "Faculty updated successfully",
+						errorMessage: "Failed to update faculty",
+						errors: {
+							nameExistsTitle: "Faculty name already exists",
+							nameExistsDesc: "Please choose a different name.",
+						},
+					},
+
+					editDepartmentDialog: {
+						title: "Edit Department",
+						description: "Update the Department name.",
+						departmentName: "Department Name",
+						cancelButton: "Cancel",
+						saveButton: "Save",
+						successMessage: "Department updated successfully",
+						errorMessage: "Failed to update Department",
+						errors: {
+							nameExistsTitle: "Department name already exists",
+							nameExistsDesc: "Please choose a different name.",
+						},
+					},
+
+					editFieldDialog: {
+						title: "Edit Field",
+						description: "Update the field name.",
+						fieldName: "Field Name",
+						cancelButton: "Cancel",
+						saveButton: "Save",
+						successMessage: "Field updated successfully.",
+						errorMessage: "Failed to update field.",
+						errors: {
+							nameExistsTitle: "Field name already exists",
+							nameExistsDesc: "Please choose a different name.",
+						},
+					},
+
+					editMajorDialog: {
+						title: "Edit Major",
+						description: "Update the major name.",
+						majorName: "Major Name",
+						cancelButton: "Cancel",
+						saveButton: "Save",
+						successMessage: "Major updated successfully.",
+						errorMessage: "Failed to update major.",
+						errors: {
+							nameExistsTitle: "Major name already exists",
+							nameExistsDesc: "Please choose a different name.",
+						},
+					},
+
+					editSpecialtyDialog: {
+						title: "Edit Specialty",
+						description: "Update the Specialty name.",
+						specialtyName: "Specialty Name",
+						cancelButton: "Cancel",
+						saveButton: "Save",
+						successMessage: "Specialty updated successfully.",
+						errorMessage: "Failed to update Specialty.",
+						errors: {
+							nameExistsTitle: "Specialty name already exists",
+							nameExistsDesc: "Please choose a different name.",
+						},
+					},
 				},
 			},
 			fr: {
@@ -893,6 +963,76 @@ i18n
 							},
 						},
 					},
+
+					editFacultyDialog: {
+						title: "Modifier la faculté",
+						description: "Mettre à jour le nom de la faculté.",
+						facultyName: "Nom de la faculté",
+						cancelButton: "Annuler",
+						saveButton: "Enregistrer",
+						successMessage: "Faculté mise à jour avec succès",
+						errorMessage: "Échec de la mise à jour de la faculté",
+						errors: {
+							nameExistsTitle: "Le nom de la faculté existe déjà",
+							nameExistsDesc: "Veuillez choisir un autre nom.",
+						},
+					},
+
+					editDepartmentDialog: {
+						title: "Modifier le département",
+						description: "Mettre à jour le nom du département.",
+						departmentName: "Nom du département",
+						cancelButton: "Annuler",
+						saveButton: "Enregistrer",
+						successMessage: "Département mis à jour avec succès",
+						errorMessage: "Échec de la mise à jour du département",
+						errors: {
+							nameExistsTitle: "Le nom du département existe déjà",
+							nameExistsDesc: "Veuillez choisir un autre nom.",
+						},
+					},
+
+					editFieldDialog: {
+						title: "Modifier le Domaine",
+						description: "Mettre à jour le nom du domaine.",
+						fieldName: "Nom du Domaine",
+						cancelButton: "Annuler",
+						saveButton: "Enregistrer",
+						successMessage: "Domaine mis à jour avec succès.",
+						errorMessage: "Échec de la mise à jour du domaine.",
+						errors: {
+							nameExistsTitle: "Le nom du domaine existe déjà",
+							nameExistsDesc: "Veuillez choisir un autre nom.",
+						},
+					},
+
+					editMajorDialog: {
+						title: "Modifier la Filière",
+						description: "Mettre à jour le nom de la filière.",
+						majorName: "Nom de la Filière",
+						cancelButton: "Annuler",
+						saveButton: "Enregistrer",
+						successMessage: "Filière mise à jour avec succès.",
+						errorMessage: "Échec de la mise à jour de la filière.",
+						errors: {
+							nameExistsTitle: "Le nom de la filière existe déjà",
+							nameExistsDesc: "Veuillez choisir un autre nom.",
+						},
+					},
+
+					editSpecialtyDialog: {
+						title: "Modifier la spécialité",
+						description: "Mettre à jour le nom de la spécialité.",
+						specialtyName: "Nom de la spécialité",
+						cancelButton: "Annuler",
+						saveButton: "Enregistrer",
+						successMessage: "Spécialité mise à jour avec succès.",
+						errorMessage: "Échec de la mise à jour de la spécialité.",
+						errors: {
+							nameExistsTitle: "Le nom de la spécialité existe déjà",
+							nameExistsDesc: "Veuillez choisir un autre nom.",
+						},
+					},
 				},
 			},
 			ar: {
@@ -1323,6 +1463,76 @@ i18n
 								title: "حدث خطأ ما.",
 								desc: "يرجى المحاولة مرة أخرى لاحقًا.",
 							},
+						},
+					},
+
+					editFacultyDialog: {
+						title: "تعديل الكلية",
+						description: "قم بتحديث اسم الكلية.",
+						facultyName: "اسم الكلية",
+						cancelButton: "إلغاء",
+						saveButton: "حفظ",
+						successMessage: "تم تحديث الكلية بنجاح",
+						errorMessage: "فشل في تحديث الكلية",
+						errors: {
+							nameExistsTitle: "اسم الكلية موجود بالفعل",
+							nameExistsDesc: "يرجى اختيار اسم مختلف.",
+						},
+					},
+
+					editDepartmentDialog: {
+						title: "تعديل القسم",
+						description: "تحديث اسم القسم.",
+						departmentName: "اسم القسم",
+						cancelButton: "إلغاء",
+						saveButton: "حفظ",
+						successMessage: "تم تحديث القسم بنجاح",
+						errorMessage: "فشل في تحديث القسم",
+						errors: {
+							nameExistsTitle: "اسم القسم موجود بالفعل",
+							nameExistsDesc: "يرجى اختيار اسم مختلف.",
+						},
+					},
+
+					editFieldDialog: {
+						title: "تعديل ميدان",
+						description: "قم بتحديث اسم ميدان.",
+						fieldName: "اسم ميدان",
+						cancelButton: "إلغاء",
+						saveButton: "حفظ",
+						successMessage: "تم تحديث ميدان بنجاح.",
+						errorMessage: "فشل في تحديث ميدان.",
+						errors: {
+							nameExistsTitle: "اسم ميدان موجود بالفعل",
+							nameExistsDesc: "يرجى اختيار اسم مختلف.",
+						},
+					},
+
+					editMajorDialog: {
+						title: "تعديل فرع",
+						description: "قم بتحديث اسم فرع.",
+						majorName: "اسم فرع",
+						cancelButton: "إلغاء",
+						saveButton: "حفظ",
+						successMessage: "تم تحديث فرع بنجاح.",
+						errorMessage: "فشل في تحديث فرع.",
+						errors: {
+							nameExistsTitle: "اسم فرع موجود بالفعل",
+							nameExistsDesc: "يرجى اختيار اسم مختلف.",
+						},
+					},
+
+					editSpecialtyDialog: {
+						title: "تعديل التخصص",
+						description: "تحديث اسم التخصص.",
+						specialtyName: "اسم التخصص",
+						cancelButton: "إلغاء",
+						saveButton: "حفظ",
+						successMessage: "تم تحديث التخصص بنجاح.",
+						errorMessage: "فشل في تحديث التخصص.",
+						errors: {
+							nameExistsTitle: "اسم التخصص موجود بالفعل",
+							nameExistsDesc: "يرجى اختيار اسم مختلف.",
 						},
 					},
 				},

@@ -47,16 +47,10 @@ export function FacultyUpdateDialog({ open, onOpenChange, user }: Props) {
 				toast.error(
 					<div>
 						<div className="font-semibold">
-							{t(
-								"editFacultyDialog.errors.nameExistsTitle",
-								"Faculty name already exists"
-							)}
+							{t("editFacultyDialog.errors.nameExistsTitle")}
 						</div>
 						<div className="text-sm">
-							{t(
-								"editFacultyDialog.errors.nameExistsDesc",
-								"Please choose a different name."
-							)}
+							{t("editFacultyDialog.errors.nameExistsDesc")}
 						</div>
 					</div>
 				);
@@ -64,15 +58,11 @@ export function FacultyUpdateDialog({ open, onOpenChange, user }: Props) {
 			}
 
 			await updateFaculty(user.id, { name });
-			toast.success(
-				t("editFacultyDialog.successMessage", "Faculty updated successfully")
-			);
+			toast.success(t("editFacultyDialog.successMessage"));
 			onOpenChange(false);
 		} catch (error) {
 			console.error("Error updating faculty:", error);
-			toast.error(
-				t("editFacultyDialog.errorMessage", "Failed to update faculty")
-			);
+			toast.error(t("editFacultyDialog.errorMessage"));
 		}
 	};
 
@@ -81,14 +71,14 @@ export function FacultyUpdateDialog({ open, onOpenChange, user }: Props) {
 			<SheetContent>
 				<SheetHeader>
 					<SheetTitle className="text-xl font-semibold">
-						{t("editFacultyDialog.title", "Edit Faculty")}
+						{t("editFacultyDialog.title")}
 					</SheetTitle>
 					<SheetDescription>
-						{t("editFacultyDialog.description", "Update the faculty name.")}
+						{t("editFacultyDialog.description")}
 					</SheetDescription>
 				</SheetHeader>
 
-				<form onSubmit={handleSubmit} className="flex flex-col gap-4 px-4 pt-4">
+				<form onSubmit={handleSubmit} className="flex flex-col gap-2 px-4">
 					<Separator />
 
 					<div className="relative">
@@ -100,7 +90,7 @@ export function FacultyUpdateDialog({ open, onOpenChange, user }: Props) {
 							className="peer w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none"
 						/>
 						<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm peer-focus:text-black dark:peer-focus:text-white">
-							{t("editFacultyDialog.facultyName", "Faculty Name")}
+							{t("editFacultyDialog.facultyName")}
 							<span className="text-[#D81212]">*</span>
 						</label>
 					</div>
@@ -113,13 +103,13 @@ export function FacultyUpdateDialog({ open, onOpenChange, user }: Props) {
 							onClick={() => onOpenChange(false)}
 							className="bg-gray-300 text-black px-4 py-2 w-full rounded-[3px] hover:bg-gray-400 transition hover:cursor-pointer"
 						>
-							{t("editFacultyDialog.cancelButton", "Cancel")}
+							{t("editFacultyDialog.cancelButton")}
 						</button>
 						<button
 							type="submit"
 							className="bg-black text-white px-4 py-2 w-full rounded-[3px] hover:bg-gray-900 transition hover:cursor-pointer"
 						>
-							{t("editFacultyDialog.saveButton", "Save")}
+							{t("editFacultyDialog.saveButton")}
 						</button>
 					</div>
 				</form>
