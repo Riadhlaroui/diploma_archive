@@ -29,6 +29,14 @@ i18n
 					dashboard: {
 						title: "Dashboard",
 						searchPlaceholder: "Search...",
+						overview: "Overview",
+						stats: {
+							faculties: "Faculties",
+							departments: "Departments",
+							majors: "Majors",
+							fields: "Fields",
+							specialties: "Specialties",
+						},
 					},
 
 					settings: {
@@ -543,6 +551,14 @@ i18n
 					dashboard: {
 						title: "Tableau de bord",
 						searchPlaceholder: "Rechercher...",
+						overview: "Aperçu",
+						stats: {
+							faculties: "Facultés",
+							departments: "Départements",
+							majors: "Spécialisations",
+							fields: "Domaines",
+							specialties: "Spécialités",
+						},
 					},
 
 					settings: {
@@ -1053,6 +1069,14 @@ i18n
 					dashboard: {
 						title: "لوحة التحكم",
 						searchPlaceholder: "ابحث...",
+						overview: "نظرة عامة",
+						stats: {
+							faculties: "الكليات",
+							departments: "الأقسام",
+							majors: "الفروع",
+							fields: "الميادين",
+							specialties: "الاختصاصات",
+						},
 					},
 
 					settings: {
@@ -1075,7 +1099,7 @@ i18n
 
 					sidebar: {
 						home: "الرئيسية",
-						inbox: "الوارد",
+						inbox: "سجلات التدقيق",
 						search: "بحث",
 						settings: "الإعدادات",
 						students: "الطلاب",
@@ -1084,7 +1108,7 @@ i18n
 						connected: "متصل بالخادم",
 						disconnected: "غير متصل بالخادم",
 						checking: "جارٍ التحقق من حالة الخادم...",
-						manageFaculties: "إدارة الكليات", // New entry
+						manageFaculties: "إدارة الكليات",
 						faculties: "الكليات",
 					},
 
