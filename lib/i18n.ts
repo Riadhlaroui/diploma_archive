@@ -188,6 +188,11 @@ i18n
 					common: {
 						cancel: "Cancel",
 						delete: "Delete",
+						edit: "Edit",
+						view: "View",
+						back: "Back",
+						na: "N/A",
+						copy: "Copy {{field}}",
 					},
 
 					faculties: {
@@ -241,13 +246,28 @@ i18n
 						copyId: "Copy Matricule",
 						numberOfDocuments: "Number of documents",
 						inDepartment: "Students in {{department}}",
-						noStudentsFound: "No students found.",
+						exists: "A student with matricule already exists.",
+						chooseDifferent: "Please choose a different matricule.",
 						table: {
 							id: "ID",
 							name: "Name",
 							email: "Email",
 							createdAt: "Created At",
 						},
+
+						requiredField: "Please fill in the required field: {{field}}",
+						noDocuments: "Please upload at least one document.",
+						invalidDOB: "Invalid date of birth format.",
+						futureDOB: "Date of birth cannot be in the future.",
+						invalidEnrollmentYear:
+							"Enrollment year must be between 1900 and {{year}}.",
+						created: "Student created successfully.",
+						creationError: "Error creating student.",
+						profile: "Student Profile",
+						info: "Student Info",
+						documents: "Documents",
+						name: "Name",
+						uploadToGetStarted: "Upload documents to get started",
 					},
 
 					addStudent: {
@@ -705,6 +725,11 @@ i18n
 					common: {
 						cancel: "Annuler",
 						delete: "Supprimer",
+						edit: "Modifier",
+						view: "Voir",
+						back: "Retour",
+						na: "N/D",
+						copy: "Copier {{field}}",
 					},
 
 					editUserDialog: {
@@ -769,6 +794,21 @@ i18n
 						notFound: "Aucun étudiant trouvé",
 						copyId: "Copier le matricule",
 						numberOfDocuments: "Nombre de documents",
+						requiredField: "Veuillez remplir le champ requis : {{field}}",
+						noDocuments: "Veuillez télécharger au moins un document.",
+						invalidDOB: "Format de date de naissance invalide.",
+						futureDOB: "La date de naissance ne peut pas être dans le futur.",
+						invalidEnrollmentYear:
+							"L'année d'inscription doit être comprise entre 1900 et {{year}}.",
+						exists: "Un étudiant avec ce matricule existe déjà.",
+						chooseDifferent: "Veuillez choisir un autre matricule.",
+						created: "Étudiant créé avec succès.",
+						creationError: "Erreur lors de la création de l'étudiant.",
+						profile: "Profil de l'étudiant",
+						info: "Informations de l'étudiant",
+						documents: "Documents",
+						name: "Nom",
+						uploadToGetStarted: "Téléversez des documents pour commencer",
 					},
 
 					addStudent: {
@@ -1219,6 +1259,11 @@ i18n
 					common: {
 						cancel: "إلغاء",
 						delete: "حذف",
+						edit: "تعديل",
+						view: "عرض",
+						back: "عودة",
+						na: "غير متوفر",
+						copy: "نسخ {{field}}",
 					},
 
 					editUserDialog: {
@@ -1281,6 +1326,21 @@ i18n
 						actions: "إجراءات",
 						notFound: "لم يتم العثور على طلاب",
 						copyId: "نسخ الرقم الجامعي",
+						requiredField: "يرجى ملء الحقل المطلوب: {{field}}",
+						noDocuments: "يرجى تحميل وثيقة واحد على الأقل.",
+						invalidDOB: "تنسيق تاريخ الميلاد غير صالح.",
+						futureDOB: "لا يمكن أن يكون تاريخ الميلاد في المستقبل.",
+						invalidEnrollmentYear:
+							"يجب أن تكون سنة التسجيل بين 1900 و{{year}}.",
+						exists: "يوجد طالب بهذا الرقم التسلسلي بالفعل.",
+						chooseDifferent: "يرجى اختيار رقم تسلسلي مختلف.",
+						created: "تم إنشاء الطالب بنجاح.",
+						creationError: "حدث خطأ أثناء إنشاء الطالب.",
+						profile: "ملف الطالب",
+						info: "معلومات الطالب",
+						documents: "الوثائق",
+						name: "الاسم",
+						uploadToGetStarted: "قم بتحميل المستندات للبدء",
 					},
 
 					addStudent: {

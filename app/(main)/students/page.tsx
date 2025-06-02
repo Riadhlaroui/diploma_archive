@@ -599,7 +599,7 @@ const StudentPage = () => {
 								colSpan={11}
 								className="text-center py-10 text-gray-500 dark:text-gray-400"
 							>
-								No students found.
+								{t("students.notFound")}
 							</TableCell>
 						</TableRow>
 					) : (
