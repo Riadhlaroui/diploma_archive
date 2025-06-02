@@ -94,7 +94,7 @@ export function DepartmentUpdateDialog({ open, onOpenChange, user }: Props) {
 					</SheetDescription>
 				</SheetHeader>
 
-				<form onSubmit={handleSubmit} className="flex flex-col gap-4 px-4 pt-4">
+				<form onSubmit={handleSubmit} className="flex flex-col gap-2 px-4">
 					<Separator />
 
 					<div className="relative">
