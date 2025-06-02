@@ -388,8 +388,9 @@ export default function SpecialtiesPage() {
 				onConfirm={confirmDelete}
 				title={t("confirm.title")}
 				description={
-					t("confirm.description", {
+					t("confirm.specialty.description", {
 						name: specialtyToDelete?.name || "",
+						entity: t("confirm.specialty.entities.specialty"),
 					}) || `Are you sure you want to delete ${specialtyToDelete?.name}?`
 				}
 			/>

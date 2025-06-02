@@ -376,9 +376,11 @@ export default function DepartmentsPage() {
 				onConfirm={confirmDelete}
 				title={t("confirm.title")}
 				description={
-					t("confirm.description", {
+					t("confirm.department.description", {
 						name: departmentToDelete?.name || "",
-					}) || `Are you sure you want to delete ${departmentToDelete?.name}?`
+						entity: t("confirm.department.entities.department"),
+					}) ||
+					`هل أنت متأكد من حذف الـ القسم "${departmentToDelete?.name}"؟ لا يمكن التراجع عن هذا الإجراء.`
 				}
 			/>
 
