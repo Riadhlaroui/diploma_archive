@@ -195,22 +195,22 @@ const CreateStudentPage = () => {
 			(key) => !form[key as keyof typeof form]
 		);
 		if (missingField) {
-			toast.error(`Please fill in the required field: ${missingField}`);
+			toast.error(t("students.requiredField", { field: missingField }));
 			return;
 		}
 
 		if (documents.length === 0) {
-			toast.error("Please upload at least one document.");
+			toast.error(t("students.noDocuments"));
 			return;
 		}
 
 		const dob = new Date(form.dateOfBirth);
 		if (isNaN(dob.getTime())) {
-			toast.error("Invalid date of birth format.");
+			toast.error(t("students.invalidDOB"));
 			return;
 		}
 		if (dob > new Date()) {
-			toast.error("Date of birth cannot be in the future.");
+			toast.error(t("students.futureDOB"));
 			return;
 		}
 
@@ -222,12 +222,9 @@ const CreateStudentPage = () => {
 			year < 1900 ||
 			year > currentYear
 		) {
-			toast.error(`Enrollment year must be between 1900 and ${currentYear}.`);
+			toast.error(t("students.invalidEnrollmentYear", { year: currentYear }));
 			return;
 		}
-
-		console.log("Creating student with data:", form);
-		console.log("Documents to upload:", documents);
 
 		try {
 			const result = await createStudentWithDocuments(
@@ -235,24 +232,22 @@ const CreateStudentPage = () => {
 				documents.map(({ file, typeId }) => ({ file, fileType: typeId }))
 			);
 
-			// If your create function returns something indicating failure, handle it here
 			if (result?.error) {
 				toast.error(
 					<div className="flex items-center gap-2">
 						<div>
 							<div className="font-semibold text-[15px]">
-								A student with matricule already exists.
+								{t("students.exists")}
 							</div>
-							<div className="text-sm">Please choose a different matricule</div>
+							<div className="text-sm">{t("students.chooseDifferent")}</div>
 						</div>
 					</div>
 				);
 				return;
 			}
 
-			toast.success("Student created successfully.");
+			toast.success(t("students.created"));
 
-			// Reset form and selections...
 			setForm({
 				matricule: "",
 				firstName: "",
@@ -276,7 +271,7 @@ const CreateStudentPage = () => {
 				<div className="flex items-center gap-2">
 					<div>
 						<div className="font-semibold text-[15px]">
-							<p>Error creating student.</p>
+							{t("students.creationError")}
 						</div>
 					</div>
 				</div>
