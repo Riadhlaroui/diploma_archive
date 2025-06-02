@@ -364,8 +364,9 @@ export default function FieldsPage() {
 				}}
 				onConfirm={confirmDelete}
 				title={t("confirm.title")}
-				description={t("confirm.description", {
+				description={t("confirm.field.description", {
 					name: fieldToDelete?.name || "",
+					entity: t("confirm.field.entities.field"),
 				})}
 			/>
 

@@ -193,6 +193,7 @@ i18n
 						back: "Back",
 						na: "N/A",
 						copy: "Copy {{field}}",
+						confirm: "Confirm ({{count}})",
 					},
 
 					faculties: {
@@ -309,6 +310,28 @@ i18n
 						remove: "Remove {{fileName}}",
 					},
 
+					uploadDocuments: {
+						title: "Upload Documents",
+						dragAndDrop: "Drag & drop files here",
+						orClick: "or click to browse your computer",
+						supportedFormats:
+							"Supported formats: PDF, PNG, JPG, JPEG, DOC, DOCX",
+						uploadedFiles: "Uploaded Files ({{count}})",
+						documentType: "Document Type",
+						loadingTypes: "Loading types...",
+						selectDocumentType: "Select document type",
+						remove: "Remove",
+						typeRequired: "Please specify a type for all documents",
+						typeExists: "This type already exists",
+						typeAddError: "Failed to add document type. Please try again.",
+						documentTypes: "Document Types",
+						addNewDocumentType: "Add new document type",
+						enterNewTypeName: "Enter new type name",
+						add: "Add",
+						adding: "Adding...",
+						cancel: "Cancel",
+					},
+
 					filterPanel: {
 						title: "Search & Filter Students",
 						close: "Close filter panel",
@@ -340,6 +363,28 @@ i18n
 						major: {
 							description:
 								"Are you sure you want to delete this major? This action cannot be undone.",
+						},
+						department: {
+							description:
+								'Are you sure you want to delete the {{entity}} "{{name}}"?',
+							entities: {
+								department: "department",
+							},
+						},
+						field: {
+							description:
+								'Are you sure you want to delete the {{entity}} "{{name}}"? This action cannot be undone.',
+							entities: {
+								field: "field",
+							},
+						},
+
+						specialty: {
+							description:
+								'Are you sure you want to delete the {{entity}} "{{name}}"? This action cannot be undone.',
+							entities: {
+								specialty: "specialty",
+							},
 						},
 					},
 
@@ -730,6 +775,7 @@ i18n
 						back: "Retour",
 						na: "N/D",
 						copy: "Copier {{field}}",
+						confirm: "Confirmer ({{count}})",
 					},
 
 					editUserDialog: {
@@ -851,6 +897,28 @@ i18n
 						remove: "Supprimer {{fileName}}",
 					},
 
+					uploadDocuments: {
+						title: "Téléverser des documents",
+						dragAndDrop: "Glissez et déposez les fichiers ici",
+						orClick: "ou cliquez pour parcourir votre ordinateur",
+						supportedFormats:
+							"Formats pris en charge : PDF, PNG, JPG, JPEG, DOC, DOCX",
+						uploadedFiles: "Fichiers téléversés ({{count}})",
+						documentType: "Type de document",
+						loadingTypes: "Chargement des types...",
+						selectDocumentType: "Sélectionnez un type de document",
+						remove: "Supprimer",
+						typeRequired: "Veuillez spécifier un type pour tous les documents",
+						typeExists: "Ce type existe déjà",
+						typeAddError:
+							"Échec de l'ajout du type de document. Veuillez réessayer.",
+						documentTypes: "Types de document",
+						addNewDocumentType: "Ajouter un nouveau type de document",
+						enterNewTypeName: "Entrez le nom du nouveau type",
+						add: "Ajouter",
+						adding: "Ajout...",
+						cancel: "Annuler",
+					},
 					filterPanel: {
 						title: "Rechercher et filtrer les étudiants",
 						close: "Fermer le panneau de filtre",
@@ -915,6 +983,28 @@ i18n
 						major: {
 							description:
 								"Êtes-vous sûr de vouloir supprimer cette filière ? Cette action est irréversible.",
+						},
+
+						department: {
+							description:
+								"Êtes-vous sûr de vouloir supprimer le {{entity}} « {{name}} » ?",
+							entities: {
+								department: "département",
+							},
+						},
+						field: {
+							description:
+								"Êtes-vous sûr de vouloir supprimer le {{entity}} « {{name}} » ? Cette action est irréversible.",
+							entities: {
+								field: "domaine",
+							},
+						},
+						specialty: {
+							description:
+								"Êtes-vous sûr de vouloir supprimer la {{entity}} « {{name}} » ? Cette action est irréversible.",
+							entities: {
+								specialty: "spécialité",
+							},
 						},
 					},
 
@@ -1264,6 +1354,7 @@ i18n
 						back: "عودة",
 						na: "غير متوفر",
 						copy: "نسخ {{field}}",
+						confirm: "تأكيد ({{count}})",
 					},
 
 					editUserDialog: {
@@ -1381,6 +1472,27 @@ i18n
 						remove: "إزالة {{fileName}}",
 					},
 
+					uploadDocuments: {
+						title: "تحميل وثائق",
+						dragAndDrop: "اسحب وأفلت الملفات  هنا",
+						orClick: "أو انقر لتصفح جهازك",
+						supportedFormats: "الصيغ المدعومة: PDF، PNG، JPG، JPEG، DOC، DOCX",
+						uploadedFiles: "الملفات التي تم تحميلها ({{count}})",
+						documentType: "نوع وثيقة",
+						loadingTypes: "جارٍ تحميل الأنواع...",
+						selectDocumentType: "اختر نوع المستند",
+						remove: "إزالة",
+						typeRequired: "يرجى تحديد نوع لكل وثيقة",
+						typeExists: "هذا النوع موجود بالفعل",
+						typeAddError: "فشل في إضافة نوع وثيقة. حاول مرة أخرى.",
+						documentTypes: "أنواع وثائق",
+						addNewDocumentType: "إضافة نوع وثيقة جديد",
+						enterNewTypeName: "أدخل اسم النوع الجديد",
+						add: "إضافة",
+						adding: "جارٍ الإضافة...",
+						cancel: "إلغاء",
+					},
+
 					filterPanel: {
 						title: "البحث وتصفية الطلاب",
 						close: "إغلاق لوحة التصفية",
@@ -1442,10 +1554,33 @@ i18n
 					confirm: {
 						title: "تأكيد الحذف",
 						description:
-							"هل أنت متأكد أنك تريد حذف الكلية {{name}}؟ لا يمكن التراجع عن هذا الإجراء.",
+							"هل أنت متأكد أنك تريد حذف الكلية: {{name}}؟ لا يمكن التراجع عن هذا الإجراء.",
 						major: {
 							description:
-								"هل أنت متأكد أنك تريد حذف هذا التخصص؟ لا يمكن التراجع عن هذا الإجراء.",
+								"هل أنت متأكد أنك تريد حذف هذا فرع؟ لا يمكن التراجع عن هذا الإجراء.",
+						},
+
+						department: {
+							description: 'هل أنت متأكد من حذف الـ {{entity}} "{{name}}"؟',
+							entities: {
+								department: "القسم",
+							},
+						},
+
+						field: {
+							description:
+								'هل أنت متأكد من حذف الـ {{entity}} "{{name}}"؟ لا يمكن التراجع عن هذا الإجراء.',
+							entities: {
+								field: "ميدان",
+							},
+						},
+
+						specialty: {
+							description:
+								"هل أنت متأكد من حذف الـ {{entity}} « {{name}} »؟ لا يمكن التراجع عن هذا الإجراء.",
+							entities: {
+								specialty: "التخصص",
+							},
 						},
 					},
 
