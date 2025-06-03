@@ -103,7 +103,6 @@ export async function getAllDocumentTypes(): Promise<DocumentTypeList[]> {
 	}
 }
 
-// services/documentTypesServices.ts
 export const fetchStudentDocuments = async (studentId: string) => {
 	try {
 		// Fetch documents with expanded file data

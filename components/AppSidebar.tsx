@@ -109,9 +109,7 @@ export function AppSidebar() {
 							{FacultiesContent.map((item) => (
 								<SidebarMenuItem
 									key={item.title}
-									className={`flex items-center justify-between ${
-										isRtl ? "flex-row-reverse" : "flex-row"
-									}`}
+									className="flex justify-between items-center"
 								>
 									{/* The main link */}
 									<SidebarMenuButton asChild>

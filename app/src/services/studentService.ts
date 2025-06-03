@@ -58,6 +58,68 @@ export async function createStudentWithDocuments(
 	}
 }
 
+export async function getStudentById(studentId: string) {
+	if (!studentId) {
+		throw new Error("Missing studentId!");
+	}
+
+	try {
+		// Get the student with expanded relations
+		const student = await pb.collection("Archive_students").getOne(studentId, {
+			expand: "fieldId,majorId,specialtyId",
+		});
+
+		// Get all documents related to this student
+		const documents = await pb.collection("Archive_documents").getFullList({
+			filter: `studentId="${studentId}"`,
+			expand: "fileId",
+		});
+
+		return {
+			...student,
+			documents,
+		};
+	} catch (error) {
+		console.error("Error fetching student by ID:", error);
+		throw error;
+	}
+}
+
+export async function fetchStudentDocuments(studentId: string) {
+	if (!studentId) {
+		throw new Error("Missing studentId!");
+	}
+
+	try {
+		// Get all documents related to this student
+		const documents = await pb.collection("Archive_documents").getFullList({
+			filter: `studentId="${studentId}"`,
+			expand: "fileId",
+			sort: "-created",
+		});
+
+		// Map to include useful file data like file URL
+		const documentsWithFiles = documents.map((doc) => {
+			const file = doc.expand?.fileId;
+
+			return {
+				id: doc.id,
+				typeId: doc.typeId,
+				fileId: file?.id,
+				fileName: file?.name,
+				fileType: file?.type,
+				fileUrl: file ? pb.files.getUrl(file, file.file) : null,
+				created: doc.created,
+			};
+		});
+
+		return documentsWithFiles;
+	} catch (error) {
+		console.error("Error fetching student documents:", error);
+		throw error;
+	}
+}
+
 export async function getStudentsByDepartment(
 	departmentId: string,
 	page = 1,
