@@ -75,6 +75,9 @@ const StudentUpdatePage = () => {
 	const studentId = searchParams.get("stuId");
 	const router = useRouter();
 
+	const confirmationTitle = t("updateStudent.deleteDocumentTitle");
+	const confirmationDescription = t("updateStudent.deleteDocumentDescription");
+
 	const [student, setStudent] = useState<Student | null>(null);
 	const [documents, setDocuments] = useState<Document[]>([]);
 	const [documentTypes, setDocumentTypes] = useState<DocumentType[]>([]);
@@ -462,14 +465,13 @@ const StudentUpdatePage = () => {
 	}
 
 	return (
-		<div className="w-full min-h-screen p-4">
-			{/* ADDED: Confirmation dialog for document deletion */}
+		<div className="w-full min-h-screen p-4" dir={t("common.dir")}>
 			<ConfirmDialog
 				open={showDeleteConfirmation}
 				onClose={() => setShowDeleteConfirmation(false)}
 				onConfirm={handleDeleteDocument}
-				title="Delete Document"
-				description="Are you sure you want to delete this document? This action cannot be undone."
+				title={confirmationTitle}
+				description={confirmationDescription}
 			/>
 
 			<button
@@ -479,20 +481,20 @@ const StudentUpdatePage = () => {
 				<ArrowLeft className="h-4 w-4" />
 				{t("common.back")}
 			</button>
-			<h2 className="text-xl font-bold mb-4">Update Student</h2>
+			<h2 className="text-xl font-bold mb-4">{t("updateStudent.title")}</h2>
 			<div className="flex flex-col lg:flex-row gap-8">
 				{/* Left: Student Info */}
 				<div className="w-full lg:w-1/2">
 					<div className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 space-y-6 bg-white dark:bg-gray-900">
 						<h2 className="text-base font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
-							{t("addStudent.academicInfo")}:
+							{t("updateStudent.academicInfo")}:
 						</h2>
 
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							{/* Faculty */}
 							<div className="space-y-1">
 								<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-									{t("addStudent.faculty")}{" "}
+									{t("updateStudent.faculty")}{" "}
 									<span className="text-red-500">*</span>
 								</label>
 								<Select
@@ -502,11 +504,13 @@ const StudentUpdatePage = () => {
 									}
 								>
 									<SelectTrigger className="w-full h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-gray-500 dark:focus:border-gray-400">
-										<SelectValue placeholder={t("addStudent.selectFaculty")} />
+										<SelectValue
+											placeholder={t("updateStudent.selectFaculty")}
+										/>
 									</SelectTrigger>
 									<SelectContent>
 										<SelectGroup>
-											<SelectLabel>{t("addStudent.faculty")}</SelectLabel>
+											<SelectLabel>{t("updateStudent.faculty")}</SelectLabel>
 											{faculties.map((f) => (
 												<SelectItem key={f.id} value={f.id}>
 													{f.name}
@@ -520,7 +524,7 @@ const StudentUpdatePage = () => {
 							{/* Department */}
 							<div className="space-y-1">
 								<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-									{t("addStudent.department")}{" "}
+									{t("updateStudent.department")}{" "}
 									<span className="text-red-500">*</span>
 								</label>
 								<Select
@@ -532,12 +536,12 @@ const StudentUpdatePage = () => {
 								>
 									<SelectTrigger className="w-full h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-gray-500 dark:focus:border-gray-400 disabled:opacity-50">
 										<SelectValue
-											placeholder={t("addStudent.selectDepartment")}
+											placeholder={t("updateStudent.selectDepartment")}
 										/>
 									</SelectTrigger>
 									<SelectContent>
 										<SelectGroup>
-											<SelectLabel>{t("addStudent.department")}</SelectLabel>
+											<SelectLabel>{t("updateStudent.department")}</SelectLabel>
 											{departments.map((d) => (
 												<SelectItem key={d.id} value={d.id}>
 													{d.name}
@@ -551,7 +555,7 @@ const StudentUpdatePage = () => {
 							{/* Fields */}
 							<div className="space-y-1">
 								<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-									{t("addStudent.field")}{" "}
+									{t("updateStudent.field")}{" "}
 									<span className="text-red-500">*</span>
 								</label>
 								<Select
@@ -562,11 +566,11 @@ const StudentUpdatePage = () => {
 									disabled={!academicHierarchy.departmentId}
 								>
 									<SelectTrigger className="w-full h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-gray-500 dark:focus:border-gray-400 disabled:opacity-50">
-										<SelectValue placeholder={t("addStudent.selectField")} />
+										<SelectValue placeholder={t("updateStudent.selectField")} />
 									</SelectTrigger>
 									<SelectContent>
 										<SelectGroup>
-											<SelectLabel>{t("addStudent.field")}</SelectLabel>
+											<SelectLabel>{t("updateStudent.field")}</SelectLabel>
 											{fields.map((f) => (
 												<SelectItem key={f.id} value={f.id}>
 													{f.name}
@@ -580,7 +584,7 @@ const StudentUpdatePage = () => {
 							{/* Major */}
 							<div className="space-y-1">
 								<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-									{t("addStudent.major")}{" "}
+									{t("updateStudent.major")}{" "}
 									<span className="text-red-500">*</span>
 								</label>
 								<Select
@@ -591,11 +595,11 @@ const StudentUpdatePage = () => {
 									disabled={!academicHierarchy.fieldId}
 								>
 									<SelectTrigger className="w-full h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-gray-500 dark:focus:border-gray-400 disabled:opacity-50">
-										<SelectValue placeholder={t("addStudent.selectMajor")} />
+										<SelectValue placeholder={t("updateStudent.selectMajor")} />
 									</SelectTrigger>
 									<SelectContent>
 										<SelectGroup>
-											<SelectLabel>{t("addStudent.major")}</SelectLabel>
+											<SelectLabel>{t("updateStudent.major")}</SelectLabel>
 											{majors.map((m) => (
 												<SelectItem key={m.id} value={m.id}>
 													{m.name}
@@ -610,7 +614,7 @@ const StudentUpdatePage = () => {
 						{/* Specialty */}
 						<div className="space-y-1">
 							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-								{t("addStudent.specialty")}{" "}
+								{t("updateStudent.specialty")}{" "}
 								<span className="text-red-500">*</span>
 							</label>
 							<Select
@@ -621,11 +625,13 @@ const StudentUpdatePage = () => {
 								disabled={!academicHierarchy.majorId}
 							>
 								<SelectTrigger className="w-full h-9 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-gray-500 dark:focus:border-gray-400 text-gray-900 dark:text-white">
-									<SelectValue placeholder={t("addStudent.selectSpecialty")} />
+									<SelectValue
+										placeholder={t("updateStudent.selectSpecialty")}
+									/>
 								</SelectTrigger>
 								<SelectContent>
 									<SelectGroup>
-										<SelectLabel>{t("addStudent.specialty")}</SelectLabel>
+										<SelectLabel>{t("updateStudent.specialty")}</SelectLabel>
 										{specialties.map((s) => (
 											<SelectItem key={s.id} value={s.id}>
 												{s.name}
@@ -637,12 +643,12 @@ const StudentUpdatePage = () => {
 						</div>
 
 						<h2 className="text-base font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2 mt-6">
-							Personal Information:
+							{t("updateStudent.personalInfo")}:
 						</h2>
 
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<div className="space-y-1">
-								<Label>Matricule</Label>
+								<Label>{t("updateStudent.matricule")}</Label>
 								<Input
 									value={form.matricule}
 									onChange={(e) =>
@@ -651,7 +657,7 @@ const StudentUpdatePage = () => {
 								/>
 							</div>
 							<div className="space-y-1">
-								<Label>First Name</Label>
+								<Label>{t("updateStudent.firstName")}</Label>
 								<Input
 									value={form.firstName}
 									onChange={(e) =>
@@ -660,7 +666,7 @@ const StudentUpdatePage = () => {
 								/>
 							</div>
 							<div className="space-y-1">
-								<Label>Last Name</Label>
+								<Label>{t("updateStudent.lastName")}</Label>
 								<Input
 									value={form.lastName}
 									onChange={(e) =>
@@ -669,7 +675,7 @@ const StudentUpdatePage = () => {
 								/>
 							</div>
 							<div className="space-y-1">
-								<Label>Date of Birth</Label>
+								<Label>{t("updateStudent.dateOfBirth")}</Label>
 								<Input
 									type="date"
 									value={form.dateOfBirth}
@@ -679,7 +685,7 @@ const StudentUpdatePage = () => {
 								/>
 							</div>
 							<div className="space-y-1">
-								<Label>Enrollment Year</Label>
+								<Label>{t("updateStudent.enrollmentYear")}</Label>
 								<Input
 									value={form.enrollmentYear}
 									onChange={(e) =>
@@ -694,7 +700,9 @@ const StudentUpdatePage = () => {
 							className="mt-4 w-full"
 							disabled={isUploading}
 						>
-							{isUploading ? "Saving changes..." : "Update Student Information"}
+							{isUploading
+								? t("updateStudent.savingChanges")
+								: t("updateStudent.updateButton")}
 						</Button>
 					</div>
 				</div>
@@ -702,18 +710,24 @@ const StudentUpdatePage = () => {
 				{/* Right: Documents */}
 				<div className="w-full lg:w-1/2">
 					<div className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 space-y-6 bg-white dark:bg-gray-900">
-						<h3 className="text-lg font-semibold mb-4">Student documents</h3>
+						<h3 className="text-lg font-semibold mb-4">
+							{t("updateStudent.studentDocuments")}
+						</h3>
 
 						{/* Document Upload Section */}
 						<div className="mb-6 p-4 border rounded-lg bg-gray-50 dark:bg-gray-900">
-							<h4 className="text-sm font-medium mb-3">Upload New Document</h4>
+							<h4 className="text-sm font-medium mb-3">
+								{t("updateStudent.uploadNewDocument")}
+							</h4>
 							<div className="space-y-3">
 								<Select
 									value={selectedDocumentType}
 									onValueChange={setSelectedDocumentType}
 								>
 									<SelectTrigger className="w-full">
-										<SelectValue placeholder="Select document type" />
+										<SelectValue
+											placeholder={t("updateStudent.selectDocumentType")}
+										/>
 									</SelectTrigger>
 									<SelectContent>
 										{documentTypes.map((type) => (
@@ -725,7 +739,9 @@ const StudentUpdatePage = () => {
 								</Select>
 
 								<div className="grid w-full max-w-sm items-center gap-1.5">
-									<Label htmlFor="document-upload">Document File</Label>
+									<Label htmlFor="document-upload">
+										{t("updateStudent.documentFile")}
+									</Label>
 									<Input
 										id="document-upload"
 										type="file"
@@ -740,15 +756,14 @@ const StudentUpdatePage = () => {
 									className="w-full"
 								>
 									<Upload className="h-4 w-4 mr-2" />
-									Add Document to Pending Changes
+									{t("updateStudent.addDocumentToPending")}
 								</Button>
 
 								{/* Pending Documents List */}
 								{pendingDocuments.length > 0 && (
 									<div className="mt-4">
 										<h4 className="text-xs font-medium mb-2 text-gray-700 dark:text-gray-300">
-											Pending Documents (will be uploaded when you click
-											&quot;Update Student Information&quot;)
+											{t("updateStudent.pendingDocumentsNote")}
 										</h4>
 										<ul className="space-y-2">
 											{pendingDocuments.map((doc, index) => (
@@ -763,7 +778,7 @@ const StudentUpdatePage = () => {
 														<span className="text-xs text-gray-500 dark:text-gray-400">
 															(
 															{documentTypes.find((t) => t.id === doc.typeId)
-																?.name || "Unknown type"}
+																?.name || t("updateStudent.unknownType")}
 															)
 														</span>
 													</div>
@@ -773,7 +788,7 @@ const StudentUpdatePage = () => {
 																prev.filter((_, i) => i !== index)
 															);
 															toast.success(
-																"Document removed from pending changes"
+																t("updateStudent.documentRemovedPending")
 															);
 														}}
 														className="text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-100 dark:hover:bg-red-900/30"
@@ -791,11 +806,11 @@ const StudentUpdatePage = () => {
 						{/* Existing Documents List */}
 						<div>
 							<h4 className="text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-								Existing Documents
+								{t("updateStudent.existingDocuments")}
 							</h4>
 							{documents.length === 0 ? (
 								<p className="text-sm text-gray-500 dark:text-gray-400">
-									No Documents
+									{t("updateStudent.noDocuments")}
 								</p>
 							) : (
 								<ul className="grid gap-3">
@@ -808,12 +823,12 @@ const StudentUpdatePage = () => {
 
 										const fileName = Array.isArray(fileData?.file)
 											? fileData.file[0]
-											: fileData?.file || "No filename";
+											: fileData?.file || t("updateStudent.noFilename");
 
 										const typeName =
 											doc.typeInfo?.name ||
 											fileData?.expand?.typeId?.name ||
-											"Unknown";
+											t("updateStudent.unknownType");
 
 										return (
 											<li
@@ -840,7 +855,6 @@ const StudentUpdatePage = () => {
 														<Eye className="h-4 w-4" />
 														{t("common.view")}
 													</button>
-													{/* MODIFIED: Use new delete function */}
 													<button
 														onClick={() => promptDeleteDocument(doc.id)}
 														className="flex-shrink-0 flex items-center gap-1 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-100 dark:text-red-400 dark:hover:text-red-300 transition-colors px-3 py-1.5 rounded-md dark:hover:bg-red-900/30"
