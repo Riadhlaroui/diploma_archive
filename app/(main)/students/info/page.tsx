@@ -66,6 +66,8 @@ const StudentInfoPage = () => {
 	const [viewerFile, setViewerFile] = useState<File | null>(null);
 	const [viewerFileName, setViewerFileName] = useState("");
 
+	//const [updateDialog, setUpdateDialog] = useState(false);
+
 	const { t } = useTranslation();
 
 	const fetchFileFromUrl = useCallback(
@@ -169,7 +171,8 @@ const StudentInfoPage = () => {
 	};
 
 	const handleEdit = () => {
-		console.log("Edit");
+		if (!student) return;
+		router.push(`/students/update?stuId=${student.id}`);
 	};
 
 	const handleDelete = async () => {

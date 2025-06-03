@@ -276,7 +276,7 @@ const StaffList = () => {
 									disabled={page === 1 || loading}
 									className="hover:cursor-pointer"
 								>
-									{t("pagination.next")}
+									{t("pagination.previous")}
 								</Button>
 								<span className="text-sm">
 									{t("pagination.pageOf", { page, totalPages })}

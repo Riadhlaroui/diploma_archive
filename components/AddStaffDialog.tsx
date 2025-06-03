@@ -120,18 +120,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			if (error.response?.status === 400) {
-				toast.error(
-					<div className="flex items-center gap-2">
-						<div>
-							<div className="font-semibold text-[15px]">
-								{t("addStaffDialog.errors.emailExistsTitle")}
-							</div>
-							<div className="text-sm">
-								{t("addStaffDialog.errors.emailExistsDesc")}
-							</div>
-						</div>
-					</div>
-				);
+				toast.error(t("addStaffDialog.errors.userCreatedError"));
 			} else {
 				console.error("Error creating user:", error);
 				toast.error(t("addStaffDialog.errors.userCreatedError"));
@@ -244,7 +233,9 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 							<button
 								type="button"
 								onClick={togglePasswordVisibility}
-								className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+								className={`absolute inset-y-0 flex items-center text-gray-500 ${
+									i18n.language === "ar" ? "left-3 mt-6" : "right-3"
+								}`}
 							>
 								{isPasswordVisible ? (
 									<EyeOff className="w-5 h-5" />
@@ -267,7 +258,9 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 							<button
 								type="button"
 								onClick={toggleConfirmPasswordVisibility}
-								className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+								className={`absolute inset-y-0 flex items-center text-gray-500 ${
+									i18n.language === "ar" ? "left-3 mt-6" : "right-3"
+								}`}
 							>
 								{isConfirmPasswordVisible ? (
 									<EyeOff className="w-5 h-5" />

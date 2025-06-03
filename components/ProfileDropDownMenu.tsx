@@ -152,7 +152,10 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 					)}
 
 					<DropdownMenuSeparator />
-					<DropdownMenuItem className=" hover:cursor-pointer">
+					<DropdownMenuItem
+						className=" hover:cursor-pointer"
+						onClick={() => router.replace("/team")}
+					>
 						<Github />
 						<span>GitHub</span>
 					</DropdownMenuItem>
