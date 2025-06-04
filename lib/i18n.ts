@@ -662,6 +662,13 @@ i18n
 						major: "Major",
 						specialty: "Specialty",
 					},
+
+					errors: {
+						deleteSpecialty: "Failed to delete specialty '{{name}}'.",
+						requiredRelation:
+							"Cannot delete '{{name}}' because it's being used by students.",
+						generic400: "Failed to delete specialty: {{message}}",
+					},
 				},
 			},
 			fr: {
@@ -1315,6 +1322,15 @@ i18n
 						major: "Majeure",
 						specialty: "Spécialité",
 					},
+
+					errors: {
+						deleteSpecialty:
+							"Échec de la suppression de la spécialité '{{name}}'.",
+						requiredRelation:
+							"Impossible de supprimer '{{name}}' car elle est utilisée par des étudiants.",
+						generic400:
+							"Échec de la suppression de la spécialité : {{message}}",
+					},
 				},
 			},
 			ar: {
@@ -1947,6 +1963,7 @@ i18n
 						fieldPlaceholder: "ابحث في الميادين...",
 						majorPlaceholder: "ابحث في الفروع...",
 						specialtyPlaceholder: "ابحث في التخصصات...",
+						teamPlaceholder: "ابحث في قائمة الموظفين...",
 						button: "بحث",
 					},
 					terms: {
@@ -1955,6 +1972,13 @@ i18n
 						field: "ميدان",
 						major: "فرع",
 						specialty: "تخصص",
+					},
+
+					errors: {
+						deleteSpecialty: "فشل حذف التخصص '{{name}}'.",
+						requiredRelation:
+							"لا يمكن حذف '{{name}}' لأنه قيد الاستخدام من قبل الطلاب.",
+						generic400: "فشل حذف التخصص: {{message}}",
 					},
 				},
 			},

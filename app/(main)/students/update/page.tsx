@@ -688,6 +688,8 @@ const StudentUpdatePage = () => {
 								<Label>{t("updateStudent.enrollmentYear")}</Label>
 								<Input
 									value={form.enrollmentYear}
+									min="1900"
+									max={new Date().getFullYear()}
 									onChange={(e) =>
 										setForm({ ...form, enrollmentYear: e.target.value })
 									}

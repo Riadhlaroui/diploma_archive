@@ -302,7 +302,7 @@ const CreateStudentPage = () => {
 
 	return (
 		<>
-			<div className="min-h-full  bg-gray-100 dark:bg-gray-900 p-4">
+			<div className="min-h-full dark:bg-gray-900 p-4">
 				<div className="max-w-7xl mx-auto">
 					{/* Header */}
 					<div className="mb-6">

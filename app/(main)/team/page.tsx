@@ -138,7 +138,7 @@ const StaffList = () => {
 					<Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
 					<input
 						type="text"
-						placeholder="Search departments..."
+						placeholder={t("search.teamPlaceholder")}
 						value={inputValue}
 						onChange={(e) => setInputValue(e.target.value)}
 						className="pl-9 pr-3 py-1 w-full border rounded dark:bg-zinc-800 dark:text-white transition-colors"
@@ -151,7 +151,7 @@ const StaffList = () => {
 					}}
 					className="px-4 py-1 rounded border hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
 				>
-					Search
+					{t("search.button")}
 				</button>
 			</div>
 
