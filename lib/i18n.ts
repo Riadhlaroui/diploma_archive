@@ -270,6 +270,11 @@ i18n
 						documents: "Documents",
 						name: "Name",
 						uploadToGetStarted: "Upload documents to get started",
+						confirmDeleteTitle: "Delete Student",
+						confirmDeleteDescription:
+							"Are you sure you want to delete {{name}}? This action cannot be undone.",
+						deleteSuccess: "Student deleted successfully",
+						deleteFailed: "Failed to delete student",
 					},
 
 					addStudent: {
@@ -901,6 +906,11 @@ i18n
 						documents: "Documents",
 						name: "Nom",
 						uploadToGetStarted: "Téléversez des documents pour commencer",
+						confirmDeleteTitle: "Supprimer l'étudiant",
+						confirmDeleteDescription:
+							"Êtes-vous sûr de vouloir supprimer {{name}} ? Cette action est irréversible.",
+						deleteSuccess: "Étudiant supprimé avec succès",
+						deleteFailed: "Échec de la suppression de l'étudiant",
 					},
 
 					addStudent: {
@@ -1527,6 +1537,11 @@ i18n
 						documents: "الوثائق",
 						name: "الاسم",
 						uploadToGetStarted: "قم بتحميل المستندات للبدء",
+						confirmDeleteTitle: "حذف الطالب",
+						confirmDeleteDescription:
+							"هل أنت متأكد أنك تريد حذف {{name}}؟ هذا الإجراء لا يمكن التراجع عنه.",
+						deleteSuccess: "تم حذف الطالب بنجاح",
+						deleteFailed: "فشل في حذف الطالب",
 					},
 
 					addStudent: {

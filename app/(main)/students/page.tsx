@@ -655,7 +655,7 @@ const StudentPage = () => {
 											className="hover:cursor-pointer h-8 w-8"
 											onClick={(e) => {
 												e.stopPropagation();
-												router.push(`/students/edit/${student.id}`);
+												router.push(`/students/update?stuId=${student.id}`);
 											}}
 											aria-label="Edit student"
 										>

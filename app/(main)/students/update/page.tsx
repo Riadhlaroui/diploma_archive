@@ -373,7 +373,7 @@ const StudentUpdatePage = () => {
 				});
 			}
 
-			toast.success("All changes saved successfully");
+			toast.success(t("updateStudent.allChangesSaved"));
 			setPendingDocuments([]);
 			fetchStudentData();
 		} catch (err) {

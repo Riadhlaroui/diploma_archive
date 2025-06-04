@@ -24,6 +24,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DocumentViewer from "@/components/DocumentViewr";
 import { fetchStudentDocuments } from "@/app/src/services/documentTypesServices";
 import { useTranslation } from "react-i18next";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 interface Student {
 	id: string;
@@ -44,6 +45,7 @@ interface Document {
 	id: string;
 	typeId: string;
 	studentId: string;
+	fileId: string; // ADDED
 	expand?: {
 		fileId?: any;
 		typeId?: { name: string };
@@ -65,6 +67,7 @@ const StudentInfoPage = () => {
 	const [viewerOpen, setViewerOpen] = useState(false);
 	const [viewerFile, setViewerFile] = useState<File | null>(null);
 	const [viewerFileName, setViewerFileName] = useState("");
+	const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
 	//const [updateDialog, setUpdateDialog] = useState(false);
 
@@ -116,11 +119,14 @@ const StudentInfoPage = () => {
 				created: studentData.created,
 				expand: studentData.expand,
 			});
+
+			// FIXED: Store fileId in document state
 			setDocuments(
 				docs.map((doc: any) => ({
 					id: doc.id,
 					typeId: doc.typeId ?? "",
 					studentId: doc.studentId ?? "",
+					fileId: doc.fileId ?? "", // ADDED
 					expand: doc.expand,
 					typeInfo: doc.typeInfo,
 				}))
@@ -176,10 +182,32 @@ const StudentInfoPage = () => {
 	};
 
 	const handleDelete = async () => {
-		const confirmDelete = confirm(
-			"Are you sure you want to delete this student?"
-		);
-		if (!confirmDelete) return;
+		if (!student) return;
+
+		try {
+			// Delete all documents and associated files
+			for (const doc of documents) {
+				try {
+					if (doc.fileId) {
+						await pb.collection("Archive_files").delete(doc.fileId);
+					}
+					await pb.collection("Archive_documents").delete(doc.id);
+				} catch (err) {
+					console.warn("Failed to delete document or file:", err);
+				}
+			}
+
+			// Delete the student record
+			await pb.collection("Archive_students").delete(student.id);
+
+			toast.success(t("students.deleteSuccess"));
+			router.push("/students");
+		} catch (err) {
+			console.error("Failed to delete student:", err);
+			toast.error(t("students.deleteFailed"));
+		} finally {
+			setIsDeleteDialogOpen(false);
+		}
 	};
 
 	const handleViewDocument = async (fileData: any, fileName: string) => {
@@ -220,6 +248,15 @@ const StudentInfoPage = () => {
 
 	return (
 		<div className="p-4 md:p-6 mx-auto w-full">
+			<ConfirmDialog
+				open={isDeleteDialogOpen}
+				onClose={() => setIsDeleteDialogOpen(false)}
+				onConfirm={handleDelete}
+				title={t("students.confirmDeleteTitle")}
+				description={t("students.confirmDeleteDescription", {
+					name: student ? `${student.firstName} ${student.lastName}` : "",
+				})}
+			/>
 			<button
 				onClick={() => router.back()}
 				className="mb-4 flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-gray-100 hover:underline transition-colors hover:cursor-pointer"
@@ -243,7 +280,7 @@ const StudentInfoPage = () => {
 							{t("common.edit")}
 						</Button>
 						<Button
-							onClick={handleDelete}
+							onClick={() => setIsDeleteDialogOpen(true)}
 							variant="destructive"
 							className="flex-1 md:flex-none"
 						>
