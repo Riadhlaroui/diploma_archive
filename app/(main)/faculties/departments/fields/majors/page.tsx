@@ -36,7 +36,7 @@ import {
 	SquarePlus,
 	Search,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -87,7 +87,7 @@ export default function MajorsPage() {
 		}
 	}, [fieldId]);
 
-	const fetchMajors = async () => {
+	const fetchMajors = useCallback(async () => {
 		if (!fieldId) {
 			setMajors([]);
 			setTotalPages(1);
@@ -99,11 +99,11 @@ export default function MajorsPage() {
 		setMajors(data.items);
 		setTotalPages(data.totalPages);
 		setLoading(false);
-	};
+	}, [fieldId, page, searchTerm]);
 
 	useEffect(() => {
 		fetchMajors();
-	}, [fieldId, page, searchTerm]);
+	}, [fetchMajors]);
 
 	const handleEdit = (major: any) => {
 		setSelectedMajor(major);
