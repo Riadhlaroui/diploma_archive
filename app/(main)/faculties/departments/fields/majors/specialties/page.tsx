@@ -3,7 +3,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-
+import { ClientResponseError } from "pocketbase";
 import {
 	Table,
 	TableHeader,
@@ -102,17 +102,30 @@ export default function SpecialtiesPage() {
 
 	const confirmDelete = async () => {
 		if (!specialtyToDelete) return;
+
 		try {
 			await deleteSpecialtyById(specialtyToDelete.id);
 			toast.success(
-				`Specialty '${specialtyToDelete.name}' deleted successfully!`
+				t("specialties.deleteSuccess", { name: specialtyToDelete.name })
 			);
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		} catch (error) {
-			toast.error(`Failed to delete specialty '${specialtyToDelete.name}'.`);
+			if (error instanceof ClientResponseError && error.status === 400) {
+				if (error.data.message.includes("required relation reference")) {
+					toast.error(
+						t("errors.requiredRelation", { name: specialtyToDelete.name })
+					);
+				} else {
+					toast.error(t("errors.generic400", { message: error.data.message }));
+				}
+			} else {
+				toast.error(
+					t("errors.deleteSpecialty", { name: specialtyToDelete.name })
+				);
+			}
+		} finally {
+			setShowConfirmDialog(false);
+			setSpecialtyToDelete(null);
 		}
-		setShowConfirmDialog(false);
-		setSpecialtyToDelete(null);
 	};
 
 	useEffect(() => {

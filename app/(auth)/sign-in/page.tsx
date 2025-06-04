@@ -6,10 +6,16 @@ import React, { useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { ThemeToggle } from "@/components/theme-toggle";
 import pb from "@/lib/pocketbase";
 import { toast } from "sonner";
 import FullScreenLoader from "@/components/FullScreenLoader";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 
 export default function SignIn() {
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -81,20 +87,24 @@ export default function SignIn() {
 				<label htmlFor="language-select" className="mr-2 font-semibold">
 					{t("language")}
 				</label>
-				<select
-					id="language-select"
-					className="border rounded-md px-2 py-1 dark:bg-[#1f1f1f] dark:text-white"
+				<Select
 					value={i18n.language}
-					onChange={(e) => switchLanguage(e.target.value as "en" | "fr" | "ar")}
+					onValueChange={(value: string) =>
+						switchLanguage(value as "en" | "fr" | "ar")
+					}
 				>
-					<option value="en">English</option>
-					<option value="fr">Français</option>
-					<option value="ar">العربية</option>
-				</select>
-			</div>
-
-			<div className="fixed top-0 right-0 z-50 p-2">
-				<ThemeToggle />
+					<SelectTrigger
+						id="language-select"
+						className="w-[150px] dark:bg-[#1f1f1f] dark:text-white"
+					>
+						<SelectValue />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectItem value="en">English</SelectItem>
+						<SelectItem value="fr">Français</SelectItem>
+						<SelectItem value="ar">العربية</SelectItem>
+					</SelectContent>
+				</Select>
 			</div>
 
 			<form onSubmit={handleLogin}>
