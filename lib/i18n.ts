@@ -646,6 +646,22 @@ i18n
 						allChangesSaved: "All changes saved successfully",
 						failedToSaveChanges: "Failed to save changes",
 					},
+
+					search: {
+						facultyPlaceholder: "Search faculties...",
+						departmentPlaceholder: "Search departments...",
+						fieldPlaceholder: "Search fields...",
+						majorPlaceholder: "Search majors...",
+						specialtyPlaceholder: "Search specialties...",
+						button: "Search",
+					},
+					terms: {
+						faculty: "Faculty",
+						department: "Department",
+						field: "Field",
+						major: "Major",
+						specialty: "Specialty",
+					},
 				},
 			},
 			fr: {
@@ -1283,6 +1299,22 @@ i18n
 							"Toutes les modifications ont été enregistrées avec succès",
 						failedToSaveChanges: "Échec de l'enregistrement des modifications",
 					},
+
+					search: {
+						facultyPlaceholder: "Rechercher des facultés...",
+						departmentPlaceholder: "Rechercher des départements...",
+						fieldPlaceholder: "Rechercher des domaines...",
+						majorPlaceholder: "Rechercher des majeures...",
+						specialtyPlaceholder: "Rechercher des spécialités...",
+						button: "Rechercher",
+					},
+					terms: {
+						faculty: "Faculté",
+						department: "Département",
+						field: "Domaine",
+						major: "Majeure",
+						specialty: "Spécialité",
+					},
 				},
 			},
 			ar: {
@@ -1907,6 +1939,22 @@ i18n
 						documentRemovedPending: "تمت إزالة الوثيقة من التغييرات المعلقة",
 						allChangesSaved: "تم حفظ جميع التغييرات بنجاح",
 						failedToSaveChanges: "فشل حفظ التغييرات",
+					},
+
+					search: {
+						facultyPlaceholder: "ابحث في الكليات...",
+						departmentPlaceholder: "ابحث في الأقسام...",
+						fieldPlaceholder: "ابحث في الميادين...",
+						majorPlaceholder: "ابحث في الفروع...",
+						specialtyPlaceholder: "ابحث في التخصصات...",
+						button: "بحث",
+					},
+					terms: {
+						faculty: "كلية",
+						department: "قسم",
+						field: "ميدان",
+						major: "فرع",
+						specialty: "تخصص",
 					},
 				},
 			},

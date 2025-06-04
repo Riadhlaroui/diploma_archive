@@ -213,7 +213,7 @@ export default function FieldsPage() {
 					<Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
 					<input
 						type="text"
-						placeholder="Search fields..."
+						placeholder={t("search.fieldPlaceholder")}
 						value={inputValue}
 						onChange={(e) => setInputValue(e.target.value)}
 						className="pl-9 pr-3 py-1 w-full border rounded dark:bg-zinc-800 dark:text-white transition-colors"
@@ -226,7 +226,7 @@ export default function FieldsPage() {
 					}}
 					variant="outline"
 				>
-					Search
+					{t("search.button")}
 				</Button>
 			</div>
 
