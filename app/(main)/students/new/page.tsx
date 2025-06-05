@@ -55,6 +55,7 @@ const CreateStudentPage = () => {
 		lastName: "",
 		dateOfBirth: "",
 		enrollmentYear: "",
+		graduationYear: "",
 		specialtyId: "",
 		fieldId: "",
 		majorId: "",
@@ -198,6 +199,20 @@ const CreateStudentPage = () => {
 			toast.error(t("students.requiredField", { field: missingField }));
 			return;
 		}
+		if (form.graduationYear) {
+			const gradYear = Number.parseInt(form.graduationYear);
+			const enrollYear = Number.parseInt(form.enrollmentYear);
+
+			if (isNaN(gradYear)) {
+				toast.error(t("students.invalidGraduationYear"));
+				return;
+			}
+
+			if (gradYear < enrollYear) {
+				toast.error(t("students.graduationBeforeEnrollment"));
+				return;
+			}
+		}
 
 		if (documents.length === 0) {
 			toast.error(t("students.noDocuments"));
@@ -227,6 +242,7 @@ const CreateStudentPage = () => {
 		}
 
 		try {
+			console.log("Form: ", form);
 			const result = await createStudentWithDocuments(
 				form,
 				documents.map(({ file, typeId }) => ({ file, fileType: typeId }))
@@ -254,6 +270,7 @@ const CreateStudentPage = () => {
 				lastName: "",
 				dateOfBirth: "",
 				enrollmentYear: "",
+				graduationYear: "",
 				specialtyId: "",
 				fieldId: "",
 				majorId: "",
@@ -589,6 +606,23 @@ const CreateStudentPage = () => {
 													max={new Date().getFullYear()}
 													className="w-full h-9 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-gray-500 dark:focus:border-gray-400 text-gray-900 dark:text-white"
 													placeholder={t("addStudent.enterEnrollmentYear")}
+												/>
+											</div>
+
+											<div className="space-y-1">
+												<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+													{t("addStudent.graduationYear")}{" "}
+													<span className="text-red-500">*</span>
+												</label>
+												<input
+													type="number"
+													name="graduationYear"
+													value={form.graduationYear}
+													onChange={handleChange}
+													min="1900"
+													max={new Date().getFullYear() + 10}
+													className="w-full h-9 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-gray-500 dark:focus:border-gray-400 text-gray-900 dark:text-white"
+													placeholder={t("addStudent.enterGraduationYear")}
 												/>
 											</div>
 										</div>

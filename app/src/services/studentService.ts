@@ -224,6 +224,7 @@ export async function fetchStudents(page = 1, perPage = 15) {
 
 interface StudentFilter {
 	matricule?: string;
+	graduationYear?: string;
 	searchQuery?: string;
 	facultyId?: string;
 	departmentId?: string;
@@ -286,6 +287,8 @@ export async function searchStudents(
 	if (filter.specialtyId)
 		filters.push(`specialtyId.id="${filter.specialtyId}"`);
 	if (filter.matricule) filters.push(`matricule~"${filter.matricule}"`);
+	if (filter.graduationYear)
+		filters.push(`graduationYear ~ "${filter.graduationYear}"`);
 	if (filter.searchQuery) {
 		filters.push(
 			`firstName~"${filter.searchQuery}" || lastName~"${filter.searchQuery}"`
