@@ -44,6 +44,7 @@ import { Separator } from "@/components/ui/separator";
 
 interface StudentFilter {
 	matricule?: string;
+	graduationYear?: string;
 	searchQuery?: string; // for searching name or matricule
 	facultyId?: string;
 	departmentId?: string;
@@ -84,6 +85,7 @@ const StudentPage = () => {
 	const [selectedSpecialty, setSelectedSpecialty] = useState<string>("");
 
 	const [matricule, setMatricule] = useState("");
+	const [graduationYear, setGraduationYear] = useState(""); // Added state for graduation year
 
 	useEffect(() => {
 		pb.collection("Archive_faculties")
@@ -179,6 +181,7 @@ const StudentPage = () => {
 				specialtyId: selectedSpecialty || undefined,
 				searchQuery: searchQuery.trim() || undefined,
 				matricule: matricule.trim() || undefined,
+				graduationYear: graduationYear.trim() || undefined,
 			};
 
 			const result = await searchStudents(filter);
@@ -320,6 +323,18 @@ const StudentPage = () => {
 							</button>
 						</div>
 					)}
+
+					{graduationYear && (
+						<div className="flex items-center gap-1 px-3 py-1 bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 rounded-full text-sm">
+							{t("filterPanel.graduationYear")}: {graduationYear}
+							<button
+								onClick={() => setGraduationYear("")}
+								aria-label="Remove Graduation Year Filter"
+							>
+								<X className="w-4 h-4 hover:text-red-600" />
+							</button>
+						</div>
+					)}
 				</div>
 
 				{/* Filter Panel (full width) */}
@@ -382,6 +397,22 @@ const StudentPage = () => {
 								onChange={(e) => setMatricule(e.target.value)}
 								className="w-full h-9 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-gray-500 dark:focus:border-gray-400 text-gray-900 dark:text-white"
 								placeholder={t("addStudent.enterMatricule")}
+							/>
+						</div>
+
+						<div className="space-y-1 mt-3">
+							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+								{t("addStudent.graduationYear")}
+							</label>
+							<input
+								type="number"
+								min="1900"
+								max="2100"
+								name="graduationYear"
+								value={graduationYear}
+								onChange={(e) => setGraduationYear(e.target.value)}
+								className="w-full h-9 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-gray-500 dark:focus:border-gray-400 text-gray-900 dark:text-white"
+								placeholder={t("addStudent.enterGraduationYear")}
 							/>
 						</div>
 
@@ -570,6 +601,9 @@ const StudentPage = () => {
 							{t("students.enrollmentYear")}
 						</TableHead>
 						<TableHead className={isRtl ? "text-right" : "text-left"}>
+							{t("students.graduationYear")}
+						</TableHead>
+						<TableHead className={isRtl ? "text-right" : "text-left"}>
 							{t("students.specialty")}
 						</TableHead>
 						<TableHead className={isRtl ? "text-right" : "text-left"}>
@@ -640,6 +674,7 @@ const StudentPage = () => {
 								<TableCell>{student.expand?.fieldId?.name ?? "N/A"}</TableCell>
 								<TableCell>{student.expand?.majorId?.name ?? "N/A"}</TableCell>
 								<TableCell>{student.enrollmentYear}</TableCell>
+								<TableCell>{student.graduationYear}</TableCell>
 								<TableCell>
 									{student.expand?.specialtyId?.name ?? "N/A"}
 								</TableCell>

@@ -275,6 +275,11 @@ i18n
 							"Are you sure you want to delete {{name}}? This action cannot be undone.",
 						deleteSuccess: "Student deleted successfully",
 						deleteFailed: "Failed to delete student",
+
+						invalidGraduationYear: "Invalid graduation year",
+						graduationBeforeEnrollment:
+							"Graduation year cannot be before enrollment year",
+						graduationYear: "Graduation Year",
 					},
 
 					addStudent: {
@@ -305,6 +310,8 @@ i18n
 						enrollmentYear: "Enrollment Year",
 						enterEnrollmentYear: "Enter enrollment year",
 						createStudent: "Create Student",
+						graduationYear: "Graduation Year",
+						enterGraduationYear: "Enter graduation year",
 					},
 
 					documents: {
@@ -358,6 +365,7 @@ i18n
 						selectSpecialty: "Select specialty",
 						reset: "Reset Filters",
 						apply: "Apply Filters",
+						graduationYear: "Graduation Year",
 					},
 
 					loading: "Loading...",
@@ -934,6 +942,10 @@ i18n
 							"Êtes-vous sûr de vouloir supprimer {{name}} ? Cette action est irréversible.",
 						deleteSuccess: "Étudiant supprimé avec succès",
 						deleteFailed: "Échec de la suppression de l'étudiant",
+						invalidGraduationYear: "Année de diplômation invalide",
+						graduationBeforeEnrollment:
+							"L'année de diplômation ne peut pas être antérieure à l'année d'inscription",
+						graduationYear: "Année de Diplôme",
 					},
 
 					addStudent: {
@@ -964,6 +976,8 @@ i18n
 						enrollmentYear: "Année d'inscription",
 						enterEnrollmentYear: "Entrez l'année d'inscription",
 						createStudent: "Créer un étudiant",
+						graduationYear: "Année de diplômation",
+						enterGraduationYear: "Entrez l'année de diplômation",
 					},
 
 					documents: {
@@ -1018,6 +1032,7 @@ i18n
 						selectSpecialty: "Sélectionner une spécialité",
 						reset: "Réinitialiser les filtres",
 						apply: "Appliquer les filtres",
+						graduationYear: "Année de Diplôme",
 					},
 
 					loading: "Chargement...",
@@ -1590,6 +1605,10 @@ i18n
 							"هل أنت متأكد أنك تريد حذف {{name}}؟ هذا الإجراء لا يمكن التراجع عنه.",
 						deleteSuccess: "تم حذف الطالب بنجاح",
 						deleteFailed: "فشل في حذف الطالب",
+						invalidGraduationYear: "سنة التخرج غير صالحة",
+						graduationBeforeEnrollment:
+							"لا يمكن أن تكون سنة التخرج قبل سنة التسجيل",
+						graduationYear: "سنة التخرج",
 					},
 
 					addStudent: {
@@ -1619,6 +1638,8 @@ i18n
 						enrollmentYear: "سنة التسجيل",
 						enterEnrollmentYear: "أدخل سنة التسجيل",
 						createStudent: "إنشاء طالب",
+						graduationYear: "سنة التخرج",
+						enterGraduationYear: "أدخل سنة التخرج",
 					},
 
 					documents: {
@@ -1671,6 +1692,7 @@ i18n
 						selectSpecialty: "اختر الاختصاص",
 						reset: "إعادة التصفية",
 						apply: "تطبيق التصفية",
+						graduationYear: "سنة التخرج",
 					},
 
 					loading: "جارٍ التحميل...",
