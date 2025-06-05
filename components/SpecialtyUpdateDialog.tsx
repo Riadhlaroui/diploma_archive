@@ -46,29 +46,35 @@ export function SpecialtyUpdateDialog({
 		e.preventDefault();
 		if (!specialty) return;
 
+		const trimmedName = name.trim();
+
+		if (!trimmedName) {
+			toast.error(
+				t(
+					"editSpecialtyDialog.errors.nameRequired",
+					"Specialty name is required"
+				)
+			);
+			return;
+		}
+
 		try {
-			const existing = await getSpecialtyByName(name, specialty.major);
+			const existing = await getSpecialtyByName(trimmedName, specialty.major);
 			if (existing && existing.id !== specialty.id) {
 				toast.error(
 					<div>
 						<div className="font-semibold">
-							{t(
-								"editSpecialtyDialog.errors.nameExistsTitle",
-								"Specialty name already exists"
-							)}
+							{t("editSpecialtyDialog.errors.nameExistsTitle")}
 						</div>
 						<div className="text-sm">
-							{t(
-								"editSpecialtyDialog.errors.nameExistsDesc",
-								"Please choose a different name."
-							)}
+							{t("editSpecialtyDialog.errors.nameExistsDesc")}
 						</div>
 					</div>
 				);
 				return;
 			}
 
-			updateSpecialty(specialty.id, { name });
+			await updateSpecialty(specialty.id, { name: trimmedName });
 
 			toast.success(
 				t(
