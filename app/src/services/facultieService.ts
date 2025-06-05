@@ -25,6 +25,19 @@ export async function addFaculty(name: string) {
 	}
 }
 
+export async function isFacultyNameTaken(name: string): Promise<boolean> {
+	try {
+		await pb.collection("Archive_faculties").getFirstListItem(`name="${name}"`);
+		return true;
+	} catch (error: any) {
+		if (error.status === 404) {
+			return false; // No matching field found
+		}
+		console.error("Error checking field name:", error);
+		throw error;
+	}
+}
+
 export async function deleteFaculty(id: string) {
 	try {
 		await pb.collection("Archive_faculties").delete(id);

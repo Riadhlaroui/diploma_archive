@@ -1,10 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Separator } from "./ui/separator";
 import { X } from "lucide-react";
-import { addDepartment } from "../app/src/services/departmentService";
+import {
+	addDepartment,
+	isDepartmentNameTaken,
+} from "../app/src/services/departmentService";
 import { toast } from "sonner";
 
 const AddDepartmentDialog = ({
@@ -14,52 +17,78 @@ const AddDepartmentDialog = ({
 	onClose: () => void;
 	facultyId: string;
 }) => {
-	const [name, setName] = useState("");
 	const { t, i18n } = useTranslation();
-
 	const isRtl = i18n.language === "ar";
+	const [name, setName] = useState("");
+	const [nameTaken, setNameTaken] = useState(false);
+	const [checking, setChecking] = useState(false);
+
+	useEffect(() => {
+		if (!name.trim()) {
+			setNameTaken(false);
+			return;
+		}
+
+		const delayDebounce = setTimeout(async () => {
+			setChecking(true);
+			try {
+				const taken = await isDepartmentNameTaken(name.trim(), facultyId);
+				setNameTaken(taken);
+			} catch {
+				setNameTaken(false);
+			} finally {
+				setChecking(false);
+			}
+		}, 500); // debounce delay
+
+		return () => clearTimeout(delayDebounce);
+	}, [name, facultyId]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		if (!name.trim()) {
+		const trimmedName = name.trim();
+
+		if (!trimmedName) {
 			toast.error(t("addDepartment.nameRequired"));
+			return;
+		}
+
+		if (nameTaken) {
+			toast.error(
+				<div className="flex items-center gap-2">
+					<div>
+						<div className="font-semibold text-[15px]">
+							{t("addDepartment.duplicateTitle")}
+						</div>
+						<div className="text-sm">{t("addDepartment.duplicateMessage")}</div>
+					</div>
+				</div>
+			);
 			return;
 		}
 
 		try {
 			await addDepartment({
-				name,
-				code: name.substring(0, 3).toUpperCase(),
+				name: trimmedName,
+				code: trimmedName.substring(0, 3).toUpperCase(),
 				facultyId,
 			});
 			toast.success(t("addDepartment.success"));
 			onClose();
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		} catch (error: any) {
-			if (error.response?.status === 400) {
-				toast.error(
-					<div className="flex items-center gap-2">
-						<div>
-							<div className="font-semibold text-[15px]">
-								{t("addDepartment.duplicateTitle")}
-							</div>
-							<div className="text-sm">
-								{t("addDepartment.duplicateMessage")}
-							</div>
+		} catch {
+			toast.error(
+				<div className="flex items-center gap-2">
+					<div>
+						<div className="font-semibold">
+							{t("addDepartment.errors.genericTitle")}
+						</div>
+						<div className="text-sm">
+							{t("addDepartment.errors.genericDesc")}
 						</div>
 					</div>
-				);
-			} else {
-				toast.error(
-					<div className="flex items-center gap-2">
-						<div>
-							<div className="font-semibold">{t("error.title")}</div>
-							<div className="text-sm">{t("error.message")}</div>
-						</div>
-					</div>
-				);
-			}
+				</div>
+			);
 		}
 	};
 
@@ -77,7 +106,7 @@ const AddDepartmentDialog = ({
 
 				<h2 className="text-xl font-semibold">{t("addDepartment.title")}</h2>
 
-				<form onSubmit={handleSubmit} className="space-y-4 mt-2">
+				<form onSubmit={handleSubmit} className="space-y-4 mt-2" noValidate>
 					<Separator />
 					<div className="flex gap-4 w-full">
 						<div className="relative w-full">
@@ -86,15 +115,25 @@ const AddDepartmentDialog = ({
 								value={name}
 								onChange={(e) => setName(e.target.value)}
 								className={`peer w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none ${
-									isRtl ? "text-right" : "text-left"
+									nameTaken ? "border-red-600" : ""
 								}`}
-								dir={isRtl ? "rtl" : "ltr"}
 								placeholder=""
+								dir={isRtl ? "rtl" : "ltr"}
+								aria-invalid={nameTaken}
+								aria-describedby="name-error"
 							/>
 							<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
 								{t("addDepartment.name")}
 								<span className="text-[#D81212]">*</span>
 							</label>
+							{nameTaken && (
+								<p
+									id="name-error"
+									className="text-red-600 text-sm mt-1 select-none"
+								>
+									{t("addDepartment.duplicateTitle")}
+								</p>
+							)}
 						</div>
 					</div>
 
@@ -110,7 +149,10 @@ const AddDepartmentDialog = ({
 						</button>
 						<button
 							type="submit"
-							className="bg-black text-white px-4 py-2 rounded-[3px] hover:bg-gray-900 hover:cursor-pointer transition-colors duration-200"
+							disabled={nameTaken || checking}
+							className={`bg-black text-white px-4 py-2 rounded-[3px] hover:bg-gray-900 hover:cursor-pointer transition-colors duration-200 ${
+								nameTaken || checking ? "opacity-50 cursor-not-allowed" : ""
+							}`}
 						>
 							{t("actionsDep.submit")}
 						</button>
