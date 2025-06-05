@@ -12,6 +12,34 @@ export async function getDepartmentById(departmentId: string) {
 	}
 }
 
+export async function isDepartmentNameTaken(
+	name: string,
+	facultyId: string
+): Promise<boolean> {
+	if (!name.trim() || !facultyId.trim()) {
+		console.error(
+			"Name and facultyId are required to check for department name."
+		);
+		return false;
+	}
+
+	try {
+		await pb
+			.collection("Archive_departments")
+			.getFirstListItem(
+				`name="${name.trim()}" && facultyId="${facultyId.trim()}"`
+			);
+		return true; // Name exists in this faculty
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	} catch (error: any) {
+		if (error.status === 404) {
+			return false; // Name available
+		}
+		console.error("Error checking department name:", error);
+		throw error;
+	}
+}
+
 export async function getSpecialtiesByDepartment(
 	departmentId: string,
 	page: number = 1,
