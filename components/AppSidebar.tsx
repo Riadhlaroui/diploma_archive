@@ -1,7 +1,6 @@
 "use client";
 import "@/lib/i18n";
 import { useTranslation } from "react-i18next";
-
 import {
 	Home,
 	Inbox,
@@ -10,7 +9,6 @@ import {
 	University,
 	UsersRound,
 } from "lucide-react";
-
 import {
 	Sidebar,
 	SidebarContent,
@@ -23,33 +21,48 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/components/ui/sidebar";
-
 import { ProfileDropDownMenu } from "./ProfileDropDownMenu";
 import { ConnectionStatus } from "./ConnectionStatus";
-
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
 import StudentFormDialog from "./StudentFormDialog";
+import pb from "@/lib/pocketbase"; // Import PocketBase client
 
 export function AppSidebar() {
 	const { t, i18n } = useTranslation();
 	const isRtl = i18n.language === "ar";
-	const { state } = useSidebar(); // 'collapsed' or 'expanded'
+	const { state } = useSidebar();
 	const isCollapsed = state === "collapsed";
-
 	const [openAddStudentDialog, setOpenAddStudentDialog] = useState(false);
+	const [isAdmin, setIsAdmin] = useState(false);
 
-	// Menu items (translated)
-	const items = [
+	// Check if user is admin on component mount
+	useEffect(() => {
+		// Check if user is authenticated and has admin role
+		const checkAdminStatus = () => {
+			if (pb.authStore.isValid) {
+				const user = pb.authStore.model;
+				setIsAdmin(user?.role === "admin"); // Adjust this based on your role field name
+			}
+		};
+
+		checkAdminStatus();
+
+		// Listen to auth changes
+		pb.authStore.onChange(() => {
+			checkAdminStatus();
+		});
+
+		return () => {
+			pb.authStore.onChange(() => {}); // Cleanup listener
+		};
+	}, []);
+
+	// Base menu items
+	const baseItems = [
 		{
 			title: t("sidebar.home"),
 			url: "/dashboard",
 			icon: Home,
-		},
-		{
-			title: t("sidebar.inbox"),
-			url: "/inbox",
-			icon: Inbox,
 		},
 		{
 			title: t("sidebar.search"),
@@ -62,6 +75,18 @@ export function AppSidebar() {
 			icon: Settings,
 		},
 	];
+
+	// Add inbox only for admin
+	const items = isAdmin
+		? [
+				...baseItems,
+				{
+					title: t("sidebar.inbox"),
+					url: "/inbox",
+					icon: Inbox,
+				},
+		  ]
+		: baseItems;
 
 	const studentContent = [
 		{
@@ -102,6 +127,7 @@ export function AppSidebar() {
 					</SidebarGroupContent>
 				</SidebarGroup>
 
+				{/* Rest of your sidebar groups remain the same */}
 				<SidebarGroup>
 					<SidebarGroupLabel>{t("sidebar.manageFaculties")}</SidebarGroupLabel>
 					<SidebarGroupContent>
@@ -111,7 +137,6 @@ export function AppSidebar() {
 									key={item.title}
 									className="flex justify-between items-center"
 								>
-									{/* The main link */}
 									<SidebarMenuButton asChild>
 										<a href={item.url} className="flex items-center gap-2">
 											<item.icon />

@@ -23,6 +23,8 @@ export default function SignIn() {
 	// Multi-language support
 	const { t, i18n } = useTranslation();
 
+	const isRtl = i18n.language === "ar";
+
 	const switchLanguage = (lang: "en" | "fr" | "ar") => {
 		i18n.changeLanguage(lang);
 		localStorage.setItem("lang", lang);
@@ -117,6 +119,7 @@ export default function SignIn() {
 								type="email"
 								className="peer w-full h-[4rem] bg-[#D7DDE3] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3.5px] px-3 pt-6 pb-2 focus:outline-none"
 								placeholder=""
+								dir={isRtl ? "rtl" : "ltr"}
 								onChange={(e) => setEmail(e.target.value)}
 							/>
 							<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
@@ -130,6 +133,7 @@ export default function SignIn() {
 								type={isPasswordVisible ? "text" : "password"}
 								className="peer w-full bg-[#D7DDE3] h-[4rem] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3.5px] px-3 pt-6 pb-2 focus:outline-none placeholder-transparent"
 								onChange={(e) => setPassword(e.target.value)}
+								dir={isRtl ? "rtl" : "ltr"} // Add direction based on language
 							/>
 							<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
 								{t("password")}
@@ -138,7 +142,9 @@ export default function SignIn() {
 							<button
 								type="button"
 								onClick={togglePasswordVisibility}
-								className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+								className={`absolute inset-y-0 ${
+									isRtl ? "left-3 mt-5" : "right-3"
+								} flex items-center text-gray-500`}
 							>
 								{isPasswordVisible ? (
 									<EyeOff className="w-5 h-5" />
