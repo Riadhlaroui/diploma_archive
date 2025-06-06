@@ -653,6 +653,11 @@ i18n
 						documentRemovedPending: "Document removed from pending changes",
 						allChangesSaved: "All changes saved successfully",
 						failedToSaveChanges: "Failed to save changes",
+						graduationYear: "Graduation Year",
+						invalidEnrollmentYear: "Invalid enrollment year format",
+						invalidGraduationYear: "Invalid graduation year format",
+						yearValidationError:
+							"Enrollment year must be before graduation year",
 					},
 
 					search: {
@@ -1320,6 +1325,11 @@ i18n
 						allChangesSaved:
 							"Toutes les modifications ont été enregistrées avec succès",
 						failedToSaveChanges: "Échec de l'enregistrement des modifications",
+						graduationYear: "Année de Diplôme",
+						invalidEnrollmentYear: "Format d'année d'inscription invalide",
+						invalidGraduationYear: "Format d'année de diplôme invalide",
+						yearValidationError:
+							"L'année d'inscription doit être antérieure à l'année de diplôme",
 					},
 
 					search: {
@@ -1977,6 +1987,10 @@ i18n
 						documentRemovedPending: "تمت إزالة الوثيقة من التغييرات المعلقة",
 						allChangesSaved: "تم حفظ جميع التغييرات بنجاح",
 						failedToSaveChanges: "فشل حفظ التغييرات",
+						graduationYear: "سنة التخرج",
+						invalidEnrollmentYear: "صيغة سنة التسجيل غير صالحة",
+						invalidGraduationYear: "صيغة سنة التخرج غير صالحة",
+						yearValidationError: "يجب أن تكون سنة التسجيل قبل سنة التخرج",
 					},
 
 					search: {

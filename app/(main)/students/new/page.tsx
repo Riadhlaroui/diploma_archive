@@ -325,10 +325,10 @@ const CreateStudentPage = () => {
 					<div className="mb-6">
 						<button
 							onClick={() => router.back()}
-							className="mb-4 inline-flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+							className="mb-4 flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-gray-100 hover:underline transition-colors hover:cursor-pointer"
 						>
 							<ArrowLeft className="h-4 w-4" />
-							<span>{t("addStudent.back")}</span>
+							{t("common.back")}
 						</button>
 						<h1 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
 							{t("addStudent.title")}

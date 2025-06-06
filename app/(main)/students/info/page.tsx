@@ -33,6 +33,7 @@ interface Student {
 	lastName: string;
 	dateOfBirth: string;
 	enrollmentYear: string;
+	graduationYear: string;
 	created: string;
 	expand?: {
 		fieldId?: { name: string };
@@ -116,6 +117,7 @@ const StudentInfoPage = () => {
 				lastName: studentData.lastName,
 				dateOfBirth: studentData.dateOfBirth,
 				enrollmentYear: studentData.enrollmentYear,
+				graduationYear: studentData.graduationYear,
 				created: studentData.created,
 				expand: studentData.expand,
 			});
@@ -365,6 +367,11 @@ const StudentInfoSection: React.FC<StudentInfoSectionProps> = ({
 				<InfoField
 					label={t("students.enrollmentYear")}
 					value={student.enrollmentYear}
+				/>
+
+				<InfoField
+					label={t("students.graduationYear")}
+					value={student.graduationYear || "N/A"}
 				/>
 			</div>
 			<div className="space-y-4">
