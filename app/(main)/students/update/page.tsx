@@ -32,6 +32,7 @@ interface Student {
 	lastName: string;
 	dateOfBirth: string;
 	enrollmentYear: string;
+	graduationYear: string;
 	created: string;
 	fieldId: string;
 	majorId: string;
@@ -120,6 +121,7 @@ const StudentUpdatePage = () => {
 		lastName: "",
 		dateOfBirth: "",
 		enrollmentYear: "",
+		graduationYear: "",
 	});
 
 	// ADDED: State for delete confirmation
@@ -146,6 +148,7 @@ const StudentUpdatePage = () => {
 				lastName: studentData.lastName,
 				dateOfBirth: studentData.dateOfBirth,
 				enrollmentYear: studentData.enrollmentYear,
+				graduationYear: studentData.graduationYear,
 				created: studentData.created,
 				fieldId: studentData.fieldId,
 				majorId: studentData.majorId,
@@ -160,6 +163,7 @@ const StudentUpdatePage = () => {
 					.toISOString()
 					.split("T")[0],
 				enrollmentYear: studentData.enrollmentYear,
+				graduationYear: studentData.graduationYear,
 			});
 
 			// Extract academic hierarchy from expanded data
@@ -344,6 +348,36 @@ const StudentUpdatePage = () => {
 
 	const handleUpdateStudent = async () => {
 		if (!studentId) return;
+
+		const dob = new Date(form.dateOfBirth);
+		if (isNaN(dob.getTime())) {
+			toast.error(t("students.invalidDOB"));
+			return;
+		}
+		if (dob > new Date()) {
+			toast.error(t("students.futureDOB"));
+			return;
+		}
+
+		if (form.graduationYear) {
+			const enrollmentYear = parseInt(form.enrollmentYear);
+			const graduationYear = parseInt(form.graduationYear);
+
+			if (isNaN(enrollmentYear)) {
+				toast.error(t("updateStudent.invalidEnrollmentYear"));
+				return;
+			}
+
+			if (isNaN(graduationYear)) {
+				toast.error(t("updateStudent.invalidGraduationYear"));
+				return;
+			}
+
+			if (enrollmentYear >= graduationYear) {
+				toast.error(t("updateStudent.yearValidationError"));
+				return;
+			}
+		}
 
 		setIsUploading(true);
 		try {
@@ -689,9 +723,20 @@ const StudentUpdatePage = () => {
 								<Input
 									value={form.enrollmentYear}
 									min="1900"
-									max={new Date().getFullYear()}
+									max={new Date().getFullYear() + 10}
 									onChange={(e) =>
 										setForm({ ...form, enrollmentYear: e.target.value })
+									}
+								/>
+							</div>
+							<div className="space-y-1">
+								<Label>{t("updateStudent.graduationYear")}</Label>
+								<Input
+									value={form.graduationYear}
+									min="1900"
+									max="2100"
+									onChange={(e) =>
+										setForm({ ...form, graduationYear: e.target.value })
 									}
 								/>
 							</div>
