@@ -388,7 +388,6 @@ const StudentPage = () => {
 						<div className="space-y-1">
 							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
 								{t("addStudent.matricule")}{" "}
-								<span className="text-red-500">*</span>
 							</label>
 							<input
 								type="text"
@@ -476,7 +475,6 @@ const StudentPage = () => {
 							<div className="space-y-1">
 								<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
 									{t("addStudent.field")}{" "}
-									<span className="text-red-500">*</span>
 								</label>
 								<Select
 									value={selectedField}
@@ -505,7 +503,6 @@ const StudentPage = () => {
 							<div className="space-y-1">
 								<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
 									{t("addStudent.major")}{" "}
-									<span className="text-red-500">*</span>
 								</label>
 								<Select
 									value={selectedMajor}
@@ -533,7 +530,6 @@ const StudentPage = () => {
 							<div className="space-y-1">
 								<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
 									{t("addStudent.specialty")}{" "}
-									<span className="text-red-500">*</span>
 								</label>
 								<Select
 									value={selectedSpecialty}
