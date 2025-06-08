@@ -20,7 +20,6 @@ import {
 	RefreshCcw,
 	Search,
 	SquarePlus,
-	Trash2,
 	UserRoundPen,
 	X,
 } from "lucide-react";
@@ -691,18 +690,6 @@ const StudentPage = () => {
 											aria-label="Edit student"
 										>
 											<UserRoundPen size={16} />
-										</Button>
-										<Button
-											size="icon"
-											variant="destructive"
-											className="h-8 w-8"
-											onClick={(e) => {
-												e.stopPropagation();
-												console.log("Delete student:", student.id);
-											}}
-											aria-label="Delete student"
-										>
-											<Trash2 size={16} />
 										</Button>
 									</div>
 								</TableCell>
