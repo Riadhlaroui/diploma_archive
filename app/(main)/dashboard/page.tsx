@@ -98,12 +98,12 @@ export default function DashboardPage() {
 							label={t("dashboard.stats.departments")}
 						/>
 						<StatCard
-							value={stats.majors}
-							label={t("dashboard.stats.majors")}
-						/>
-						<StatCard
 							value={stats.fields}
 							label={t("dashboard.stats.fields")}
+						/>
+						<StatCard
+							value={stats.majors}
+							label={t("dashboard.stats.majors")}
 						/>
 						<StatCard
 							value={stats.specialties}

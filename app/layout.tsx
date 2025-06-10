@@ -6,6 +6,7 @@ import { Cairo, Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { cookies } from "next/headers";
+import { ThemeProvider } from "@/components/theme-provider"; // ✅ import
 
 const cairo = Cairo({
 	subsets: ["arabic", "latin"],
@@ -41,8 +42,15 @@ export default async function RootLayout({
 			suppressHydrationWarning
 		>
 			<body className="font-sans">
-				{children}
-				<Toaster richColors />
+				<ThemeProvider
+					attribute="class"
+					defaultTheme="light" // ✅ default to light
+					enableSystem={false} // ✅ force light as default
+					disableTransitionOnChange
+				>
+					{children}
+					<Toaster richColors />
+				</ThemeProvider>
 			</body>
 		</html>
 	);
