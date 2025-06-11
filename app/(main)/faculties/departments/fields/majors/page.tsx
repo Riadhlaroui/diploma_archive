@@ -28,8 +28,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
 	Loader2,
-	Check,
-	Copy,
 	Trash2,
 	UserRoundPen,
 	RefreshCcw,
@@ -62,7 +60,6 @@ export default function MajorsPage() {
 	const [loading, setLoading] = useState(true);
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
-	const [copiedId, setCopiedId] = useState("");
 
 	const [inputValue, setInputValue] = useState("");
 	const [searchTerm, setSearchTerm] = useState("");
@@ -244,9 +241,6 @@ export default function MajorsPage() {
 				<TableHeader>
 					<TableRow>
 						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("majors.table.code")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
 							{t("majors.table.name")}
 						</TableHead>
 						<TableHead className={isRtl ? "text-right" : "text-left"}>
@@ -263,7 +257,7 @@ export default function MajorsPage() {
 				<TableBody>
 					{loading ? (
 						<TableRow>
-							<TableCell colSpan={5} className="text-center py-6">
+							<TableCell colSpan={4} className="text-center py-6">
 								<Loader2 className="animate-spin mx-auto text-gray-500" />
 								<span>{t("loading")}</span>
 							</TableCell>
@@ -279,25 +273,6 @@ export default function MajorsPage() {
 									);
 								}}
 							>
-								<TableCell>
-									<span className="inline-flex items-center gap-2 bg-gray-200 px-3 py-1 rounded-full text-sm">
-										{major.id}
-										{copiedId === major.id ? (
-											<Check size={14} className="text-green-600" />
-										) : (
-											<button
-												onClick={() => {
-													navigator.clipboard.writeText(major.id);
-													setCopiedId(major.id);
-													setTimeout(() => setCopiedId(""), 1500);
-												}}
-												className="hover:text-blue-500"
-											>
-												<Copy size={14} />
-											</button>
-										)}
-									</span>
-								</TableCell>
 								<TableCell>{major.name}</TableCell>
 								<TableCell>{major.specialtiesCount ?? 0}</TableCell>
 								<TableCell>
@@ -327,7 +302,7 @@ export default function MajorsPage() {
 						))
 					) : (
 						<TableRow>
-							<TableCell colSpan={5} className="text-center py-6 text-gray-500">
+							<TableCell colSpan={4} className="text-center py-6 text-gray-500">
 								{t("majors.notFound")}
 							</TableCell>
 						</TableRow>

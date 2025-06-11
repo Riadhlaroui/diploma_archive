@@ -157,9 +157,6 @@ const FacultiesList = () => {
 				<TableHeader>
 					<TableRow>
 						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("faculties.code")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
 							{t("faculties.name")}
 						</TableHead>
 						<TableHead className={isRtl ? "text-right" : "text-left"}>
@@ -174,7 +171,7 @@ const FacultiesList = () => {
 				<TableBody>
 					{loading ? (
 						<TableRow>
-							<TableCell colSpan={4} className="text-center py-6">
+							<TableCell colSpan={3} className="text-center py-6">
 								<Loader2 className="mx-auto animate-spin text-gray-500" />
 								<span className="text-sm text-gray-500 mt-2 block">
 									{t("loading")}
@@ -190,26 +187,6 @@ const FacultiesList = () => {
 									router.push(`/faculties/departments?facultyId=${faculty.id}`)
 								}
 							>
-								<TableCell>
-									<span className="inline-flex items-center gap-2 rounded-full bg-gray-200 px-3 py-1 text-sm font-medium">
-										{faculty.id}
-										{copiedId === faculty.id ? (
-											<Check size={14} className="text-green-600" />
-										) : (
-											<button
-												onClick={() => {
-													navigator.clipboard.writeText(faculty.id);
-													setCopiedId(faculty.id);
-													setTimeout(() => setCopiedId(""), 1500);
-												}}
-												aria-label={t("actions.copyId")}
-												className="hover:text-blue-500"
-											>
-												<Copy size={14} />
-											</button>
-										)}
-									</span>
-								</TableCell>
 								<TableCell>{faculty.name}</TableCell>
 								<TableCell>{faculty.departmentCount ?? 0}</TableCell>
 								<TableCell>
@@ -236,7 +213,7 @@ const FacultiesList = () => {
 						))
 					) : (
 						<TableRow>
-							<TableCell colSpan={4} className="text-center py-6 text-gray-500">
+							<TableCell colSpan={3} className="text-center py-6 text-gray-500">
 								{t("faculties.notFound")}
 							</TableCell>
 						</TableRow>

@@ -27,8 +27,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
 	Loader2,
-	Check,
-	Copy,
 	Trash2,
 	UserRoundPen,
 	RefreshCcw,
@@ -62,7 +60,6 @@ export default function FieldsPage() {
 	const [loading, setLoading] = useState(true);
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
-	const [copiedId, setCopiedId] = useState("");
 
 	const [inputValue, setInputValue] = useState("");
 	const [searchTerm, setSearchTerm] = useState("");
@@ -234,9 +231,6 @@ export default function FieldsPage() {
 				<TableHeader>
 					<TableRow>
 						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("fields.code")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
 							{t("fields.name")}
 						</TableHead>
 						<TableHead className={isRtl ? "text-right" : "text-left"}>
@@ -253,7 +247,7 @@ export default function FieldsPage() {
 				<TableBody>
 					{loading ? (
 						<TableRow>
-							<TableCell colSpan={5} className="text-center py-6">
+							<TableCell colSpan={4} className="text-center py-6">
 								<Loader2 className="mx-auto animate-spin text-gray-500" />
 								<span className="text-sm text-gray-500 mt-2 block">
 									{t("loading")}
@@ -271,25 +265,6 @@ export default function FieldsPage() {
 									);
 								}}
 							>
-								<TableCell>
-									<span className="inline-flex items-center gap-2 rounded-full bg-gray-200 px-3 py-1 text-sm font-medium">
-										{field.id}
-										{copiedId === field.id ? (
-											<Check size={14} className="text-green-600" />
-										) : (
-											<button
-												onClick={() => {
-													navigator.clipboard.writeText(field.id);
-													setCopiedId(field.id);
-													setTimeout(() => setCopiedId(""), 1500);
-												}}
-												className="hover:text-blue-500"
-											>
-												<Copy size={14} />
-											</button>
-										)}
-									</span>
-								</TableCell>
 								<TableCell>{field.name}</TableCell>
 								<TableCell>{field.majorsCount ?? 0}</TableCell>
 								<TableCell>
@@ -317,7 +292,7 @@ export default function FieldsPage() {
 						))
 					) : (
 						<TableRow>
-							<TableCell colSpan={5} className="text-center py-6 text-gray-500">
+							<TableCell colSpan={4} className="text-center py-6 text-gray-500">
 								{t("fields.notFound")}
 							</TableCell>
 						</TableRow>
@@ -325,7 +300,7 @@ export default function FieldsPage() {
 				</TableBody>
 				<TableFooter>
 					<TableRow>
-						<TableCell colSpan={5} className="text-center py-3">
+						<TableCell colSpan={4} className="text-center py-3">
 							<div className="flex items-center justify-center gap-4">
 								<Button
 									variant="outline"
