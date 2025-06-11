@@ -12,13 +12,14 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import {
-	getDepartmentByName,
+	getDepartmentByNameAndFaculty,
 	updateDepartment,
 } from "@/app/src/services/departmentService";
 
 type Department = {
 	id: string;
 	name: string;
+	facultyId: string; // Add facultyId
 };
 
 type Props = {
@@ -42,7 +43,12 @@ export function DepartmentUpdateDialog({ open, onOpenChange, user }: Props) {
 		if (!user) return;
 
 		try {
-			const existing = await getDepartmentByName(name);
+			// Use the new function with facultyId
+			const existing = await getDepartmentByNameAndFaculty(
+				name,
+				user.facultyId
+			);
+
 			if (existing && existing.id !== user.id) {
 				toast.error(
 					<div>
