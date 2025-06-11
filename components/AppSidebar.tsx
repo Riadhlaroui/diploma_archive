@@ -1,14 +1,7 @@
 "use client";
 import "@/lib/i18n";
 import { useTranslation } from "react-i18next";
-import {
-	Home,
-	Inbox,
-	Search,
-	Settings,
-	University,
-	UsersRound,
-} from "lucide-react";
+import { Home, Inbox, Settings, University, UsersRound } from "lucide-react";
 import {
 	Sidebar,
 	SidebarContent,
@@ -64,11 +57,7 @@ export function AppSidebar() {
 			url: "/dashboard",
 			icon: Home,
 		},
-		{
-			title: t("sidebar.search"),
-			url: "#",
-			icon: Search,
-		},
+
 		{
 			title: t("sidebar.settings"),
 			url: "/settings",
