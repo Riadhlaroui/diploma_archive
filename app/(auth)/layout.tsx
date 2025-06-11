@@ -10,8 +10,8 @@ export default function AuthLayout({
 		<main className="min-h-screen flex items-center justify-center">
 			<ThemeProvider
 				attribute="class"
-				defaultTheme="light" // ✅ Set default to light
-				enableSystem={false} // ❌ Disable system theme if you want light as true default
+				defaultTheme="light"
+				enableSystem={false}
 				disableTransitionOnChange
 			>
 				{children}
