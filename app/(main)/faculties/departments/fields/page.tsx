@@ -318,7 +318,7 @@ export default function FieldsPage() {
 					) : (
 						<TableRow>
 							<TableCell colSpan={5} className="text-center py-6 text-gray-500">
-								Fields not found
+								{t("fields.notFound")}
 							</TableCell>
 						</TableRow>
 					)}
