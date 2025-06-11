@@ -16,25 +16,25 @@ export async function isDepartmentNameTaken(
 	name: string,
 	facultyId: string
 ): Promise<boolean> {
-	if (!name.trim() || !facultyId.trim()) {
-		console.error(
-			"Name and facultyId are required to check for department name."
-		);
+	const trimmedName = name.trim();
+	const trimmedFacultyId = facultyId.trim();
+
+	if (!trimmedName || !trimmedFacultyId) {
+		console.error("Name and facultyId are required");
 		return false;
 	}
 
 	try {
+		// Case-insensitive search
 		await pb
 			.collection("Archive_departments")
 			.getFirstListItem(
-				`name="${name.trim()}" && facultyId="${facultyId.trim()}"`
+				`(name~"${trimmedName}" || name="${trimmedName}") && facultyId="${trimmedFacultyId}"`
 			);
-		return true; // Name exists in this faculty
+		return true;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (error: any) {
-		if (error.status === 404) {
-			return false; // Name available
-		}
+		if (error.status === 404) return false;
 		console.error("Error checking department name:", error);
 		throw error;
 	}
@@ -170,18 +170,28 @@ export async function updateDepartment(
 	}
 }
 
-export async function getDepartmentByName(name: string) {
+export async function getDepartmentByNameAndFaculty(
+	name: string,
+	facultyId: string
+) {
+	if (!name.trim() || !facultyId.trim()) {
+		console.error("Name and facultyId are required");
+		return null;
+	}
+
 	try {
 		const result = await pb
 			.collection("Archive_departments")
-			.getFirstListItem(`name = "${name}"`);
+			.getFirstListItem(
+				`name="${name.trim()}" && facultyId="${facultyId.trim()}"`
+			);
 		return result;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (error: any) {
 		if (error.status === 404) {
 			return null;
 		}
-		console.error("Error fetching department by name:", error);
-		throw new Error("Failed to fetch department by name.");
+		console.error("Error fetching department by name and faculty:", error);
+		throw new Error("Failed to fetch department by name and faculty.");
 	}
 }
