@@ -14,8 +14,6 @@ import {
 	TableFooter,
 } from "@/components/ui/table";
 import {
-	Check,
-	Copy,
 	Loader2,
 	RefreshCcw,
 	Search,
@@ -62,8 +60,6 @@ export default function SpecialtiesPage() {
 	const [specialties, setSpecialties] = useState<any[]>([]);
 	const [majorName, setMajorName] = useState<string>("");
 	const [loading, setLoading] = useState(true);
-
-	const [copiedId, setCopiedId] = useState("");
 
 	const [inputValue, setInputValue] = useState(""); // What user types
 	const [searchTerm, setSearchTerm] = useState(""); // Triggers search
@@ -271,9 +267,6 @@ export default function SpecialtiesPage() {
 				<TableHeader>
 					<TableRow>
 						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("specialties.code")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
 							{t("specialties.name")}
 						</TableHead>
 						<TableHead className={isRtl ? "text-right" : "text-left"}>
@@ -287,32 +280,13 @@ export default function SpecialtiesPage() {
 				<TableBody>
 					{loading ? (
 						<TableRow>
-							<TableCell colSpan={4} className="text-center py-6">
+							<TableCell colSpan={3} className="text-center py-6">
 								<Loader2 className="mx-auto animate-spin text-gray-500" />
 							</TableCell>
 						</TableRow>
 					) : specialties.length > 0 ? (
 						specialties.map((specialtie) => (
 							<TableRow key={specialtie.id}>
-								<TableCell>
-									<span className="inline-flex items-center gap-2 bg-gray-200 px-3 py-1 rounded-full">
-										{specialtie.id}
-										{copiedId === specialtie.id ? (
-											<Check size={14} className="text-green-600" />
-										) : (
-											<button
-												onClick={() => {
-													navigator.clipboard.writeText(specialtie.id);
-													setCopiedId(specialtie.id);
-													setTimeout(() => setCopiedId(""), 1500);
-												}}
-												aria-label={t("actions.copyId")}
-											>
-												<Copy size={14} />
-											</button>
-										)}
-									</span>
-								</TableCell>
 								<TableCell>{specialtie.name}</TableCell>
 
 								<TableCell>
@@ -345,7 +319,7 @@ export default function SpecialtiesPage() {
 						))
 					) : (
 						<TableRow>
-							<TableCell colSpan={4} className="text-center py-6 text-gray-500">
+							<TableCell colSpan={3} className="text-center py-6 text-gray-500">
 								{t("specialties.notFound")}
 							</TableCell>
 						</TableRow>
@@ -353,7 +327,7 @@ export default function SpecialtiesPage() {
 				</TableBody>
 				<TableFooter>
 					<TableRow>
-						<TableCell colSpan={4} className="text-center py-3">
+						<TableCell colSpan={3} className="text-center py-3">
 							<div className="flex justify-center items-center gap-4">
 								<Button
 									variant="outline"

@@ -28,8 +28,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
 	Loader2,
-	Check,
-	Copy,
 	Trash2,
 	UserRoundPen,
 	RefreshCcw,
@@ -62,7 +60,6 @@ export default function DepartmentsPage() {
 	const [loading, setLoading] = useState(true);
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
-	const [copiedId, setCopiedId] = useState("");
 
 	const [inputValue, setInputValue] = useState(""); // What user types
 	const [searchTerm, setSearchTerm] = useState(""); // Triggers search
@@ -238,9 +235,6 @@ export default function DepartmentsPage() {
 				<TableHeader>
 					<TableRow>
 						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("departments.code")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
 							{t("departments.name")}
 						</TableHead>
 						<TableHead className={isRtl ? "text-right" : "text-left"}>
@@ -258,7 +252,7 @@ export default function DepartmentsPage() {
 				<TableBody>
 					{loading ? (
 						<TableRow>
-							<TableCell colSpan={5} className="text-center py-6">
+							<TableCell colSpan={4} className="text-center py-6">
 								<Loader2 className="mx-auto animate-spin text-gray-500" />
 								<span className="text-sm text-gray-500 mt-2 block">
 									{t("loading")}
@@ -276,26 +270,6 @@ export default function DepartmentsPage() {
 									);
 								}}
 							>
-								<TableCell>
-									<span className="inline-flex items-center gap-2 rounded-full bg-gray-200 px-3 py-1 text-sm font-medium">
-										{department.id}
-										{copiedId === department.id ? (
-											<Check size={14} className="text-green-600" />
-										) : (
-											<button
-												onClick={() => {
-													navigator.clipboard.writeText(department.id);
-													setCopiedId(department.id);
-													setTimeout(() => setCopiedId(""), 1500);
-												}}
-												aria-label={t("actions.copyId")}
-												className="hover:text-blue-500"
-											>
-												<Copy size={14} />
-											</button>
-										)}
-									</span>
-								</TableCell>
 								<TableCell>{department.name}</TableCell>
 								<TableCell>{department.fieldsCount ?? 0}</TableCell>
 								<TableCell>
@@ -334,7 +308,7 @@ export default function DepartmentsPage() {
 				</TableBody>
 				<TableFooter>
 					<TableRow>
-						<TableCell colSpan={5} className="text-center py-3">
+						<TableCell colSpan={4} className="text-center py-3">
 							<div className="flex items-center justify-center gap-4">
 								<Button
 									variant="outline"
