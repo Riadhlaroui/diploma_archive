@@ -15,8 +15,15 @@ import { getInbox, InboxRecord } from "@/app/src/services/userService";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import pb from "@/lib/pocketbase";
 
 const AuditLogTable = () => {
+	const router = useRouter();
+	const [userRole, setUserRole] = useState<string | null>(null);
+	const [loadingAuth, setLoadingAuth] = useState(true);
 	const { t, i18n } = useTranslation();
 
 	const isRtl = i18n.language === "ar";
@@ -47,6 +54,40 @@ const AuditLogTable = () => {
 	useEffect(() => {
 		fetchData();
 	}, [page]);
+
+	// Check authentication and user role
+	useEffect(() => {
+		// Ensure we're in client-side environment
+		if (typeof window !== "undefined") {
+			// Check if we have a valid auth store
+			if (pb.authStore.isValid) {
+				setUserRole(pb.authStore.model?.role || null);
+				setLoadingAuth(false);
+			} else {
+				router.replace("/login");
+			}
+		}
+	}, []);
+
+	// Redirect staff users
+	useEffect(() => {
+		if (userRole === "staff") {
+			toast.error(t("noPermission"));
+			router.replace("/dashboard");
+		}
+	}, [userRole, router]);
+
+	// Show loader while checking auth
+	if (loadingAuth) return <Skeleton className="w-screen h-screen" />;
+
+	// Block staff users from seeing content
+	if (userRole === "staff") {
+		return (
+			<div className="flex justify-center items-center h-screen">
+				<p>{t("redirecting")}</p>
+			</div>
+		);
+	}
 
 	return (
 		<div className="flex flex-col h-full mt-10 p-6 rounded-xl shadow-lg">

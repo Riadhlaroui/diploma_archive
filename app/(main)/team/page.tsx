@@ -108,12 +108,12 @@ const StaffList = () => {
 	useEffect(() => {
 		if (userRole === "staff") {
 			toast.error(t("noPermission"));
-			router.replace("/");
+			router.replace("/dashboard");
 		}
 	}, [userRole, router]);
 
 	// Show loader while checking auth
-	if (loadingAuth) return <Skeleton className="w-full h-full" />;
+	if (loadingAuth) return <Skeleton className="w-screen h-screen" />;
 
 	// Block staff users from seeing content
 	if (userRole === "staff") {
