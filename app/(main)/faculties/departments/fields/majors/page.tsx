@@ -114,12 +114,14 @@ export default function MajorsPage() {
 
 	const confirmDelete = async () => {
 		if (!majorToDelete) return;
+
 		try {
 			await deleteMajor(majorToDelete.id);
-			toast.success(`Major '${majorToDelete.name}' deleted successfully!`);
+			toast.success(t("majors.deleteSuccess", { name: majorToDelete.name }));
 		} catch {
-			toast.error(`Failed to delete major '${majorToDelete.name}'.`);
+			toast.error(t("majors.deleteError", { name: majorToDelete.name }));
 		}
+
 		setShowConfirmDialog(false);
 		setMajorToDelete(null);
 		await fetchMajors();

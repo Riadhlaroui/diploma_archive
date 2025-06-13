@@ -127,11 +127,13 @@ export default function DepartmentsPage() {
 		try {
 			await deleteDepartment(departmentToDelete.id);
 			toast.success(
-				`Department '${departmentToDelete.name}' deleted successfully!`
+				t("departments.deleteSuccess", { name: departmentToDelete.name })
 			);
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		} catch (error) {
-			toast.error(`Failed to delete department '${departmentToDelete.name}'.`);
+			toast.error(
+				t("departments.deleteError", { name: departmentToDelete.name })
+			);
 		}
 
 		setShowConfirmDialog(false);

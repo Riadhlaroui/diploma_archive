@@ -71,9 +71,11 @@ const FacultiesList = () => {
 
 		try {
 			await deleteFaculty(facultyToDelete.id);
-			toast.success(`Faculty '${facultyToDelete.name}' deleted successfully!`);
+			toast.success(
+				t("faculties.deleteSuccess", { name: facultyToDelete.name })
+			);
 		} catch (error) {
-			toast.error(`Failed to delete faculty '${facultyToDelete.name}'.`);
+			toast.error(t("faculties.deleteError", { name: facultyToDelete.name }));
 		}
 
 		setShowConfirmDialog(false);
