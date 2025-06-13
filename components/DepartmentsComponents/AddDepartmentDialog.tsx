@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Separator } from "./ui/separator";
+import { Separator } from "../ui/separator";
 import { X } from "lucide-react";
 import {
 	addDepartment,
 	isDepartmentNameTaken,
-} from "../app/src/services/departmentService";
+} from "../../app/src/services/departmentService";
 import { toast } from "sonner";
 
 const AddDepartmentDialog = ({

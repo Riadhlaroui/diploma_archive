@@ -31,8 +31,8 @@ import { clearAurthStore } from "../app/src/shared/utils/getUserInfo";
 
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
-import AddStaffDialog from "./AddStaffDialog";
-import DeleteStaffDialog from "./DeleteStaffDialog";
+import AddStaffDialog from "./StaffComponents/AddStaffDialog";
+import DeleteStaffDialog from "./StaffComponents/DeleteStaffDialog";
 import { getCurrentUser } from "@/app/src/services/userService";
 import { User } from "@/app/src/core/domain/entities/User";
 

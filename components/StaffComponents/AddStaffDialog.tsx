@@ -8,11 +8,12 @@ import {
 	SelectLabel,
 	SelectTrigger,
 	SelectValue,
-} from "./ui/select";
+} from "../ui/select";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
-import { createUser } from "./../app/src/services/userService";
-import { Separator } from "./ui/separator";
+import { createUser } from "../../app/src/services/userService";
+
+import { Separator } from "../ui/separator";
 
 type Props = {
 	open: boolean;
