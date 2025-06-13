@@ -42,11 +42,11 @@ import { Button } from "@/components/ui/button";
 import { getMajorById } from "@/app/src/services/majorService";
 import { getSpecialtiesByMajor } from "@/app/src/services/specialtyService";
 
-import { SpecialtyUpdateDialog } from "@/components/SpecialtyUpdateDialog";
+import { SpecialtyUpdateDialog } from "@/components/SpecialtyComponents/SpecialtyUpdateDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { toast } from "sonner";
 import { deleteSpecialtyById } from "@/app/src/services/specialtyService";
-import AddSpecialtyDialog from "@/components/AddSpecialtyDialog";
+import AddSpecialtyDialog from "@/components/SpecialtyComponents/AddSpecialtyDialog";
 
 export default function SpecialtiesPage() {
 	const searchParams = useSearchParams();

@@ -28,8 +28,8 @@ import {
 	getFaculties,
 	deleteFaculty,
 } from "@/app/src/services/facultieService";
-import AddFacultyDialog from "@/components/AddFacultyDialog";
-import { FacultyUpdateDialog } from "@/components/FacultyUpdateDialog";
+import AddFacultyDialog from "@/components/FacultyComponents/AddFacultyDialog";
+import { FacultyUpdateDialog } from "@/components/FacultyComponents/FacultyUpdateDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

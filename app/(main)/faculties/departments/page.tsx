@@ -39,8 +39,8 @@ import { useTranslation } from "react-i18next";
 import { getFacultyById } from "@/app/src/services/facultieService";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import AddDepartmentDialog from "@/components/AddDepartmentDialog";
-import { DepartmentUpdateDialog } from "@/components/DepartmentUpdateDialog";
+import AddDepartmentDialog from "@/components/DepartmentsComponents/AddDepartmentDialog";
+import { DepartmentUpdateDialog } from "@/components/DepartmentsComponents/DepartmentUpdateDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { toast } from "sonner";
 
