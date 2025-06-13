@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Separator } from "./ui/separator";
+import { Separator } from "../ui/separator";
 import { X } from "lucide-react";
 import {
 	addSpecialty,
 	isSpecialtyNameTaken,
-} from "../app/src/services/specialtyService";
+} from "../../app/src/services/specialtyService";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 

@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { getUsers, deleteUsers } from "@/app/src/services/userService";
-import { User } from "../app/src/core/domain/entities/User";
+import { User } from "../../app/src/core/domain/entities/User";
 import { Search, ShieldUser, X } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "./ui/separator";
+import { Separator } from "../ui/separator";
 import { toast } from "sonner";
-import ConfirmDialog from "./ConfirmDialog";
+import ConfirmDialog from "../ConfirmDialog";
 import { useTranslation } from "react-i18next";
 
 type Props = {
