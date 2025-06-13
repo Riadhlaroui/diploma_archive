@@ -13,6 +13,8 @@ i18n
 		resources: {
 			en: {
 				translation: {
+					noPermission: "You don't have permission to access this page",
+					redirecting: "Redirecting...",
 					welcome: "Welcome back!",
 					email: "Email",
 					password: "Password",
@@ -343,6 +345,8 @@ i18n
 						add: "Add",
 						adding: "Adding...",
 						cancel: "Cancel",
+						missingFields: "Please select a document type and file",
+						success: "Document added to pending changes",
 					},
 
 					filterPanel: {
@@ -686,6 +690,8 @@ i18n
 			},
 			fr: {
 				translation: {
+					noPermission: "Vous n'avez pas la permission d'accéder à cette page",
+					redirecting: "Redirection en cours...",
 					welcome: "Bon retour!",
 					email: "E-mail",
 					password: "Mot de passe",
@@ -1016,6 +1022,9 @@ i18n
 						add: "Ajouter",
 						adding: "Ajout...",
 						cancel: "Annuler",
+						missingFields:
+							"Veuillez sélectionner un type de document et un fichier",
+						success: "Document ajouté aux modifications en attente",
 					},
 					filterPanel: {
 						title: "Rechercher et filtrer les étudiants",
@@ -1360,6 +1369,8 @@ i18n
 			},
 			ar: {
 				translation: {
+					noPermission: "ليس لديك إذن للوصول إلى هذه الصفحة",
+					redirecting: "جاري إعادة التوجيه...",
 					welcome: "مرحبًا بعودتك!",
 					email: "البريد الإلكتروني",
 					password: "كلمة المرور",
@@ -1680,6 +1691,8 @@ i18n
 						add: "إضافة",
 						adding: "جارٍ الإضافة...",
 						cancel: "إلغاء",
+						missingFields: "الرجاء تحديد نوع المستند والملف",
+						success: "تمت إضافة المستند إلى التغييرات المعلقة",
 					},
 
 					filterPanel: {

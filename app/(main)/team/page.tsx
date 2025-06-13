@@ -32,8 +32,15 @@ import AddStaffDialog from "@/components/AddStaffDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { toast } from "sonner";
 import { UserUpdateDialog } from "@/components/UserUpdateDialog";
+import { useRouter } from "next/navigation";
+import pb from "@/lib/pocketbase";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const StaffList = () => {
+	const router = useRouter();
+	const [userRole, setUserRole] = useState<string | null>(null);
+	const [loadingAuth, setLoadingAuth] = useState(true);
+
 	const [logs, setLogs] = useState<UserList[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
@@ -82,6 +89,40 @@ const StaffList = () => {
 		setSelectedUser(user);
 		setOpenEditDialog(true);
 	};
+
+	// Check authentication and user role
+	useEffect(() => {
+		// Ensure we're in client-side environment
+		if (typeof window !== "undefined") {
+			// Check if we have a valid auth store
+			if (pb.authStore.isValid) {
+				setUserRole(pb.authStore.model?.role || null);
+				setLoadingAuth(false);
+			} else {
+				router.replace("/login");
+			}
+		}
+	}, []);
+
+	// Redirect staff users
+	useEffect(() => {
+		if (userRole === "staff") {
+			toast.error(t("noPermission"));
+			router.replace("/");
+		}
+	}, [userRole, router]);
+
+	// Show loader while checking auth
+	if (loadingAuth) return <Skeleton className="w-full h-full" />;
+
+	// Block staff users from seeing content
+	if (userRole === "staff") {
+		return (
+			<div className="flex justify-center items-center h-screen">
+				<p>{t("redirecting")}</p>
+			</div>
+		);
+	}
 
 	const handleDelete = (id: string) => {
 		setSelectedUserId(id);

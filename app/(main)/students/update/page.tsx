@@ -424,7 +424,7 @@ const StudentUpdatePage = () => {
 
 	const handleUploadDocument = () => {
 		if (!selectedDocumentType || !uploadFile || !studentId) {
-			toast.error("Please select a document type and file");
+			toast.error(t("uploadDocuments.missingFields"));
 			return;
 		}
 
@@ -436,7 +436,7 @@ const StudentUpdatePage = () => {
 			},
 		]);
 
-		toast.success("Document added to pending changes");
+		toast.success(t("uploadDocuments.success"));
 		setUploadFile(null);
 		setSelectedDocumentType("");
 	};
