@@ -115,13 +115,15 @@ export default function FieldsPage() {
 
 	const confirmDelete = async () => {
 		if (!fieldToDelete) return;
+
 		try {
 			await deleteField(fieldToDelete.id);
-			toast.success(`Field '${fieldToDelete.name}' deleted successfully!`);
+			toast.success(t("fields.deleteSuccess", { name: fieldToDelete.name }));
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		} catch (error) {
-			toast.error(`Failed to delete field '${fieldToDelete.name}'.`);
+			toast.error(t("fields.deleteError", { name: fieldToDelete.name }));
 		}
+
 		setShowConfirmDialog(false);
 		setFieldToDelete(null);
 		await fetchFields();

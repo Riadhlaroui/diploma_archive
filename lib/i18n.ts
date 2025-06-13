@@ -217,6 +217,8 @@ i18n
 						error: "An error occurred. Please try again.",
 						notFound: "No faculties found.",
 						departmentsOf: "Departments of {{name}}",
+						deleteSuccess: "Faculty '{{name}}' deleted successfully!",
+						deleteError: "Failed to delete faculty '{{name}}'.",
 					},
 
 					addFaculty: {
@@ -421,8 +423,9 @@ i18n
 						fieldsCount: "Number of fields",
 						noDepartments: "No departments found.",
 						searchPlaceholder: "Search departments...",
-						deleteSuccess: "Department '{{name}}' deleted successfully!",
 						deleteFail: "Failed to delete department '{{name}}'.",
+						deleteSuccess: "Department '{{name}}' deleted successfully!",
+						deleteError: "Failed to delete department '{{name}}'.",
 					},
 
 					addDepartment: {
@@ -462,6 +465,8 @@ i18n
 						name: "Name",
 						MajorsCount: "Number of Majors",
 						createdAt: "Created At",
+						deleteSuccess: "Field '{{name}}' deleted successfully!",
+						deleteError: "Failed to delete field '{{name}}'.",
 					},
 
 					AddFieldDialog: {
@@ -493,6 +498,8 @@ i18n
 							actions: "Actions",
 						},
 						notFound: "Majors not found",
+						deleteSuccess: "Major '{{name}}' deleted successfully!",
+						deleteError: "Failed to delete major '{{name}}'.",
 					},
 
 					addMajor: {
@@ -902,6 +909,9 @@ i18n
 						successDelete: "Faculté supprimée avec succès !",
 						error: "Une erreur s’est produite. Veuillez réessayer.",
 						notFound: "Aucune faculté trouvée.",
+						deleteSuccess:
+							"La faculté '{{name}}' a été supprimée avec succès !",
+						deleteError: "Échec de la suppression de la faculté '{{name}}'.",
 					},
 
 					addFaculty: {
@@ -1062,8 +1072,10 @@ i18n
 						fieldsCount: "Nombre de filières",
 						noDepartments: "Aucun département trouvé.",
 						searchPlaceholder: "Rechercher des départements...",
-						deleteSuccess: "Département '{{name}}' supprimé avec succès !",
 						deleteFail: "Échec de la suppression du département '{{name}}'.",
+						deleteSuccess:
+							"Le département '{{name}}' a été supprimé avec succès !",
+						deleteError: "Échec de la suppression du département '{{name}}'.",
 					},
 
 					addDepartment: {
@@ -1136,6 +1148,8 @@ i18n
 						name: "Nom",
 						MajorsCount: "Nombre de filiales",
 						createdAt: "Créé le",
+						deleteSuccess: "Le domaine '{{name}}' a été supprimé avec succès !",
+						deleteError: "Échec de la suppression du domaine '{{name}}'.",
 					},
 
 					AddFieldDialog: {
@@ -1167,6 +1181,10 @@ i18n
 							actions: "Actions",
 						},
 						notFound: "Aucune filière trouvée",
+						deleteSuccess:
+							"La spécialisation '{{name}}' a été supprimée avec succès !",
+						deleteError:
+							"Échec de la suppression de la spécialisation '{{name}}'.",
 					},
 
 					addMajor: {
@@ -1577,6 +1595,8 @@ i18n
 						successDelete: "تم حذف الكلية بنجاح!",
 						error: "حدث خطأ. يرجى المحاولة مرة أخرى.",
 						notFound: "لم يتم العثور على كليات.",
+						deleteSuccess: "تم حذف الكلية '{{name}}' بنجاح!",
+						deleteError: "فشل في حذف الكلية '{{name}}'.",
 					},
 
 					addFaculty: {
@@ -1736,6 +1756,7 @@ i18n
 						deleteSuccess: "تم حذف القسم '{{name}}' بنجاح!",
 						deleteFail: "فشل في حذف القسم '{{name}}'.",
 						NumberofFields: "عدد الميادين",
+						deleteError: "فشل في حذف القسم '{{name}}'.",
 					},
 
 					addDepartment: {
@@ -1808,6 +1829,8 @@ i18n
 						name: "الاسم",
 						MajorsCount: "عدد الفروع",
 						createdAt: "تاريخ الإنشاء",
+						deleteSuccess: "تم حذف ميدان '{{name}}' بنجاح!",
+						deleteError: "فشل في حذف ميدان '{{name}}'.",
 					},
 
 					AddFieldDialog: {
@@ -1839,6 +1862,8 @@ i18n
 							actions: "الإجراءات",
 						},
 						notFound: "لم يتم العثور على الفروع",
+						deleteSuccess: "تم حذف فرع '{{name}}' بنجاح!",
+						deleteError: "فشل في حذف فرع '{{name}}'.",
 					},
 
 					addMajor: {
