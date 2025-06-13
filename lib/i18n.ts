@@ -523,6 +523,7 @@ i18n
 						createdAt: "Created At",
 						actions: "Actions",
 						notFound: "Specialties not found",
+						deleteSuccess: "Specialty {{name}} has been successfully deleted.",
 					},
 
 					addSpecialty: {
@@ -1196,6 +1197,8 @@ i18n
 						createdAt: "Créé le",
 						actions: "Actions",
 						notFound: "Aucune spécialité trouvée",
+						deleteSuccess:
+							"La spécialité {{name}} a été supprimée avec succès.",
 					},
 
 					addSpecialty: {
@@ -1866,6 +1869,7 @@ i18n
 						createdAt: "تاريخ الإنشاء",
 						actions: "الإجراءات",
 						notFound: "لم يتم العثور على تخصصات",
+						deleteSuccess: "تم حذف التخصص {{name}} بنجاح.",
 					},
 
 					addSpecialty: {
