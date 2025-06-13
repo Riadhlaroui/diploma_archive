@@ -1,6 +1,5 @@
 "use client";
 import {
-	Github,
 	LogOut,
 	PlusCircle,
 	Settings,
@@ -152,14 +151,7 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 					)}
 
 					<DropdownMenuSeparator />
-					<DropdownMenuItem
-						className=" hover:cursor-pointer"
-						onClick={() => router.replace("/team")}
-					>
-						<Github />
-						<span>GitHub</span>
-					</DropdownMenuItem>
-					<DropdownMenuSeparator />
+
 					<DropdownMenuItem
 						className="hover:cursor-pointer"
 						onClick={() => setShowLogoutDialog(true)}
