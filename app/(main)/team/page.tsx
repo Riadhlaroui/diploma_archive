@@ -28,7 +28,7 @@ import {
 	getUsersList,
 	UserList,
 } from "@/app/src/services/userService";
-import AddStaffDialog from "@/components/AddStaffDialog";
+import AddStaffDialog from "@/components/StaffComponents/AddStaffDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { toast } from "sonner";
 import { UserUpdateDialog } from "@/components/UserUpdateDialog";
