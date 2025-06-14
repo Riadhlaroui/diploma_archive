@@ -699,7 +699,7 @@ const StudentPage = () => {
 				</TableBody>
 				<TableFooter>
 					<TableRow>
-						<TableCell colSpan={11} className="text-center py-4">
+						<TableCell colSpan={12} className="text-center py-4">
 							<div className="flex items-center justify-center gap-4">
 								<Button
 									variant="outline"
