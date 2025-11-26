@@ -6,7 +6,7 @@ import { Cairo, Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { cookies } from "next/headers";
-import { ThemeProvider } from "@/components/theme-provider"; // ✅ import
+import { ThemeProvider } from "@/components/theme-provider";
 
 const cairo = Cairo({
 	subsets: ["arabic", "latin"],
@@ -44,8 +44,8 @@ export default async function RootLayout({
 			<body className="font-sans">
 				<ThemeProvider
 					attribute="class"
-					defaultTheme="light" // ✅ default to light
-					enableSystem={false} // ✅ force light as default
+					defaultTheme="light"
+					enableSystem={false}
 					disableTransitionOnChange
 				>
 					{children}
