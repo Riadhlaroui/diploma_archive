@@ -74,7 +74,13 @@ export default function DashboardPage() {
 		fetchStats();
 	}, []);
 
-	if (checkingAuth) return <Skeleton className="w-full h-full" />;
+	if (checkingAuth) {
+		return (
+			<div className="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-black">
+				<div className="animate-spin h-12 w-12 border-4 border-gray-300 border-t-transparent rounded-full"></div>
+			</div>
+		);
+	}
 
 	return (
 		<div className="w-full flex flex-col items-center justify-center gap-4 p-4">
