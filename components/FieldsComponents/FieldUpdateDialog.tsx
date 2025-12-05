@@ -84,9 +84,10 @@ export function FieldUpdateDialog({ open, onOpenChange, user }: Props) {
 					</SheetDescription>
 				</SheetHeader>
 
-				<form onSubmit={handleSubmit} className="flex flex-col gap-2 px-4">
-					<Separator />
-
+				<form
+					onSubmit={handleSubmit}
+					className="flex flex-col mt-[-8px] gap-2 px-4"
+				>
 					<div className="relative">
 						<input
 							type="text"
@@ -103,7 +104,7 @@ export function FieldUpdateDialog({ open, onOpenChange, user }: Props) {
 
 					<Separator />
 
-					<div className="flex w-full gap-2 p-4 mt-auto">
+					<div className="flex w-full gap-2 mt-auto">
 						<button
 							type="button"
 							onClick={() => onOpenChange(false)}
