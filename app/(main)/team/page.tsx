@@ -35,9 +35,12 @@ import { UserUpdateDialog } from "@/components/UserUpdateDialog";
 import { useRouter } from "next/navigation";
 import pb from "@/lib/pocketbase";
 import { Skeleton } from "@/components/ui/skeleton";
+import { checkAuthOrRedirect } from "@/app/src/services/authService";
 
 const StaffList = () => {
 	const router = useRouter();
+	const [checkingAuth, setCheckingAuth] = useState(true);
+
 	const [userRole, setUserRole] = useState<string | null>(null);
 	const [loadingAuth, setLoadingAuth] = useState(true);
 
@@ -80,6 +83,13 @@ const StaffList = () => {
 	};
 
 	useEffect(() => {
+		try {
+			checkAuthOrRedirect(router);
+			setCheckingAuth(false);
+		} catch {}
+	}, [router]);
+
+	useEffect(() => {
 		fetchData();
 	}, [page, searchTerm]);
 
@@ -99,7 +109,7 @@ const StaffList = () => {
 				setUserRole(pb.authStore.model?.role || null);
 				setLoadingAuth(false);
 			} else {
-				router.replace("/login");
+				router.replace("/sign-in");
 			}
 		}
 	}, []);
@@ -107,7 +117,6 @@ const StaffList = () => {
 	// Redirect staff users
 	useEffect(() => {
 		if (userRole === "staff") {
-			toast.error(t("noPermission"));
 			router.replace("/dashboard");
 		}
 	}, [userRole, router]);
@@ -145,6 +154,14 @@ const StaffList = () => {
 			setSelectedUserId(null);
 		}
 	};
+
+	if (checkingAuth) {
+		return (
+			<div className="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-black">
+				<div className="animate-spin h-12 w-12 border-4 border-gray-300 border-t-transparent rounded-full"></div>
+			</div>
+		);
+	}
 
 	return (
 		<div className="flex flex-col h-full mt-10 p-6 rounded-md shadow-lg">

@@ -33,6 +33,7 @@ import { FacultyUpdateDialog } from "@/components/FacultyComponents/FacultyUpdat
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { checkAuthOrRedirect } from "@/app/src/services/authService";
 
 const FacultiesList = () => {
 	const [logs, setLogs] = useState<FacultieList[]>([]);
@@ -45,6 +46,7 @@ const FacultiesList = () => {
 	const [searchTerm, setSearchTerm] = useState("");
 
 	const router = useRouter();
+	const [checkingAuth, setCheckingAuth] = useState(true);
 
 	const [selectedFaculty, setSelectedFaculty] = useState<FacultieList | null>(
 		null
@@ -88,6 +90,13 @@ const FacultiesList = () => {
 	const isRtl = i18n.language === "ar";
 
 	useEffect(() => {
+		try {
+			checkAuthOrRedirect(router);
+			setCheckingAuth(false);
+		} catch {}
+	}, [router]);
+
+	useEffect(() => {
 		fetchFaculties();
 	}, [page, searchTerm]);
 
@@ -103,6 +112,14 @@ const FacultiesList = () => {
 			setLoading(false);
 		}
 	};
+
+	if (checkingAuth) {
+		return (
+			<div className="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-black">
+				<div className="animate-spin h-12 w-12 border-4 border-gray-300 border-t-transparent rounded-full"></div>
+			</div>
+		);
+	}
 
 	return (
 		<div className="flex flex-col h-full mt-10 p-6 rounded-md shadow-lg">

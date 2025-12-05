@@ -40,6 +40,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { checkAuthOrRedirect } from "@/app/src/services/authService";
 
 interface StudentFilter {
 	matricule?: string;
@@ -57,6 +58,8 @@ const StudentPage = () => {
 
 	const isRtl = i18n.language === "ar";
 	const router = useRouter();
+
+	const [checkingAuth, setCheckingAuth] = useState(true);
 
 	const [loading, setLoading] = useState(true);
 	const [students, setStudents] = useState<any[]>([]);
@@ -91,6 +94,13 @@ const StudentPage = () => {
 			.getFullList()
 			.then((data) => setFaculties(data));
 	}, []);
+
+	useEffect(() => {
+		try {
+			checkAuthOrRedirect(router);
+			setCheckingAuth(false);
+		} catch {}
+	}, [router]);
 
 	useEffect(() => {
 		if (selectedFaculty) {
@@ -212,6 +222,14 @@ const StudentPage = () => {
 	useEffect(() => {
 		loadStudents();
 	}, [page]);
+
+	if (checkingAuth) {
+		return (
+			<div className="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-black">
+				<div className="animate-spin h-12 w-12 border-4 border-gray-300 border-t-transparent rounded-full"></div>
+			</div>
+		);
+	}
 
 	return (
 		<div className="relative p-6 space-y-6">
