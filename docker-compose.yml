@@ -1,21 +1,32 @@
+# Instructions:
+# 1. Replace SERVER_IP in the environment variable with your server's LAN IP address.
+# NEXT_PUBLIC_POCKETBASE_URL=http://192.168.1.20:8090
+# 2. Ensure that the PocketBase service is accessible from other devices on the LAN.
+# 3. Run `docker-compose up -d` to start the services.
+# 4. Access the Next.js application via http://SERVER_IP:3000 from other devices on the LAN.
+
 version: "3.9"
+
 services:
   web:
     build: .
     ports:
-      - "3000:3000"
+      - "3000:3000" # Expose Next.js to LAN
     environment:
-      - NEXT_PUBLIC_POCKETBASE_URL=http://pocketbase:8090
+      - NEXT_PUBLIC_POCKETBASE_URL=http://SERVER_IP:8090
+      # Example: http://192.168.1.20:8090
     depends_on:
       - pocketbase
+    command: "npm run start -- -p 3000 -H 0.0.0.0"
 
   pocketbase:
     build:
       context: ./pocketbase
     ports:
-      - "8090:8090"
+      - "8090:8090" # Expose PocketBase to LAN
     volumes:
       - pb_data:/pb/pb_data
+    command: serve --http=0.0.0.0:8090 # VERY IMPORTANT
 
 volumes:
   pb_data:
