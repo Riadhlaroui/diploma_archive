@@ -1,11 +1,19 @@
 version: "3.9"
 services:
   web:
-    build: .
+    build:
+      context: .
+      # This passes the LAN IP to the Dockerfile during the build process
+      args:
+        NEXT_PUBLIC_POCKETBASE_URL: http://192.168.1.2:8090
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_POCKETBASE_URL=http://pocketbase:8090
+      # INTERNAL communication (Server-side fetching uses this internal Docker name)
+      - INTERNAL_POCKETBASE_URL=http://pocketbase:8090
+
+      # EXTERNAL communication (Client-side browser uses this LAN IP)
+      - NEXT_PUBLIC_POCKETBASE_URL=http://192.168.1.2:8090
     depends_on:
       - pocketbase
 
