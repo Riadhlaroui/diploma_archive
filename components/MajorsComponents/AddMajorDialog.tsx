@@ -71,8 +71,9 @@ const AddMajorDialog = ({
 			await addMajor(name, fieldId);
 			toast.success(t("addMajor.success"));
 			onClose();
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		} catch (error: any) {
+			console.log("PocketBase Validation Error:", error.data);
+
 			toast.error(
 				<div className="flex items-center gap-2">
 					<div>

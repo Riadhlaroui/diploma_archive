@@ -3,27 +3,42 @@ services:
   web:
     build:
       context: .
-      # This passes the LAN IP to the Dockerfile during the build process
       args:
-        NEXT_PUBLIC_POCKETBASE_URL: http://192.168.1.2:8090
-    ports:
-      - "3000:3000"
-    environment:
-      # INTERNAL communication (Server-side fetching uses this internal Docker name)
-      - INTERNAL_POCKETBASE_URL=http://pocketbase:8090
+        # Use the domain name, not the IP, for client-side API calls
+        NEXT_PUBLIC_POCKETBASE_URL: http://archive.lan:8090
+    # REMOVE the ports entry for Next.js. The proxy handles port 80/443 externally.
+    # ports:
+    #   - "3000:3000"
 
-      # EXTERNAL communication (Client-side browser uses this LAN IP)
-      - NEXT_PUBLIC_POCKETBASE_URL=http://192.168.1.2:8090
+    environment:
+      - INTERNAL_POCKETBASE_URL=http://pocketbase:8090
+      # Change the public URL to the domain name
+      - NEXT_PUBLIC_POCKETBASE_URL=http://archive.lan:8090
     depends_on:
       - pocketbase
 
   pocketbase:
     build:
       context: ./pocketbase
+    # REMOVE the ports entry for PocketBase for better security.
+    # Only the web app and the proxy need to access it internally.
     ports:
       - "8090:8090"
     volumes:
       - pb_data:/pb/pb_data
+
+  # --- NEW NGINX PROXY SERVICE ---
+  proxy:
+    image: nginx:alpine
+    container_name: nextjs_proxy
+    ports:
+      # Expose standard HTTP port 80 to the host
+      - "80:80"
+    volumes:
+      # Mount your custom configuration file into the container
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - web # Ensure the web app is running before starting the proxy
 
 volumes:
   pb_data:
