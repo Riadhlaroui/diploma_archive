@@ -18,7 +18,7 @@ import { ProfileDropDownMenu } from "./ProfileDropDownMenu";
 import { ConnectionStatus } from "./ConnectionStatus";
 import { useState, useEffect } from "react";
 import StudentFormDialog from "./StudentFormDialog";
-import pb from "@/lib/pocketbase"; // Import PocketBase client
+import pb from "@/lib/pocketbase";
 
 export function AppSidebar() {
 	const { t, i18n } = useTranslation();

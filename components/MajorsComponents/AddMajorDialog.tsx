@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Separator } from "@/components/ui/separator";
 import { X } from "lucide-react";
 import { toast } from "sonner";
-import { addMajor, isMajorNameTaken } from "@/app/src/services/majorService"; // Update path as needed
+import { addMajor, isMajorNameTaken } from "@/app/src/services/majorService";
 
 const AddMajorDialog = ({
 	onClose,
