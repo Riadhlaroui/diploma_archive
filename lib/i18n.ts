@@ -39,6 +39,12 @@ i18n
 							fields: "Fields",
 							specialties: "Specialties",
 						},
+						// --- New Features Translations ---
+						hierarchy: {
+							title: "System Hierarchy Explorer",
+							hint: "Click arrows to expand levels",
+							noItems: "No items found.",
+						},
 					},
 
 					settings: {
@@ -714,15 +720,21 @@ i18n
 					language: "Langue",
 
 					dashboard: {
-						title: "Tableau de bord",
+						title: "Tableau de Bord",
 						searchPlaceholder: "Rechercher...",
 						overview: "Aperçu",
 						stats: {
 							faculties: "Facultés",
 							departments: "Départements",
-							majors: "Spécialisations",
+							majors: "Majeures",
 							fields: "Domaines",
 							specialties: "Spécialités",
+						},
+
+						hierarchy: {
+							title: "Explorateur de Hiérarchie du Système",
+							hint: "Cliquez sur les flèches pour développer les niveaux",
+							noItems: "Aucun élément trouvé.",
 						},
 					},
 
@@ -1415,6 +1427,12 @@ i18n
 							majors: "الفروع",
 							fields: "الميادين",
 							specialties: "الاختصاصات",
+						},
+
+						hierarchy: {
+							title: "مستكشف التسلسل الهيكلي للنظام",
+							hint: "انقر على الأسهم لتوسيع المستويات",
+							noItems: "لم يتم العثور على عناصر.",
 						},
 					},
 
