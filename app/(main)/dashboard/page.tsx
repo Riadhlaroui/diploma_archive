@@ -108,9 +108,6 @@ function TreeNode({
 				className={`flex items-center gap-2 py-1.5 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors`}
 				onClick={handleToggle}
 			>
-				{/* Arrow and Icon placement should also consider RTL, usually by reversing the order, 
-                    but for an indented tree structure, the icon should typically stay at the start of the line regardless. 
-                    Tailwind 'flex' handles item ordering */}
 				<div className="text-gray-400 w-4 h-4 flex items-center justify-center shrink-0">
 					{loading ? (
 						<Loader2 className="w-3 h-3 animate-spin" />
