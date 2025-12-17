@@ -158,9 +158,9 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
 				{/* Header */}
 				<div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
 					<div className="flex items-center justify-between">
-						<h3 className="text-lg font-medium text-gray-900 dark:text-white">
+						<span className="text-lg font-medium text-gray-900 dark:text-white">
 							<h3>{t("uploadDocuments.title")}</h3>
-						</h3>
+						</span>
 						<button
 							onClick={() => onOpenChange(false)}
 							className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
