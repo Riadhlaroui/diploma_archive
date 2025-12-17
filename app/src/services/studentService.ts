@@ -215,6 +215,7 @@ export async function fetchStudents(page = 1, perPage = 15) {
 		return {
 			items,
 			totalPages: studentsResponse.totalPages,
+			totalItems: studentsResponse.totalItems,
 		};
 	} catch (error) {
 		console.error("Error fetching students:", error);
