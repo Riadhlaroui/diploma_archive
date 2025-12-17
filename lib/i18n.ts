@@ -76,7 +76,7 @@ i18n
 						connected: "Connected to server",
 						disconnected: "Disconnected from server",
 						checking: "Checking server status...",
-						manageFaculties: "Manage Faculties", // New entry
+						manageFaculties: "Manage Faculties",
 						faculties: "Faculties",
 					},
 
@@ -266,6 +266,8 @@ i18n
 							email: "Email",
 							createdAt: "Created At",
 						},
+
+						totalStudents: "Total Students",
 
 						requiredField: "Please fill in the required field: {{field}}",
 						noDocuments: "Please upload at least one document.",
@@ -685,6 +687,7 @@ i18n
 						majorPlaceholder: "Search majors...",
 						specialtyPlaceholder: "Search specialties...",
 						button: "Search",
+						teamPlaceholder: "Search staff...",
 					},
 					terms: {
 						faculty: "Faculty",
@@ -980,6 +983,8 @@ i18n
 						graduationBeforeEnrollment:
 							"L'année de diplômation ne peut pas être antérieure à l'année d'inscription",
 						graduationYear: "Année de Diplôme",
+
+						totalStudents: "Total Students",
 					},
 
 					addStudent: {
@@ -1381,6 +1386,7 @@ i18n
 						majorPlaceholder: "Rechercher des majeures...",
 						specialtyPlaceholder: "Rechercher des spécialités...",
 						button: "Rechercher",
+						teamPlaceholder: "Rechercher du personnel...",
 					},
 					terms: {
 						faculty: "Faculté",
@@ -1671,6 +1677,8 @@ i18n
 						graduationBeforeEnrollment:
 							"لا يمكن أن تكون سنة التخرج قبل سنة التسجيل",
 						graduationYear: "سنة التخرج",
+
+						totalStudents: "Total Students",
 					},
 
 					addStudent: {

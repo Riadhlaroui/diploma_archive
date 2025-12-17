@@ -533,7 +533,7 @@ const StudentUpdatePage = () => {
 								</label>
 								<Select
 									value={academicHierarchy.facultyId}
-									onValueChange={(value) =>
+									onValueChange={(value: string) =>
 										handleAcademicHierarchyChange("facultyId", value)
 									}
 								>
@@ -563,7 +563,7 @@ const StudentUpdatePage = () => {
 								</label>
 								<Select
 									value={academicHierarchy.departmentId}
-									onValueChange={(value) =>
+									onValueChange={(value: string) =>
 										handleAcademicHierarchyChange("departmentId", value)
 									}
 									disabled={!academicHierarchy.facultyId}
@@ -594,7 +594,7 @@ const StudentUpdatePage = () => {
 								</label>
 								<Select
 									value={academicHierarchy.fieldId}
-									onValueChange={(value) =>
+									onValueChange={(value: string) =>
 										handleAcademicHierarchyChange("fieldId", value)
 									}
 									disabled={!academicHierarchy.departmentId}
@@ -623,7 +623,7 @@ const StudentUpdatePage = () => {
 								</label>
 								<Select
 									value={academicHierarchy.majorId}
-									onValueChange={(value) =>
+									onValueChange={(value: string) =>
 										handleAcademicHierarchyChange("majorId", value)
 									}
 									disabled={!academicHierarchy.fieldId}
@@ -653,7 +653,7 @@ const StudentUpdatePage = () => {
 							</label>
 							<Select
 								value={academicHierarchy.specialtyId}
-								onValueChange={(value) =>
+								onValueChange={(value: string) =>
 									handleAcademicHierarchyChange("specialtyId", value)
 								}
 								disabled={!academicHierarchy.majorId}

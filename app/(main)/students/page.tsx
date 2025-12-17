@@ -87,7 +87,8 @@ const StudentPage = () => {
 	const [selectedSpecialty, setSelectedSpecialty] = useState<string>("");
 
 	const [matricule, setMatricule] = useState("");
-	const [graduationYear, setGraduationYear] = useState(""); // Added state for graduation year
+	const [graduationYear, setGraduationYear] = useState("");
+	const [totalStudents, setTotalStudents] = useState(0);
 
 	useEffect(() => {
 		pb.collection("Archive_faculties")
@@ -197,6 +198,7 @@ const StudentPage = () => {
 
 			setStudents(result.items);
 			setTotalPages(result.totalPages);
+			setTotalStudents(result.totalItems ?? 0);
 			setPage(1);
 			setIsFilterOpen(false);
 		} catch (err) {
@@ -212,6 +214,7 @@ const StudentPage = () => {
 			const data = await fetchStudents(page, 15);
 			setStudents(data.items);
 			setTotalPages(data.totalPages);
+			setTotalStudents(data.totalItems ?? 0);
 		} catch (err) {
 			console.error(err);
 		} finally {
@@ -232,7 +235,7 @@ const StudentPage = () => {
 	}
 
 	return (
-		<div className="relative p-6 space-y-6">
+		<div className="relative p-5 h-screen flex flex-col overflow-hidden">
 			<div className="relative w-full">
 				<div ref={buttonRowRef} className="flex gap-2 mb-4 items-center">
 					<h3 className="text-2xl font-semibold">{t("students.title")}</h3>
@@ -495,7 +498,7 @@ const StudentPage = () => {
 								</label>
 								<Select
 									value={selectedField}
-									onValueChange={(value) => {
+									onValueChange={(value: string) => {
 										setSelectedField(value);
 									}}
 									disabled={!selectedDepartment}
@@ -523,7 +526,7 @@ const StudentPage = () => {
 								</label>
 								<Select
 									value={selectedMajor}
-									onValueChange={(value) => {
+									onValueChange={(value: string) => {
 										setSelectedMajor(value);
 									}}
 									disabled={!selectedField}
@@ -550,7 +553,7 @@ const StudentPage = () => {
 								</label>
 								<Select
 									value={selectedSpecialty}
-									onValueChange={(value) => {
+									onValueChange={(value: string) => {
 										setSelectedSpecialty(value);
 									}}
 									disabled={!selectedMajor}
@@ -588,161 +591,186 @@ const StudentPage = () => {
 					</div>
 				)}
 			</div>
-
-			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
-				<TableHeader>
-					<TableRow>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("students.matricule")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("students.firstName")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("students.lastName")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("students.dateOfBirth")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("students.field")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("students.major")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("students.enrollmentYear")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("students.graduationYear")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("students.specialty")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("students.numberOfDocuments")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("students.createdAt")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("students.actions")}
-						</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{loading && students.length === 0 ? (
+			<div className="flex-1 overflow-auto bg-white dark:bg-zinc-900">
+				<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
+					<TableHeader>
 						<TableRow>
-							<TableCell colSpan={11} className="text-center py-10">
-								<Loader2 className="mx-auto h-8 w-8 animate-spin text-gray-500 dark:text-gray-400" />
-								<span className="text-sm text-gray-500 dark:text-gray-400 mt-2 block">
-									{t("loading")}
-								</span>
-							</TableCell>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("students.matricule")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("students.firstName")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("students.lastName")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("students.dateOfBirth")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("students.field")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("students.major")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("students.enrollmentYear")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("students.graduationYear")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("students.specialty")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("students.numberOfDocuments")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("students.createdAt")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("students.actions")}
+							</TableHead>
 						</TableRow>
-					) : !loading && students.length === 0 ? (
-						<TableRow>
-							<TableCell
-								colSpan={11}
-								className="text-center py-10 text-gray-500 dark:text-gray-400"
-							>
-								{t("students.notFound")}
-							</TableCell>
-						</TableRow>
-					) : (
-						students.map((student) => (
-							<TableRow
-								key={student.id}
-								className="hover:bg-gray-50 dark:hover:bg-zinc-800/50 hover:cursor-pointer transition-colors duration-100"
-								onDoubleClick={() =>
-									router.push(`/students/info?stuId=${student.id}`)
-								}
-							>
-								<TableCell>
-									<span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 dark:bg-zinc-700 px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-gray-200">
-										{student.matricule}
-										{copiedId === student.matricule ? (
-											<Check size={14} className="text-green-500" />
-										) : (
-											<button
-												onClick={(e) => {
-													e.stopPropagation();
-													navigator.clipboard.writeText(student.matricule);
-													setCopiedId(student.matricule);
-													setTimeout(() => setCopiedId(""), 1500);
-												}}
-												aria-label={t("actions.copyId")}
-												className="text-gray-400 hover:text-blue-500 dark:text-gray-500 dark:hover:text-blue-400"
-											>
-												<Copy size={12} />
-											</button>
-										)}
+					</TableHeader>
+					<TableBody>
+						{loading && students.length === 0 ? (
+							<TableRow>
+								<TableCell colSpan={11} className="text-center py-10">
+									<Loader2 className="mx-auto h-8 w-8 animate-spin text-gray-500 dark:text-gray-400" />
+									<span className="text-sm text-gray-500 dark:text-gray-400 mt-2 block">
+										{t("loading")}
 									</span>
 								</TableCell>
-								<TableCell>{student.firstName}</TableCell>
-								<TableCell>{student.lastName}</TableCell>
-								<TableCell>
-									{new Date(student.dateOfBirth).toLocaleDateString()}
-								</TableCell>
-								<TableCell>{student.expand?.fieldId?.name ?? "N/A"}</TableCell>
-								<TableCell>{student.expand?.majorId?.name ?? "N/A"}</TableCell>
-								<TableCell>{student.enrollmentYear}</TableCell>
-								<TableCell>{student.graduationYear}</TableCell>
-								<TableCell>
-									{student.expand?.specialtyId?.name ?? "N/A"}
-								</TableCell>
-								<TableCell>{student.documentsCount}</TableCell>
-								<TableCell>
-									{new Date(student.created).toLocaleDateString()}
-								</TableCell>
-								<TableCell>
-									<div className="flex gap-2">
-										<Button
-											size="icon"
-											variant="outline"
-											className="hover:cursor-pointer h-8 w-8"
-											onClick={(e) => {
-												e.stopPropagation();
-												router.push(`/students/update?stuId=${student.id}`);
-											}}
-											aria-label="Edit student"
-										>
-											<UserRoundPen size={16} />
-										</Button>
-									</div>
+							</TableRow>
+						) : !loading && students.length === 0 ? (
+							<TableRow>
+								<TableCell
+									colSpan={11}
+									className="text-center py-10 text-gray-500 dark:text-gray-400"
+								>
+									{t("students.notFound")}
 								</TableCell>
 							</TableRow>
-						))
-					)}
-				</TableBody>
-				<TableFooter>
-					<TableRow>
-						<TableCell colSpan={12} className="text-center py-4">
-							<div className="flex items-center justify-center gap-4">
-								<Button
-									variant="outline"
-									onClick={() => setPage((p) => Math.max(p - 1, 1))}
-									disabled={page === 1 || loading}
-									className="hover:cursor-pointer px-3 py-1.5 text-sm h-auto"
+						) : (
+							students.map((student) => (
+								<TableRow
+									key={student.id}
+									className="hover:bg-gray-50 dark:hover:bg-zinc-800/50 hover:cursor-pointer transition-colors duration-100"
+									onDoubleClick={() =>
+										router.push(`/students/info?stuId=${student.id}`)
+									}
 								>
-									{t("pagination.previous")}
-								</Button>
-								<span className="text-sm text-gray-700 dark:text-gray-300">
-									{t("pagination.pageOf", { page, totalPages })}
-								</span>
-								<Button
-									variant="outline"
-									onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
-									disabled={page >= totalPages || loading}
-									className="hover:cursor-pointer px-3 py-1.5 text-sm h-auto"
+									<TableCell>
+										<span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 dark:bg-zinc-700 px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-gray-200">
+											{student.matricule}
+											{copiedId === student.matricule ? (
+												<Check size={14} className="text-green-500" />
+											) : (
+												<button
+													onClick={(e) => {
+														e.stopPropagation();
+														navigator.clipboard.writeText(student.matricule);
+														setCopiedId(student.matricule);
+														setTimeout(() => setCopiedId(""), 1500);
+													}}
+													aria-label={t("actions.copyId")}
+													className="text-gray-400 hover:text-blue-500 dark:text-gray-500 dark:hover:text-blue-400"
+												>
+													<Copy size={12} />
+												</button>
+											)}
+										</span>
+									</TableCell>
+									<TableCell>{student.firstName}</TableCell>
+									<TableCell>{student.lastName}</TableCell>
+									<TableCell>
+										{new Date(student.dateOfBirth).toLocaleDateString()}
+									</TableCell>
+									<TableCell>
+										{student.expand?.fieldId?.name ?? "N/A"}
+									</TableCell>
+									<TableCell>
+										{student.expand?.majorId?.name ?? "N/A"}
+									</TableCell>
+									<TableCell>{student.enrollmentYear}</TableCell>
+									<TableCell>{student.graduationYear}</TableCell>
+									<TableCell>
+										{student.expand?.specialtyId?.name ?? "N/A"}
+									</TableCell>
+									<TableCell>{student.documentsCount}</TableCell>
+									<TableCell>
+										{new Date(student.created).toLocaleDateString()}
+									</TableCell>
+									<TableCell>
+										<div className="flex gap-2">
+											<Button
+												size="icon"
+												variant="outline"
+												className="hover:cursor-pointer h-8 w-8"
+												onClick={(e) => {
+													e.stopPropagation();
+													router.push(`/students/update?stuId=${student.id}`);
+												}}
+												aria-label="Edit student"
+											>
+												<UserRoundPen size={16} />
+											</Button>
+										</div>
+									</TableCell>
+								</TableRow>
+							))
+						)}
+					</TableBody>
+					<TableFooter className="bg-gray-50/50 dark:bg-zinc-800/50">
+						<TableRow>
+							<TableCell colSpan={12} className="py-4 px-6">
+								<div
+									className={`flex items-center justify-between w-full ${
+										isRtl ? "flex-row-reverse" : "flex-row"
+									}`}
 								>
-									{t("pagination.next")}
-								</Button>
-							</div>
-						</TableCell>
-					</TableRow>
-				</TableFooter>
-			</Table>
+									{/* Total Students Count */}
+									<div className="text-sm font-medium text-gray-700 dark:text-gray-300">
+										{t("students.totalStudents")}:{" "}
+										<span className="text-black dark:text-white font-bold">
+											{totalStudents}
+										</span>
+									</div>
+
+									{/* Pagination Controls */}
+									<div className="flex items-center gap-4">
+										<Button
+											variant="outline"
+											onClick={() => setPage((p) => Math.max(p - 1, 1))}
+											disabled={page === 1 || loading}
+											className="hover:cursor-pointer px-3 py-1.5 text-sm h-auto"
+										>
+											{t("pagination.previous")}
+										</Button>
+										<span className="text-sm text-gray-700 dark:text-gray-300">
+											{t("pagination.pageOf", { page, totalPages })}
+										</span>
+										<Button
+											variant="outline"
+											onClick={() =>
+												setPage((p) => Math.min(p + 1, totalPages))
+											}
+											disabled={page >= totalPages || loading}
+											className="hover:cursor-pointer px-3 py-1.5 text-sm h-auto"
+										>
+											{t("pagination.next")}
+										</Button>
+									</div>
+
+									{/* This empty div helps keep the pagination perfectly centered if you want */}
+									<div className="hidden md:block w-[120px]"></div>
+								</div>
+							</TableCell>
+						</TableRow>
+					</TableFooter>
+				</Table>
+			</div>
 		</div>
 	);
 };

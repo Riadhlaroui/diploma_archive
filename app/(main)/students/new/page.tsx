@@ -425,7 +425,7 @@ const CreateStudentPage = () => {
 												</label>
 												<Select
 													value={selectedField}
-													onValueChange={(value) => {
+													onValueChange={(value: string) => {
 														setSelectedField(value);
 														const selected = fields.find((f) => f.id === value);
 														setForm((prev) => ({
@@ -461,7 +461,7 @@ const CreateStudentPage = () => {
 												</label>
 												<Select
 													value={selectedMajor}
-													onValueChange={(value) => {
+													onValueChange={(value: string) => {
 														setSelectedMajor(value);
 														const selected = majors.find((m) => m.id === value);
 														setForm((prev) => ({
@@ -587,6 +587,7 @@ const CreateStudentPage = () => {
 													type="date"
 													name="dateOfBirth"
 													value={form.dateOfBirth}
+													max={`${new Date().getFullYear()}-12-31`}
 													onChange={handleChange}
 													className="w-full h-9 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-gray-500 dark:focus:border-gray-400 text-gray-900 dark:text-white"
 												/>
