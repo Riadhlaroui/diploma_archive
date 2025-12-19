@@ -235,9 +235,9 @@ const StudentPage = () => {
 	}
 
 	return (
-		<div className="relative p-5 h-screen flex flex-col overflow-hidden">
-			<div className="relative w-full">
-				<div ref={buttonRowRef} className="flex gap-2 mb-4 items-center">
+		<div className="relative p-4 h-screen flex flex-col overflow-hidden bg-gray-50 dark:bg-zinc-950">
+			<div className="relative w-full shoadow-md ">
+				<div ref={buttonRowRef} className="flex gap-2 mb-2.5 items-center">
 					<h3 className="text-2xl font-semibold">{t("students.title")}</h3>
 					<Button
 						className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:shadow-md"
@@ -259,9 +259,6 @@ const StudentPage = () => {
 						<SquarePlus className="text-black dark:text-white" />
 					</Button>
 
-					<Separator orientation="vertical" />
-
-					{/* Search button */}
 					<Button
 						onClick={() => setIsFilterOpen(!isFilterOpen)}
 						className="bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:shadow-md"
@@ -726,11 +723,9 @@ const StudentPage = () => {
 						<TableRow>
 							<TableCell colSpan={12} className="py-4 px-6">
 								<div
-									className={`flex items-center justify-between w-full ${
-										isRtl ? "flex-row-reverse" : "flex-row"
-									}`}
+									className="flex items-center justify-between w-full"
+									dir={isRtl ? "rtl" : "ltr"}
 								>
-									{/* Total Students Count */}
 									<div className="text-sm font-medium text-gray-700 dark:text-gray-300">
 										{t("students.totalStudents")}:{" "}
 										<span className="text-black dark:text-white font-bold">
@@ -738,13 +733,12 @@ const StudentPage = () => {
 										</span>
 									</div>
 
-									{/* Pagination Controls */}
 									<div className="flex items-center gap-4">
 										<Button
 											variant="outline"
 											onClick={() => setPage((p) => Math.max(p - 1, 1))}
 											disabled={page === 1 || loading}
-											className="hover:cursor-pointer px-3 py-1.5 text-sm h-auto"
+											className="px-3 py-1.5 text-sm h-auto"
 										>
 											{t("pagination.previous")}
 										</Button>
@@ -757,14 +751,15 @@ const StudentPage = () => {
 												setPage((p) => Math.min(p + 1, totalPages))
 											}
 											disabled={page >= totalPages || loading}
-											className="hover:cursor-pointer px-3 py-1.5 text-sm h-auto"
+											className="px-3 py-1.5 text-sm h-auto"
 										>
 											{t("pagination.next")}
 										</Button>
 									</div>
 
-									{/* This empty div helps keep the pagination perfectly centered if you want */}
-									<div className="hidden md:block w-[120px]"></div>
+									{/* 4. This spacer ensures the pagination stays centered. 
+                       In RTL, this empty div moves to the LEFT. */}
+									<div className="hidden md:block w-32"></div>
 								</div>
 							</TableCell>
 						</TableRow>
