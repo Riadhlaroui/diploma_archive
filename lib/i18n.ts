@@ -260,14 +260,13 @@ i18n
 						inDepartment: "Students in {{department}}",
 						exists: "A student with matricule already exists.",
 						chooseDifferent: "Please choose a different matricule.",
+						totalStudents: "Total Students",
 						table: {
 							id: "ID",
 							name: "Name",
 							email: "Email",
 							createdAt: "Created At",
 						},
-
-						totalStudents: "Total Students",
 
 						requiredField: "Please fill in the required field: {{field}}",
 						noDocuments: "Please upload at least one document.",
@@ -1677,8 +1676,7 @@ i18n
 						graduationBeforeEnrollment:
 							"لا يمكن أن تكون سنة التخرج قبل سنة التسجيل",
 						graduationYear: "سنة التخرج",
-
-						totalStudents: "Total Students",
+						totalStudents: "إجمالي الطلاب",
 					},
 
 					addStudent: {
