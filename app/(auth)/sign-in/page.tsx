@@ -136,7 +136,7 @@ export default function SignIn() {
 								type={isPasswordVisible ? "text" : "password"}
 								className="peer w-full bg-[#D7DDE3] h-[4rem] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3.5px] px-3 pt-6 pb-2 focus:outline-none placeholder-transparent"
 								onChange={(e) => setPassword(e.target.value)}
-								dir={isRtl ? "rtl" : "ltr"} // Add direction based on language
+								dir={isRtl ? "rtl" : "ltr"}
 							/>
 							<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
 								{t("password")}
