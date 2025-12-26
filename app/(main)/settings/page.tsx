@@ -39,8 +39,10 @@ const SettingsPage = () => {
 						{t("language")}
 					</label>
 					<Select
-						value={i18n.language}
-						onValueChange={(value: "en" | "fr" | "ar") => switchLanguage(value)}
+						value={i18n.language?.split("-")[0] || "en"}
+						onValueChange={(value: string) =>
+							switchLanguage(value as "en" | "fr" | "ar")
+						}
 					>
 						<SelectTrigger className="w-[150px] h-fit dark:bg-[#1f1f1f] dark:text-white">
 							<SelectValue placeholder="select language" />

@@ -22,6 +22,7 @@ import {
 	SquarePlus,
 	UserRoundPen,
 	X,
+	FileStack,
 } from "lucide-react";
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -251,13 +252,24 @@ const StudentPage = () => {
 							<RefreshCcw className="text-black dark:text-white" />
 						)}
 					</Button>
-					<Button
-						className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:shadow-md"
-						onClick={() => router.push("/students/new")}
-						aria-label="Add new student"
-					>
-						<SquarePlus className="text-black dark:text-white" />
-					</Button>
+
+					<div className="flex border rounded-full">
+						<Button
+							className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:shadow-md"
+							onClick={() => router.push("/students/new")}
+							aria-label="Add new student"
+						>
+							<SquarePlus className="text-black dark:text-white" />
+						</Button>
+
+						<Button
+							className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:shadow-md"
+							onClick={() => router.push("/students/bulk-new")}
+							aria-label="Add new student"
+						>
+							<FileStack className="text-black dark:text-white" />
+						</Button>
+					</div>
 
 					<Button
 						onClick={() => setIsFilterOpen(!isFilterOpen)}

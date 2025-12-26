@@ -90,7 +90,9 @@ export default function SignIn() {
 					{t("language")}
 				</label>
 				<Select
-					value={i18n.language}
+					// Normalize the value: takes "en-US" and makes it "en"
+					// Also provides a fallback if i18n.language is undefined
+					value={i18n.language?.split("-")[0] || "en"}
 					onValueChange={(value: string) =>
 						switchLanguage(value as "en" | "fr" | "ar")
 					}
@@ -99,7 +101,8 @@ export default function SignIn() {
 						id="language-select"
 						className="w-[150px] dark:bg-[#1f1f1f] dark:text-white"
 					>
-						<SelectValue />
+						{/* Added a placeholder for when the value is still loading */}
+						<SelectValue placeholder="Select Language" />
 					</SelectTrigger>
 					<SelectContent>
 						<SelectItem value="en">English</SelectItem>
