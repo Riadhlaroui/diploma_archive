@@ -22,8 +22,8 @@ import {
 	SquarePlus,
 	UserRoundPen,
 	X,
-	FileStack,
 } from "lucide-react";
+import { LayersPlus } from "lucide-react";
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -267,7 +267,7 @@ const StudentPage = () => {
 							onClick={() => router.push("/students/bulk-new")}
 							aria-label="Add new student"
 						>
-							<FileStack className="text-black dark:text-white" />
+							<LayersPlus className="text-black dark:text-white" />
 						</Button>
 					</div>
 
