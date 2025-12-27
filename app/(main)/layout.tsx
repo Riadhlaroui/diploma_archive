@@ -3,7 +3,11 @@
 
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import {
+	SidebarInset,
+	SidebarProvider,
+	SidebarTrigger,
+} from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 
@@ -32,17 +36,16 @@ export default function MainLayout({
 	return (
 		<SidebarProvider defaultOpen={defaultOpen}>
 			<AppSidebar />
-			<main className="w-full min-h-screen flex flex-col" dir={dir}>
-				<SidebarTrigger />
-				<ThemeProvider
-					attribute="class"
-					defaultTheme="system"
-					enableSystem
-					disableTransitionOnChange
-				>
-					{children}
-				</ThemeProvider>
-			</main>
+
+			{/* REPLACE <main> with <SidebarInset> */}
+			<SidebarInset>
+				<header className="flex h-12 shrink-0 items-center gap-2 border-b px-4">
+					<SidebarTrigger className="-ml-1" />
+				</header>
+
+				{/* Wrap children in a div that fills the remaining height */}
+				<div className="flex flex-1 flex-col">{children}</div>
+			</SidebarInset>
 		</SidebarProvider>
 	);
 }

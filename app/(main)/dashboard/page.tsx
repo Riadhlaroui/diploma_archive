@@ -365,7 +365,7 @@ export default function DashboardPage() {
 	}
 
 	return (
-		<div className="w-full flex flex-col items-center justify-start gap-4 p-4 pt-10 min-h-screen bg-gray-50 dark:bg-black text-black dark:text-white">
+		<div className="flex-1 flex flex-col items-center justify-start gap-4 p-4 pt-10  bg-gray-50 dark:bg-black text-black dark:text-white min-w-0">
 			<HierarchyDialog
 				isOpen={isHierarchyOpen}
 				onClose={() => setIsHierarchyOpen(false)}
