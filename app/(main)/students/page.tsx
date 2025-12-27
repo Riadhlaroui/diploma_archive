@@ -212,7 +212,7 @@ const StudentPage = () => {
 	const loadStudents = async () => {
 		setLoading(true);
 		try {
-			const data = await fetchStudents(page, 15);
+			const data = await fetchStudents(page, 10);
 			setStudents(data.items);
 			setTotalPages(data.totalPages);
 			setTotalStudents(data.totalItems ?? 0);
@@ -236,7 +236,7 @@ const StudentPage = () => {
 	}
 
 	return (
-		<div className="relative p-4 h-screen flex flex-col overflow-hidden bg-gray-50 dark:bg-zinc-950">
+		<div className="relative p-4 flex-1 flex-col overflow-hidden bg-gray-50 dark:bg-zinc-950">
 			<div className="relative w-full shoadow-md ">
 				<div ref={buttonRowRef} className="flex gap-2 mb-2.5 items-center">
 					<h3 className="text-2xl font-semibold">{t("students.title")}</h3>

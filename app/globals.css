@@ -124,6 +124,11 @@
 @layer base {
 	* {
 		@apply border-border outline-ring/50;
+	}
+
+	/* Apply scrollbar styles ONLY to the main scrolling elements */
+	html,
+	body {
 		scrollbar-width: thin; /* Firefox */
 		scrollbar-color: oklch(0.708 0 0) transparent; /* Firefox */
 	}
@@ -136,15 +141,11 @@
 
 	::-webkit-scrollbar-track {
 		background: transparent;
-		border-radius: var(--radius);
 	}
 
 	::-webkit-scrollbar-thumb {
 		background: oklch(0.708 0 0);
 		border-radius: var(--radius);
-		border: 2px solid transparent;
-		background-clip: padding-box;
-		transition: background 0.2s ease;
 	}
 
 	::-webkit-scrollbar-thumb:hover {
