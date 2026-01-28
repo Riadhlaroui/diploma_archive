@@ -109,6 +109,14 @@ i18n
 						},
 						cancelButton: "Cancel",
 						userCreatedSuccess: "User successfully created!",
+						req: {
+							length: "At least 8 characters",
+							upper: "One uppercase letter",
+							lower: "One lowercase letter",
+							number: "One number",
+							special: "One special character",
+						},
+						passwordRequirements: "Password Requirements",
 					},
 
 					auditLogs: {
@@ -127,6 +135,12 @@ i18n
 						previous: "Previous",
 						next: "Next",
 						pageOf: "Page {{page}} of {{totalPages}}",
+						Showing: "Showing",
+						to: "to",
+						of: "of",
+						Records: "records",
+						show: "Show",
+						perPage: "per page",
 					},
 					actions: {
 						create_user: "Create User",
@@ -805,6 +819,14 @@ i18n
 						},
 						cancelButton: "Annuler",
 						userCreatedSuccess: "Utilisateur créé avec succès !",
+						req: {
+							length: "Au moins 8 caractères",
+							upper: "Une majuscule",
+							lower: "Une minuscule",
+							number: "Un chiffre",
+							special: "Un caractère spécial",
+						},
+						passwordRequirements: "Exigences du mot de passe",
 					},
 
 					auditLogs: {
@@ -824,6 +846,12 @@ i18n
 						previous: "Précédent",
 						next: "Suivant",
 						pageOf: "Page {{page}} sur {{totalPages}}",
+						Showing: "Affichage de",
+						to: "à",
+						of: "sur",
+						Records: "enregistrements",
+						show: "Afficher",
+						perPage: "par page",
 					},
 
 					actions: {
@@ -1503,6 +1531,14 @@ i18n
 						},
 						cancelButton: "إلغاء",
 						userCreatedSuccess: "تم إنشاء المستخدم بنجاح!",
+						req: {
+							length: "8 أحرف على الأقل",
+							upper: "حرف كبير واحد",
+							lower: "حرف صغير واحد",
+							number: "رقم واحد",
+							special: "رمز خاص واحد",
+						},
+						passwordRequirements: "متطلبات كلمة المرور",
 					},
 
 					auditLogs: {
@@ -1522,6 +1558,12 @@ i18n
 						previous: "السابق",
 						next: "التالي",
 						pageOf: "الصفحة {{page}} من {{totalPages}}",
+						Showing: "عرض",
+						to: "إلى",
+						of: "من أصل",
+						Records: "سجلات",
+						show: "عرض",
+						perPage: "لكل صفحة",
 					},
 
 					actions: {

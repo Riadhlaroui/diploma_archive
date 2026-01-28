@@ -103,7 +103,10 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 							<UserIcon />
 							<span>{t("profile.profile")}</span>
 						</DropdownMenuItem>
-						<DropdownMenuItem className=" hover:cursor-pointer">
+						<DropdownMenuItem
+							className="hover:cursor-pointer"
+							onClick={() => router.push("/settings")}
+						>
 							<Settings />
 							<span>{t("profile.settings")}</span>
 						</DropdownMenuItem>
@@ -119,7 +122,7 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 								<span>{t("profile.team")}</span>
 							</DropdownMenuItem>
 							<DropdownMenuSub>
-								<DropdownMenuSubTrigger className=" hover:cursor-pointer">
+								<DropdownMenuSubTrigger className="hover:cursor-pointer">
 									<span>{t("profile.addUser")}</span>
 								</DropdownMenuSubTrigger>
 								<DropdownMenuPortal>

@@ -46,7 +46,7 @@ export function AppSidebar() {
 		});
 
 		return () => {
-			pb.authStore.onChange(() => {}); // Cleanup listener
+			pb.authStore.onChange(() => {});
 		};
 	}, []);
 
