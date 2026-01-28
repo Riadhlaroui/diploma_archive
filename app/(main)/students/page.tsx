@@ -90,6 +90,7 @@ const StudentPage = () => {
 	const [matricule, setMatricule] = useState("");
 	const [graduationYear, setGraduationYear] = useState("");
 	const [totalStudents, setTotalStudents] = useState(0);
+	const [limit, setLimit] = useState(10);
 
 	useEffect(() => {
 		pb.collection("Archive_faculties")
@@ -209,10 +210,27 @@ const StudentPage = () => {
 		}
 	};
 
+	useEffect(() => {
+		const loadData = async () => {
+			setLoading(true);
+			try {
+				const data = await fetchStudents(page, limit);
+				setStudents(data.items);
+				setTotalStudents(data.totalItems ?? 0);
+			} catch (error) {
+				console.error("Failed to fetch:", error);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		loadData();
+	}, [page, limit]);
+
 	const loadStudents = async () => {
 		setLoading(true);
 		try {
-			const data = await fetchStudents(page, 10);
+			const data = await fetchStudents(page, limit);
 			setStudents(data.items);
 			setTotalPages(data.totalPages);
 			setTotalStudents(data.totalItems ?? 0);
@@ -236,7 +254,7 @@ const StudentPage = () => {
 	}
 
 	return (
-		<div className="relative p-4 flex-1 flex-col overflow-hidden bg-gray-50 dark:bg-zinc-950">
+		<div className="relative p-4 flex-1 flex-col overflow-hidden bg-gray-50">
 			<div className="relative w-full shoadow-md ">
 				<div ref={buttonRowRef} className="flex gap-2 mb-2.5 items-center">
 					<h3 className="text-2xl font-semibold">{t("students.title")}</h3>
@@ -600,9 +618,9 @@ const StudentPage = () => {
 					</div>
 				)}
 			</div>
-			<div className="flex-1 overflow-auto bg-white dark:bg-zinc-900">
-				<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
-					<TableHeader>
+			<div className="flex-1 overflow-auto bg-white border rounded-2xl">
+				<Table className="text-sm rounded-xl shadow-lg bg-white">
+					<TableHeader className="bg-[#f9fafb]">
 						<TableRow>
 							<TableHead className={isRtl ? "text-right" : "text-left"}>
 								{t("students.matricule")}
@@ -735,14 +753,53 @@ const StudentPage = () => {
 						<TableRow>
 							<TableCell colSpan={12} className="py-4 px-6">
 								<div
-									className="flex items-center justify-between w-full"
+									className="flex flex-col md:flex-row items-center justify-between w-full gap-4"
 									dir={isRtl ? "rtl" : "ltr"}
 								>
-									<div className="text-sm font-medium text-gray-700 dark:text-gray-300">
-										{t("students.totalStudents")}:{" "}
-										<span className="text-black dark:text-white font-bold">
-											{totalStudents}
+									<div className="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+										<span>
+											{t("pagination.Showing")}{" "}
+											<span className="font-bold">
+												{totalStudents === 0 ? 0 : (page - 1) * limit + 1}
+											</span>{" "}
+											{t("pagination.to")}{" "}
+											<span className="font-bold">
+												{Math.min(page * limit, totalStudents)}
+											</span>{" "}
+											{t("pagination.of")}{" "}
+											<span className="font-bold">{totalStudents}</span>{" "}
+											{t("pagination.Records")}
 										</span>
+
+										{/* Separator */}
+										<span className="hidden sm:inline text-gray-300">|</span>
+
+										{/* Dropdown */}
+										<div className="flex items-center gap-2 ml-2">
+											<span className="whitespace-nowrap">
+												{t("pagination.show")}
+											</span>
+											<Select
+												value={limit.toString()}
+												onValueChange={(value) => {
+													setLimit(Number(value));
+													setPage(1);
+												}}
+											>
+												<SelectTrigger className="w-17.5 h-9 dark:bg-[#1f1f1f] dark:text-white">
+													<SelectValue placeholder={limit.toString()} />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectItem value="10">10</SelectItem>
+													<SelectItem value="20">20</SelectItem>
+													<SelectItem value="50">50</SelectItem>
+													<SelectItem value="100">100</SelectItem>
+												</SelectContent>
+											</Select>
+											<span className="whitespace-nowrap">
+												{t("pagination.perPage")}
+											</span>
+										</div>
 									</div>
 
 									<div className="flex items-center gap-4">
@@ -769,9 +826,9 @@ const StudentPage = () => {
 										</Button>
 									</div>
 
-									{/* 4. This spacer ensures the pagination stays centered. 
-                       In RTL, this empty div moves to the LEFT. */}
-									<div className="hidden md:block w-32"></div>
+									<div className="hidden md:block w-auto text-transparent select-none">
+										Placeholder
+									</div>
 								</div>
 							</TableCell>
 						</TableRow>

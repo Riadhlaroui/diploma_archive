@@ -63,7 +63,7 @@ const AddDepartmentDialog = ({
 						</div>
 						<div className="text-sm">{t("addDepartment.duplicateMessage")}</div>
 					</div>
-				</div>
+				</div>,
 			);
 			return;
 		}
@@ -87,7 +87,7 @@ const AddDepartmentDialog = ({
 							{t("addDepartment.errors.genericDesc")}
 						</div>
 					</div>
-				</div>
+				</div>,
 			);
 		}
 	};
@@ -97,11 +97,11 @@ const AddDepartmentDialog = ({
 			<div className="bg-white dark:bg-gray-900 rounded-[3px] shadow-lg w-full max-w-md p-6 relative">
 				<button
 					onClick={onClose}
-					className={`absolute top-3 ${
+					className={`text-gray-400 absolute top-3 ${
 						isRtl ? "left-3" : "right-3"
-					} text-gray-500 hover:text-black dark:hover:text-white hover:cursor-pointer`}
+					}  hover:text-gray-900 dark:hover:text-white transition-colors rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-800`}
 				>
-					<X />
+					<X className="w-5 h-5" />
 				</button>
 
 				<h2 className="text-xl font-semibold">{t("addDepartment.title")}</h2>

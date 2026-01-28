@@ -34,7 +34,7 @@ export default function ConfirmDialog({
 					<Button
 						variant="ghost"
 						onClick={onClose}
-						className="hover:bg-gray-200 dark:hover:bg-zinc-800 hover:cursor-pointer"
+						className="hover:bg-gray-200 dark:hover:bg-zinc-800 hover:cursor-pointer border"
 					>
 						{t("common.cancel")}
 					</Button>
