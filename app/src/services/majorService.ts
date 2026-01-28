@@ -21,25 +21,27 @@ export async function addMajor(name: string, fieldId: string) {
 
 export async function isMajorNameTaken(
 	name: string,
-	fieldId: string
+	fieldId: string,
 ): Promise<boolean> {
-	if (!name.trim() || !fieldId.trim()) {
-		console.error("Name and fieldId are required to check for major name.");
-		return false;
-	}
+	const trimmedName = name.trim();
+	const trimmedFieldId = fieldId.trim();
+
+	if (!trimmedName || !trimmedFieldId) return false;
 
 	try {
-		await pb
-			.collection("Archive_majors")
-			.getFirstListItem(`name="${name.trim()}" && fieldId="${fieldId.trim()}"`);
-		return true; // Found a matching major
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const result = await pb.collection("Archive_majors").getList(1, 1, {
+			filter: pb.filter("name = {:name} && fieldId = {:fieldId}", {
+				name: trimmedName,
+				fieldId: trimmedFieldId,
+			}),
+			fields: "id",
+			requestKey: null,
+		});
+		return result.totalItems > 0;
 	} catch (error: any) {
-		if (error.status === 404) {
-			return false; // No matching major found
-		}
+		if (error.isAbort) return false;
 		console.error("Error checking major name:", error);
-		throw error; // Unexpected error
+		return false;
 	}
 }
 
@@ -47,7 +49,7 @@ export async function getMajors(
 	fieldId: string,
 	page = 1,
 	perPage = 10,
-	search = ""
+	search = "",
 ) {
 	if (!fieldId) {
 		console.error("Missing fieldId!");
@@ -122,7 +124,7 @@ export async function getSpecialtiesByMajor(
 	majorId: string,
 	page: number = 1,
 	perPage: number = 10,
-	search: string = ""
+	search: string = "",
 ) {
 	try {
 		const filter = `majorId="${majorId}"${
