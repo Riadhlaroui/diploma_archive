@@ -3,7 +3,7 @@ import pb from "@/lib/pocketbase";
 export async function getSpecialtiesByMajor(
 	majorId: string,
 	page: number = 1,
-	perPage: number = 10
+	perPage: number = 10,
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 ) {
 	try {
@@ -27,25 +27,27 @@ export async function getSpecialtiesByMajor(
 
 export async function isSpecialtyNameTaken(
 	name: string,
-	majorId: string
+	majorId: string,
 ): Promise<boolean> {
-	if (!name.trim() || !majorId.trim()) {
-		console.error("Name and majorId are required to check for major name.");
-		return false;
-	}
+	const trimmedName = name.trim();
+	const trimmedMajorId = majorId.trim();
+
+	if (!trimmedName || !trimmedMajorId) return false;
 
 	try {
-		await pb
-			.collection("Archive_specialties")
-			.getFirstListItem(`name="${name.trim()}" && majorId="${majorId.trim()}"`);
-		return true; // Found a matching major
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const result = await pb.collection("Archive_specialties").getList(1, 1, {
+			filter: pb.filter("name = {:name} && majorId = {:majorId}", {
+				name: trimmedName,
+				majorId: trimmedMajorId,
+			}),
+			fields: "id",
+			requestKey: null,
+		});
+		return result.totalItems > 0;
 	} catch (error: any) {
-		if (error.status === 404) {
-			return false; // No matching major found
-		}
-		console.error("Error checking major name:", error);
-		throw error; // Unexpected error
+		if (error.isAbort) return false;
+		console.error("Error checking specialty name:", error);
+		return false;
 	}
 }
 

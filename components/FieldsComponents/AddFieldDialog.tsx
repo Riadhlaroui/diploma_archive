@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Separator } from "@/components/ui/separator";
-import { X } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import {
 	addField,
 	isFieldNameTaken,
@@ -24,12 +24,19 @@ const AddFieldDialog = ({
 	const [name, setName] = useState("");
 	const [nameTaken, setNameTaken] = useState(false);
 	const [checking, setChecking] = useState(false);
+	const [submitting, setSubmitting] = useState(false);
 
 	useEffect(() => {
+		let isActive = true;
+
 		if (!name.trim()) {
 			setNameTaken(false);
+			setChecking(false);
 			return;
 		}
+
+		// Set checking immediately to disable the button while debouncing
+		setChecking(true);
 
 		const delayDebounce = setTimeout(async () => {
 			setChecking(true);
@@ -41,9 +48,12 @@ const AddFieldDialog = ({
 			} finally {
 				setChecking(false);
 			}
-		}, 500); // debounce delay
+		}, 500);
 
-		return () => clearTimeout(delayDebounce);
+		return () => {
+			isActive = false;
+			clearTimeout(delayDebounce);
+		};
 	}, [name, departmentId]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -97,69 +107,93 @@ const AddFieldDialog = ({
 		}
 	};
 
+	const isInvalid = nameTaken || checking || submitting || !name.trim();
+
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-			<div className="bg-white dark:bg-gray-900 rounded-[3px] shadow-lg w-full max-w-md p-6 relative">
+		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 ">
+			<div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg w-full max-w-md p-4 relative">
 				<button
 					onClick={onClose}
 					className={`text-gray-400 absolute top-3 ${
 						isRtl ? "left-3" : "right-3"
-					}  hover:text-gray-900 dark:hover:text-white transition-colors rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-800`}
+					} hover:text-gray-900 dark:hover:text-white transition-colors rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-800`}
 				>
 					<X className="w-5 h-5" />
 				</button>
 
-				<h2 className="text-xl font-semibold">{t("AddFieldDialog.title")}</h2>
+				<div className="mb-5">
+					<h2 className="text-xl font-semibold text-zinc-900 dark:text-white">
+						{t("AddFieldDialog.title")}
+					</h2>
+					<p className="text-sm text-zinc-500 dark:text-gray-400 mt-1 leading-relaxed">
+						{t("AddFieldDialog.subtitle", "Provide a name for the field..")}
+					</p>
+				</div>
 
 				<form onSubmit={handleSubmit} className="space-y-4 mt-2" noValidate>
-					<Separator />
 					<div className="flex gap-4 w-full">
 						<div className="relative w-full">
 							<input
 								type="text"
 								value={name}
 								onChange={(e) => setName(e.target.value)}
-								className={`peer w-full h-[4rem] bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 pb-2 focus:outline-none ${
-									nameTaken ? "border-red-600" : ""
+								className={`peer w-full h-16 bg-[#E3E8ED] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3px] px-3 pt-6 focus:outline-none transition-colors ${
+									nameTaken
+										? "border-red-600 focus:border-red-600"
+										: "focus:border-black dark:focus:border-white"
 								}`}
 								placeholder=""
 								dir={isRtl ? "rtl" : "ltr"}
 								aria-invalid={nameTaken}
 								aria-describedby="name-error"
 							/>
-							<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
+							<label
+								className={`absolute top-2 ${isRtl ? "right-3" : "left-3"} text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white`}
+							>
 								{t("AddFieldDialog.nameLabel")}
 								<span className="text-[#D81212]">*</span>
 							</label>
-							{nameTaken && (
-								<p
-									id="name-error"
-									className="text-red-600 text-sm mt-1 select-none"
-								>
-									{t("AddFieldDialog.errors.nameTakenTitle")}
-								</p>
-							)}
+							<div className=" mt-1">
+								{checking ? (
+									<p className="text-gray-500 text-xs flex items-center gap-1">
+										<Loader2 className="w-3 h-3 animate-spin" />
+										{t("addDepartment.checking", "Checking availability...")}
+									</p>
+								) : nameTaken ? (
+									<p className="text-red-600 text-sm select-none">
+										{t("addDepartment.duplicateTitle")}
+									</p>
+								) : null}
+							</div>
 						</div>
 					</div>
 
 					<Separator />
 
-					<div className="flex justify-end gap-2 pt-4">
+					<div className="flex items-center gap-3 pt-2">
 						<button
 							type="button"
 							onClick={onClose}
-							className="bg-gray-300 text-black px-4 py-2 rounded-[3px] hover:bg-gray-400 hover:cursor-pointer transition-colors duration-200"
+							className="flex-1 px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-sm font-semibold text-zinc-600 dark:text-zinc-400 bg-zinc-50/40 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-900 dark:hover:text-zinc-100 transition-all duration-200"
 						>
-							{t("AddFieldDialog.cancel")}
+							{t("actionsDep.cancel")}
 						</button>
+
 						<button
 							type="submit"
-							disabled={nameTaken || checking}
-							className={`bg-black text-white px-4 py-2 rounded-[3px] hover:bg-gray-900 hover:cursor-pointer transition-colors duration-200 ${
-								nameTaken || checking ? "opacity-50 cursor-not-allowed" : ""
-							}`}
+							disabled={isInvalid}
+							className={`flex-[1.5] border relative overflow-hidden px-4 py-2.5 rounded-xl text-sm font-bold transition-all
+													${
+														isInvalid
+															? "bg-zinc-100 dark:bg-zinc-900 text-zinc-400 cursor-not-allowed"
+															: "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 hover:shadow-lg hover:shadow-zinc-900/20 active:scale-[0.98]"
+													}
+												`}
 						>
-							{t("AddFieldDialog.submit")}
+							<span className="flex items-center justify-center gap-2">
+								{submitting && <Loader2 className="w-4 h-4 animate-spin" />}
+								{t("actionsDep.submit")}
+							</span>
 						</button>
 					</div>
 				</form>

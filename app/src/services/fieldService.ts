@@ -16,29 +16,27 @@ export async function addField(data: {
 
 export async function isFieldNameTaken(
 	name: string,
-	departmentId: string
+	departmentId: string,
 ): Promise<boolean> {
-	if (!name.trim() || !departmentId.trim()) {
-		console.error(
-			"Name and departmentId are required to check for field name."
-		);
-		return false;
-	}
+	const trimmedName = name.trim();
+	const trimmedDeptId = departmentId.trim();
+
+	if (!trimmedName || !trimmedDeptId) return false;
 
 	try {
-		await pb
-			.collection("Archive_fields")
-			.getFirstListItem(
-				`name="${name.trim()}" && departmentId="${departmentId.trim()}"`
-			);
-		return true; // A field with the same name exists in this department
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const result = await pb.collection("Archive_fields").getList(1, 1, {
+			filter: pb.filter("name = {:name} && departmentId = {:deptId}", {
+				name: trimmedName,
+				deptId: trimmedDeptId,
+			}),
+			fields: "id",
+			requestKey: null,
+		});
+		return result.totalItems > 0;
 	} catch (error: any) {
-		if (error.status === 404) {
-			return false; // No matching field found
-		}
+		if (error.isAbort) return false;
 		console.error("Error checking field name:", error);
-		throw error;
+		return false;
 	}
 }
 
@@ -56,7 +54,7 @@ export async function getFields(
 	departmentId: string,
 	page = 1,
 	perPage = 10,
-	searchTerm: string = ""
+	searchTerm: string = "",
 ) {
 	if (!departmentId) {
 		console.error("Missing departmentId!");

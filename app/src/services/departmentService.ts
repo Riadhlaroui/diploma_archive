@@ -14,29 +14,31 @@ export async function getDepartmentById(departmentId: string) {
 
 export async function isDepartmentNameTaken(
 	name: string,
-	facultyId: string
+	facultyId: string,
 ): Promise<boolean> {
 	const trimmedName = name.trim();
 	const trimmedFacultyId = facultyId.trim();
 
-	if (!trimmedName || !trimmedFacultyId) {
-		console.error("Name and facultyId are required");
-		return false;
-	}
+	if (!trimmedName || !trimmedFacultyId) return false;
 
 	try {
-		// Case-insensitive search
-		await pb
-			.collection("Archive_departments")
-			.getFirstListItem(
-				`(name~"${trimmedName}" || name="${trimmedName}") && facultyId="${trimmedFacultyId}"`
-			);
-		return true;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const result = await pb.collection("Archive_departments").getList(1, 1, {
+			// Use the {key} syntax which is more widely compatible for PocketBase filters
+			filter: pb.filter("name = {:name} && facultyId = {:facultyId}", {
+				name: trimmedName,
+				facultyId: trimmedFacultyId,
+			}),
+			fields: "id",
+			requestKey: null,
+		});
+
+		return result.totalItems > 0;
 	} catch (error: any) {
-		if (error.status === 404) return false;
+		// If the request was cancelled (common during fast typing), don't log an error
+		if (error.isAbort) return false;
+
 		console.error("Error checking department name:", error);
-		throw error;
+		return false;
 	}
 }
 
@@ -44,7 +46,7 @@ export async function getSpecialtiesByDepartment(
 	departmentId: string,
 	page: number = 1,
 	perPage: number = 10,
-	searchTerm: string = ""
+	searchTerm: string = "",
 ) {
 	if (!departmentId) {
 		console.error("Missing departmentId!");
@@ -80,7 +82,7 @@ export async function getDepartments(
 	facultyId: string,
 	page = 1,
 	perPage = 10,
-	searchTerm: string = ""
+	searchTerm: string = "",
 ) {
 	if (!facultyId) {
 		console.error("Missing facultyId!");
@@ -157,7 +159,7 @@ export async function deleteDepartment(departmentId: string) {
 
 export async function updateDepartment(
 	departmentId: string,
-	data: { name: string }
+	data: { name: string },
 ) {
 	try {
 		const updatedDepartment = await pb
@@ -172,7 +174,7 @@ export async function updateDepartment(
 
 export async function getDepartmentByNameAndFaculty(
 	name: string,
-	facultyId: string
+	facultyId: string,
 ) {
 	if (!name.trim() || !facultyId.trim()) {
 		console.error("Name and facultyId are required");
@@ -183,7 +185,7 @@ export async function getDepartmentByNameAndFaculty(
 		const result = await pb
 			.collection("Archive_departments")
 			.getFirstListItem(
-				`name="${name.trim()}" && facultyId="${facultyId.trim()}"`
+				`name="${name.trim()}" && facultyId="${facultyId.trim()}"`,
 			);
 		return result;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -26,15 +26,21 @@ export async function addFaculty(name: string) {
 }
 
 export async function isFacultyNameTaken(name: string): Promise<boolean> {
+	const trimmedName = name.trim();
+	if (!trimmedName) return false;
+
 	try {
-		await pb.collection("Archive_faculties").getFirstListItem(`name="${name}"`);
-		return true;
+		const result = await pb.collection("Archive_faculties").getList(1, 1, {
+			filter: pb.filter("name = {:name}", { name: trimmedName }),
+			fields: "id",
+			requestKey: null,
+		});
+		return result.totalItems > 0;
 	} catch (error: any) {
-		if (error.status === 404) {
-			return false; // No matching field found
-		}
-		console.error("Error checking field name:", error);
-		throw error;
+		if (error.isAbort) return false;
+
+		console.error("Error checking faculty name:", error);
+		return false;
 	}
 }
 
@@ -77,7 +83,7 @@ export async function updateFaculty(id: string, data: { name: string }) {
 export async function getFaculties(
 	page: number = 1,
 	perPage: number = 10,
-	searchTerm: string = ""
+	searchTerm: string = "",
 ): Promise<{ items: FacultieList[]; totalPages: number }> {
 	const filter = searchTerm ? `name ~ "${searchTerm}"` : "";
 
@@ -85,7 +91,7 @@ export async function getFaculties(
 		.collection("Archive_faculties")
 		.getList(page, perPage, {
 			sort: "-created",
-			filter: filter || undefined, // only include filter if it's not empty
+			filter: filter || undefined,
 		});
 
 	const departments = await pb.collection("Archive_departments").getFullList();
