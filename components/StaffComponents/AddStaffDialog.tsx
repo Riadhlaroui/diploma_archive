@@ -187,30 +187,28 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 							</div>
 						</div>
 
-						<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-							<div className={inputContainerClass}>
-								<label className={labelClass}>
-									{t("addStaffDialog.phoneNumber")}{" "}
-									<span className="text-red-500">*</span>
-								</label>
-								<input
-									type="tel"
-									className={inputClass}
-									onChange={(e) => setPhoneNumber(e.target.value)}
-								/>
-							</div>
+						<div className={inputContainerClass}>
+							<label className={labelClass}>
+								{t("addStaffDialog.email")}{" "}
+								<span className="text-red-500">*</span>
+							</label>
+							<input
+								type="email"
+								className={inputClass}
+								onChange={(e) => setEmail(e.target.value)}
+							/>
+						</div>
 
-							<div className={inputContainerClass}>
-								<label className={labelClass}>
-									{t("addStaffDialog.email")}{" "}
-									<span className="text-red-500">*</span>
-								</label>
-								<input
-									type="email"
-									className={inputClass}
-									onChange={(e) => setEmail(e.target.value)}
-								/>
-							</div>
+						<div className={inputContainerClass}>
+							<label className={labelClass}>
+								{t("addStaffDialog.phoneNumber")}{" "}
+								<span className="text-red-500">*</span>
+							</label>
+							<input
+								type="tel"
+								className={inputClass}
+								onChange={(e) => setPhoneNumber(e.target.value)}
+							/>
 						</div>
 
 						<Separator className="my-2" />

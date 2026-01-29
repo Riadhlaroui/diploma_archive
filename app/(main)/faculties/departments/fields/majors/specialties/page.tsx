@@ -102,20 +102,20 @@ export default function SpecialtiesPage() {
 		try {
 			await deleteSpecialtyById(specialtyToDelete.id);
 			toast.success(
-				t("specialties.deleteSuccess", { name: specialtyToDelete.name })
+				t("specialties.deleteSuccess", { name: specialtyToDelete.name }),
 			);
 		} catch (error) {
 			if (error instanceof ClientResponseError && error.status === 400) {
 				if (error.data.message.includes("required relation reference")) {
 					toast.error(
-						t("errors.requiredRelation", { name: specialtyToDelete.name })
+						t("errors.requiredRelation", { name: specialtyToDelete.name }),
 					);
 				} else {
 					toast.error(t("errors.generic400", { message: error.data.message }));
 				}
 			} else {
 				toast.error(
-					t("errors.deleteSpecialty", { name: specialtyToDelete.name })
+					t("errors.deleteSpecialty", { name: specialtyToDelete.name }),
 				);
 			}
 		} finally {
@@ -263,96 +263,101 @@ export default function SpecialtiesPage() {
 				</button>
 			</div>
 
-			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
-				<TableHeader>
-					<TableRow>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("specialties.name")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("specialties.createdAt")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("specialties.actions")}
-						</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{loading ? (
+			<div className="flex-1 overflow-auto bg-white border rounded-2xl">
+				<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
+					<TableHeader>
 						<TableRow>
-							<TableCell colSpan={3} className="text-center py-6">
-								<Loader2 className="mx-auto animate-spin text-gray-500" />
-							</TableCell>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("specialties.name")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("specialties.createdAt")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("specialties.actions")}
+							</TableHead>
 						</TableRow>
-					) : specialties.length > 0 ? (
-						specialties.map((specialtie) => (
-							<TableRow key={specialtie.id}>
-								<TableCell>{specialtie.name}</TableCell>
-
-								<TableCell>
-									{new Date(specialtie.created).toLocaleDateString()}
-								</TableCell>
-								<TableCell>
-									<div className="flex gap-2">
-										<Button
-											size="sm"
-											variant="outline"
-											onClick={() => setEditDialogData(specialtie)}
-											className=" hover:cursor-pointer"
-										>
-											<UserRoundPen />
-										</Button>
-										<Button
-											size="sm"
-											variant="destructive"
-											className="hover:cursor-pointer"
-											onClick={() => {
-												setSpecialtyToDelete(specialtie);
-												setShowConfirmDialog(true);
-											}}
-										>
-											<Trash2 />
-										</Button>
-									</div>
+					</TableHeader>
+					<TableBody>
+						{loading ? (
+							<TableRow>
+								<TableCell colSpan={3} className="text-center py-6">
+									<Loader2 className="mx-auto animate-spin text-gray-500" />
 								</TableCell>
 							</TableRow>
-						))
-					) : (
+						) : specialties.length > 0 ? (
+							specialties.map((specialtie) => (
+								<TableRow key={specialtie.id}>
+									<TableCell>{specialtie.name}</TableCell>
+
+									<TableCell>
+										{new Date(specialtie.created).toLocaleDateString()}
+									</TableCell>
+									<TableCell>
+										<div className="flex gap-2">
+											<Button
+												size="sm"
+												variant="outline"
+												onClick={() => setEditDialogData(specialtie)}
+												className=" hover:cursor-pointer"
+											>
+												<UserRoundPen />
+											</Button>
+											<Button
+												size="sm"
+												variant="destructive"
+												className="hover:cursor-pointer"
+												onClick={() => {
+													setSpecialtyToDelete(specialtie);
+													setShowConfirmDialog(true);
+												}}
+											>
+												<Trash2 />
+											</Button>
+										</div>
+									</TableCell>
+								</TableRow>
+							))
+						) : (
+							<TableRow>
+								<TableCell
+									colSpan={3}
+									className="text-center py-6 text-gray-500"
+								>
+									{t("specialties.notFound")}
+								</TableCell>
+							</TableRow>
+						)}
+					</TableBody>
+					<TableFooter>
 						<TableRow>
-							<TableCell colSpan={3} className="text-center py-6 text-gray-500">
-								{t("specialties.notFound")}
+							<TableCell colSpan={3} className="text-center py-3">
+								<div className="flex justify-center items-center gap-4">
+									<Button
+										variant="outline"
+										onClick={() => setPage((p) => Math.max(p - 1, 1))}
+										disabled={page === 1 || loading}
+										className=" hover:cursor-pointer"
+									>
+										{t("pagination.previous")}
+									</Button>
+									<span className="text-sm">
+										{t("pagination.pageOf", { page, totalPages })}
+									</span>
+									<Button
+										variant="outline"
+										onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+										disabled={page >= totalPages || loading}
+										className=" hover:cursor-pointer"
+									>
+										{t("pagination.next")}
+									</Button>
+								</div>
 							</TableCell>
 						</TableRow>
-					)}
-				</TableBody>
-				<TableFooter>
-					<TableRow>
-						<TableCell colSpan={3} className="text-center py-3">
-							<div className="flex justify-center items-center gap-4">
-								<Button
-									variant="outline"
-									onClick={() => setPage((p) => Math.max(p - 1, 1))}
-									disabled={page === 1 || loading}
-									className=" hover:cursor-pointer"
-								>
-									{t("pagination.previous")}
-								</Button>
-								<span className="text-sm">
-									{t("pagination.pageOf", { page, totalPages })}
-								</span>
-								<Button
-									variant="outline"
-									onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
-									disabled={page >= totalPages || loading}
-									className=" hover:cursor-pointer"
-								>
-									{t("pagination.next")}
-								</Button>
-							</div>
-						</TableCell>
-					</TableRow>
-				</TableFooter>
-			</Table>
+					</TableFooter>
+				</Table>
+			</div>
 
 			{showAddDialog && majorId && (
 				<AddSpecialtyDialog

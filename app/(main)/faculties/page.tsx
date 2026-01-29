@@ -49,13 +49,13 @@ const FacultiesList = () => {
 	const [checkingAuth, setCheckingAuth] = useState(true);
 
 	const [selectedFaculty, setSelectedFaculty] = useState<FacultieList | null>(
-		null
+		null,
 	);
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 
 	const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 	const [facultyToDelete, setFacultyToDelete] = useState<FacultieList | null>(
-		null
+		null,
 	);
 
 	const handleEdit = (faculty: FacultieList) => {
@@ -74,7 +74,7 @@ const FacultiesList = () => {
 		try {
 			await deleteFaculty(facultyToDelete.id);
 			toast.success(
-				t("faculties.deleteSuccess", { name: facultyToDelete.name })
+				t("faculties.deleteSuccess", { name: facultyToDelete.name }),
 			);
 		} catch (error) {
 			toast.error(t("faculties.deleteError", { name: facultyToDelete.name }));
@@ -122,7 +122,7 @@ const FacultiesList = () => {
 	}
 
 	return (
-		<div className="flex flex-col h-full mt-10 p-6 rounded-md shadow-lg">
+		<div className="relative p-4 flex-1 flex-col overflow-hidden bg-gray-50">
 			<div className="flex gap-2 mb-4 items-center">
 				<h3
 					className="text-2xl font-semibold cursor-pointer hover:underline"
@@ -172,100 +172,107 @@ const FacultiesList = () => {
 				</button>
 			</div>
 
-			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
-				<TableHeader>
-					<TableRow>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("faculties.name")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("faculties.departmentCount")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("faculties.actions")}
-						</TableHead>
-					</TableRow>
-				</TableHeader>
-
-				<TableBody>
-					{loading ? (
+			<div className="flex-1 overflow-auto bg-white border rounded-2xl">
+				<Table className="text-sm rounded-xl shadow-lg bg-white">
+					<TableHeader>
 						<TableRow>
-							<TableCell colSpan={3} className="text-center py-6">
-								<Loader2 className="mx-auto animate-spin text-gray-500" />
-								<span className="text-sm text-gray-500 mt-2 block">
-									{t("loading")}
-								</span>
-							</TableCell>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("faculties.name")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("faculties.departmentCount")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("faculties.actions")}
+							</TableHead>
 						</TableRow>
-					) : logs.length > 0 ? (
-						logs.map((faculty) => (
-							<TableRow
-								key={faculty.id}
-								className="hover:bg-gray-100 dark:hover:bg-zinc-800 hover:cursor-pointer"
-								onDoubleClick={() =>
-									router.push(`/faculties/departments?facultyId=${faculty.id}`)
-								}
-							>
-								<TableCell>{faculty.name}</TableCell>
-								<TableCell>{faculty.departmentCount ?? 0}</TableCell>
-								<TableCell>
-									<div className="flex gap-2">
-										<Button
-											className="hover:cursor-pointer"
-											size="sm"
-											variant="outline"
-											onClick={() => handleEdit(faculty)}
-										>
-											<UserRoundPen />
-										</Button>
-										<Button
-											size="sm"
-											variant="destructive"
-											onClick={() => handleDelete(faculty)}
-											className="bg-[#f44336] text-white hover:cursor-pointer"
-										>
-											<Trash2 />
-										</Button>
-									</div>
+					</TableHeader>
+
+					<TableBody>
+						{loading ? (
+							<TableRow>
+								<TableCell colSpan={3} className="text-center py-6">
+									<Loader2 className="mx-auto animate-spin text-gray-500" />
+									<span className="text-sm text-gray-500 mt-2 block">
+										{t("loading")}
+									</span>
 								</TableCell>
 							</TableRow>
-						))
-					) : (
+						) : logs.length > 0 ? (
+							logs.map((faculty) => (
+								<TableRow
+									key={faculty.id}
+									className="hover:bg-gray-100 dark:hover:bg-zinc-800 hover:cursor-pointer"
+									onDoubleClick={() =>
+										router.push(
+											`/faculties/departments?facultyId=${faculty.id}`,
+										)
+									}
+								>
+									<TableCell>{faculty.name}</TableCell>
+									<TableCell>{faculty.departmentCount ?? 0}</TableCell>
+									<TableCell>
+										<div className="flex gap-2">
+											<Button
+												className="hover:cursor-pointer"
+												size="sm"
+												variant="outline"
+												onClick={() => handleEdit(faculty)}
+											>
+												<UserRoundPen />
+											</Button>
+											<Button
+												size="sm"
+												variant="destructive"
+												onClick={() => handleDelete(faculty)}
+												className="bg-[#f44336] text-white hover:cursor-pointer"
+											>
+												<Trash2 />
+											</Button>
+										</div>
+									</TableCell>
+								</TableRow>
+							))
+						) : (
+							<TableRow>
+								<TableCell
+									colSpan={3}
+									className="text-center py-6 text-gray-500"
+								>
+									{t("faculties.notFound")}
+								</TableCell>
+							</TableRow>
+						)}
+					</TableBody>
+					<TableFooter>
 						<TableRow>
-							<TableCell colSpan={3} className="text-center py-6 text-gray-500">
-								{t("faculties.notFound")}
+							<TableCell colSpan={4} className="text-center py-3">
+								<div className="flex items-center justify-center gap-4">
+									<Button
+										variant="outline"
+										onClick={() => setPage((p) => Math.max(p - 1, 1))}
+										disabled={page === 1 || loading}
+										className="hover:cursor-pointer"
+									>
+										{t("pagination.previous")}
+									</Button>
+									<span className="text-sm">
+										{t("pagination.pageOf", { page, totalPages })}
+									</span>
+									<Button
+										variant="outline"
+										onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+										disabled={page >= totalPages || loading}
+										className="hover:cursor-pointer"
+									>
+										{t("pagination.next")}
+									</Button>
+								</div>
 							</TableCell>
 						</TableRow>
-					)}
-				</TableBody>
-				<TableFooter>
-					<TableRow>
-						<TableCell colSpan={4} className="text-center py-3">
-							<div className="flex items-center justify-center gap-4">
-								<Button
-									variant="outline"
-									onClick={() => setPage((p) => Math.max(p - 1, 1))}
-									disabled={page === 1 || loading}
-									className="hover:cursor-pointer"
-								>
-									{t("pagination.previous")}
-								</Button>
-								<span className="text-sm">
-									{t("pagination.pageOf", { page, totalPages })}
-								</span>
-								<Button
-									variant="outline"
-									onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
-									disabled={page >= totalPages || loading}
-									className="hover:cursor-pointer"
-								>
-									{t("pagination.next")}
-								</Button>
-							</div>
-						</TableCell>
-					</TableRow>
-				</TableFooter>
-			</Table>
+					</TableFooter>
+				</Table>
+			</div>
 
 			<FacultyUpdateDialog
 				open={isDialogOpen}

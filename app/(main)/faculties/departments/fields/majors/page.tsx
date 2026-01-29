@@ -239,103 +239,108 @@ export default function MajorsPage() {
 				</Button>
 			</div>
 
-			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
-				<TableHeader>
-					<TableRow>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("majors.table.name")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("majors.table.specialtiesCount")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("majors.table.createdAt")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("majors.table.actions")}
-						</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{loading ? (
+			<div className="flex-1 overflow-auto bg-white border rounded-2xl">
+				<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
+					<TableHeader>
 						<TableRow>
-							<TableCell colSpan={4} className="text-center py-6">
-								<Loader2 className="animate-spin mx-auto text-gray-500" />
-								<span>{t("loading")}</span>
-							</TableCell>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("majors.table.name")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("majors.table.specialtiesCount")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("majors.table.createdAt")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("majors.table.actions")}
+							</TableHead>
 						</TableRow>
-					) : majors.length > 0 ? (
-						majors.map((major) => (
-							<TableRow
-								key={major.id}
-								className="hover:bg-gray-100 dark:hover:bg-zinc-800 hover:cursor-pointer"
-								onDoubleClick={() => {
-									router.push(
-										`/faculties/departments/fields/majors/specialties?majorId=${major.id}`
-									);
-								}}
-							>
-								<TableCell>{major.name}</TableCell>
-								<TableCell>{major.specialtiesCount ?? 0}</TableCell>
-								<TableCell>
-									{new Date(major.created).toLocaleDateString()}
-								</TableCell>
-								<TableCell>
-									<div className="flex gap-2">
-										<Button
-											size="sm"
-											variant="outline"
-											onClick={() => handleEdit(major)}
-											className=" hover:cursor-pointer"
-										>
-											<UserRoundPen />
-										</Button>
-										<Button
-											size="sm"
-											variant="destructive"
-											onClick={() => handleDelete(major)}
-											className=" hover:cursor-pointer"
-										>
-											<Trash2 />
-										</Button>
-									</div>
+					</TableHeader>
+					<TableBody>
+						{loading ? (
+							<TableRow>
+								<TableCell colSpan={4} className="text-center py-6">
+									<Loader2 className="animate-spin mx-auto text-gray-500" />
+									<span>{t("loading")}</span>
 								</TableCell>
 							</TableRow>
-						))
-					) : (
+						) : majors.length > 0 ? (
+							majors.map((major) => (
+								<TableRow
+									key={major.id}
+									className="hover:bg-gray-100 dark:hover:bg-zinc-800 hover:cursor-pointer"
+									onDoubleClick={() => {
+										router.push(
+											`/faculties/departments/fields/majors/specialties?majorId=${major.id}`,
+										);
+									}}
+								>
+									<TableCell>{major.name}</TableCell>
+									<TableCell>{major.specialtiesCount ?? 0}</TableCell>
+									<TableCell>
+										{new Date(major.created).toLocaleDateString()}
+									</TableCell>
+									<TableCell>
+										<div className="flex gap-2">
+											<Button
+												size="sm"
+												variant="outline"
+												onClick={() => handleEdit(major)}
+												className=" hover:cursor-pointer"
+											>
+												<UserRoundPen />
+											</Button>
+											<Button
+												size="sm"
+												variant="destructive"
+												onClick={() => handleDelete(major)}
+												className=" hover:cursor-pointer"
+											>
+												<Trash2 />
+											</Button>
+										</div>
+									</TableCell>
+								</TableRow>
+							))
+						) : (
+							<TableRow>
+								<TableCell
+									colSpan={4}
+									className="text-center py-6 text-gray-500"
+								>
+									{t("majors.notFound")}
+								</TableCell>
+							</TableRow>
+						)}
+					</TableBody>
+					<TableFooter>
 						<TableRow>
-							<TableCell colSpan={4} className="text-center py-6 text-gray-500">
-								{t("majors.notFound")}
+							<TableCell colSpan={5} className="text-center py-3">
+								<div className="flex items-center justify-center gap-4">
+									<Button
+										variant="outline"
+										onClick={() => setPage((p) => Math.max(p - 1, 1))}
+										disabled={page === 1 || loading}
+									>
+										{t("pagination.previous")}
+									</Button>
+									<span className="text-sm">
+										{t("pagination.pageOf", { page, totalPages })}
+									</span>
+									<Button
+										variant="outline"
+										onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+										disabled={page >= totalPages || loading}
+									>
+										{t("pagination.next")}
+									</Button>
+								</div>
 							</TableCell>
 						</TableRow>
-					)}
-				</TableBody>
-				<TableFooter>
-					<TableRow>
-						<TableCell colSpan={5} className="text-center py-3">
-							<div className="flex items-center justify-center gap-4">
-								<Button
-									variant="outline"
-									onClick={() => setPage((p) => Math.max(p - 1, 1))}
-									disabled={page === 1 || loading}
-								>
-									{t("pagination.previous")}
-								</Button>
-								<span className="text-sm">
-									{t("pagination.pageOf", { page, totalPages })}
-								</span>
-								<Button
-									variant="outline"
-									onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
-									disabled={page >= totalPages || loading}
-								>
-									{t("pagination.next")}
-								</Button>
-							</div>
-						</TableCell>
-					</TableRow>
-				</TableFooter>
-			</Table>
+					</TableFooter>
+				</Table>
+			</div>
 
 			<MajorUpdateDialog
 				open={openUpdateDialog}
