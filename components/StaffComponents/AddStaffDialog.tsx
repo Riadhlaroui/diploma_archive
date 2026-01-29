@@ -66,7 +66,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 				valid: /[^A-Za-z0-9]/.test(password),
 			},
 		],
-		[password, t]
+		[password, t],
 	);
 
 	const isPasswordStrong = passwordRequirements.every((req) => req.valid);
@@ -80,7 +80,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 
 		if (password !== confirmPassword) {
 			toast.error(
-				t("addStaffDialog.errors.mismatchTitle", "Passwords do not match")
+				t("addStaffDialog.errors.mismatchTitle", "Passwords do not match"),
 			);
 			return;
 		}
@@ -95,7 +95,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 			!role
 		) {
 			toast.error(
-				t("addStaffDialog.errors.missingTitle", "Please fill in all fields")
+				t("addStaffDialog.errors.missingTitle", "Please fill in all fields"),
 			);
 			return;
 		}
@@ -104,8 +104,8 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 			toast.error(
 				t(
 					"addStaffDialog.errors.weakTitle",
-					"Password does not meet requirements"
-				)
+					"Password does not meet requirements",
+				),
 			);
 			return;
 		}
@@ -135,7 +135,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 		"flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-50 dark:focus:ring-white transition-all duration-200";
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 ">
 			<div
 				className="bg-white dark:bg-gray-900 rounded-lg shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]"
 				dir={isRtl ? "rtl" : "ltr"}
@@ -247,7 +247,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 										<p className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">
 											{t(
 												"addStaffDialog.passwordRequirements",
-												"Password Requirements"
+												"Password Requirements",
 											)}
 										</p>
 										<ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -311,7 +311,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 										<AlertCircle className="w-3 h-3" />
 										{t(
 											"addStaffDialog.errors.mismatchShort",
-											"Passwords do not match"
+											"Passwords do not match",
 										)}
 									</div>
 								)}
