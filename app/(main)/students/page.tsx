@@ -271,23 +271,31 @@ const StudentPage = () => {
 						)}
 					</Button>
 
-					<div className="flex border rounded-full">
+					<div className="flex items-center border border-gray-200 dark:border-zinc-700 rounded-full p-1 shadow-sm">
 						<Button
-							className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:shadow-md"
+							variant="ghost"
+							size="icon"
+							className="rounded-full h-8 w-8 hover:bg-gray-100 dark:hover:bg-zinc-800"
 							onClick={() => router.push("/students/new")}
 							aria-label="Add new student"
 						>
-							<SquarePlus className="text-black dark:text-white" />
+							<SquarePlus className="h-4 w-4 text-black dark:text-white" />
 						</Button>
 
+						<div className="h-4 w-px bg-gray-200 dark:bg-zinc-700 mx-1" />
+
 						<Button
-							className="w-fit bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full p-2 hover:shadow-md"
+							variant="ghost"
+							size="icon"
+							className="rounded-full h-8 w-8 hover:bg-gray-100 dark:hover:bg-zinc-800"
 							onClick={() => router.push("/students/bulk-new")}
-							aria-label="Add new student"
+							aria-label="Bulk add students"
 						>
-							<LayersPlus className="text-black dark:text-white" />
+							<LayersPlus className="h-4 w-4 text-black dark:text-white" />
 						</Button>
 					</div>
+
+					<div className="h-6 w-px bg-gray-200 dark:bg-zinc-700" />
 
 					<Button
 						onClick={() => setIsFilterOpen(!isFilterOpen)}

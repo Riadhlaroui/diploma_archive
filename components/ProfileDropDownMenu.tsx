@@ -36,6 +36,10 @@ import { getCurrentUser } from "@/app/src/services/userService";
 import { User } from "@/app/src/core/domain/entities/User";
 
 export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
+	const { i18n } = useTranslation();
+
+	const isRtl = i18n.language === "ar";
+
 	const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
 	const [openAddDialog, setOpenAddDialog] = useState(false);
@@ -50,17 +54,12 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 
 	const { t } = useTranslation();
 
-	//The older way to get user info
-	//const user2 = getUserInfo();
-
-	// The newer way to get user info using the getCurrentUser function
 	useEffect(() => {
-		// Ensure we're rendering on the client
 		setIsClient(true);
 		getCurrentUser().then(setUser);
 	}, []);
 
-	if (!isClient) return null; // Return nothing during SSR to prevent hydration issues
+	if (!isClient) return null;
 	if (!user) return <p className="w-full">Not logged in</p>;
 
 	const handleLogout = () => {
@@ -72,13 +71,13 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 
 	return (
 		<>
-			<DropdownMenu>
+			<DropdownMenu dir={isRtl ? "rtl" : "ltr"}>
 				<DropdownMenuTrigger asChild>
 					<div className="flex items-center gap-3 w-full p-1 rounded-sm outline-dashed outline-2 border-[0px] bg-muted transition-colors hover:cursor-pointer">
 						{isCollapsed && <User2 className=" opacity-90 w-[24px] h-[24px]" />}
 						{!isCollapsed && (
 							<>
-								<CircleUserRound className="ml-1.5 size-[2rem] flex-shrink-0 opacity-90" />
+								<CircleUserRound className="ms-1.5 size-[2rem] flex-shrink-0 opacity-90" />
 								<div className=" flex flex-col items-start">
 									<div className="flex items-start gap-1">
 										<p className=" font-semibold">{user?.firstName}</p>
@@ -122,7 +121,7 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 								<span>{t("profile.team")}</span>
 							</DropdownMenuItem>
 							<DropdownMenuSub>
-								<DropdownMenuSubTrigger className="hover:cursor-pointer">
+								<DropdownMenuSubTrigger className="hover:cursor-pointer  items-center gap-2">
 									<span>{t("profile.addUser")}</span>
 								</DropdownMenuSubTrigger>
 								<DropdownMenuPortal>
@@ -141,11 +140,6 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 										>
 											<UserRoundX />
 											<span>{t("profile.deleteMember")}</span>
-										</DropdownMenuItem>
-										<DropdownMenuSeparator />
-										<DropdownMenuItem>
-											<PlusCircle />
-											<span>More...</span>
 										</DropdownMenuItem>
 									</DropdownMenuSubContent>
 								</DropdownMenuPortal>
