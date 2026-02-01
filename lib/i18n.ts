@@ -39,7 +39,7 @@ i18n
 							fields: "Fields",
 							specialties: "Specialties",
 						},
-						// --- New Features Translations ---
+
 						hierarchy: {
 							title: "System Hierarchy Explorer",
 							hint: "Click arrows to expand levels",
@@ -217,6 +217,7 @@ i18n
 						copy: "Copy {{field}}",
 						confirm: "Confirm ({{count}})",
 						dir: "ltr",
+						searchPlaceholder: "Search...",
 					},
 
 					faculties: {
@@ -919,6 +920,7 @@ i18n
 						copy: "Copier {{field}}",
 						confirm: "Confirmer ({{count}})",
 						dir: "ltr",
+						searchPlaceholder: "Rechercher...",
 					},
 
 					editUserDialog: {
@@ -1630,6 +1632,7 @@ i18n
 						copy: "نسخ {{field}}",
 						confirm: "تأكيد ({{count}})",
 						dir: "rtl",
+						searchPlaceholder: "بحث...",
 					},
 
 					editUserDialog: {

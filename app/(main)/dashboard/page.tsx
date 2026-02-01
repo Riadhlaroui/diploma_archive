@@ -15,9 +15,12 @@ import {
 	X,
 	Shrink,
 	ChevronLeft,
+	Search,
+	FileText,
 } from "lucide-react";
 import { t } from "i18next";
 
+// --- Configuration ---
 const HIERARCHY_MAP: Record<
 	string,
 	{ childCollection: string; foreignKey: string; labelField: string }
@@ -48,6 +51,13 @@ const HIERARCHY_MAP: Record<
 		labelField: "name",
 	},
 };
+
+// Helper to get a readable name for the badge (e.g., "Archive_majors" -> "Major")
+const getCollectionLabel = (collectionName: string) => {
+	return collectionName.replace("Archive_", "").replace(/s$/, "");
+};
+
+// --- Components ---
 
 function TreeNode({
 	collection,
@@ -94,7 +104,6 @@ function TreeNode({
 	};
 
 	const indentationClass = `ps-${depth * 4}`;
-
 	const isRtl = i18n.dir() === "rtl";
 	const borderContainerClasses = isRtl
 		? `border-r mr-2 border-gray-200 dark:border-gray-600`
@@ -125,7 +134,7 @@ function TreeNode({
 				<span className="text-sm font-medium truncate">{label}</span>
 
 				<span className="text-[10px] uppercase text-gray-400 dark:text-gray-500 ms-auto border dark:border-gray-600 px-1 rounded bg-gray-50 dark:bg-gray-800">
-					{collection.replace("Archive_", "")}
+					{getCollectionLabel(collection)}
 				</span>
 			</div>
 
@@ -164,11 +173,19 @@ function HierarchyDialog({
 	onClose: () => void;
 }) {
 	const { t } = useTranslation();
-	const [roots, setRoots] = useState<any[]>([]);
-	const [loading, setLoading] = useState(false);
 	const modalRef = useRef<HTMLDivElement>(null);
+
+	// Tree State
+	const [roots, setRoots] = useState<any[]>([]);
+	const [loadingTree, setLoadingTree] = useState(false);
 	const [refreshKey, setRefreshKey] = useState(0);
 
+	// Search State
+	const [searchQuery, setSearchQuery] = useState("");
+	const [searchResults, setSearchResults] = useState<any[]>([]);
+	const [isSearching, setIsSearching] = useState(false);
+
+	// 1. Close on click outside
 	useEffect(() => {
 		function handleClickOutside(event: MouseEvent) {
 			if (
@@ -182,6 +199,7 @@ function HierarchyDialog({
 		return () => document.removeEventListener("mousedown", handleClickOutside);
 	}, [isOpen, onClose]);
 
+	// 2. Lock body scroll
 	useEffect(() => {
 		if (isOpen) document.body.style.overflow = "hidden";
 		else document.body.style.overflow = "unset";
@@ -190,18 +208,68 @@ function HierarchyDialog({
 		};
 	}, [isOpen]);
 
+	// 3. Load Initial Roots (Faculties)
 	useEffect(() => {
-		if (isOpen) {
-			setLoading(true);
+		if (isOpen && !searchQuery) {
+			setLoadingTree(true);
 			pb.collection("Archive_faculties")
 				.getList(1, 50)
 				.then((res) => setRoots(res.items))
 				.catch((err) => console.error(err))
-				.finally(() => setLoading(false));
+				.finally(() => setLoadingTree(false));
 		}
-	}, [isOpen, refreshKey]);
+	}, [isOpen, refreshKey, searchQuery]);
+
+	// 4. Handle Global Search
+	useEffect(() => {
+		const query = searchQuery.trim();
+		if (!query) {
+			setSearchResults([]);
+			setIsSearching(false);
+			return;
+		}
+
+		const debounceTimer = setTimeout(async () => {
+			setIsSearching(true);
+			try {
+				// Collections to search (exclude 'root')
+				const collectionsToSearch = Object.keys(HIERARCHY_MAP).filter(
+					(k) => k !== "root" && HIERARCHY_MAP[k]?.childCollection,
+				);
+				const allCollections = [
+					"Archive_faculties",
+					"Archive_departments",
+					"Archive_fields",
+					"Archive_majors",
+					"Archive_specialties",
+				];
+
+				const searchPromises = allCollections.map((col) =>
+					pb
+						.collection(col)
+						.getList(1, 5, {
+							filter: `name ~ "${query}"`,
+						})
+						.then((res) =>
+							res.items.map((item) => ({ ...item, _collection: col })),
+						),
+				);
+
+				const results = await Promise.all(searchPromises);
+				const flatResults = results.flat();
+				setSearchResults(flatResults);
+			} catch (error) {
+				console.error("Search failed", error);
+			} finally {
+				setIsSearching(false);
+			}
+		}, 400);
+
+		return () => clearTimeout(debounceTimer);
+	}, [searchQuery]);
 
 	const handleCollapseAll = () => {
+		setSearchQuery("");
 		setRefreshKey((prev) => prev + 1);
 	};
 
@@ -211,51 +279,115 @@ function HierarchyDialog({
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
 			<div
 				ref={modalRef}
-				className="bg-white dark:bg-gray-900 w-full max-w-2xl max-h-[85vh] rounded-lg shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+				className="bg-white dark:bg-gray-900 w-full max-w-2xl max-h-[85vh] rounded-xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-gray-200 dark:border-gray-800"
 			>
-				<div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800">
-					<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-						{t("dashboard.hierarchy.title")}
-					</h3>
-					<div className="flex items-center gap-2">
-						<button
-							onClick={handleCollapseAll}
-							className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
-						>
-							<Shrink className="w-4 h-4" />
-						</button>
-						<button
-							onClick={onClose}
-							className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-							title={t("common.close")}
-						>
-							<X className="w-5 h-5 text-gray-500" />
-						</button>
+				{/* Header */}
+				<div className="flex flex-col gap-4 px-6 py-5 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 z-10">
+					<div className="flex items-center justify-between">
+						<h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+							<ListTree className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+							{t("dashboard.hierarchy.title")}
+						</h3>
+						<div className="flex items-center gap-2">
+							<button
+								onClick={handleCollapseAll}
+								className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full text-gray-600 bg-gray-100 hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
+							>
+								<Shrink className="w-3.5 h-3.5" />
+							</button>
+							<button
+								onClick={onClose}
+								className={`text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-800`}
+							>
+								<X className="w-5 h-5" />
+							</button>
+						</div>
+					</div>
+
+					{/* Search Bar */}
+					<div className="relative">
+						<Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+						<input
+							type="text"
+							placeholder={
+								t("common.searchPlaceholder") || "Search hierarchy..."
+							}
+							value={searchQuery}
+							onChange={(e) => setSearchQuery(e.target.value)}
+							className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2a2828c8] transition-all"
+						/>
 					</div>
 				</div>
 
-				<div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
-					{loading ? (
-						<div className="flex justify-center items-center h-40">
-							<Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+				{/* Content Area */}
+				<div className="flex-1 overflow-y-auto p-2 sm:p-4 custom-scrollbar bg-gray-50/50 dark:bg-black/20">
+					{/* Scenario 1: Searching */}
+					{searchQuery.trim() !== "" ? (
+						<div className="space-y-2">
+							{isSearching ? (
+								<div className="flex flex-col items-center justify-center py-12 gap-3 text-gray-400">
+									<Loader2 className="w-6 h-6 animate-spin" />
+									<span className="text-sm">Searching...</span>
+								</div>
+							) : searchResults.length > 0 ? (
+								searchResults.map((item) => (
+									<div
+										key={item.id}
+										className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 shadow-sm"
+									>
+										<div className="p-2 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
+											<FileText className="w-4 h-4" />
+										</div>
+										<div className="flex-1 min-w-0">
+											<p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+												{item.name || item.title || "Unnamed"}
+											</p>
+											<p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+												ID: {item.id}
+											</p>
+										</div>
+										<span className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 rounded-md">
+											{getCollectionLabel(item._collection)}
+										</span>
+									</div>
+								))
+							) : (
+								<div className="flex flex-col items-center justify-center py-12 text-gray-400">
+									<p className="text-sm">
+										No results found for "{searchQuery}"
+									</p>
+								</div>
+							)}
 						</div>
 					) : (
+						// Scenario 2: Hierarchy Tree
 						<div className="space-y-1">
-							{roots.map((faculty) => (
-								<TreeNode
-									key={`${faculty.id}-${refreshKey}`} // Added refreshKey to force component remount on collapse
-									collection="Archive_faculties"
-									id={faculty.id}
-									label={faculty.name || faculty.title || "Unnamed Faculty"}
-									depth={0} // Roots always have depth 0
-								/>
-							))}
+							{loadingTree ? (
+								<div className="flex justify-center items-center h-40">
+									<Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+								</div>
+							) : (
+								roots.map((faculty) => (
+									<TreeNode
+										key={`${faculty.id}-${refreshKey}`}
+										collection="Archive_faculties"
+										id={faculty.id}
+										label={faculty.name || faculty.title || "Unnamed Faculty"}
+										depth={0}
+									/>
+								))
+							)}
 						</div>
 					)}
 				</div>
 
-				<div className="px-6 py-3 bg-gray-50 dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 text-xs text-gray-500 text-right">
-					{t("dashboard.hierarchy.hint")}
+				{/* Footer Hint */}
+				<div className="px-6 py-3 bg-gray-50 dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 text-xs text-gray-500 flex justify-between">
+					<span>
+						{searchQuery
+							? `${searchResults.length} results found`
+							: t("dashboard.hierarchy.hint")}
+					</span>
 				</div>
 			</div>
 		</div>
@@ -264,24 +396,33 @@ function HierarchyDialog({
 
 type Stats = {
 	faculties: number;
+
 	departments: number;
+
 	majors: number;
+
 	fields: number;
+
 	specialties: number;
 };
 
 function StatCard({
 	label,
+
 	value,
+
 	onIconClick,
+
 	showIcon = false,
 }: {
 	label: string;
+
 	value: number;
+
 	onIconClick: () => void;
+
 	showIcon?: boolean;
 }) {
-	// ... StatCard remains unchanged (using old t(..)) or updated t(..) as requested
 	return (
 		<div className="relative flex flex-col items-center justify-center border rounded-md p-4 bg-white dark:bg-gray-800 shadow transition-all hover:shadow-md">
 			{showIcon && (
@@ -289,9 +430,10 @@ function StatCard({
 					className="absolute top-2 right-2 p-1.5 rounded-md text-gray-400  hover:text-[#86898f] hover:bg-blue-50 cursor-pointer transition-all"
 					onClick={(e) => {
 						e.stopPropagation();
+
 						onIconClick();
 					}}
-					title={t("dashboard.hierarchy.viewHierarchy")} // Assumed new translation key
+					title={t("dashboard.hierarchy.viewHierarchy")}
 				>
 					<ListTree className="size-5" />
 				</div>
@@ -300,6 +442,7 @@ function StatCard({
 			<span className="text-3xl font-bold text-gray-900 dark:text-white">
 				{value}
 			</span>
+
 			<span className="text-sm text-gray-600 dark:text-gray-300 mt-1">
 				{label}
 			</span>
@@ -308,7 +451,6 @@ function StatCard({
 }
 
 export default function DashboardPage() {
-	// ... (rest of DashboardPage remains the same)
 	const { t } = useTranslation();
 	const router = useRouter();
 
