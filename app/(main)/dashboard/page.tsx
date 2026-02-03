@@ -233,6 +233,7 @@ function HierarchyDialog({
 			setIsSearching(true);
 			try {
 				// Collections to search (exclude 'root')
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				const collectionsToSearch = Object.keys(HIERARCHY_MAP).filter(
 					(k) => k !== "root" && HIERARCHY_MAP[k]?.childCollection,
 				);
@@ -354,7 +355,7 @@ function HierarchyDialog({
 							) : (
 								<div className="flex flex-col items-center justify-center py-12 text-gray-400">
 									<p className="text-sm">
-										No results found for "{searchQuery}"
+										No results found for &quot;{searchQuery}&quot;
 									</p>
 								</div>
 							)}

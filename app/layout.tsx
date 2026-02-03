@@ -41,7 +41,9 @@ export default async function RootLayout({
 			className={`${inter.variable} ${cairo.variable}`}
 			suppressHydrationWarning
 		>
-			<body className="font-sans antialiased overflow-x-hidden">
+			<body
+				className={`${cairo.variable} ${inter.variable} antialiased overflow-x-hidden`}
+			>
 				<ThemeProvider
 					attribute="class"
 					defaultTheme="light"
