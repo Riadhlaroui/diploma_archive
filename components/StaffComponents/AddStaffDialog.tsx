@@ -350,14 +350,15 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 					<button
 						type="button"
 						onClick={() => onOpenChange(false)}
-						className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700"
+						className="flex-1 px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-sm font-semibold text-zinc-600 dark:text-zinc-400 bg-zinc-50/40 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-900 dark:hover:text-zinc-100 transition-all duration-200"
 					>
 						{t("addStaffDialog.cancelButton")}
 					</button>
+
 					<button
 						type="submit"
 						form="add-staff-form"
-						className="px-4 py-2 text-sm font-medium text-white bg-black border border-transparent rounded-md shadow-sm hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+						className="px-4 py-2 text-sm font-medium flex-1 text-white bg-black border border-transparent rounded-md shadow-sm hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
 						disabled={!isPasswordStrong || !email || !firstName}
 					>
 						{t("addStaffDialog.submitButton")}

@@ -31,7 +31,7 @@ export interface UserList {
 	email: string;
 	role: UserRole;
 	phone: string;
-	createdAt: string; // ISO string from PocketBase
+	createdAt: string;
 	updatedAt?: string;
 }
 
@@ -50,7 +50,8 @@ export async function getCurrentUser(): Promise<User | null> {
 			createdAt: new Date(record.created),
 			updatedAt: new Date(record.updated),
 		};
-	} catch {
+	} catch (error) {
+		console.error("Error fetching current user:", error);
 		return null;
 	}
 }
@@ -91,7 +92,10 @@ export async function createUser(data: createUserInput): Promise<User | null> {
 		};
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (error: any) {
-		console.error("Error response from PocketBase:", error?.response || error);
+		console.error(
+			"Error response from PocketBase: Error in creating user",
+			error?.response || error,
+		);
 		throw error;
 	}
 }
@@ -117,10 +121,9 @@ export async function getInbox(page = 1, perPage = 13) {
 export async function getUsersList(
 	page = 1,
 	perPage = 13,
-	searchTerm: string = ""
+	searchTerm: string = "",
 ) {
 	try {
-		// Build filter if searchTerm exists (search in firstName, lastName, or email)
 		const filter = searchTerm
 			? `firstName ~ "${searchTerm}" || lastName ~ "${searchTerm}" || email ~ "${searchTerm}"`
 			: "";
@@ -179,7 +182,10 @@ export async function getUsers() {
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (error: any) {
-		console.error("Error response from PocketBase:", error?.response || error);
+		console.error(
+			"Error response from PocketBase: Getting list of users",
+			error?.response || error,
+		);
 		throw error;
 	}
 }
@@ -188,7 +194,7 @@ export async function deleteUsers(userIds: string[]): Promise<void> {
 	try {
 		// Delete users one by one (PocketBase doesn't support batch delete natively)
 		await Promise.all(
-			userIds.map((id) => pb.collection("Archive_users").delete(id))
+			userIds.map((id) => pb.collection("Archive_users").delete(id)),
 		);
 	} catch (error) {
 		console.error("Error deleting users:", error);
@@ -231,16 +237,11 @@ export async function getCurrentUserRole(): Promise<"admin" | "staff" | null> {
 
 export async function updateUser(
 	id: string,
-	data: Partial<createUserInput>
+	data: Partial<createUserInput>,
 ): Promise<User | null> {
 	try {
-		// Log the data being sent to ensure it is correct
-		console.log("Updating user with data:", data);
-
-		// Update user in the Archive_users collection
 		const updatedRecord = await pb.collection("Archive_users").update(id, data);
 
-		// Log the action in Archive_inbox
 		const currentUser = pb.authStore.model;
 
 		if (currentUser) {
@@ -271,7 +272,7 @@ export async function updateUser(
 	} catch (error: any) {
 		console.error(
 			"Error updating user:",
-			error?.response?.data || error.message || error
+			error?.response?.data || error.message || error,
 		);
 		throw error;
 	}

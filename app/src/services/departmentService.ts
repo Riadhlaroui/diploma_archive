@@ -23,7 +23,6 @@ export async function isDepartmentNameTaken(
 
 	try {
 		const result = await pb.collection("Archive_departments").getList(1, 1, {
-			// Use the {key} syntax which is more widely compatible for PocketBase filters
 			filter: pb.filter("name = {:name} && facultyId = {:facultyId}", {
 				name: trimmedName,
 				facultyId: trimmedFacultyId,
@@ -34,7 +33,6 @@ export async function isDepartmentNameTaken(
 
 		return result.totalItems > 0;
 	} catch (error: any) {
-		// If the request was cancelled (common during fast typing), don't log an error
 		if (error.isAbort) return false;
 
 		console.error("Error checking department name:", error);

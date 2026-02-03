@@ -46,7 +46,7 @@ export function DepartmentUpdateDialog({ open, onOpenChange, user }: Props) {
 			// Use the new function with facultyId
 			const existing = await getDepartmentByNameAndFaculty(
 				name,
-				user.facultyId
+				user.facultyId,
 			);
 
 			if (existing && existing.id !== user.id) {
@@ -55,16 +55,16 @@ export function DepartmentUpdateDialog({ open, onOpenChange, user }: Props) {
 						<div className="font-semibold">
 							{t(
 								"editDepartmentDialog.errors.nameExistsTitle",
-								"Department name already exists"
+								"Department name already exists",
 							)}
 						</div>
 						<div className="text-sm">
 							{t(
 								"editDepartmentDialog.errors.nameExistsDesc",
-								"Please choose a different name."
+								"Please choose a different name.",
 							)}
 						</div>
-					</div>
+					</div>,
 				);
 				return;
 			}
@@ -73,14 +73,14 @@ export function DepartmentUpdateDialog({ open, onOpenChange, user }: Props) {
 			toast.success(
 				t(
 					"editDepartmentDialog.successMessage",
-					"Department updated successfully"
-				)
+					"Department updated successfully",
+				),
 			);
 			onOpenChange(false);
 		} catch (error) {
 			console.error("Error updating Department:", error);
 			toast.error(
-				t("editDepartmentDialog.errorMessage", "Failed to update Department")
+				t("editDepartmentDialog.errorMessage", "Failed to update Department"),
 			);
 		}
 	};
@@ -95,7 +95,7 @@ export function DepartmentUpdateDialog({ open, onOpenChange, user }: Props) {
 					<SheetDescription>
 						{t(
 							"editDepartmentDialog.description",
-							"Update the Department name."
+							"Update the Department name.",
 						)}
 					</SheetDescription>
 				</SheetHeader>
@@ -124,13 +124,13 @@ export function DepartmentUpdateDialog({ open, onOpenChange, user }: Props) {
 						<button
 							type="button"
 							onClick={() => onOpenChange(false)}
-							className="bg-gray-300 text-black px-4 py-2 w-full rounded-[3px] hover:bg-gray-400 transition hover:cursor-pointer"
+							className="flex-1 px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-sm font-semibold text-zinc-600 dark:text-zinc-400 bg-zinc-50/40 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-900 dark:hover:text-zinc-100 transition-all duration-200"
 						>
 							{t("editDepartmentDialog.cancelButton", "Cancel")}
 						</button>
 						<button
 							type="submit"
-							className="bg-black text-white px-4 py-2 w-full rounded-[3px] hover:bg-gray-900 transition hover:cursor-pointer"
+							className="bg-black flex-1 rounded-xl text-white px-4 py-2 w-full hover:bg-gray-900 transition hover:cursor-pointer"
 						>
 							{t("editDepartmentDialog.saveButton", "Save")}
 						</button>

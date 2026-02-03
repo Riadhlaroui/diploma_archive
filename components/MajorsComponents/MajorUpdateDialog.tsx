@@ -47,23 +47,23 @@ export function MajorUpdateDialog({ open, onOpenChange, major }: Props) {
 						<div className="font-semibold">
 							{t(
 								"editMajorDialog.errors.nameExistsTitle",
-								"Major name already exists"
+								"Major name already exists",
 							)}
 						</div>
 						<div className="text-sm">
 							{t(
 								"editMajorDialog.errors.nameExistsDesc",
-								"Please choose a different name."
+								"Please choose a different name.",
 							)}
 						</div>
-					</div>
+					</div>,
 				);
 				return;
 			}
 
 			await updateMajor(major.id, { name });
 			toast.success(
-				t("editMajorDialog.successMessage", "Major updated successfully")
+				t("editMajorDialog.successMessage", "Major updated successfully"),
 			);
 			onOpenChange(false);
 		} catch (error) {
@@ -108,13 +108,13 @@ export function MajorUpdateDialog({ open, onOpenChange, major }: Props) {
 						<button
 							type="button"
 							onClick={() => onOpenChange(false)}
-							className="bg-gray-300 text-black px-4 py-2 w-full rounded-[3px] hover:bg-gray-400 transition hover:cursor-pointer"
+							className="flex-1 px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-sm font-semibold text-zinc-600 dark:text-zinc-400 bg-zinc-50/40 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-900 dark:hover:text-zinc-100 transition-all duration-200"
 						>
 							{t("editMajorDialog.cancelButton", "Cancel")}
 						</button>
 						<button
 							type="submit"
-							className="bg-black text-white px-4 py-2 w-full rounded-[3px] hover:bg-gray-900 transition hover:cursor-pointer"
+							className="bg-black flex-1 rounded-xl text-white px-4 py-2 w-full hover:bg-gray-900 transition hover:cursor-pointer"
 						>
 							{t("editMajorDialog.saveButton", "Save")}
 						</button>

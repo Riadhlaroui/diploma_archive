@@ -52,8 +52,8 @@ export function SpecialtyUpdateDialog({
 			toast.error(
 				t(
 					"editSpecialtyDialog.errors.nameRequired",
-					"Specialty name is required"
-				)
+					"Specialty name is required",
+				),
 			);
 			return;
 		}
@@ -69,7 +69,7 @@ export function SpecialtyUpdateDialog({
 						<div className="text-sm">
 							{t("editSpecialtyDialog.errors.nameExistsDesc")}
 						</div>
-					</div>
+					</div>,
 				);
 				return;
 			}
@@ -79,14 +79,14 @@ export function SpecialtyUpdateDialog({
 			toast.success(
 				t(
 					"editSpecialtyDialog.successMessage",
-					"Specialty updated successfully"
-				)
+					"Specialty updated successfully",
+				),
 			);
 			onOpenChange(false);
 		} catch (error) {
 			console.error("Error updating Specialty:", error);
 			toast.error(
-				t("editSpecialtyDialog.errorMessage", "Failed to update Specialty")
+				t("editSpecialtyDialog.errorMessage", "Failed to update Specialty"),
 			);
 		}
 	};
@@ -127,13 +127,13 @@ export function SpecialtyUpdateDialog({
 						<button
 							type="button"
 							onClick={() => onOpenChange(false)}
-							className="bg-gray-300 text-black px-4 py-2 w-full rounded-[3px] hover:bg-gray-400 transition hover:cursor-pointer"
+							className="flex-1 px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-sm font-semibold text-zinc-600 dark:text-zinc-400 bg-zinc-50/40 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-900 dark:hover:text-zinc-100 transition-all duration-200"
 						>
 							{t("editSpecialtyDialog.cancelButton", "Cancel")}
 						</button>
 						<button
 							type="submit"
-							className="bg-black text-white px-4 py-2 w-full rounded-[3px] hover:bg-gray-900 transition hover:cursor-pointer"
+							className="bg-black flex-1 rounded-xl text-white px-4 py-2 w-full hover:bg-gray-900 transition hover:cursor-pointer"
 						>
 							{t("editSpecialtyDialog.saveButton", "Save")}
 						</button>
