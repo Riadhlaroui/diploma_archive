@@ -1,13 +1,15 @@
 "use client";
+
 import {
 	LogOut,
-	PlusCircle,
 	Settings,
 	User as UserIcon,
 	User2,
 	Users,
 	UserRoundPlus,
 	UserRoundX,
+	ChevronRight,
+	MoreVertical,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -24,10 +26,9 @@ import {
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useEffect, useState } from "react";
-import { CircleUserRound } from "lucide-react";
-import { clearAurthStore } from "../app/src/shared/utils/getUserInfo";
 
+import { useEffect, useState } from "react";
+import { clearAurthStore } from "../app/src/shared/utils/getUserInfo";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
 import AddStaffDialog from "./StaffComponents/AddStaffDialog";
@@ -36,23 +37,15 @@ import { getCurrentUser } from "@/app/src/services/userService";
 import { User } from "@/app/src/core/domain/entities/User";
 
 export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
-	const { i18n } = useTranslation();
-
+	const { i18n, t } = useTranslation();
 	const isRtl = i18n.language === "ar";
-
-	const [showLogoutDialog, setShowLogoutDialog] = useState(false);
-
-	const [openAddDialog, setOpenAddDialog] = useState(false);
-
-	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-
-	const [isClient, setIsClient] = useState(false);
-
-	const [user, setUser] = useState<User | null>(null);
-
 	const router = useRouter();
 
-	const { t } = useTranslation();
+	const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+	const [openAddDialog, setOpenAddDialog] = useState(false);
+	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+	const [isClient, setIsClient] = useState(false);
+	const [user, setUser] = useState<User | null>(null);
 
 	useEffect(() => {
 		setIsClient(true);
@@ -60,7 +53,7 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 	}, []);
 
 	if (!isClient) return null;
-	if (!user) return <p className="w-full">Not logged in</p>;
+	if (!user) return null;
 
 	const handleLogout = () => {
 		console.log("User logged out.");
@@ -69,48 +62,78 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 		setShowLogoutDialog(false);
 	};
 
+	// Helper to get initials
+	const initials =
+		`${user.firstName?.charAt(0) || ""}${user.lastName?.charAt(0) || ""}`.toUpperCase();
+
 	return (
 		<>
 			<DropdownMenu dir={isRtl ? "rtl" : "ltr"}>
 				<DropdownMenuTrigger asChild>
-					<div className="flex items-center gap-3 w-full p-1 rounded-sm outline-dashed outline-2 border-[0px] bg-muted transition-colors hover:cursor-pointer">
-						{isCollapsed && <User2 className=" opacity-90 w-[24px] h-[24px]" />}
+					<Button
+						variant="outline"
+						className={`w-full p-2 h-auto flex items-center gap-3 bg-transparent text-black border-black hover:bg-transparent border-none rounded-none justify-start  transition-all duration-200 ${
+							isCollapsed ? "justify-center px-2" : ""
+						}`}
+					>
+						<div className="relative flex h-8 w-8 shrink-0 overflow-hidden bg-primary/10 items-center justify-center border border-border">
+							<span className="font-semibold text-xs">
+								{initials || <User2 className="h-4 w-4" />}
+							</span>
+						</div>
+
 						{!isCollapsed && (
 							<>
-								<CircleUserRound className="ms-1.5 size-[2rem] flex-shrink-0 opacity-90" />
-								<div className=" flex flex-col items-start">
-									<div className="flex items-start gap-1">
-										<p className=" font-semibold">{user?.firstName}</p>
-										<p className=" font-semibold">{user?.lastName}</p>
-									</div>
-									<span className="text-sm opacity-65 truncate max-w-fit overflow-hidden text-ellipsis whitespace-nowrap cursor-default">
-										{user?.email}
+								<div className="flex flex-col items-start text-sm text-left leading-tight overflow-hidden">
+									<span className="font-semibold truncate w-full">
+										{user.firstName} {user.lastName}
+									</span>
+									<span className="text-xs text-muted-foreground truncate max-w-35">
+										{user.email}
 									</span>
 								</div>
 							</>
 						)}
-					</div>
+					</Button>
 				</DropdownMenuTrigger>
-				<DropdownMenuContent align="start" className="w-full min-w-[15rem]">
-					<DropdownMenuLabel>{t("profile.myAccount")}</DropdownMenuLabel>
+
+				<DropdownMenuContent
+					className="w-56"
+					align={isRtl ? "end" : "start"}
+					side={isCollapsed ? "right" : "bottom"}
+					sideOffset={8}
+				>
+					{/* User Details Header inside Dropdown (Cleaner look) */}
+					<div className="flex items-center justify-start gap-2 p-2">
+						<div className="flex flex-col space-y-0.5 leading-none">
+							<p className="font-medium text-sm">
+								{user.firstName} {user.lastName}
+							</p>
+							<p className="text-xs text-muted-foreground truncate w-[180px]">
+								{user.email}
+							</p>
+						</div>
+					</div>
+
 					<DropdownMenuSeparator />
+
 					<DropdownMenuGroup>
 						<DropdownMenuItem
-							className=" hover:cursor-pointer"
 							onClick={() => router.push("/profile")}
+							className="gap-2 cursor-pointer"
 						>
-							<UserIcon />
+							<UserIcon className="size-4 text-muted-foreground" />
 							<span>{t("profile.profile")}</span>
 						</DropdownMenuItem>
 						<DropdownMenuItem
-							className="hover:cursor-pointer"
 							onClick={() => router.push("/settings")}
+							className="gap-2 cursor-pointer"
 						>
-							<Settings />
+							<Settings className="size-4 text-muted-foreground" />
 							<span>{t("profile.settings")}</span>
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
-					<DropdownMenuSeparator />
+
 					{user?.role !== "staff" && (
 						<DropdownMenuGroup>
 							<DropdownMenuItem
@@ -118,12 +141,15 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 								onClick={() => router.replace("/team")}
 							>
 								<Users />
+
 								<span>{t("profile.team")}</span>
 							</DropdownMenuItem>
+
 							<DropdownMenuSub>
 								<DropdownMenuSubTrigger className="hover:cursor-pointer  items-center gap-2">
 									<span>{t("profile.addUser")}</span>
 								</DropdownMenuSubTrigger>
+
 								<DropdownMenuPortal>
 									<DropdownMenuSubContent>
 										<DropdownMenuItem
@@ -131,14 +157,18 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 											onClick={() => setOpenAddDialog(true)}
 										>
 											<UserRoundPlus />
+
 											<span>{t("profile.addMember")}</span>
 										</DropdownMenuItem>
+
 										<DropdownMenuSeparator />
+
 										<DropdownMenuItem
 											className=" hover:cursor-pointer"
 											onClick={() => setOpenDeleteDialog(true)}
 										>
 											<UserRoundX />
+
 											<span>{t("profile.deleteMember")}</span>
 										</DropdownMenuItem>
 									</DropdownMenuSubContent>
@@ -154,30 +184,32 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 						onClick={() => setShowLogoutDialog(true)}
 					>
 						<LogOut />
+
 						<span>{t("profile.logout")}</span>
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
 
-			{/* Add Staff Dialog */}
+			{/* Dialogs */}
 			<AddStaffDialog open={openAddDialog} onOpenChange={setOpenAddDialog} />
-
-			{/* Delete Staff Dialog */}
 			<DeleteStaffDialog
 				open={openDeleteDialog}
 				onOpenChange={setOpenDeleteDialog}
 			/>
 
 			{/* Logout Dialog */}
+
 			{showLogoutDialog && (
 				<div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
 					<div className="bg-white dark:bg-zinc-900 rounded-xl shadow-xl p-6 max-w-sm w-full space-y-4 text-center">
 						<h2 className="text-lg font-semibold">
 							{t("profile.logoutConfirm")}
 						</h2>
+
 						<p className="text-sm text-zinc-600 dark:text-zinc-400">
 							{t("profile.logoutMessage")}
 						</p>
+
 						<div className="flex justify-center gap-4 pt-4">
 							<Button
 								className=" hover:cursor-pointer"
@@ -186,6 +218,7 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 							>
 								{t("profile.cancel")}
 							</Button>
+
 							<Button
 								className="hover:cursor-pointer"
 								variant="destructive"

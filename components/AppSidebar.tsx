@@ -74,7 +74,7 @@ export function AppSidebar() {
 					url: "/inbox",
 					icon: Inbox,
 				},
-		  ]
+			]
 		: baseItems;
 
 	const studentContent = [
