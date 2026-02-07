@@ -92,7 +92,7 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 							</div>
 						)}
 						{!isCollapsed && (
-							<MoreVertical className="ml-auto h-4 w-4 text-muted-foreground/50" />
+							<MoreVertical className="ms-auto h-4 w-4 text-muted-foreground/50" />
 						)}
 					</Button>
 				</DropdownMenuTrigger>
