@@ -71,45 +71,49 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 			<DropdownMenu dir={isRtl ? "rtl" : "ltr"}>
 				<DropdownMenuTrigger asChild>
 					<Button
-						variant="outline"
-						className={`w-full p-2 h-auto flex items-center gap-3 bg-transparent text-black border-black hover:bg-transparent border-none rounded-none justify-start  transition-all duration-200 ${
-							isCollapsed ? "justify-center px-2" : ""
-						}`}
+						variant="ghost"
+						className={`w-full h-auto p-2 flex items-center gap-3 justify-start transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${isCollapsed ? "justify-center px-2" : ""
+							}`}
 					>
-						<div className="relative flex h-8 w-8 shrink-0 overflow-hidden bg-primary/10 items-center justify-center border border-border">
-							<span className="font-semibold text-xs">
+						<div className="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-full items-center justify-center bg-muted border border-border">
+							<span className="font-medium text-xs">
 								{initials || <User2 className="h-4 w-4" />}
 							</span>
 						</div>
 
 						{!isCollapsed && (
-							<>
-								<div className="flex flex-col items-start text-sm text-left leading-tight overflow-hidden">
-									<span className="font-semibold truncate w-full">
-										{user.firstName} {user.lastName}
-									</span>
-									<span className="text-xs text-muted-foreground truncate max-w-35">
-										{user.email}
-									</span>
-								</div>
-							</>
+							<div className="flex flex-col items-start text-sm leading-tight max-w-[150px]">
+								<span className="font-semibold truncate w-full">
+									{user.firstName} {user.lastName}
+								</span>
+								<span className="text-xs text-muted-foreground truncate w-full">
+									{user.email}
+								</span>
+							</div>
+						)}
+						{!isCollapsed && (
+							<MoreVertical className="ml-auto h-4 w-4 text-muted-foreground/50" />
 						)}
 					</Button>
 				</DropdownMenuTrigger>
 
 				<DropdownMenuContent
-					className="w-56"
+					className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
 					align={isRtl ? "end" : "start"}
 					side={isCollapsed ? "right" : "bottom"}
 					sideOffset={8}
 				>
-					{/* User Details Header inside Dropdown (Cleaner look) */}
-					<div className="flex items-center justify-start gap-2 p-2">
+					<div className="flex items-center gap-2 p-2">
+						<div className="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-full items-center justify-center bg-muted border border-border">
+							<span className="font-medium text-xs">
+								{initials || <User2 className="h-4 w-4" />}
+							</span>
+						</div>
 						<div className="flex flex-col space-y-0.5 leading-none">
-							<p className="font-medium text-sm">
+							<p className="font-semibold text-sm">
 								{user.firstName} {user.lastName}
 							</p>
-							<p className="text-xs text-muted-foreground truncate w-[180px]">
+							<p className="text-xs text-muted-foreground truncate w-[160px]">
 								{user.email}
 							</p>
 						</div>
@@ -134,41 +138,40 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
 
+					<DropdownMenuSeparator />
+
+
 					{user?.role !== "staff" && (
 						<DropdownMenuGroup>
 							<DropdownMenuItem
-								className=" hover:cursor-pointer"
+								className="gap-2 cursor-pointer"
 								onClick={() => router.replace("/team")}
 							>
-								<Users />
-
+								<Users className="size-4 text-muted-foreground" />
 								<span>{t("profile.team")}</span>
 							</DropdownMenuItem>
 
 							<DropdownMenuSub>
-								<DropdownMenuSubTrigger className="hover:cursor-pointer  items-center gap-2">
+								<DropdownMenuSubTrigger className="gap-2 cursor-pointer">
+									<UserRoundPlus className="size-4 text-muted-foreground" />
 									<span>{t("profile.addUser")}</span>
 								</DropdownMenuSubTrigger>
 
 								<DropdownMenuPortal>
 									<DropdownMenuSubContent>
 										<DropdownMenuItem
-											className="hover:cursor-pointer"
+											className="gap-2 cursor-pointer"
 											onClick={() => setOpenAddDialog(true)}
 										>
-											<UserRoundPlus />
-
+											<UserRoundPlus className="size-4 text-muted-foreground" />
 											<span>{t("profile.addMember")}</span>
 										</DropdownMenuItem>
-
 										<DropdownMenuSeparator />
-
 										<DropdownMenuItem
-											className=" hover:cursor-pointer"
+											className="gap-2 cursor-pointer text-destructive focus:text-destructive"
 											onClick={() => setOpenDeleteDialog(true)}
 										>
-											<UserRoundX />
-
+											<UserRoundX className="size-4" />
 											<span>{t("profile.deleteMember")}</span>
 										</DropdownMenuItem>
 									</DropdownMenuSubContent>
@@ -180,11 +183,10 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 					<DropdownMenuSeparator />
 
 					<DropdownMenuItem
-						className="hover:cursor-pointer"
+						className="gap-2 cursor-pointer text-destructive focus:text-destructive"
 						onClick={() => setShowLogoutDialog(true)}
 					>
-						<LogOut />
-
+						<LogOut className="size-4" />
 						<span>{t("profile.logout")}</span>
 					</DropdownMenuItem>
 				</DropdownMenuContent>
@@ -196,8 +198,6 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 				open={openDeleteDialog}
 				onOpenChange={setOpenDeleteDialog}
 			/>
-
-			{/* Logout Dialog */}
 
 			{showLogoutDialog && (
 				<div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
