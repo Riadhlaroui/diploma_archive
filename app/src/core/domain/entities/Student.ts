@@ -3,8 +3,8 @@ export interface Student {
 	firstName: string;
 	lastName: string;
 	enrollmentYear: number;
-	faculty: string; // e.g., "Computer Science"
-	diplomaType: string; // e.g., "Bachelor of Science"
+	faculty: string;
+	diplomaType: string;
 	year: Date;
 	createdAt: Date;
 	updatedAt: Date;
