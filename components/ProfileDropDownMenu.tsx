@@ -72,17 +72,22 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 				<DropdownMenuTrigger asChild>
 					<Button
 						variant="ghost"
-						className={`w-full h-auto p-2 flex items-center gap-3 justify-start transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${isCollapsed ? "justify-center px-2" : ""
-							}`}
+						className={`w-full h-auto p-2 flex items-center shadow-sm gap-3 justify-start transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+							isCollapsed ? "justify-center px-2 border-none" : "border"
+						}`}
 					>
-						<div className="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-full items-center justify-center bg-muted border border-border">
-							<span className="font-medium text-xs">
+						<div
+							className={`relative flex h-8 w-8 shrink-0 overflow-hidden rounded-full items-center justify-center bg-muted ${
+								isCollapsed ? "border-none h-fit w-fit" : "border border-border"
+							}`}
+						>
+							<span className="font-medium text-sm">
 								{initials || <User2 className="h-4 w-4" />}
 							</span>
 						</div>
 
 						{!isCollapsed && (
-							<div className="flex flex-col items-start text-sm leading-tight max-w-[150px]">
+							<div className="flex flex-col items-start text-sm leading-tight max-w-37.5">
 								<span className="font-semibold truncate w-full">
 									{user.firstName} {user.lastName}
 								</span>
@@ -91,6 +96,7 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 								</span>
 							</div>
 						)}
+
 						{!isCollapsed && (
 							<MoreVertical className="ms-auto h-4 w-4 text-muted-foreground/50" />
 						)}
@@ -113,7 +119,7 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 							<p className="font-semibold text-sm">
 								{user.firstName} {user.lastName}
 							</p>
-							<p className="text-xs text-muted-foreground truncate w-[160px]">
+							<p className="text-xs text-muted-foreground truncate w-40">
 								{user.email}
 							</p>
 						</div>
@@ -139,7 +145,6 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 					</DropdownMenuGroup>
 
 					<DropdownMenuSeparator />
-
 
 					{user?.role !== "staff" && (
 						<DropdownMenuGroup>
