@@ -217,141 +217,146 @@ const StaffList = () => {
 				<div className="text-red-500 text-sm mb-4 text-center">{error}</div>
 			)}
 
-			<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
-				<TableHeader>
-					<TableRow>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("staffList.id")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("staffList.firstName")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("staffList.lastName")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("staffList.email")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("staffList.role")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("staffList.phone")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("staffList.created")}
-						</TableHead>
-						<TableHead className={isRtl ? "text-right" : "text-left"}>
-							{t("staffList.actions")}
-						</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{loading ? (
+			<div className="overflow-auto bg-white border rounded-2xl">
+				<Table className="text-sm rounded-xl shadow-lg bg-white dark:bg-zinc-900">
+					<TableHeader>
 						<TableRow>
-							<TableCell colSpan={8} className="text-center py-6">
-								<Loader2 className="mx-auto animate-spin text-gray-500" />
-								<span className="text-sm text-gray-500 mt-2 block">
-									{t("staffList.loading")}
-								</span>
-							</TableCell>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("staffList.id")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("staffList.firstName")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("staffList.lastName")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("staffList.email")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("staffList.role")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("staffList.phone")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("staffList.created")}
+							</TableHead>
+							<TableHead className={isRtl ? "text-right" : "text-left"}>
+								{t("staffList.actions")}
+							</TableHead>
 						</TableRow>
-					) : logs.length > 0 ? (
-						logs.map((user) => (
-							<TableRow
-								key={user.id}
-								className="hover:bg-gray-100 dark:hover:bg-zinc-800 hover:cursor-pointer"
-							>
-								<TableCell>
-									<span className="inline-flex items-center gap-2 rounded-full bg-gray-200 px-3 py-1 text-sm font-medium">
-										{user.id}
-										{copiedId === user.id ? (
-											<Check size={14} className="text-green-600" />
-										) : (
-											<button
-												onClick={() => {
-													navigator.clipboard.writeText(user.id);
-													setCopiedId(user.id);
-													setTimeout(() => setCopiedId(""), 1500);
-												}}
-												title={"copy"}
-												className="hover:text-blue-500"
-											>
-												<Copy size={14} className=" hover:cursor-pointer" />
-											</button>
-										)}
+					</TableHeader>
+					<TableBody>
+						{loading ? (
+							<TableRow>
+								<TableCell colSpan={8} className="text-center py-6">
+									<Loader2 className="mx-auto animate-spin text-gray-500" />
+									<span className="text-sm text-gray-500 mt-2 block">
+										{t("staffList.loading")}
 									</span>
-								</TableCell>
-								<TableCell>{user.firstName}</TableCell>
-								<TableCell>{user.lastName}</TableCell>
-								<TableCell>
-									<span className="inline-block rounded-full bg-gray-200 px-3 py-1 text-sm font-medium">
-										{user.email}
-									</span>
-								</TableCell>
-								<TableCell>{user.role}</TableCell>
-								<TableCell>{user.phone}</TableCell>
-								<TableCell>
-									{new Date(user.createdAt).toLocaleString()}
-								</TableCell>
-								<TableCell>
-									<div className="flex gap-2">
-										<Button
-											size="sm"
-											variant="outline"
-											onClick={() => handleEdit(user)}
-											className=" hover:cursor-pointer"
-										>
-											<UserRoundPen />
-										</Button>
-										<Button
-											size="sm"
-											variant="destructive"
-											onClick={() => handleDelete(user.id)}
-											className=" hover:cursor-pointer bg-[#f44336] text-white"
-										>
-											<Trash2 />
-										</Button>
-									</div>
 								</TableCell>
 							</TableRow>
-						))
-					) : (
+						) : logs.length > 0 ? (
+							logs.map((user) => (
+								<TableRow
+									key={user.id}
+									className="hover:bg-gray-100 dark:hover:bg-zinc-800 hover:cursor-pointer"
+								>
+									<TableCell>
+										<span className="inline-flex items-center gap-2 rounded-full bg-gray-200 px-3 py-1 text-sm font-medium">
+											{user.id}
+											{copiedId === user.id ? (
+												<Check size={14} className="text-green-600" />
+											) : (
+												<button
+													onClick={() => {
+														navigator.clipboard.writeText(user.id);
+														setCopiedId(user.id);
+														setTimeout(() => setCopiedId(""), 1500);
+													}}
+													title={"copy"}
+													className="hover:text-blue-500"
+												>
+													<Copy size={14} className=" hover:cursor-pointer" />
+												</button>
+											)}
+										</span>
+									</TableCell>
+									<TableCell>{user.firstName}</TableCell>
+									<TableCell>{user.lastName}</TableCell>
+									<TableCell>
+										<span className="inline-block rounded-full bg-gray-200 px-3 py-1 text-sm font-medium">
+											{user.email}
+										</span>
+									</TableCell>
+									<TableCell>{user.role}</TableCell>
+									<TableCell>{user.phone}</TableCell>
+									<TableCell>
+										{new Date(user.createdAt).toLocaleString()}
+									</TableCell>
+									<TableCell>
+										<div className="flex gap-2">
+											<Button
+												size="sm"
+												variant="outline"
+												onClick={() => handleEdit(user)}
+												className=" hover:cursor-pointer"
+											>
+												<UserRoundPen />
+											</Button>
+											<Button
+												size="sm"
+												variant="destructive"
+												onClick={() => handleDelete(user.id)}
+												className=" hover:cursor-pointer bg-[#f44336] text-white"
+											>
+												<Trash2 />
+											</Button>
+										</div>
+									</TableCell>
+								</TableRow>
+							))
+						) : (
+							<TableRow>
+								<TableCell
+									colSpan={8}
+									className="text-center py-6 text-gray-500"
+								>
+									{t("staffList.title")}
+								</TableCell>
+							</TableRow>
+						)}
+					</TableBody>
+					<TableFooter>
 						<TableRow>
-							<TableCell colSpan={8} className="text-center py-6 text-gray-500">
-								{t("staffList.title")}
+							<TableCell colSpan={8} className="text-center py-3">
+								<div className="flex items-center justify-center gap-4">
+									<Button
+										variant="outline"
+										onClick={() => setPage((p) => Math.max(p - 1, 1))}
+										disabled={page === 1 || loading}
+										className="hover:cursor-pointer"
+									>
+										{t("pagination.previous")}
+									</Button>
+									<span className="text-sm">
+										{t("pagination.pageOf", { page, totalPages })}
+									</span>
+									<Button
+										variant="outline"
+										onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+										disabled={page >= totalPages || loading}
+										className="hover:cursor-pointer"
+									>
+										{t("pagination.next")}
+									</Button>
+								</div>
 							</TableCell>
 						</TableRow>
-					)}
-				</TableBody>
-				<TableFooter>
-					<TableRow>
-						<TableCell colSpan={8} className="text-center py-3">
-							<div className="flex items-center justify-center gap-4">
-								<Button
-									variant="outline"
-									onClick={() => setPage((p) => Math.max(p - 1, 1))}
-									disabled={page === 1 || loading}
-									className="hover:cursor-pointer"
-								>
-									{t("pagination.previous")}
-								</Button>
-								<span className="text-sm">
-									{t("pagination.pageOf", { page, totalPages })}
-								</span>
-								<Button
-									variant="outline"
-									onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
-									disabled={page >= totalPages || loading}
-									className="hover:cursor-pointer"
-								>
-									{t("pagination.next")}
-								</Button>
-							</div>
-						</TableCell>
-					</TableRow>
-				</TableFooter>
-			</Table>
+					</TableFooter>
+				</Table>
+			</div>
 
 			<AddStaffDialog open={openAddDialog} onOpenChange={setOpenAddDialog} />
 
@@ -373,7 +378,7 @@ const StaffList = () => {
 								role: selectedUser.role,
 								firstName: selectedUser.firstName,
 								lastName: selectedUser.lastName,
-						  })
+							})
 						: ""
 				}
 			/>
