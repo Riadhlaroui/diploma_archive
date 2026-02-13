@@ -1,0 +1,676 @@
+{
+	"GoToLogin": "Aller à la connexion",
+
+	"noPermission": "Vous n'avez pas la permission d'accéder à cette page",
+	"redirecting": "Redirection en cours...",
+	"welcome": "Bon retour!",
+	"email": "E-mail",
+	"password": "Mot de passe",
+	"forgotPassword": "Mot de passe oublié?",
+	"login.button": "Se connecter",
+	"login.success": "Connexion réussie",
+	"login.welcome": "Bienvenue!",
+	"login.failed": "Échec de la connexion",
+	"login.incorrect": "Identifiants incorrects",
+	"noAccount": "Vous n'avez pas de compte?",
+	"signUp": "S'inscrire",
+	"language": "Langue",
+
+	"dashboard": {
+		"title": "Tableau de Bord",
+		"searchPlaceholder": "Rechercher...",
+		"overview": "Aperçu",
+		"stats": {
+			"faculties": "Facultés",
+			"departments": "Départements",
+			"majors": "Majeures",
+			"fields": "Domaines",
+			"specialties": "Spécialités"
+		},
+
+		"hierarchy": {
+			"title": "Explorateur de Hiérarchie du Système",
+			"hint": "Cliquez sur les flèches pour développer les niveaux",
+			"noItems": "Aucun élément trouvé."
+		}
+	},
+
+	"settings": {
+		"title": "Paramètres"
+	},
+
+	"profile": {
+		"myAccount": "Mon compte",
+		"profile": "Profil",
+		"settings": "Paramètres",
+		"team": "Équipe",
+		"addUser": "Gestion du personne",
+		"addMember": "Ajouter un membre du personnel",
+		"deleteMember": "Supprimer un membre du personnel",
+		"logout": "Se déconnecter",
+		"logoutConfirm": "Confirmer la déconnexion",
+		"logoutMessage": "Êtes-vous sûr de vouloir vous déconnecter ?",
+		"cancel": "Annuler"
+	},
+
+	"sidebar": {
+		"home": "Accueil",
+		"inbox": "Boîte de réception",
+		"search": "Recherche",
+		"settings": "Paramètres",
+		"students": "Étudiants",
+		"application": "Application",
+		"manageStudents": "Gérer les étudiants",
+		"connected": "Connecté au serveur",
+		"disconnected": "Déconnecté du serveur",
+		"checking": "Vérification de l'état du serveur...",
+		"manageFaculties": "Gérer les facultés",
+		"faculties": "Facultés"
+	},
+
+	"addStaffDialog": {
+		"triggerButton": "Ajouter un membre",
+		"title": "Ajouter un nouveau membre",
+		"firstName": "Prénom",
+		"lastName": "Nom",
+		"phoneNumber": "Numéro de téléphone",
+		"email": "E-mail",
+		"password": "Mot de passe",
+		"confirmPassword": "Confirmer le mot de passe",
+		"roleLabel": "Rôle",
+		"selectRolePlaceholder": "Sélectionner un rôle",
+		"staffRole": "Personnel",
+		"adminRole": "Administrateur",
+		"submitButton": "Soumettre",
+		"errors": {
+			"mismatchTitle": "Les mots de passe ne correspondent pas",
+			"mismatchDesc": "Veuillez vous assurer que les deux mots de passe sont identiques.",
+			"missingTitle": "Champs requis manquants",
+			"missingDesc": "Veuillez remplir tous les champs obligatoires marqués d’un *.",
+			"weakTitle": "Mot de passe faible",
+			"weakDesc": "Le mot de passe doit comporter au moins 8 caractères, inclure une majuscule et un chiffre ou un caractère spécial.",
+			"userCreatedError": "Échec de la création de l'utilisateur. Veuillez réessayer.",
+			"emailExistsTitle": "Email déjà utilisé",
+			"emailExistsDesc": "L'adresse email saisie est déjà enregistrée. Veuillez en essayer une autre."
+		},
+		"cancelButton": "Annuler",
+		"userCreatedSuccess": "Utilisateur créé avec succès !",
+		"req": {
+			"length": "Au moins 8 caractères",
+			"upper": "Une majuscule",
+			"lower": "Une minuscule",
+			"number": "Un chiffre",
+			"special": "Un caractère spécial"
+		},
+		"passwordRequirements": "Exigences du mot de passe"
+	},
+
+	"auditLogs": {
+		"title": "Journaux d'audit",
+		"action": "Action",
+		"userId": "ID utilisateur",
+		"targetType": "Type de cible",
+		"targetId": "ID de la cible",
+		"timestamp": "Horodatage",
+		"copy": "Copier",
+		"loading": "Chargement des journaux d'audit...",
+		"fetchError": "Une erreur est survenue lors du chargement des journaux d'audit.",
+		"noLogs": "Aucun journal disponible."
+	},
+	"pagination": {
+		"previous": "Précédent",
+		"next": "Suivant",
+		"pageOf": "Page {{page}} sur {{totalPages}}",
+		"Showing": "Affichage de",
+		"to": "à",
+		"of": "sur",
+		"Records": "enregistrements",
+		"show": "Afficher",
+		"perPage": "par page"
+	},
+
+	"actions": {
+		"create_user": "Créer un utilisateur",
+		"delete_user": "Supprimer un utilisateur",
+		"update_user": "Mettre à jour l'utilisateur"
+	},
+
+	"staffList": {
+		"title": "Liste du personnel",
+		"loading": "Chargement",
+		"error": "Échec du chargement des données.",
+		"copy": "copier",
+		"notFound": "Aucun membre du personnel trouvé.",
+		"id": "Id",
+		"firstName": "Prénom",
+		"lastName": "Nom de famille",
+		"email": "Email",
+		"role": "Rôle",
+		"phone": "Téléphone",
+		"created": "Créé",
+		"actions": "Actions",
+		"previous": "Précédent",
+		"next": "Suivant",
+		"page": "Page {{page}} sur {{totalPages}}",
+		"confirmDelete": "Supprimer l'utilisateur ?",
+		"confirmDeleteDesc": "Êtes-vous sûr de vouloir supprimer l'utilisateur {{email}} ayant le rôle {{role}} ? Cette action est irréversible.",
+		"deleteSuccess": "Utilisateur supprimé avec succès.",
+		"deleteError": "Échec de la suppression de l'utilisateur."
+	},
+
+	"deleteStaffDialog": {
+		"title": "Supprimer un membre du personnel",
+		"searchPlaceholder": "Rechercher un membre du personnel",
+		"noStaffFound": "Aucun membre du personnel trouvé.",
+		"roleLabel": "Rôle",
+		"errors": {
+			"fetchFailed": "Échec de la récupération de la liste du personnel",
+			"deleteFailed": "Échec de la suppression des membres du personnel"
+		},
+		"success": "{{count}} membre(s) du personnel supprimé(s) avec succès",
+		"warnings": {
+			"noSelection": "Veuillez sélectionner au moins un membre du personnel"
+		},
+		"deleting": "Suppression en cours...",
+		"confirm": {
+			"title": "Confirmer la suppression",
+			"description": "Êtes-vous sûr de vouloir supprimer {{count}} membre(s) du personnel ? Cette action est irréversible."
+		}
+	},
+	"roles": {
+		"admin": "Administrateur",
+		"staff": "Personnel"
+	},
+	"common": {
+		"cancel": "Annuler",
+		"delete": "Supprimer",
+		"edit": "Modifier",
+		"view": "Voir",
+		"back": "Retour",
+		"na": "N/D",
+		"copy": "Copier {{field}}",
+		"confirm": "Confirmer ({{count}})",
+		"dir": "ltr",
+		"searchPlaceholder": "Rechercher..."
+	},
+
+	"editUserDialog": {
+		"title": "Modifier l'utilisateur",
+		"firstName": "Prénom",
+		"lastName": "Nom de famille",
+		"phoneNumber": "Numéro de téléphone",
+		"email": "E-mail",
+		"description": "Mettre à jour les informations de l'utilisateur sélectionné.",
+		"successMessage": "Utilisateur mis à jour avec succès !",
+		"errorMessage": "Échec de la mise à jour de l'utilisateur. Veuillez réessayer."
+	},
+
+	"faculties": {
+		"title": "Facultés",
+		"addFaculty": "Ajouter une faculté",
+		"editFaculty": "Modifier la faculté",
+		"deleteFaculty": "Supprimer la faculté",
+		"confirmDelete": "Êtes-vous sûr de vouloir supprimer cette faculté ?",
+		"name": "Nom",
+		"code": "Code",
+		"departmentCount": "Nombre de départements",
+		"actions": "Actions",
+		"submit": "Soumettre",
+		"cancel": "Annuler",
+		"successCreate": "Faculté créée avec succès !",
+		"successUpdate": "Faculté mise à jour avec succès !",
+		"successDelete": "Faculté supprimée avec succès !",
+		"error": "Une erreur s’est produite. Veuillez réessayer.",
+		"notFound": "Aucune faculté trouvée.",
+		"deleteSuccess": "La faculté '{{name}}' a été supprimée avec succès !",
+		"deleteError": "Échec de la suppression de la faculté '{{name}}'."
+	},
+
+	"addFaculty": {
+		"title": "Ajouter une nouvelle faculté",
+		"name": "Nom",
+		"cancel": "Annuler",
+		"submit": "Soumettre",
+		"nameRequired": "Le nom de la faculté est requis.",
+		"success": "Faculté ajoutée avec succès !",
+		"duplicateTitle": "Une faculté avec ce nom existe déjà.",
+		"duplicateSubtitle": "Veuillez choisir un nom différent.",
+		"errorTitle": "Une erreur s'est produite.",
+		"errorSubtitle": "Veuillez réessayer plus tard."
+	},
+
+	"students": {
+		"title": "Étudiants",
+		"matricule": "Matricule",
+		"firstName": "Prénom",
+		"lastName": "Nom",
+		"enrollmentYear": "Année d'inscription",
+		"dateOfBirth": "Date de naissance",
+		"specialtyId": "Spécialité",
+		"year": "Année",
+		"field": "Domaine",
+		"major": "Filière",
+		"specialty": "Spécialité",
+		"createdAt": "Créé le",
+		"actions": "Actions",
+		"notFound": "Aucun étudiant trouvé",
+		"copyId": "Copier le matricule",
+		"numberOfDocuments": "Nombre de documents",
+		"requiredField": "Veuillez remplir le champ requis : {{field}}",
+		"noDocuments": "Veuillez télécharger au moins un document.",
+		"invalidDOB": "Format de date de naissance invalide.",
+		"futureDOB": "La date de naissance ne peut pas être dans le futur.",
+		"invalidEnrollmentYear": "L'année d'inscription doit être comprise entre 1900 et {{year}}.",
+		"exists": "Un étudiant avec ce matricule existe déjà.",
+		"chooseDifferent": "Veuillez choisir un autre matricule.",
+		"created": "Étudiant créé avec succès.",
+		"creationError": "Erreur lors de la création de l'étudiant.",
+		"profile": "Profil de l'étudiant",
+		"info": "Informations de l'étudiant",
+		"documents": "Documents",
+		"name": "Nom",
+		"uploadToGetStarted": "Téléversez des documents pour commencer",
+		"confirmDeleteTitle": "Supprimer l'étudiant",
+		"confirmDeleteDescription": "Êtes-vous sûr de vouloir supprimer {{name}} ? Cette action est irréversible.",
+		"deleteSuccess": "Étudiant supprimé avec succès",
+		"deleteFailed": "Échec de la suppression de l'étudiant",
+		"invalidGraduationYear": "Année de diplômation invalide",
+		"graduationBeforeEnrollment": "L'année de diplômation ne peut pas être antérieure à l'année d'inscription",
+		"graduationYear": "Année de Diplôme",
+
+		"totalStudents": "Total Students"
+	},
+
+	"addStudent": {
+		"back": "Retour",
+		"title": "Ajouter un nouvel étudiant",
+		"description": "Veuillez remplir les informations ci-dessous pour créer une nouvelle fiche étudiant.",
+
+		"academicInfo": "Informations académiques",
+		"faculty": "Faculté",
+		"selectFaculty": "Sélectionnez une faculté",
+		"department": "Département",
+		"selectDepartment": "Sélectionnez un département",
+		"field": "Domaine",
+		"selectField": "Sélectionnez un domaine",
+		"major": "Filière",
+		"selectMajor": "Sélectionnez une filière",
+		"specialty": "Spécialité",
+		"selectSpecialty": "Sélectionnez une spécialité",
+		"personalInfo": "Informations personnelles",
+		"matricule": "Matricule",
+		"enterMatricule": "Entrez le matricule",
+		"firstName": "Prénom",
+		"enterFirstName": "Entrez le prénom",
+		"lastName": "Nom",
+		"enterLastName": "Entrez le nom",
+		"dateOfBirth": "Date de naissance",
+		"enrollmentYear": "Année d'inscription",
+		"enterEnrollmentYear": "Entrez l'année d'inscription",
+		"createStudent": "Créer un étudiant",
+		"graduationYear": "Année de diplômation",
+		"enterGraduationYear": "Entrez l'année de diplômation"
+	},
+
+	"documents": {
+		"title": "Documents",
+		"count": "{{count}} fichier{{pluralSuffix}}",
+		"upload": "Téléverser des documents",
+		"emptyTitle": "Aucun document téléversé",
+		"emptyDescription": "Téléversez les documents de l'étudiant pour commencer",
+		"remove": "Supprimer {{fileName}}"
+	},
+
+	"uploadDocuments": {
+		"title": "Téléverser des documents",
+		"dragAndDrop": "Glissez et déposez les fichiers ici",
+		"orClick": "ou cliquez pour parcourir votre ordinateur",
+		"supportedFormats": "Formats pris en charge : PDF, PNG, JPG, JPEG, DOC, DOCX",
+		"uploadedFiles": "Fichiers téléversés ({{count}})",
+		"documentType": "Type de document",
+		"loadingTypes": "Chargement des types...",
+		"selectDocumentType": "Sélectionnez un type de document",
+		"remove": "Supprimer",
+		"typeRequired": "Veuillez spécifier un type pour tous les documents",
+		"typeExists": "Ce type existe déjà",
+		"typeAddError": "Échec de l'ajout du type de document. Veuillez réessayer.",
+		"documentTypes": "Types de document",
+		"addNewDocumentType": "Ajouter un nouveau type de document",
+		"enterNewTypeName": "Entrez le nom du nouveau type",
+		"add": "Ajouter",
+		"adding": "Ajout...",
+		"cancel": "Annuler",
+		"missingFields": "Veuillez sélectionner un type de document et un fichier",
+		"success": "Document ajouté aux modifications en attente"
+	},
+	"filterPanel": {
+		"title": "Rechercher et filtrer les étudiants",
+		"close": "Fermer le panneau de filtre",
+		"searchLabel": "Rechercher par nom, matricule, etc.",
+		"searchPlaceholder": "Entrez une requête de recherche...",
+		"options": "Options de filtrage :",
+		"matricule": "Matricule",
+		"enterMatricule": "Entrez le matricule",
+		"faculty": "Faculté",
+		"selectFaculty": "Sélectionner une faculté",
+		"department": "Département",
+		"selectDepartment": "Sélectionner un département",
+		"field": "Domaine",
+		"selectField": "Sélectionner un domaine",
+		"major": "Filière",
+		"selectMajor": "Sélectionner une filière",
+		"specialty": "Spécialité",
+		"selectSpecialty": "Sélectionner une spécialité",
+		"reset": "Réinitialiser les filtres",
+		"apply": "Appliquer les filtres",
+		"graduationYear": "Année de Diplôme"
+	},
+
+	"loading": "Chargement...",
+
+	"departments": {
+		"titleWithFaculty": "Départements dans: {{faculty}}",
+		"title": "Départements",
+		"name": "Nom",
+		"code": "Code",
+		"createdAt": "Créé le",
+		"actions": "Actions",
+		"fieldsCount": "Nombre de filières",
+		"noDepartments": "Aucun département trouvé.",
+		"searchPlaceholder": "Rechercher des départements...",
+		"deleteFail": "Échec de la suppression du département '{{name}}'.",
+		"deleteSuccess": "Le département '{{name}}' a été supprimé avec succès !",
+		"deleteError": "Échec de la suppression du département '{{name}}'."
+	},
+
+	"addDepartment": {
+		"title": "Ajouter un nouveau département",
+		"name": "Nom",
+		"nameRequired": "Le nom du département est requis.",
+		"success": "Département ajouté avec succès !",
+		"duplicateTitle": "Un département avec ce nom existe déjà.",
+		"duplicateMessage": "Veuillez choisir un nom différent."
+	},
+
+	"error": {
+		"title": "Une erreur s'est produite.",
+		"message": "Veuillez réessayer plus tard."
+	},
+
+	"actionsDep": {
+		"cancel": "Annuler",
+		"submit": "Valider"
+	},
+
+	"confirm": {
+		"title": "Confirmer la suppression",
+		"description": "Êtes-vous sûr de vouloir supprimer {{count}} membre(s) du personnel ? Cette action est irréversible.",
+		"major": {
+			"description": "Êtes-vous sûr de vouloir supprimer cette filière ? Cette action est irréversible."
+		},
+
+		"department": {
+			"description": "Êtes-vous sûr de vouloir supprimer le {{entity}} « {{name}} » ?",
+			"entities": {
+				"department": "département"
+			}
+		},
+		"field": {
+			"description": "Êtes-vous sûr de vouloir supprimer le {{entity}} « {{name}} » ? Cette action est irréversible.",
+			"entities": {
+				"field": "domaine"
+			}
+		},
+		"specialty": {
+			"description": "Êtes-vous sûr de vouloir supprimer la {{entity}} « {{name}} » ? Cette action est irréversible.",
+			"entities": {
+				"specialty": "spécialité"
+			}
+		}
+	},
+
+	"navigation": {
+		"home": "Accueil"
+	},
+
+	"fields": {
+		"title": "Domaine",
+		"search_placeholder": "Rechercher des Domaine...",
+		"majors_count": "Nombre de filiales",
+		"created_at": "Date de création",
+		"actions": "Actions",
+		"notFound": "Aucun Domaine trouvé",
+		"deleted_success": "Le domaine '{{name}}' a été supprimé avec succès !",
+		"deleted_fail": "Échec de la suppression du domaine '{{name}}'.",
+		"titleWithDepartment": "Les domaine dans: {{department}}",
+		"code": "Code",
+		"name": "Nom",
+		"MajorsCount": "Nombre de filiales",
+		"createdAt": "Créé le",
+		"deleteSuccess": "Le domaine '{{name}}' a été supprimé avec succès !",
+		"deleteError": "Échec de la suppression du domaine '{{name}}'."
+	},
+
+	"AddFieldDialog": {
+		"title": "Ajouter un nouveau champs",
+		"nameLabel": "Nom",
+		"cancel": "Annuler",
+		"submit": "Soumettre",
+		"close": "Fermer la boîte de dialogue",
+		"errors": {
+			"nameRequired": "Le nom du champs est requis.",
+			"nameTakenTitle": "Un champs avec ce nom existe déjà.",
+			"nameTakenDesc": "Veuillez choisir un nom différent.",
+			"genericTitle": "Une erreur s'est produite.",
+			"genericDesc": "Veuillez réessayer plus tard."
+		},
+		"success": {
+			"added": "Champs ajouté avec succès !"
+		}
+	},
+
+	"majors": {
+		"title": "Filières",
+		"titleWithfield": "Les filiales dans: {{field}}",
+		"table": {
+			"code": "Code",
+			"name": "Nom",
+			"specialtiesCount": "Nombre de spécialités",
+			"createdAt": "Créé le",
+			"actions": "Actions"
+		},
+		"notFound": "Aucune filière trouvée",
+		"deleteSuccess": "La spécialisation '{{name}}' a été supprimée avec succès !",
+		"deleteError": "Échec de la suppression de la spécialisation '{{name}}'."
+	},
+
+	"addMajor": {
+		"title": "Ajouter un nouveau branche",
+		"nameLabel": "Nom",
+		"cancel": "Annuler",
+		"submit": "Envoyer",
+		"close": "Fermer la fenêtre",
+		"success": "Branche ajoutée avec succès !",
+		"errors": {
+			"nameRequired": "Le nom de la branche est requis.",
+			"nameTaken": {
+				"title": "Une branche avec ce nom existe déjà.",
+				"desc": "Veuillez choisir un nom différent."
+			},
+			"general": {
+				"title": "Une erreur s'est produite.",
+				"desc": "Veuillez réessayer plus tard."
+			}
+		}
+	},
+
+	"specialties": {
+		"title": "Spécialités",
+		"titleWithMajor": "Spécialités dans: {{major}}",
+		"code": "Code",
+		"name": "Nom",
+		"createdAt": "Créé le",
+		"actions": "Actions",
+		"notFound": "Aucune spécialité trouvée",
+		"deleteSuccess": "La spécialité {{name}} a été supprimée avec succès."
+	},
+
+	"addSpecialty": {
+		"title": "Ajouter une nouvelle spécialité",
+		"nameLabel": "Nom",
+		"cancel": "Annuler",
+		"submit": "Envoyer",
+		"close": "Fermer la fenêtre",
+		"success": "Spécialité ajoutée avec succès !",
+		"errors": {
+			"nameRequired": "Le nom de la spécialité est requis.",
+			"nameTaken": {
+				"title": "Une spécialité avec ce nom existe déjà.",
+				"desc": "Veuillez choisir un nom différent."
+			},
+			"general": {
+				"title": "Une erreur s'est produite.",
+				"desc": "Veuillez réessayer plus tard."
+			}
+		}
+	},
+
+	"editFacultyDialog": {
+		"title": "Modifier la faculté",
+		"description": "Mettre à jour le nom de la faculté.",
+		"facultyName": "Nom de la faculté",
+		"cancelButton": "Annuler",
+		"saveButton": "Enregistrer",
+		"successMessage": "Faculté mise à jour avec succès",
+		"errorMessage": "Échec de la mise à jour de la faculté",
+		"errors": {
+			"nameExistsTitle": "Le nom de la faculté existe déjà",
+			"nameExistsDesc": "Veuillez choisir un autre nom."
+		}
+	},
+
+	"editDepartmentDialog": {
+		"title": "Modifier le département",
+		"description": "Mettre à jour le nom du département.",
+		"departmentName": "Nom du département",
+		"cancelButton": "Annuler",
+		"saveButton": "Enregistrer",
+		"successMessage": "Département mis à jour avec succès",
+		"errorMessage": "Échec de la mise à jour du département",
+		"errors": {
+			"nameExistsTitle": "Le nom du département existe déjà",
+			"nameExistsDesc": "Veuillez choisir un autre nom."
+		}
+	},
+
+	"editFieldDialog": {
+		"title": "Modifier le Domaine",
+		"description": "Mettre à jour le nom du domaine.",
+		"fieldName": "Nom du Domaine",
+		"cancelButton": "Annuler",
+		"saveButton": "Enregistrer",
+		"successMessage": "Domaine mis à jour avec succès.",
+		"errorMessage": "Échec de la mise à jour du domaine.",
+		"errors": {
+			"nameExistsTitle": "Le nom du domaine existe déjà",
+			"nameExistsDesc": "Veuillez choisir un autre nom."
+		}
+	},
+
+	"editMajorDialog": {
+		"title": "Modifier la Filière",
+		"description": "Mettre à jour le nom de la filière.",
+		"majorName": "Nom de la Filière",
+		"cancelButton": "Annuler",
+		"saveButton": "Enregistrer",
+		"successMessage": "Filière mise à jour avec succès.",
+		"errorMessage": "Échec de la mise à jour de la filière.",
+		"errors": {
+			"nameExistsTitle": "Le nom de la filière existe déjà",
+			"nameExistsDesc": "Veuillez choisir un autre nom."
+		}
+	},
+
+	"editSpecialtyDialog": {
+		"title": "Modifier la spécialité",
+		"description": "Mettre à jour le nom de la spécialité.",
+		"specialtyName": "Nom de la spécialité",
+		"cancelButton": "Annuler",
+		"saveButton": "Enregistrer",
+		"successMessage": "Spécialité mise à jour avec succès.",
+		"errorMessage": "Échec de la mise à jour de la spécialité.",
+		"errors": {
+			"nameExistsTitle": "Le nom de la spécialité existe déjà",
+			"nameExistsDesc": "Veuillez choisir un autre nom."
+		}
+	},
+
+	"updateStudent": {
+		"title": "Modifier l'Étudiant",
+		"notFound": "Étudiant non trouvé",
+		"academicInfo": "Informations Académiques",
+		"personalInfo": "Informations Personnelles",
+		"studentDocuments": "Documents de l'Étudiant",
+		"uploadNewDocument": "Télécharger un Nouveau Document",
+		"documentFile": "Fichier du Document",
+		"addDocumentToPending": "Ajouter le Document aux Modifications en Attente",
+		"pendingDocumentsNote": "Documents en Attente (seront téléchargés lorsque vous cliquerez sur \"Mettre à jour les informations de l'étudiant\")",
+		"existingDocuments": "Documents Existants",
+		"noDocuments": "Aucun Document",
+		"faculty": "Faculté",
+		"selectFaculty": "Sélectionnez une Faculté",
+		"department": "Département",
+		"selectDepartment": "Sélectionnez un Département",
+		"field": "Domaine",
+		"selectField": "Sélectionnez un Domaine",
+		"major": "Majeure",
+		"selectMajor": "Sélectionnez une Majeure",
+		"specialty": "Spécialité",
+		"selectSpecialty": "Sélectionnez une Spécialité",
+		"matricule": "Matricule",
+		"firstName": "Prénom",
+		"lastName": "Nom",
+		"dateOfBirth": "Date de Naissance",
+		"enrollmentYear": "Année d'Inscription",
+		"updateButton": "Mettre à Jour les Informations de l'Étudiant",
+		"savingChanges": "Enregistrement des modifications...",
+		"selectDocumentType": "Sélectionnez le type de document",
+		"unknownType": "Type inconnu",
+		"noFilename": "Aucun nom de fichier",
+		"deleteDocumentTitle": "Supprimer le Document",
+		"deleteDocumentDescription": "Êtes-vous sûr de vouloir supprimer ce document ? Cette action est irréversible.",
+		"documentDeletedSuccess": "Document supprimé avec succès",
+		"documentDeleteFailed": "Échec de la suppression du document",
+		"documentAddedPending": "Document ajouté aux modifications en attente",
+		"documentRemovedPending": "Document retiré des modifications en attente",
+		"allChangesSaved": "Toutes les modifications ont été enregistrées avec succès",
+		"failedToSaveChanges": "Échec de l'enregistrement des modifications",
+		"graduationYear": "Année de Diplôme",
+		"invalidEnrollmentYear": "Format d'année d'inscription invalide",
+		"invalidGraduationYear": "Format d'année de diplôme invalide",
+		"yearValidationError": "L'année d'inscription doit être antérieure à l'année de diplôme"
+	},
+
+	"search": {
+		"facultyPlaceholder": "Rechercher des facultés...",
+		"departmentPlaceholder": "Rechercher des départements...",
+		"fieldPlaceholder": "Rechercher des domaines...",
+		"majorPlaceholder": "Rechercher des majeures...",
+		"specialtyPlaceholder": "Rechercher des spécialités...",
+		"button": "Rechercher",
+		"teamPlaceholder": "Rechercher du personnel..."
+	},
+	"terms": {
+		"faculty": "Faculté",
+		"department": "Département",
+		"field": "Domaine",
+		"major": "Majeure",
+		"specialty": "Spécialité"
+	},
+
+	"errors": {
+		"deleteSpecialty": "Échec de la suppression de la spécialité '{{name}}'.",
+		"requiredRelation": "Impossible de supprimer '{{name}}' car elle est utilisée par des étudiants.",
+		"generic400": "Échec de la suppression de la spécialité : {{message}}"
+	}
+}

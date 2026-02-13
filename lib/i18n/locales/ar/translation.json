@@ -1,0 +1,680 @@
+{
+	"GoToLogin": "الذهاب إلى تسجيل الدخول",
+
+	"noPermission": "ليس لديك إذن للوصول إلى هذه الصفحة",
+	"redirecting": "جاري إعادة التوجيه...",
+	"welcome": "مرحبًا بعودتك!",
+	"email": "البريد الإلكتروني",
+	"password": "كلمة المرور",
+	"forgotPassword": "هل نسيت كلمة المرور؟",
+	"login.button": "تسجيل الدخول",
+	"login.success": "تم تسجيل الدخول بنجاح",
+	"login.welcome": "أهلًا وسهلًا!",
+	"login.failed": "فشل تسجيل الدخول",
+	"login.incorrect": "بيانات الدخول غير صحيحة",
+	"noAccount": "ليس لديك حساب؟",
+	"signUp": "سجّل الآن",
+	"language": "اللغة",
+
+	"dashboard": {
+		"title": "لوحة التحكم",
+		"searchPlaceholder": "ابحث...",
+		"overview": "نظرة عامة",
+		"stats": {
+			"faculties": "الكليات",
+			"departments": "الأقسام",
+			"majors": "الفروع",
+			"fields": "الميادين",
+			"specialties": "الاختصاصات"
+		},
+
+		"hierarchy": {
+			"title": " التسلسل الهيكلي للنظام",
+			"hint": "انقر على الأسهم لتوسيع المستويات",
+			"noItems": "لم يتم العثور على عناصر."
+		}
+	},
+
+	"settings": {
+		"title": "صفحة الإعدادات"
+	},
+
+	"profile": {
+		"myAccount": "حسابي",
+		"profile": "الملف الشخصي",
+		"settings": "الإعدادات",
+		"team": "إدارة الموظفين",
+		"addUser": "إضافة مستخدم",
+		"addMember": "إضافة موظف جديد",
+		"deleteMember": "حذف موظف",
+		"logout": "تسجيل الخروج",
+		"logoutConfirm": "تأكيد تسجيل الخروج",
+		"logoutMessage": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+		"cancel": "إلغاء"
+	},
+
+	"sidebar": {
+		"home": "الرئيسية",
+		"inbox": "سجلات التدقيق",
+		"search": "بحث",
+		"settings": "الإعدادات",
+		"students": "الطلاب",
+		"application": "التطبيق",
+		"manageStudents": "إدارة الطلاب",
+		"connected": "متصل بالخادم",
+		"disconnected": "غير متصل بالخادم",
+		"checking": "جارٍ التحقق من حالة الخادم...",
+		"manageFaculties": "إدارة الكليات",
+		"faculties": "الكليات"
+	},
+
+	"addStaffDialog": {
+		"triggerButton": "إضافة موظف",
+		"title": "إضافة موظف جديد",
+		"firstName": "الاسم",
+		"lastName": "اللقب",
+		"phoneNumber": "رقم الهاتف",
+		"email": "البريد الإلكتروني",
+		"password": "كلمة المرور",
+		"confirmPassword": "تأكيد كلمة المرور",
+		"roleLabel": "الدور",
+		"selectRolePlaceholder": "اختر الدور",
+		"staffRole": "موظف",
+		"adminRole": "مسؤول",
+		"submitButton": "إرسال",
+		"errors": {
+			"mismatchTitle": "كلمتا المرور غير متطابقتين",
+			"mismatchDesc": "يرجى التأكد من تطابق كلمتي المرور.",
+			"missingTitle": "حقول مطلوبة مفقودة",
+			"missingDesc": "يرجى ملء جميع الحقول الإلزامية المحددة بـ *.",
+			"weakTitle": "كلمة المرور ضعيفة",
+			"weakDesc": "يجب أن تكون كلمة المرور 8 أحرف على الأقل، وتحتوي على حرف كبير ورقم أو رمز خاص.",
+			"userCreatedError": "فشل في إنشاء المستخدم. حاول مرة أخرى.",
+			"emailExistsTitle": "البريد الإلكتروني مستخدم",
+			"emailExistsDesc": "البريد الإلكتروني المدخل مستخدم بالفعل. جرب بريدًا آخر."
+		},
+		"cancelButton": "إلغاء",
+		"userCreatedSuccess": "تم إنشاء المستخدم بنجاح!",
+		"req": {
+			"length": "8 أحرف على الأقل",
+			"upper": "حرف كبير واحد",
+			"lower": "حرف صغير واحد",
+			"number": "رقم واحد",
+			"special": "رمز خاص واحد"
+		},
+		"passwordRequirements": "متطلبات كلمة المرور"
+	},
+
+	"auditLogs": {
+		"title": "سجلات التدقيق",
+		"action": "الإجراء",
+		"userId": "معرّف المستخدم",
+		"targetType": "نوع الهدف",
+		"targetId": "معرّف الهدف",
+		"timestamp": "الطابع الزمني",
+		"copy": "نسخ",
+		"loading": "جارٍ تحميل السجلات...",
+		"fetchError": "حدث خطأ أثناء جلب سجلات التدقيق.",
+		"noLogs": "لا توجد سجلات متاحة."
+	},
+
+	"pagination": {
+		"previous": "السابق",
+		"next": "التالي",
+		"pageOf": "الصفحة {{page}} من {{totalPages}}",
+		"Showing": "عرض",
+		"to": "إلى",
+		"of": "من أصل",
+		"Records": "سجلات",
+		"show": "عرض",
+		"perPage": "لكل صفحة"
+	},
+
+	"actions": {
+		"create_user": "إنشاء مستخدم",
+		"delete_user": "حذف مستخدم",
+		"update_user": "تحديث مستخدم"
+	},
+
+	"staffList": {
+		"title": "قائمة الموظفين",
+		"loading": "جاري التحميل",
+		"error": "فشل في تحميل البيانات.",
+		"copy": "نسخ",
+		"notFound": "لم يتم العثور على أعضاء في طاقم العمل.",
+		"id": "المعرف",
+		"firstName": "الاسم",
+		"lastName": "اللقب",
+		"email": "البريد الإلكتروني",
+		"role": "الدور",
+		"phone": "رقم الهاتف",
+		"created": "تاريخ الإنشاء",
+		"actions": "الإجراءات",
+		"previous": "السابق",
+		"next": "التالي",
+		"page": "الصفحة {{page}} من {{totalPages}}",
+		"confirmDelete": "حذف المستخدم؟",
+		"confirmDeleteDesc": "هل أنت متأكد أنك تريد حذف المستخدم {{email}} الذي لديه دور {{role}}؟ هذا الإجراء لا يمكن التراجع عنه.",
+		"deleteSuccess": "تم حذف المستخدم بنجاح.",
+		"deleteError": "فشل في حذف المستخدم."
+	},
+
+	"deleteStaffDialog": {
+		"title": "حذف عضو من الموظفين",
+		"searchPlaceholder": "ابحث عن عضو من الموظفين",
+		"noStaffFound": "لا يوجد موظفون.",
+		"roleLabel": "الدور",
+		"errors": {
+			"fetchFailed": "فشل جلب قائمة الموظفين",
+			"deleteFailed": "فشل حذف أعضاء الموظفين"
+		},
+		"success": "تم حذف {{count}} من أعضاء الموظفين بنجاح",
+		"warnings": {
+			"noSelection": "الرجاء تحديد عضو واحد على الأقل من الموظفين"
+		},
+		"deleting": "جاري الحذف...",
+		"confirm": {
+			"title": "تأكيد الحذف",
+			"description": "هل أنت متأكد أنك تريد حذف {{count}} عضو من الموظفين؟ لا يمكن التراجع عن هذا الإجراء."
+		}
+	},
+	"roles": {
+		"admin": "مدير",
+		"staff": "موظف"
+	},
+	"common": {
+		"cancel": "إلغاء",
+		"delete": "حذف",
+		"edit": "تعديل",
+		"view": "عرض",
+		"back": "عودة",
+		"na": "غير متوفر",
+		"copy": "نسخ {{field}}",
+		"confirm": "تأكيد ({{count}})",
+		"dir": "rtl",
+		"searchPlaceholder": "بحث..."
+	},
+
+	"editUserDialog": {
+		"title": "تعديل المستخدم",
+		"firstName": "الاسم",
+		"lastName": "اللقب",
+		"phoneNumber": "رقم الهاتف",
+		"email": "البريد الإلكتروني",
+		"description": "تحديث معلومات المستخدم المحدد.",
+		"successMessage": "تم تحديث المستخدم بنجاح!",
+		"errorMessage": "فشل في تحديث المستخدم. حاول مرة أخرى."
+	},
+
+	"faculties": {
+		"title": "الكليات",
+		"addFaculty": "إضافة كلية",
+		"editFaculty": "تعديل الكلية",
+		"deleteFaculty": "حذف الكلية",
+		"confirmDelete": "هل أنت متأكد من أنك تريد حذف هذه الكلية؟",
+		"name": "الاسم",
+		"code": "المعرف",
+		"departmentCount": "عدد الأقسام",
+		"actions": "الإجراءات",
+		"submit": "إرسال",
+		"cancel": "إلغاء",
+		"successCreate": "تم إنشاء الكلية بنجاح!",
+		"successUpdate": "تم تحديث الكلية بنجاح!",
+		"successDelete": "تم حذف الكلية بنجاح!",
+		"error": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+		"notFound": "لم يتم العثور على كليات.",
+		"deleteSuccess": "تم حذف الكلية '{{name}}' بنجاح!",
+		"deleteError": "فشل في حذف الكلية '{{name}}'."
+	},
+
+	"addFaculty": {
+		"title": "إضافة كلية جديدة",
+		"name": "الاسم",
+		"cancel": "إلغاء",
+		"submit": "إرسال",
+		"nameRequired": "اسم الكلية مطلوب.",
+		"success": "تمت إضافة الكلية بنجاح!",
+		"duplicateTitle": "كلية بهذا الاسم موجودة بالفعل.",
+		"duplicateSubtitle": "يرجى اختيار اسم مختلف.",
+		"errorTitle": "حدث خطأ.",
+		"errorSubtitle": "يرجى المحاولة مرة أخرى لاحقًا."
+	},
+
+	"students": {
+		"title": "الطلاب",
+		"matricule": "الرقم الجامعي",
+		"firstName": "الاسم",
+		"lastName": "اللقب",
+		"enrollmentYear": "سنة التسجيل",
+		"dateOfBirth": "تاريخ الميلاد",
+		"specialtyId": "التخصص",
+		"field": "ميدان",
+		"major": "فرع",
+		"specialty": "الاختصاص",
+		"numberOfDocuments": "عدد الوثائق",
+		"year": "السنة",
+		"createdAt": "تاريخ الإضافة",
+		"actions": "إجراءات",
+		"notFound": "لم يتم العثور على طلاب",
+		"copyId": "نسخ الرقم الجامعي",
+		"requiredField": "يرجى ملء الحقل المطلوب: {{field}}",
+		"noDocuments": "يرجى تحميل وثيقة واحد على الأقل.",
+		"invalidDOB": "تنسيق تاريخ الميلاد غير صالح.",
+		"futureDOB": "لا يمكن أن يكون تاريخ الميلاد في المستقبل.",
+		"invalidEnrollmentYear": "يجب أن تكون سنة التسجيل بين 1900 و{{year}}.",
+		"exists": "يوجد طالب بهذا الرقم التسلسلي بالفعل.",
+		"chooseDifferent": "يرجى اختيار رقم تسلسلي مختلف.",
+		"created": "تم إنشاء الطالب بنجاح.",
+		"creationError": "حدث خطأ أثناء إنشاء الطالب.",
+		"profile": "ملف الطالب",
+		"info": "معلومات الطالب",
+		"documents": "الوثائق",
+		"name": "الاسم",
+		"uploadToGetStarted": "قم بتحميل المستندات للبدء",
+		"confirmDeleteTitle": "حذف الطالب",
+		"confirmDeleteDescription": "هل أنت متأكد أنك تريد حذف {{name}}؟ هذا الإجراء لا يمكن التراجع عنه.",
+		"deleteSuccess": "تم حذف الطالب بنجاح",
+		"deleteFailed": "فشل في حذف الطالب",
+		"invalidGraduationYear": "سنة التخرج غير صالحة",
+		"graduationBeforeEnrollment": "لا يمكن أن تكون سنة التخرج قبل سنة التسجيل",
+		"graduationYear": "سنة التخرج",
+		"totalStudents": "إجمالي الطلاب"
+	},
+
+	"addStudent": {
+		"back": "رجوع",
+		"title": "إضافة طالب جديد",
+		"description": "يرجى ملء التفاصيل أدناه لإنشاء سجل طالب جديد.",
+
+		"academicInfo": "المعلومات الأكاديمية",
+		"faculty": "الكلية",
+		"selectFaculty": "اختر الكلية",
+		"department": "القسم",
+		"selectDepartment": "اختر القسم",
+		"field": "ميدان",
+		"selectField": "اختر ميدان",
+		"major": "فرع",
+		"selectMajor": "اختر فرع",
+		"specialty": "التخصص",
+		"selectSpecialty": "اختر التخصص",
+		"personalInfo": "المعلومات الشخصية",
+		"matricule": "الرقم التسلسلي",
+		"enterMatricule": "أدخل الرقم التسلسلي",
+		"firstName": "الاسم",
+		"enterFirstName": "أدخل الاسم",
+		"lastName": "اللقب",
+		"enterLastName": "أدخل اللقب",
+		"dateOfBirth": "تاريخ الميلاد",
+		"enrollmentYear": "سنة التسجيل",
+		"enterEnrollmentYear": "أدخل سنة التسجيل",
+		"createStudent": "إنشاء طالب",
+		"graduationYear": "سنة التخرج",
+		"enterGraduationYear": "أدخل سنة التخرج"
+	},
+
+	"documents": {
+		"title": "وثائق",
+		"count": "{{count}} ملف{{pluralSuffix}}",
+		"upload": "تحميل وثائق",
+		"emptyTitle": "لم يتم تحميل أي وثائق",
+		"emptyDescription": "قم بتحميل وثائق الطالب للبدء",
+		"remove": "إزالة {{fileName}}"
+	},
+
+	"uploadDocuments": {
+		"title": "تحميل وثائق",
+		"dragAndDrop": "اسحب وأفلت الملفات  هنا",
+		"orClick": "أو انقر لتصفح جهازك",
+		"supportedFormats": "الصيغ المدعومة: PDF، PNG، JPG، JPEG، DOC، DOCX",
+		"uploadedFiles": "الملفات التي تم تحميلها ({{count}})",
+		"documentType": "نوع وثيقة",
+		"loadingTypes": "جارٍ تحميل الأنواع...",
+		"selectDocumentType": "اختر نوع المستند",
+		"remove": "إزالة",
+		"typeRequired": "يرجى تحديد نوع لكل وثيقة",
+		"typeExists": "هذا النوع موجود بالفعل",
+		"typeAddError": "فشل في إضافة نوع وثيقة. حاول مرة أخرى.",
+		"documentTypes": "أنواع وثائق",
+		"addNewDocumentType": "إضافة نوع وثيقة جديد",
+		"enterNewTypeName": "أدخل اسم النوع الجديد",
+		"add": "إضافة",
+		"adding": "جارٍ الإضافة...",
+		"cancel": "إلغاء",
+		"missingFields": "الرجاء تحديد نوع المستند والملف",
+		"success": "تمت إضافة المستند إلى التغييرات المعلقة"
+	},
+
+	"filterPanel": {
+		"title": "البحث وتصفية الطلاب",
+		"close": "إغلاق لوحة التصفية",
+		"searchLabel": "البحث بالاسم، الرقم، إلخ",
+		"searchPlaceholder": "أدخل كلمة البحث...",
+		"options": "خيارات التصفية:",
+		"matricule": "رقم التسجيل",
+		"enterMatricule": "أدخل رقم التسجيل",
+		"faculty": "الكلية",
+		"selectFaculty": "اختر الكلية",
+		"department": "القسم",
+		"selectDepartment": "اختر القسم",
+		"field": "ميدان",
+		"selectField": "اختر ميدان",
+		"major": "فرع",
+		"selectMajor": "اختر فرع",
+		"specialty": "الاختصاص",
+		"selectSpecialty": "اختر الاختصاص",
+		"reset": "إعادة التصفية",
+		"apply": "تطبيق التصفية",
+		"graduationYear": "سنة التخرج"
+	},
+
+	"loading": "جارٍ التحميل...",
+
+	"departments": {
+		"titleWithFaculty": "الاقسام في: {{faculty}}",
+		"title": "الأقسام",
+		"name": "الاسم",
+		"code": "الرمز",
+		"createdAt": "تاريخ الإنشاء",
+		"actions": "الإجراءات",
+		"fieldsCount": "عدد الميادين",
+		"noDepartments": "لم يتم العثور على أقسام.",
+		"searchPlaceholder": "ابحث عن الأقسام...",
+		"deleteSuccess": "تم حذف القسم '{{name}}' بنجاح!",
+		"deleteFail": "فشل في حذف القسم '{{name}}'.",
+		"NumberofFields": "عدد الميادين",
+		"deleteError": "فشل في حذف القسم '{{name}}'."
+	},
+
+	"addDepartment": {
+		"title": "إضافة قسم جديد",
+		"name": "الاسم",
+		"nameRequired": "اسم القسم مطلوب.",
+		"success": "تمت إضافة القسم بنجاح!",
+		"duplicateTitle": "يوجد قسم بهذا الاسم بالفعل.",
+		"duplicateMessage": "يرجى اختيار اسم مختلف."
+	},
+
+	"error": {
+		"title": "حدث خطأ.",
+		"message": "يرجى المحاولة لاحقًا."
+	},
+
+	"actionsDep": {
+		"cancel": "إلغاء",
+		"submit": "إرسال"
+	},
+
+	"confirm": {
+		"title": "تأكيد الحذف",
+		"description": "هل أنت متأكد أنك تريد حذف الكلية: {{name}}؟ لا يمكن التراجع عن هذا الإجراء.",
+		"major": {
+			"description": "هل أنت متأكد أنك تريد حذف هذا فرع؟ لا يمكن التراجع عن هذا الإجراء."
+		},
+
+		"department": {
+			"description": "هل أنت متأكد من حذف الـ {{entity}} \"{{name}}\"؟",
+			"entities": {
+				"department": "القسم"
+			}
+		},
+
+		"field": {
+			"description": "هل أنت متأكد من حذف الـ {{entity}} \"{{name}}\"؟ لا يمكن التراجع عن هذا الإجراء.",
+			"entities": {
+				"field": "ميدان"
+			}
+		},
+
+		"specialty": {
+			"description": "هل أنت متأكد من حذف الـ {{entity}} « {{name}} »؟ لا يمكن التراجع عن هذا الإجراء.",
+			"entities": {
+				"specialty": "التخصص"
+			}
+		}
+	},
+
+	"navigation": {
+		"home": "الرئيسية"
+	},
+
+	"fields": {
+		"title": "الميادين",
+		"search_placeholder": "ابحث في الميادين...",
+		"majors_count": "عدد التخصصات",
+		"created_at": "تاريخ الإنشاء",
+		"actions": "الإجراءات",
+		"notFound": "لم يتم العثور على ميادين",
+		"deleted_success": "تم حذف الميدان '{{name}}' بنجاح!",
+		"deleted_fail": "فشل في حذف الميدان '{{name}}'.",
+		"titleWithDepartment": "الميادين في: {{department}}",
+		"code": "الرمز",
+		"name": "الاسم",
+		"MajorsCount": "عدد الفروع",
+		"createdAt": "تاريخ الإنشاء",
+		"deleteSuccess": "تم حذف ميدان '{{name}}' بنجاح!",
+		"deleteError": "فشل في حذف ميدان '{{name}}'."
+	},
+
+	"AddFieldDialog": {
+		"title": "إضافة ميدان جديد",
+		"nameLabel": "الاسم",
+		"cancel": "إلغاء",
+		"submit": "إرسال",
+		"close": "إغلاق النافذة",
+		"errors": {
+			"nameRequired": "اسم ميدان مطلوب.",
+			"nameTakenTitle": "يوجد ميدان بهذا الاسم بالفعل.",
+			"nameTakenDesc": "يرجى اختيار اسم مختلف.",
+			"genericTitle": "حدث خطأ.",
+			"genericDesc": "يرجى المحاولة مرة أخرى لاحقًا."
+		},
+		"success": {
+			"added": "تم إضافة ميدان بنجاح!"
+		}
+	},
+
+	"majors": {
+		"title": "الفروع",
+		"titleWithfield": "الفروع في: {{field}}",
+		"table": {
+			"code": "الرمز",
+			"name": "الاسم",
+			"specialtiesCount": "عدد التخصصات",
+			"createdAt": "تاريخ الإنشاء",
+			"actions": "الإجراءات"
+		},
+		"notFound": "لم يتم العثور على الفروع",
+		"deleteSuccess": "تم حذف فرع '{{name}}' بنجاح!",
+		"deleteError": "فشل في حذف فرع '{{name}}'."
+	},
+
+	"addMajor": {
+		"title": "إضافة فرع جديد",
+		"nameLabel": "الاسم",
+		"cancel": "إلغاء",
+		"submit": "إرسال",
+		"close": "إغلاق النافذة",
+		"success": "تمت إضافة الفرع بنجاح!",
+		"errors": {
+			"nameRequired": "اسم الفرع مطلوب.",
+			"nameTaken": {
+				"title": "يوجد فرع بنفس الاسم.",
+				"desc": "يرجى اختيار اسم مختلف."
+			},
+			"general": {
+				"title": "حدث خطأ ما.",
+				"desc": "يرجى المحاولة مرة أخرى لاحقًا."
+			}
+		}
+	},
+
+	"specialties": {
+		"title": "التخصصات",
+		"titleWithMajor": "التخصصات في: {{major}}",
+		"code": "الرمز",
+		"name": "الاسم",
+		"createdAt": "تاريخ الإنشاء",
+		"actions": "الإجراءات",
+		"notFound": "لم يتم العثور على تخصصات",
+		"deleteSuccess": "تم حذف التخصص {{name}} بنجاح."
+	},
+
+	"addSpecialty": {
+		"title": "إضافة تخصص جديد",
+		"nameLabel": "الاسم",
+		"cancel": "إلغاء",
+		"submit": "إرسال",
+		"close": "إغلاق النافذة",
+		"success": "تمت إضافة التخصص بنجاح!",
+		"errors": {
+			"nameRequired": "اسم التخصص مطلوب.",
+			"nameTaken": {
+				"title": "يوجد تخصص بنفس الاسم.",
+				"desc": "يرجى اختيار اسم مختلف."
+			},
+			"general": {
+				"title": "حدث خطأ ما.",
+				"desc": "يرجى المحاولة مرة أخرى لاحقًا."
+			}
+		}
+	},
+
+	"editFacultyDialog": {
+		"title": "تعديل الكلية",
+		"description": "قم بتحديث اسم الكلية.",
+		"facultyName": "اسم الكلية",
+		"cancelButton": "إلغاء",
+		"saveButton": "حفظ",
+		"successMessage": "تم تحديث الكلية بنجاح",
+		"errorMessage": "فشل في تحديث الكلية",
+		"errors": {
+			"nameExistsTitle": "اسم الكلية موجود بالفعل",
+			"nameExistsDesc": "يرجى اختيار اسم مختلف."
+		}
+	},
+
+	"editDepartmentDialog": {
+		"title": "تعديل القسم",
+		"description": "تحديث اسم القسم.",
+		"departmentName": "اسم القسم",
+		"cancelButton": "إلغاء",
+		"saveButton": "حفظ",
+		"successMessage": "تم تحديث القسم بنجاح",
+		"errorMessage": "فشل في تحديث القسم",
+		"errors": {
+			"nameExistsTitle": "اسم القسم موجود بالفعل",
+			"nameExistsDesc": "يرجى اختيار اسم مختلف."
+		}
+	},
+
+	"editFieldDialog": {
+		"title": "تعديل ميدان",
+		"description": "قم بتحديث اسم ميدان.",
+		"fieldName": "اسم ميدان",
+		"cancelButton": "إلغاء",
+		"saveButton": "حفظ",
+		"successMessage": "تم تحديث ميدان بنجاح.",
+		"errorMessage": "فشل في تحديث ميدان.",
+		"errors": {
+			"nameExistsTitle": "اسم ميدان موجود بالفعل",
+			"nameExistsDesc": "يرجى اختيار اسم مختلف."
+		}
+	},
+
+	"editMajorDialog": {
+		"title": "تعديل فرع",
+		"description": "قم بتحديث اسم فرع.",
+		"majorName": "اسم فرع",
+		"cancelButton": "إلغاء",
+		"saveButton": "حفظ",
+		"successMessage": "تم تحديث فرع بنجاح.",
+		"errorMessage": "فشل في تحديث فرع.",
+		"errors": {
+			"nameExistsTitle": "اسم فرع موجود بالفعل",
+			"nameExistsDesc": "يرجى اختيار اسم مختلف."
+		}
+	},
+
+	"editSpecialtyDialog": {
+		"title": "تعديل التخصص",
+		"description": "تحديث اسم التخصص.",
+		"specialtyName": "اسم التخصص",
+		"cancelButton": "إلغاء",
+		"saveButton": "حفظ",
+		"successMessage": "تم تحديث التخصص بنجاح.",
+		"errorMessage": "فشل في تحديث التخصص.",
+		"errors": {
+			"nameExistsTitle": "اسم التخصص موجود بالفعل",
+			"nameExistsDesc": "يرجى اختيار اسم مختلف."
+		}
+	},
+
+	"updateStudent": {
+		"title": "تحديث الطالب",
+		"notFound": "الطالب غير موجود",
+		"academicInfo": "المعلومات الأكاديمية",
+		"personalInfo": "المعلومات الشخصية",
+		"studentDocuments": "وثائق الطالب",
+		"uploadNewDocument": "رفع وثيقة جديدة",
+		"documentFile": "ملف الوثيقة",
+		"addDocumentToPending": "إضافة الوثيقة إلى التغييرات المعلقة",
+		"pendingDocumentsNote": "وثائق معلقة (سيتم رفعها عند النقر على \"تحديث معلومات الطالب\")",
+		"existingDocuments": "الوثائق الموجودة",
+		"noDocuments": "لا توجد وثائق",
+		"faculty": "الكلية",
+		"selectFaculty": "اختر الكلية",
+		"department": "القسم",
+		"selectDepartment": "اختر القسم",
+		"field": "ميدان",
+		"selectField": "اختر ميدان",
+		"major": "فرع",
+		"selectMajor": "اختر  فرع",
+		"specialty": "التخصص",
+		"selectSpecialty": "اختر التخصص",
+		"matricule": "رقم التسجيل",
+		"firstName": "الاسم",
+		"lastName": "اللقب",
+		"dateOfBirth": "تاريخ الميلاد",
+		"enrollmentYear": "سنة التسجيل",
+		"updateButton": "تحديث معلومات الطالب",
+		"savingChanges": "جاري حفظ التغييرات...",
+		"selectDocumentType": "اختر نوع الوثيقة",
+		"unknownType": "نوع غير معروف",
+		"noFilename": "لا يوجد اسم ملف",
+		"deleteDocumentTitle": "حذف الوثيقة",
+		"deleteDocumentDescription": "هل أنت متأكد أنك تريد حذف هذه الوثيقة؟ لا يمكن التراجع عن هذا الإجراء.",
+		"documentDeletedSuccess": "تم حذف الوثيقة بنجاح",
+		"documentDeleteFailed": "فشل حذف الوثيقة",
+		"documentAddedPending": "تمت إضافة الوثيقة إلى التغييرات المعلقة",
+		"documentRemovedPending": "تمت إزالة الوثيقة من التغييرات المعلقة",
+		"allChangesSaved": "تم حفظ جميع التغييرات بنجاح",
+		"failedToSaveChanges": "فشل حفظ التغييرات",
+		"graduationYear": "سنة التخرج",
+		"invalidEnrollmentYear": "صيغة سنة التسجيل غير صالحة",
+		"invalidGraduationYear": "صيغة سنة التخرج غير صالحة",
+		"yearValidationError": "يجب أن تكون سنة التسجيل قبل سنة التخرج"
+	},
+
+	"search": {
+		"facultyPlaceholder": "ابحث في الكليات...",
+		"departmentPlaceholder": "ابحث في الأقسام...",
+		"fieldPlaceholder": "ابحث في الميادين...",
+		"majorPlaceholder": "ابحث في الفروع...",
+		"specialtyPlaceholder": "ابحث في التخصصات...",
+		"teamPlaceholder": "ابحث في قائمة الموظفين...",
+		"button": "بحث"
+	},
+	"terms": {
+		"faculty": "كلية",
+		"department": "قسم",
+		"field": "ميدان",
+		"major": "فرع",
+		"specialty": "تخصص"
+	},
+
+	"errors": {
+		"deleteSpecialty": "فشل حذف التخصص '{{name}}'.",
+		"requiredRelation": "لا يمكن حذف '{{name}}' لأنه قيد الاستخدام من قبل الطلاب.",
+		"generic400": "فشل حذف التخصص: {{message}}"
+	}
+}
