@@ -137,7 +137,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 ">
 			<div
-				className="bg-white dark:bg-gray-900 rounded-lg shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]"
+				className="bg-white rounded-lg shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]"
 				dir={isRtl ? "rtl" : "ltr"}
 			>
 				{/* Header */}
