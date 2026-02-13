@@ -16,7 +16,8 @@ type Props = {
 };
 
 const DeleteStaffDialog = ({ open, onOpenChange }: Props) => {
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
+	const isRtl = i18n.language === "ar";
 	const [staffList, setStaffList] = useState<User[]>([]);
 	const [selectedIds, setSelectedIds] = useState<string[]>([]);
 	const [searchTerm, setSearchTerm] = useState("");
@@ -41,7 +42,7 @@ const DeleteStaffDialog = ({ open, onOpenChange }: Props) => {
 
 	const toggleCheck = (id: string) => {
 		setSelectedIds((prev) =>
-			prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+			prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
 		);
 	};
 
@@ -53,7 +54,7 @@ const DeleteStaffDialog = ({ open, onOpenChange }: Props) => {
 		try {
 			await deleteUsers(selectedIds);
 			toast.success(
-				t("deleteStaffDialog.success", { count: selectedIds.length })
+				t("deleteStaffDialog.success", { count: selectedIds.length }),
 			);
 			setSelectedIds([]);
 			await fetchStaffList();
@@ -69,7 +70,7 @@ const DeleteStaffDialog = ({ open, onOpenChange }: Props) => {
 	const filteredStaff = staffList.filter((user) =>
 		`${user.firstName} ${user.lastName} ${user.email}`
 			.toLowerCase()
-			.includes(searchTerm.toLowerCase())
+			.includes(searchTerm.toLowerCase()),
 	);
 
 	if (!open) return null;
@@ -77,25 +78,27 @@ const DeleteStaffDialog = ({ open, onOpenChange }: Props) => {
 	return (
 		<>
 			<div
-				className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+				className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 "
 				onClick={() => onOpenChange(false)}
 			>
 				<div
-					className="bg-white w-full max-w-lg p-6 rounded-[3px] shadow-lg relative max-h-[90vh] flex flex-col"
+					className="shadow-2xl bg-white w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh] rounded-lg  relative "
+					dir={isRtl ? "rtl" : "ltr"}
 					onClick={(e) => e.stopPropagation()}
 				>
-					<button
-						onClick={() => onOpenChange(false)}
-						className="absolute top-2 right-2 text-gray-500 hover:text-black hover:cursor-pointer"
-					>
-						<X />
-					</button>
+					<div className="flex items-center justify-between px-6 py-4 border-b dark:border-gray-800">
+						<h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+							{t("deleteStaffDialog.title")}
+						</h2>
+						<button
+							onClick={() => onOpenChange(false)}
+							className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+						>
+							<X className="w-5 h-5" />
+						</button>
+					</div>
 
-					<h2 className="text-xl font-semibold">
-						{t("deleteStaffDialog.title")}
-					</h2>
-
-					<div className="mt-4 relative">
+					<div className="mt-4 relative p-2">
 						<Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
 						<input
 							type="text"
@@ -106,7 +109,7 @@ const DeleteStaffDialog = ({ open, onOpenChange }: Props) => {
 						/>
 					</div>
 
-					<div className="mt-4 flex-1 overflow-y-auto space-y-2">
+					<div className="mt-4 flex-1 overflow-y-auto space-y-2 p-2">
 						{filteredStaff.length === 0 ? (
 							<p className="text-sm text-gray-500">
 								{t("deleteStaffDialog.noStaffFound")}
@@ -143,10 +146,10 @@ const DeleteStaffDialog = ({ open, onOpenChange }: Props) => {
 
 					<Separator className="mt-2" />
 
-					<div className="flex justify-end gap-3 mt-4">
+					<div className="px-6 py-4 bg-gray-50 dark:bg-gray-800/50 border-t dark:border-gray-800 flex  gap-3">
 						<button
 							onClick={() => onOpenChange(false)}
-							className="bg-gray-300 text-[#363636] font-semibold px-4 py-2 rounded hover:bg-gray-400 hover:cursor-pointer"
+							className="flex-1 px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-sm font-semibold text-zinc-600 dark:text-zinc-400 bg-zinc-50/40 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-900 dark:hover:text-zinc-100 transition-all duration-200"
 						>
 							{t("common.cancel")}
 						</button>
@@ -159,7 +162,7 @@ const DeleteStaffDialog = ({ open, onOpenChange }: Props) => {
 								}
 							}}
 							disabled={loading || selectedIds.length === 0}
-							className="bg-red-600 text-white px-4 py-2 rounded font-semibold hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed hover:cursor-pointer"
+							className="bg-red-600 text-white px-4 py-2.5 rounded-xl flex-1 border-zinc-200 text-sm font-semibold hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed hover:cursor-pointer"
 						>
 							{loading
 								? t("deleteStaffDialog.deleting")
