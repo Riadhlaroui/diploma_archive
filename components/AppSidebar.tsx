@@ -28,13 +28,12 @@ export function AppSidebar() {
 	const [openAddStudentDialog, setOpenAddStudentDialog] = useState(false);
 	const [isAdmin, setIsAdmin] = useState(false);
 
-	// Check if user is admin on component mount
 	useEffect(() => {
 		// Check if user is authenticated and has admin role
 		const checkAdminStatus = () => {
 			if (pb.authStore.isValid) {
 				const user = pb.authStore.model;
-				setIsAdmin(user?.role === "admin"); // Adjust this based on your role field name
+				setIsAdmin(user?.role === "admin");
 			}
 		};
 
@@ -116,7 +115,6 @@ export function AppSidebar() {
 					</SidebarGroupContent>
 				</SidebarGroup>
 
-				{/* Rest of your sidebar groups remain the same */}
 				<SidebarGroup>
 					<SidebarGroupLabel>{t("sidebar.manageFaculties")}</SidebarGroupLabel>
 					<SidebarGroupContent>
