@@ -206,8 +206,8 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 
 			{showLogoutDialog && (
 				<div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-					<div className="bg-white dark:bg-zinc-900 rounded-xl shadow-xl p-6 max-w-sm w-full space-y-4 text-center">
-						<h2 className="text-lg font-semibold">
+					<div className="bg-white rounded-xl shadow-lg p-6 max-w-sm w-full space-y-4 text-center">
+						<h2 className="text-xl font-semibold">
 							{t("profile.logoutConfirm")}
 						</h2>
 
@@ -217,7 +217,7 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 
 						<div className="flex justify-center gap-4 pt-4">
 							<Button
-								className=" hover:cursor-pointer"
+								className=" hover:cursor-pointer flex-1 h-10 text-sm"
 								variant="outline"
 								onClick={() => setShowLogoutDialog(false)}
 							>
@@ -225,7 +225,7 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 							</Button>
 
 							<Button
-								className="hover:cursor-pointer"
+								className="hover:cursor-pointer flex-1 h-10 text-sm"
 								variant="destructive"
 								onClick={handleLogout}
 							>

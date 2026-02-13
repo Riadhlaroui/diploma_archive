@@ -20,7 +20,6 @@ import {
 export default function SignIn() {
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-	// Multi-language support
 	const { t, i18n } = useTranslation();
 
 	const isRtl = i18n.language === "ar";
@@ -68,7 +67,7 @@ export default function SignIn() {
 						<div className="font-semibold">{t("login.success")}</div>
 						<div className="text-sm">{t("login.welcome")}</div>
 					</div>
-				</div>
+				</div>,
 			);
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		} catch (err) {
@@ -78,7 +77,7 @@ export default function SignIn() {
 						<div className="font-semibold">{t("login.failed")}</div>
 						<div className="text-sm">{t("login.incorrect")}</div>
 					</div>
-				</div>
+				</div>,
 			);
 		}
 	};
@@ -99,7 +98,7 @@ export default function SignIn() {
 				>
 					<SelectTrigger
 						id="language-select"
-						className="w-[150px] dark:bg-[#1f1f1f] dark:text-white"
+						className="w-37.5 dark:bg-[#1f1f1f] dark:text-white"
 					>
 						{/* Added a placeholder for when the value is still loading */}
 						<SelectValue placeholder="Select Language" />
@@ -113,14 +112,14 @@ export default function SignIn() {
 			</div>
 
 			<form onSubmit={handleLogin}>
-				<div className="flex flex-col items-center justify-center min-h-screen gap-[1rem]">
+				<div className="flex flex-col items-center justify-center min-h-screen gap-4 ">
 					<h1 className="text-2xl font-bold italic">{t("welcome")}</h1>
 
 					<div className="flex flex-col gap-[0.7rem]">
 						<div className="relative ">
 							<input
 								type="email"
-								className="peer w-full h-[4rem] bg-[#D7DDE3] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3.5px] px-3 pt-6 pb-2 focus:outline-none"
+								className="peer w-full h-16 bg-[#D7DDE3] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3.5px] px-3 pt-6 pb-2 focus:outline-none"
 								placeholder=""
 								dir={isRtl ? "rtl" : "ltr"}
 								onChange={(e) => setEmail(e.target.value)}
@@ -131,10 +130,10 @@ export default function SignIn() {
 							</label>
 						</div>
 
-						<div className="relative w-[25rem]">
+						<div className="relative w-100">
 							<input
 								type={isPasswordVisible ? "text" : "password"}
-								className="peer w-full bg-[#D7DDE3] h-[4rem] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3.5px] px-3 pt-6 pb-2 focus:outline-none placeholder-transparent"
+								className="peer w-full bg-[#D7DDE3] h-16 dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3.5px] px-3 pt-6 pb-2 focus:outline-none placeholder-transparent"
 								onChange={(e) => setPassword(e.target.value)}
 								dir={isRtl ? "rtl" : "ltr"}
 							/>
@@ -164,9 +163,18 @@ export default function SignIn() {
 						</span>
 					</div>
 
-					<Button className="font-semibold h-[4rem] text-[1rem] w-full dark:bg-[#E9E9E9] cursor-pointer">
-						{t("login.button")}
-					</Button>
+					<div
+						className="w-full inline-block group relative bg-[#c2c0c0c8] p-0.5 rounded-lg 
+               shadow-lg hover:shadow-xl transition-all duration-300 border border-[#bbbbbbc8]"
+					>
+						<Button
+							className="w-full h-16 text-lg cursor-pointer font-semibold bg-black hover:bg-neutral-900 
+                   text-white rounded-lg transition-all duration-300 
+                   group-hover:-translate-y-0.5 border-none flex items-center justify-center gap-2"
+						>
+							{t("login.button")}
+						</Button>
+					</div>
 				</div>
 			</form>
 		</div>

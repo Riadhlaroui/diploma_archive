@@ -13,6 +13,8 @@ i18n
 		resources: {
 			en: {
 				translation: {
+					GoToLogin: "Go to Login",
+
 					noPermission: "You don't have permission to access this page",
 					redirecting: "Redirecting...",
 					welcome: "Welcome back!",
@@ -721,6 +723,8 @@ i18n
 			},
 			fr: {
 				translation: {
+					GoToLogin: "Aller à la connexion",
+
 					noPermission: "Vous n'avez pas la permission d'accéder à cette page",
 					redirecting: "Redirection en cours...",
 					welcome: "Bon retour!",
@@ -1437,6 +1441,8 @@ i18n
 			},
 			ar: {
 				translation: {
+					GoToLogin: "الذهاب إلى تسجيل الدخول",
+
 					noPermission: "ليس لديك إذن للوصول إلى هذه الصفحة",
 					redirecting: "جاري إعادة التوجيه...",
 					welcome: "مرحبًا بعودتك!",
