@@ -1,5 +1,5 @@
 "use client";
-import "@/lib/i18n";
+import "@/lib/i18n/i18n";
 import { useTranslation } from "react-i18next";
 import { Home, Inbox, Settings, University, UsersRound } from "lucide-react";
 import {

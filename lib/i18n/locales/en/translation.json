@@ -1,0 +1,690 @@
+{
+	"GoToLogin": "Go to Login",
+
+	"noPermission": "You don't have permission to access this page",
+	"redirecting": "Redirecting...",
+	"welcome": "Welcome back!",
+	"email": "Email",
+	"password": "Password",
+	"forgotPassword": "Forgot password?",
+	"login.button": "Sign in",
+	"login.success": "Login successful",
+	"login.welcome": "Welcome!",
+	"login.failed": "Login failed",
+	"login.incorrect": "Incorrect credentials",
+	"noAccount": "Don't have an account?",
+	"signUp": "Sign up",
+	"language": "Language",
+
+	"dashboard": {
+		"title": "Dashboard",
+		"searchPlaceholder": "Search...",
+		"overview": "Overview",
+		"stats": {
+			"faculties": "Faculties",
+			"departments": "Departments",
+			"majors": "Majors",
+			"fields": "Fields",
+			"specialties": "Specialties"
+		},
+
+		"hierarchy": {
+			"title": "System Hierarchy Explorer",
+			"hint": "Click arrows to expand levels",
+			"noItems": "No items found."
+		}
+	},
+
+	"settings": {
+		"title": "Settings page"
+	},
+
+	"profile": {
+		"myAccount": "My Account",
+		"profile": "Profile",
+		"settings": "Settings",
+		"team": "Staff Management",
+		"addUser": "Add user",
+		"addMember": "Add a new staff member",
+		"deleteMember": "Delete a staff member",
+		"logout": "Log out",
+		"logoutConfirm": "Confirm Log Out",
+		"logoutMessage": "Are you sure you want to log out?",
+		"cancel": "Cancel"
+	},
+
+	"sidebar": {
+		"home": "Home",
+		"inbox": "Inbox",
+		"search": "Search",
+		"settings": "Settings",
+		"students": "Students",
+		"application": "Application",
+		"manageStudents": "Manage Students",
+		"connected": "Connected to server",
+		"disconnected": "Disconnected from server",
+		"checking": "Checking server status...",
+		"manageFaculties": "Manage Faculties",
+		"faculties": "Faculties"
+	},
+
+	"addStaffDialog": {
+		"triggerButton": "Add Staff",
+		"title": "Add New Staff",
+		"firstName": "First Name",
+		"lastName": "Last Name",
+		"phoneNumber": "Phone Number",
+		"email": "Email",
+		"password": "Password",
+		"confirmPassword": "Confirm Password",
+		"roleLabel": "Role",
+		"selectRolePlaceholder": "Select a role",
+		"staffRole": "Staff",
+		"adminRole": "Admin",
+		"submitButton": "Submit",
+		"errors": {
+			"mismatchTitle": "Passwords do not match",
+			"mismatchDesc": "Please make sure both passwords are the same.",
+			"missingTitle": "Missing Required Fields",
+			"missingDesc": "Please fill in all required fields marked with *.",
+			"weakTitle": "Weak Password",
+			"weakDesc": "Password must be at least 8 characters long, include an uppercase letter and a number or special character.",
+			"userCreatedError": "Failed to create user. Please try again.",
+			"emailExistsTitle": "Email Already Exists",
+			"emailExistsDesc": "The email you entered is already registered. Please try another."
+		},
+		"cancelButton": "Cancel",
+		"userCreatedSuccess": "User successfully created!",
+		"req": {
+			"length": "At least 8 characters",
+			"upper": "One uppercase letter",
+			"lower": "One lowercase letter",
+			"number": "One number",
+			"special": "One special character"
+		},
+		"passwordRequirements": "Password Requirements"
+	},
+
+	"auditLogs": {
+		"title": "Audit Logs",
+		"action": "Action",
+		"userId": "User ID",
+		"targetType": "Target Type",
+		"targetId": "Target ID",
+		"timestamp": "Timestamp",
+		"copy": "Copy",
+		"loading": "Loading audit logs...",
+		"fetchError": "An error occurred while fetching audit logs.",
+		"noLogs": "No logs available."
+	},
+	"pagination": {
+		"previous": "Previous",
+		"next": "Next",
+		"pageOf": "Page {{page}} of {{totalPages}}",
+		"Showing": "Showing",
+		"to": "to",
+		"of": "of",
+		"Records": "records",
+		"show": "Show",
+		"perPage": "per page"
+	},
+	"actions": {
+		"create_user": "Create User",
+		"delete_user": "Delete User",
+		"update_user": "Update User"
+	},
+
+	"staffList": {
+		"title": "Staff List",
+		"loading": "Loading",
+		"error": "Failed to load data.",
+		"copy": "copy",
+		"notFound": "No staff members found.",
+		"id": "Id",
+		"firstName": "First Name",
+		"lastName": "Last Name",
+		"email": "Email",
+		"role": "Role",
+		"phone": "Phone",
+		"created": "Created",
+		"actions": "Actions",
+		"previous": "Previous",
+		"next": "Next",
+		"page": "Page {{page}} of {{totalPages}}",
+		"confirmDelete": "Delete User?",
+		"confirmDeleteDesc": "Are you sure you want to delete the user {{firstName}} {{lastName}}, {{email}} with the role of {{role}}? This action is irreversible.",
+		"deleteSuccess": "User deleted successfully.",
+		"deleteError": "Failed to delete user."
+	},
+
+	"editUserDialog": {
+		"title": "Edit User",
+		"firstName": "First Name",
+		"lastName": "Last Name",
+		"phoneNumber": "Phone Number",
+		"email": "Email",
+		"description": "Update the selected user's information.",
+		"successMessage": "User updated successfully!",
+		"errorMessage": "Failed to update user. Please try again."
+	},
+
+	"deleteStaffDialog": {
+		"title": "Delete Staff Member",
+		"searchPlaceholder": "Search for a staff member",
+		"noStaffFound": "No staff found.",
+		"roleLabel": "Role",
+		"errors": {
+			"fetchFailed": "Failed to fetch staff list",
+			"deleteFailed": "Failed to delete staff members"
+		},
+		"success": "{{count}} staff member(s) deleted successfully",
+		"warnings": {
+			"noSelection": "Please select at least one staff member"
+		},
+		"deleting": "Deleting...",
+		"confirm": {
+			"title": "Confirm Deletion",
+			"description": "Are you sure you want to delete {{count}} staff member(s)? This action cannot be undone."
+		}
+	},
+	"roles": {
+		"admin": "Admin",
+		"staff": "Staff"
+	},
+	"common": {
+		"cancel": "Cancel",
+		"delete": "Delete",
+		"edit": "Edit",
+		"view": "View",
+		"back": "Back",
+		"na": "N/A",
+		"copy": "Copy {{field}}",
+		"confirm": "Confirm ({{count}})",
+		"dir": "ltr",
+		"searchPlaceholder": "Search..."
+	},
+
+	"faculties": {
+		"title": "Faculties",
+		"addFaculty": "Add Faculty",
+		"editFaculty": "Edit Faculty",
+		"deleteFaculty": "Delete Faculty",
+		"confirmDelete": "Are you sure you want to delete this faculty?",
+		"name": "Name",
+		"code": "Code",
+		"departmentCount": "Number of Departments",
+		"actions": "Actions",
+		"submit": "Submit",
+		"cancel": "Cancel",
+		"successCreate": "Faculty created successfully!",
+		"successUpdate": "Faculty updated successfully!",
+		"successDelete": "Faculty deleted successfully!",
+		"error": "An error occurred. Please try again.",
+		"notFound": "No faculties found.",
+		"departmentsOf": "Departments of {{name}}",
+		"deleteSuccess": "Faculty '{{name}}' deleted successfully!",
+		"deleteError": "Failed to delete faculty '{{name}}'."
+	},
+
+	"addFaculty": {
+		"title": "Add a new faculty",
+		"name": "Name",
+		"cancel": "Cancel",
+		"submit": "Submit",
+		"nameRequired": "Faculty name is required.",
+		"success": "Faculty added successfully!",
+		"duplicateTitle": "A faculty with this name already exists.",
+		"duplicateSubtitle": "Please choose a different name.",
+		"errorTitle": "An error occurred.",
+		"errorSubtitle": "Please try again later."
+	},
+
+	"students": {
+		"title": "Students",
+		"matricule": "Matricule",
+		"firstName": "First Name",
+		"lastName": "Last Name",
+		"enrollmentYear": "Enrollment Year",
+		"dateOfBirth": "Date of Birth",
+		"specialtyId": "Specialty",
+		"year": "Year",
+		"field": "Field",
+		"major": "Major",
+		"specialty": "Specialty",
+		"createdAt": "Created At",
+		"actions": "Actions",
+		"notFound": "No students found",
+		"copyId": "Copy Matricule",
+		"numberOfDocuments": "Number of documents",
+		"inDepartment": "Students in {{department}}",
+		"exists": "A student with matricule already exists.",
+		"chooseDifferent": "Please choose a different matricule.",
+		"totalStudents": "Total Students",
+		"table": {
+			"id": "ID",
+			"name": "Name",
+			"email": "Email",
+			"createdAt": "Created At"
+		},
+
+		"requiredField": "Please fill in the required field: {{field}}",
+		"noDocuments": "Please upload at least one document.",
+		"invalidDOB": "Invalid date of birth format.",
+		"futureDOB": "Date of birth cannot be in the future.",
+		"invalidEnrollmentYear": "Enrollment year must be between 1900 and {{year}}.",
+		"created": "Student created successfully.",
+		"creationError": "Error creating student.",
+		"profile": "Student Profile",
+		"info": "Student Info",
+		"documents": "Documents",
+		"name": "Name",
+		"uploadToGetStarted": "Upload documents to get started",
+		"confirmDeleteTitle": "Delete Student",
+		"confirmDeleteDescription": "Are you sure you want to delete {{name}}? This action cannot be undone.",
+		"deleteSuccess": "Student deleted successfully",
+		"deleteFailed": "Failed to delete student",
+
+		"invalidGraduationYear": "Invalid graduation year",
+		"graduationBeforeEnrollment": "Graduation year cannot be before enrollment year",
+		"graduationYear": "Graduation Year"
+	},
+
+	"addStudent": {
+		"back": "Back",
+		"title": "Add New Student",
+		"description": "Please fill in the details below to create a new student record.",
+
+		"academicInfo": "Academic Information",
+		"faculty": "Faculty",
+		"selectFaculty": "Select faculty",
+		"department": "Department",
+		"selectDepartment": "Select department",
+		"field": "Field",
+		"selectField": "Select field",
+		"major": "Major",
+		"selectMajor": "Select major",
+		"specialty": "Specialty",
+		"selectSpecialty": "Select specialty",
+		"personalInfo": "Personal Information",
+		"matricule": "Matricule",
+		"enterMatricule": "Enter matricule",
+		"firstName": "First Name",
+		"enterFirstName": "Enter first name",
+		"lastName": "Last Name",
+		"enterLastName": "Enter last name",
+		"dateOfBirth": "Date of Birth",
+		"enrollmentYear": "Enrollment Year",
+		"enterEnrollmentYear": "Enter enrollment year",
+		"createStudent": "Create Student",
+		"graduationYear": "Graduation Year",
+		"enterGraduationYear": "Enter graduation year"
+	},
+
+	"documents": {
+		"title": "Documents",
+		"count": "{{count}} file{{pluralSuffix}}",
+		"upload": "Upload Documents",
+		"emptyTitle": "No documents uploaded",
+		"emptyDescription": "Upload student documents to get started",
+		"remove": "Remove {{fileName}}"
+	},
+
+	"uploadDocuments": {
+		"title": "Upload Documents",
+		"dragAndDrop": "Drag & drop files here",
+		"orClick": "or click to browse your computer",
+		"supportedFormats": "Supported formats: PDF, PNG, JPG, JPEG, DOC, DOCX",
+		"uploadedFiles": "Uploaded Files ({{count}})",
+		"documentType": "Document Type",
+		"loadingTypes": "Loading types...",
+		"selectDocumentType": "Select document type",
+		"remove": "Remove",
+		"typeRequired": "Please specify a type for all documents",
+		"typeExists": "This type already exists",
+		"typeAddError": "Failed to add document type. Please try again.",
+		"documentTypes": "Document Types",
+		"addNewDocumentType": "Add new document type",
+		"enterNewTypeName": "Enter new type name",
+		"add": "Add",
+		"adding": "Adding...",
+		"cancel": "Cancel",
+		"missingFields": "Please select a document type and file",
+		"success": "Document added to pending changes"
+	},
+
+	"filterPanel": {
+		"title": "Search & Filter Students",
+		"close": "Close filter panel",
+		"searchLabel": "Search by Name, ID, etc.",
+		"searchPlaceholder": "Enter search query...",
+		"options": "Filter Options:",
+		"matricule": "Matricule",
+		"enterMatricule": "Enter matricule",
+		"faculty": "Faculty",
+		"selectFaculty": "Select faculty",
+		"department": "Department",
+		"selectDepartment": "Select department",
+		"field": "Field",
+		"selectField": "Select field",
+		"major": "Major",
+		"selectMajor": "Select major",
+		"specialty": "Specialty",
+		"selectSpecialty": "Select specialty",
+		"reset": "Reset Filters",
+		"apply": "Apply Filters",
+		"graduationYear": "Graduation Year"
+	},
+
+	"loading": "Loading...",
+
+	"confirm": {
+		"title": "Confirm Deletion",
+		"description": "Are you sure you want to delete {{name}}? This action cannot be undone.",
+		"major": {
+			"description": "Are you sure you want to delete this major? This action cannot be undone."
+		},
+		"department": {
+			"description": "Are you sure you want to delete the {{entity}} \"{{name}}\"?",
+			"entities": {
+				"department": "department"
+			}
+		},
+		"field": {
+			"description": "Are you sure you want to delete the {{entity}} \"{{name}}\"? This action cannot be undone.",
+			"entities": {
+				"field": "field"
+			}
+		},
+
+		"specialty": {
+			"description": "Are you sure you want to delete the {{entity}} \"{{name}}\"? This action cannot be undone.",
+			"entities": {
+				"specialty": "specialty"
+			}
+		}
+	},
+
+	"breadcrumbs": {
+		"home": "Home",
+		"faculties": "Faculties"
+	},
+
+	"departments": {
+		"titleWithFaculty": "Departments in: {{faculty}}",
+		"title": "Departments",
+		"name": "Name",
+		"code": "Code",
+		"createdAt": "Created at",
+		"actions": "Actions",
+		"fieldsCount": "Number of fields",
+		"noDepartments": "No departments found.",
+		"searchPlaceholder": "Search departments...",
+		"deleteFail": "Failed to delete department '{{name}}'.",
+		"deleteSuccess": "Department '{{name}}' deleted successfully!",
+		"deleteError": "Failed to delete department '{{name}}'."
+	},
+
+	"addDepartment": {
+		"title": "Add a new department",
+		"name": "Name",
+		"nameRequired": "Department name is required.",
+		"success": "Department added successfully!",
+		"duplicateTitle": "A department with this name already exists.",
+		"duplicateMessage": "Please choose a different name."
+	},
+
+	"error": {
+		"title": "An error occurred.",
+		"message": "Please try again later."
+	},
+
+	"actionsDep": {
+		"cancel": "Cancel",
+		"submit": "Submit"
+	},
+
+	"navigation": {
+		"home": "Home"
+	},
+
+	"fields": {
+		"title": "Fields",
+		"search_placeholder": "Search fields...",
+		"majors_count": "Majors Count",
+		"created_at": "Created At",
+		"actions": "Actions",
+		"notFound": "Fields not found",
+		"deleted_success": "Field '{{name}}' deleted successfully!",
+		"deleted_fail": "Failed to delete field '{{name}}'.",
+		"titleWithDepartment": "Fields in: {{department}}",
+		"code": "Code",
+		"name": "Name",
+		"MajorsCount": "Number of Majors",
+		"createdAt": "Created At",
+		"deleteSuccess": "Field '{{name}}' deleted successfully!",
+		"deleteError": "Failed to delete field '{{name}}'."
+	},
+
+	"AddFieldDialog": {
+		"title": "Add a new field",
+		"nameLabel": "Name",
+		"cancel": "Cancel",
+		"submit": "Submit",
+		"close": "Close dialog",
+		"errors": {
+			"nameRequired": "Field name is required.",
+			"nameTakenTitle": "A field with this name already exists.",
+			"nameTakenDesc": "Please choose a different name.",
+			"genericTitle": "An error occurred.",
+			"genericDesc": "Please try again later."
+		},
+		"success": {
+			"added": "Field added successfully!"
+		}
+	},
+
+	"majors": {
+		"title": "Majors",
+		"titleWithfield": "Majors in: {{field}}",
+		"table": {
+			"code": "Code",
+			"name": "Name",
+			"specialtiesCount": "Number of specialties",
+			"createdAt": "Created At",
+			"actions": "Actions"
+		},
+		"notFound": "Majors not found",
+		"deleteSuccess": "Major '{{name}}' deleted successfully!",
+		"deleteError": "Failed to delete major '{{name}}'."
+	},
+
+	"addMajor": {
+		"title": "Add a new major",
+		"nameLabel": "Name",
+		"cancel": "Cancel",
+		"submit": "Submit",
+		"close": "Close dialog",
+		"success": "Major added successfully!",
+		"errors": {
+			"nameRequired": "Major name is required.",
+			"nameTaken": {
+				"title": "A major with this name already exists.",
+				"desc": "Please choose a different name."
+			},
+			"general": {
+				"title": "An error occurred.",
+				"desc": "Please try again later."
+			}
+		}
+	},
+
+	"specialties": {
+		"title": "Specialties",
+		"titleWithMajor": "Specialties in: {{major}}",
+		"code": "Code",
+		"name": "Name",
+		"createdAt": "Created At",
+		"actions": "Actions",
+		"notFound": "Specialties not found",
+		"deleteSuccess": "Specialty {{name}} has been successfully deleted."
+	},
+
+	"addSpecialty": {
+		"title": "Add New Specialty",
+		"nameLabel": "Name",
+		"cancel": "Cancel",
+		"submit": "Submit",
+		"close": "Close Window",
+		"success": "Specialty added successfully!",
+		"errors": {
+			"nameRequired": "Specialty name is required.",
+			"nameTaken": {
+				"title": "A specialty with this name already exists.",
+				"desc": "Please choose a different name."
+			},
+			"general": {
+				"title": "Something went wrong.",
+				"desc": "Please try again later."
+			}
+		}
+	},
+
+	"editFacultyDialog": {
+		"title": "Edit Faculty",
+		"description": "Update the faculty name.",
+		"facultyName": "Faculty Name",
+		"cancelButton": "Cancel",
+		"saveButton": "Save",
+		"successMessage": "Faculty updated successfully",
+		"errorMessage": "Failed to update faculty",
+		"errors": {
+			"nameExistsTitle": "Faculty name already exists",
+			"nameExistsDesc": "Please choose a different name."
+		}
+	},
+
+	"editDepartmentDialog": {
+		"title": "Edit Department",
+		"description": "Update the Department name.",
+		"departmentName": "Department Name",
+		"cancelButton": "Cancel",
+		"saveButton": "Save",
+		"successMessage": "Department updated successfully",
+		"errorMessage": "Failed to update Department",
+		"errors": {
+			"nameExistsTitle": "Department name already exists",
+			"nameExistsDesc": "Please choose a different name."
+		}
+	},
+
+	"editFieldDialog": {
+		"title": "Edit Field",
+		"description": "Update the field name.",
+		"fieldName": "Field Name",
+		"cancelButton": "Cancel",
+		"saveButton": "Save",
+		"successMessage": "Field updated successfully.",
+		"errorMessage": "Failed to update field.",
+		"errors": {
+			"nameExistsTitle": "Field name already exists",
+			"nameExistsDesc": "Please choose a different name."
+		}
+	},
+
+	"editMajorDialog": {
+		"title": "Edit Major",
+		"description": "Update the major name.",
+		"majorName": "Major Name",
+		"cancelButton": "Cancel",
+		"saveButton": "Save",
+		"successMessage": "Major updated successfully.",
+		"errorMessage": "Failed to update major.",
+		"errors": {
+			"nameExistsTitle": "Major name already exists",
+			"nameExistsDesc": "Please choose a different name."
+		}
+	},
+
+	"editSpecialtyDialog": {
+		"title": "Edit Specialty",
+		"description": "Update the Specialty name.",
+		"specialtyName": "Specialty Name",
+		"cancelButton": "Cancel",
+		"saveButton": "Save",
+		"successMessage": "Specialty updated successfully.",
+		"errorMessage": "Failed to update Specialty.",
+		"errors": {
+			"nameExistsTitle": "Specialty name already exists",
+			"nameExistsDesc": "Please choose a different name."
+		}
+	},
+
+	"updateStudent": {
+		"title": "Update Student",
+		"notFound": "Student not found",
+		"academicInfo": "Academic Information",
+		"personalInfo": "Personal Information",
+		"studentDocuments": "Student Documents",
+		"uploadNewDocument": "Upload New Document",
+		"documentFile": "Document File",
+		"addDocumentToPending": "Add Document to Pending Changes",
+		"pendingDocumentsNote": "Pending Documents (will be uploaded when you click \"Update Student Information\")",
+		"existingDocuments": "Existing Documents",
+		"noDocuments": "No Documents",
+		"faculty": "Faculty",
+		"selectFaculty": "Select Faculty",
+		"department": "Department",
+		"selectDepartment": "Select Department",
+		"field": "Field",
+		"selectField": "Select Field",
+		"major": "Major",
+		"selectMajor": "Select Major",
+		"specialty": "Specialty",
+		"selectSpecialty": "Select Specialty",
+		"matricule": "Matricule",
+		"firstName": "First Name",
+		"lastName": "Last Name",
+		"dateOfBirth": "Date of Birth",
+		"enrollmentYear": "Enrollment Year",
+		"updateButton": "Update Student Information",
+		"savingChanges": "Saving changes...",
+		"selectDocumentType": "Select document type",
+		"unknownType": "Unknown type",
+		"noFilename": "No filename",
+		"deleteDocumentTitle": "Delete Document",
+		"deleteDocumentDescription": "Are you sure you want to delete this document? This action cannot be undone.",
+		"documentDeletedSuccess": "Document deleted successfully",
+		"documentDeleteFailed": "Failed to delete document",
+		"documentAddedPending": "Document added to pending changes",
+		"documentRemovedPending": "Document removed from pending changes",
+		"allChangesSaved": "All changes saved successfully",
+		"failedToSaveChanges": "Failed to save changes",
+		"graduationYear": "Graduation Year",
+		"invalidEnrollmentYear": "Invalid enrollment year format",
+		"invalidGraduationYear": "Invalid graduation year format",
+		"yearValidationError": "Enrollment year must be before graduation year"
+	},
+
+	"search": {
+		"facultyPlaceholder": "Search faculties...",
+		"departmentPlaceholder": "Search departments...",
+		"fieldPlaceholder": "Search fields...",
+		"majorPlaceholder": "Search majors...",
+		"specialtyPlaceholder": "Search specialties...",
+		"button": "Search",
+		"teamPlaceholder": "Search staff..."
+	},
+	"terms": {
+		"faculty": "Faculty",
+		"department": "Department",
+		"field": "Field",
+		"major": "Major",
+		"specialty": "Specialty"
+	},
+
+	"errors": {
+		"deleteSpecialty": "Failed to delete specialty '{{name}}'.",
+		"requiredRelation": "Cannot delete '{{name}}' because it's being used by students.",
+		"generic400": "Failed to delete specialty: {{message}}"
+	}
+}

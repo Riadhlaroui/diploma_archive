@@ -1,5 +1,5 @@
 // app/layout.tsx
-import "../lib/i18n";
+import "../lib/i18n/i18n";
 
 import type { Metadata } from "next";
 import { Cairo, Inter } from "next/font/google";

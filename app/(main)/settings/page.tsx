@@ -1,5 +1,5 @@
 "use client";
-import "@/lib/i18n"; // ✅ Forces i18n to initialize
+import "@/lib/i18n/i18n"; // ✅ Forces i18n to initialize
 import { useTranslation } from "react-i18next";
 import React, { useEffect } from "react";
 import {
