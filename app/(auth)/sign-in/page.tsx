@@ -84,25 +84,23 @@ export default function SignIn() {
 
 	return (
 		<div className="relative flex flex-col items-center justify-center h-screen overflow-hidden">
-			<div className="fixed top-0 left-0 z-50 p-2">
-				<label htmlFor="language-select" className="mr-2 font-semibold">
-					{t("language")}
-				</label>
+			<div className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 p-2 flex items-center">
 				<Select
-					// Normalize the value: takes "en-US" and makes it "en"
-					// Also provides a fallback if i18n.language is undefined
-					value={i18n.language?.split("-")[0] || "en"}
+					value={i18n.language}
 					onValueChange={(value: string) =>
 						switchLanguage(value as "en" | "fr" | "ar")
 					}
 				>
 					<SelectTrigger
 						id="language-select"
-						className="w-37.5 dark:bg-[#1f1f1f] dark:text-white"
+						className={`w-auto flex items-center gap-2 px-3 dark:bg-[#1f1f1f] dark:text-white ${
+							isRtl ? "flex-row-reverse" : "flex-row"
+						}`}
 					>
-						{/* Added a placeholder for when the value is still loading */}
+						<span className="font-semibold">{t("language")}</span>
 						<SelectValue placeholder="Select Language" />
 					</SelectTrigger>
+
 					<SelectContent>
 						<SelectItem value="en">English</SelectItem>
 						<SelectItem value="fr">Français</SelectItem>
