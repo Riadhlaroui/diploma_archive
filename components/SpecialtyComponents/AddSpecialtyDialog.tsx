@@ -132,7 +132,6 @@ const AddSpecialtyDialog = ({
 				</div>
 
 				<form onSubmit={handleSubmit} className="space-y-4 mt-2" noValidate>
-					<Separator />
 					<div className="flex gap-4 w-full">
 						<div className="relative w-full">
 							<input

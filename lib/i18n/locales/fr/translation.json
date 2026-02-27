@@ -236,7 +236,8 @@
 		"duplicateTitle": "Une faculté avec ce nom existe déjà.",
 		"duplicateSubtitle": "Veuillez choisir un nom différent.",
 		"errorTitle": "Une erreur s'est produite.",
-		"errorSubtitle": "Veuillez réessayer plus tard."
+		"errorSubtitle": "Veuillez réessayer plus tard.",
+		"subtitle": "Veuillez remplir les détails ci-dessous pour créer une nouvelle faculté."
 	},
 
 	"students": {
@@ -389,7 +390,8 @@
 		"nameRequired": "Le nom du département est requis.",
 		"success": "Département ajouté avec succès !",
 		"duplicateTitle": "Un département avec ce nom existe déjà.",
-		"duplicateMessage": "Veuillez choisir un nom différent."
+		"duplicateMessage": "Veuillez choisir un nom différent.",
+		"subtitle": "Veuillez remplir les détails ci-dessous pour créer un nouveau département."
 	},
 
 	"error": {
@@ -452,20 +454,21 @@
 	},
 
 	"AddFieldDialog": {
-		"title": "Ajouter un nouveau champs",
+		"title": "Ajouter un nouveau domaine",
 		"nameLabel": "Nom",
 		"cancel": "Annuler",
 		"submit": "Soumettre",
 		"close": "Fermer la boîte de dialogue",
+		"subtitle": "Veuillez remplir les informations ci-dessous pour créer un nouveau domaine.",
 		"errors": {
-			"nameRequired": "Le nom du champs est requis.",
-			"nameTakenTitle": "Un champs avec ce nom existe déjà.",
+			"nameRequired": "Le nom du domaine est requis.",
+			"nameTakenTitle": "Un domaine avec ce nom existe déjà.",
 			"nameTakenDesc": "Veuillez choisir un nom différent.",
 			"genericTitle": "Une erreur s'est produite.",
 			"genericDesc": "Veuillez réessayer plus tard."
 		},
 		"success": {
-			"added": "Champs ajouté avec succès !"
+			"added": "Domaine ajouté avec succès !"
 		}
 	},
 
@@ -485,16 +488,17 @@
 	},
 
 	"addMajor": {
-		"title": "Ajouter un nouveau branche",
+		"title": "Ajouter un nouveau filière",
 		"nameLabel": "Nom",
 		"cancel": "Annuler",
 		"submit": "Envoyer",
 		"close": "Fermer la fenêtre",
-		"success": "Branche ajoutée avec succès !",
+		"success": "Filière ajoutée avec succès !",
+		"subtitle": "Veuillez remplir les informations ci-dessous pour créer une nouvelle filière.",
 		"errors": {
-			"nameRequired": "Le nom de la branche est requis.",
+			"nameRequired": "Le nom de la filière est requis.",
 			"nameTaken": {
-				"title": "Une branche avec ce nom existe déjà.",
+				"title": "Une filière avec ce nom existe déjà.",
 				"desc": "Veuillez choisir un nom différent."
 			},
 			"general": {
@@ -522,6 +526,7 @@
 		"submit": "Envoyer",
 		"close": "Fermer la fenêtre",
 		"success": "Spécialité ajoutée avec succès !",
+		"subtitle": "Veuillez remplir les informations ci-dessous pour créer une nouvelle spécialité.",
 		"errors": {
 			"nameRequired": "Le nom de la spécialité est requis.",
 			"nameTaken": {

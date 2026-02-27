@@ -115,7 +115,7 @@ const AddDepartmentDialog = ({
 						{t("addDepartment.title")}
 					</h2>
 					<p className="text-sm text-zinc-500 dark:text-gray-400 mt-1 leading-relaxed">
-						{t("addDepartment.subtitle", "Provide a name for the department..")}
+						{t("addDepartment.subtitle")}
 					</p>
 				</div>
 
