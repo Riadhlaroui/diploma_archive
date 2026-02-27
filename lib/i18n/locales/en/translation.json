@@ -236,7 +236,8 @@
 		"duplicateTitle": "A faculty with this name already exists.",
 		"duplicateSubtitle": "Please choose a different name.",
 		"errorTitle": "An error occurred.",
-		"errorSubtitle": "Please try again later."
+		"errorSubtitle": "Please try again later.",
+		"subtitle": "Please fill in the details below to create a new faculty."
 	},
 
 	"students": {
@@ -430,7 +431,8 @@
 		"nameRequired": "Department name is required.",
 		"success": "Department added successfully!",
 		"duplicateTitle": "A department with this name already exists.",
-		"duplicateMessage": "Please choose a different name."
+		"duplicateMessage": "Please choose a different name.",
+		"subtitle": "Please fill in the details below to create a new department."
 	},
 
 	"error": {
@@ -471,6 +473,7 @@
 		"cancel": "Cancel",
 		"submit": "Submit",
 		"close": "Close dialog",
+		"subtitle": "Please fill in the details below to create a new field.",
 		"errors": {
 			"nameRequired": "Field name is required.",
 			"nameTakenTitle": "A field with this name already exists.",
@@ -505,6 +508,7 @@
 		"submit": "Submit",
 		"close": "Close dialog",
 		"success": "Major added successfully!",
+		"subtitle": "Please fill in the details below to create a new major.",
 		"errors": {
 			"nameRequired": "Major name is required.",
 			"nameTaken": {
@@ -536,6 +540,7 @@
 		"submit": "Submit",
 		"close": "Close Window",
 		"success": "Specialty added successfully!",
+		"subtitle": "Please fill in the details below to create a new specialty.",
 		"errors": {
 			"nameRequired": "Specialty name is required.",
 			"nameTaken": {
