@@ -40,7 +40,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
+
 import { checkAuthOrRedirect } from "@/app/src/services/authService";
 
 interface StudentFilter {
@@ -288,7 +288,7 @@ const StudentPage = () => {
 							variant="ghost"
 							size="icon"
 							className="rounded-full h-8 w-8 hover:bg-gray-100 dark:hover:bg-zinc-800"
-							onClick={() => router.push("/students/bulk-new")}
+							onClick={() => router.push("/students/bulk-import")}
 							aria-label="Bulk add students"
 						>
 							<LayersPlus className="h-4 w-4 text-black dark:text-white" />
