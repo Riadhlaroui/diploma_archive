@@ -395,239 +395,233 @@ const StudentPage = () => {
 				{/* Filter Panel (full width) */}
 				{isFilterOpen && (
 					<div
-						className={`absolute top-full mt-2 z-50 w-full md:w-170 border border-gray-200 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-900 shadow-lg max-h-[85vh] flex flex-col
-        ${isRtl ? "right-0" : "left-0"}`}
+						className={`absolute top-full mt-2 z-50 w-full md:w-150 border rounded-[14px] bg-white shadow-xl max-h-[80vh] flex flex-col overflow-hidden
+    ${isRtl ? "right-0" : "left-0"}`}
 					>
-						{/* Header - Fixed */}
-						<div className="flex justify-between items-center px-5 py-4 border-b border-[#d1d0d0] dark:border-zinc-800">
-							<h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+						{/* Header */}
+						<div className="flex justify-between items-center px-5 py-4 border-b border-gray-100">
+							<h4 className="text-[15px] font-semibold text-gray-900 tracking-tight">
 								{t("filterPanel.title")}
 							</h4>
 							<Button
 								onClick={() => setIsFilterOpen(false)}
 								aria-label="Close filter panel"
-								className="bg-transparent hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full h-8 w-8 p-0"
+								className="bg-transparent hover:bg-red-50 rounded-full h-8 w-8 p-0 transition-colors"
 							>
-								<X className="h-5 w-5 text-gray-500 hover:text-red-600 dark:text-gray-400" />
+								<X className="h-[14px] w-[14px] text-gray-400 hover:text-red-500" />
 							</Button>
 						</div>
 
-						{/* Scrollable Content Area */}
-						<div className="flex-1 overflow-y-auto p-5 space-y-6">
-							{/* Search Field */}
-							<div className="space-y-1.5">
-								<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-									{t("filterPanel.searchLabel")}
-								</label>
-								<div className="relative">
-									<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-										<Search className="h-4 w-4 text-gray-400 dark:text-gray-500" />
+						{/* Scrollable Body */}
+						<div className="flex-1 overflow-y-auto p-5 flex flex-col gap-5">
+							{/* Search */}
+							<div className="relative">
+								<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+									<Search className="h-[14px] w-[14px] text-gray-400" />
+								</div>
+								<input
+									type="text"
+									placeholder={t("filterPanel.searchPlaceholder")}
+									value={searchQuery}
+									onChange={(e) => setSearchQuery(e.target.value)}
+									disabled={!selectedDepartment}
+									className={`w-full pl-9 pr-3 h-[38px] text-sm border border-gray-200 rounded-lg bg-white text-gray-900 placeholder-gray-300 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100 transition-all
+            ${!selectedDepartment ? "opacity-50 cursor-not-allowed" : ""}`}
+								/>
+							</div>
+
+							<hr className="border-gray-100" />
+
+							{/* Identity Section */}
+							<div>
+								<p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-3">
+									{/* "Identity" or your i18n key */}
+									Identity
+								</p>
+								<div className="grid grid-cols-2 gap-3">
+									<div>
+										<label className="block text-[12.5px] font-medium text-gray-600 mb-1.5">
+											{t("addStudent.matricule")}
+										</label>
+										<input
+											type="text"
+											name="matricule"
+											value={matricule}
+											onChange={(e) => setMatricule(e.target.value)}
+											placeholder={t("addStudent.enterMatricule")}
+											className="w-full h-[38px] px-3 text-sm border border-gray-200 rounded-lg bg-white text-gray-900 placeholder-gray-300 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100 transition-all"
+										/>
 									</div>
-									<input
-										type="text"
-										placeholder={t("filterPanel.searchPlaceholder")}
-										value={searchQuery}
-										onChange={(e) => setSearchQuery(e.target.value)}
-										disabled={!selectedDepartment}
-										className={`w-full pl-9 pr-3 h-10 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 dark:bg-zinc-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${
-											!selectedDepartment ? "opacity-50 cursor-not-allowed" : ""
-										}`}
-									/>
+									<div>
+										<label className="block text-[12.5px] font-medium text-gray-600 mb-1.5">
+											{t("addStudent.graduationYear")}
+										</label>
+										<input
+											type="number"
+											min="1900"
+											max="2100"
+											name="graduationYear"
+											value={graduationYear}
+											onChange={(e) => setGraduationYear(e.target.value)}
+											placeholder="2024"
+											className="w-full h-[38px] px-3 text-sm border border-gray-200 rounded-lg bg-white text-gray-900 placeholder-gray-300 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100 transition-all"
+										/>
+									</div>
 								</div>
 							</div>
 
+							<hr className="border-gray-100" />
+
+							{/* Academic Path Section */}
 							<div>
-								<h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4">
-									{t("filterPanel.options")}
-								</h3>
+								<p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-3">
+									{/* "Academic Path" or your i18n key */}
+									Academic path
+								</p>
 
-								<div className="space-y-4">
-									{/* Row 1: Matricule & Year */}
-									<div className="grid grid-cols-2 gap-4">
-										<div className="space-y-1.5">
-											<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-												{t("addStudent.matricule")}
-											</label>
-											<input
-												type="text"
-												name="matricule"
-												value={matricule}
-												onChange={(e) => setMatricule(e.target.value)}
-												className="w-full h-10 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-gray-500 dark:focus:border-gray-400 text-gray-900 dark:text-white text-sm"
-												placeholder={t("addStudent.enterMatricule")}
+								{/* Faculty & Department */}
+								<div className="grid grid-cols-2 gap-3 mb-3">
+									<div>
+										<label className="block text-[12.5px] font-medium text-gray-600 mb-1.5">
+											{t("addStudent.faculty")}{" "}
+											<span className="text-red-500">*</span>
+										</label>
+										<Select
+											value={selectedFaculty}
+											onValueChange={setSelectedFaculty}
+										>
+											<SelectTrigger className="h-[38px] w-full text-sm border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-100 focus:border-gray-400">
+												<SelectValue
+													placeholder={t("addStudent.selectFaculty")}
+												/>
+											</SelectTrigger>
+											<SelectContent>
+												<SelectGroup>
+													<SelectLabel>{t("addStudent.faculty")}</SelectLabel>
+													{faculties.map((f) => (
+														<SelectItem key={f.id} value={f.id}>
+															{f.name}
+														</SelectItem>
+													))}
+												</SelectGroup>
+											</SelectContent>
+										</Select>
+									</div>
+									<div>
+										<label className="block text-[12.5px] font-medium text-gray-600 mb-1.5">
+											{t("addStudent.department")}{" "}
+											<span className="text-red-500">*</span>
+										</label>
+										<Select
+											value={selectedDepartment}
+											onValueChange={setSelectedDepartment}
+											disabled={!selectedFaculty}
+										>
+											<SelectTrigger className="h-[38px] w-full text-sm border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-100 focus:border-gray-400 disabled:opacity-50">
+												<SelectValue
+													placeholder={t("addStudent.selectDepartment")}
+												/>
+											</SelectTrigger>
+											<SelectContent>
+												<SelectGroup>
+													<SelectLabel>
+														{t("addStudent.department")}
+													</SelectLabel>
+													{departments.map((d) => (
+														<SelectItem key={d.id} value={d.id}>
+															{d.name}
+														</SelectItem>
+													))}
+												</SelectGroup>
+											</SelectContent>
+										</Select>
+									</div>
+								</div>
+
+								{/* Chained Selects: Field → Major → Specialty */}
+								<div className="flex flex-col gap-3 border border-gray-100 rounded-xl p-4 bg-gray-50">
+									{[
+										{
+											label: t("addStudent.field"),
+											value: selectedField,
+											onChange: setSelectedField,
+											disabled: !selectedDepartment,
+											placeholder: t("addStudent.selectField"),
+											items: fields,
+										},
+										{
+											label: t("addStudent.major"),
+											value: selectedMajor,
+											onChange: setSelectedMajor,
+											disabled: !selectedField,
+											placeholder: t("addStudent.selectMajor"),
+											items: majors,
+										},
+										{
+											label: t("addStudent.specialty"),
+											value: selectedSpecialty,
+											onChange: setSelectedSpecialty,
+											disabled: !selectedMajor,
+											placeholder: t("addStudent.selectSpecialty"),
+											items: specialties,
+										},
+									].map((row, i) => (
+										<div key={i} className="flex items-center gap-3">
+											<div
+												className={`w-1.5 h-1.5 rounded-full flex-shrink-0 transition-colors ${
+													!row.disabled ? "bg-gray-500" : "bg-gray-300"
+												}`}
 											/>
+											<div className="flex-1">
+												<label className="block text-[12.5px] font-medium text-gray-600 mb-1.5">
+													{row.label}
+												</label>
+												<Select
+													value={row.value}
+													onValueChange={row.onChange}
+													disabled={row.disabled}
+												>
+													<SelectTrigger className="h-[38px] w-full text-sm border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-gray-100 focus:border-gray-400 disabled:opacity-50 disabled:bg-gray-50">
+														<SelectValue placeholder={row.placeholder} />
+													</SelectTrigger>
+													<SelectContent>
+														<SelectGroup>
+															<SelectLabel>{row.label}</SelectLabel>
+															{row.items.map((item) => (
+																<SelectItem key={item.id} value={item.id}>
+																	{item.name}
+																</SelectItem>
+															))}
+														</SelectGroup>
+													</SelectContent>
+												</Select>
+											</div>
 										</div>
-										<div className="space-y-1.5">
-											<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-												{t("addStudent.graduationYear")}
-											</label>
-											<input
-												type="number"
-												min="1900"
-												max="2100"
-												name="graduationYear"
-												value={graduationYear}
-												onChange={(e) => setGraduationYear(e.target.value)}
-												className="w-full h-10 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-gray-500 dark:focus:border-gray-400 text-gray-900 dark:text-white text-sm"
-												placeholder="2024"
-											/>
-										</div>
-									</div>
-
-									{/* Row 2: Faculty & Department */}
-									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-										<div className="space-y-1.5">
-											<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-												{t("addStudent.faculty")}{" "}
-												<span className="text-red-500">*</span>
-											</label>
-											<Select
-												value={selectedFaculty}
-												onValueChange={setSelectedFaculty}
-											>
-												<SelectTrigger className="w-full h-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-gray-500 dark:focus:border-gray-400">
-													<SelectValue
-														placeholder={t("addStudent.selectFaculty")}
-													/>
-												</SelectTrigger>
-												<SelectContent>
-													<SelectGroup>
-														<SelectLabel>{t("addStudent.faculty")}</SelectLabel>
-														{faculties.map((f) => (
-															<SelectItem key={f.id} value={f.id}>
-																{f.name}
-															</SelectItem>
-														))}
-													</SelectGroup>
-												</SelectContent>
-											</Select>
-										</div>
-
-										<div className="space-y-1.5">
-											<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-												{t("addStudent.department")}{" "}
-												<span className="text-red-500">*</span>
-											</label>
-											<Select
-												value={selectedDepartment}
-												onValueChange={setSelectedDepartment}
-												disabled={!selectedFaculty}
-											>
-												<SelectTrigger className="w-full h-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-gray-500 dark:focus:border-gray-400 disabled:opacity-50">
-													<SelectValue
-														placeholder={t("addStudent.selectDepartment")}
-													/>
-												</SelectTrigger>
-												<SelectContent>
-													<SelectGroup>
-														<SelectLabel>
-															{t("addStudent.department")}
-														</SelectLabel>
-														{departments.map((d) => (
-															<SelectItem key={d.id} value={d.id}>
-																{d.name}
-															</SelectItem>
-														))}
-													</SelectGroup>
-												</SelectContent>
-											</Select>
-										</div>
-									</div>
-
-									{/* Stacked Fields */}
-									<div className="space-y-4 pt-2">
-										<div className="space-y-1.5">
-											<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-												{t("addStudent.field")}
-											</label>
-											<Select
-												value={selectedField}
-												onValueChange={setSelectedField}
-												disabled={!selectedDepartment}
-											>
-												<SelectTrigger className="w-full h-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-gray-500 dark:focus:border-gray-400 disabled:opacity-50">
-													<SelectValue
-														placeholder={t("addStudent.selectField")}
-													/>
-												</SelectTrigger>
-												<SelectContent>
-													<SelectGroup>
-														<SelectLabel>{t("addStudent.field")}</SelectLabel>
-														{fields.map((f) => (
-															<SelectItem key={f.id} value={f.id}>
-																{f.name}
-															</SelectItem>
-														))}
-													</SelectGroup>
-												</SelectContent>
-											</Select>
-										</div>
-
-										<div className="space-y-1.5">
-											<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-												{t("addStudent.major")}
-											</label>
-											<Select
-												value={selectedMajor}
-												onValueChange={setSelectedMajor}
-												disabled={!selectedField}
-											>
-												<SelectTrigger className="w-full h-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:border-gray-500 dark:focus:border-gray-400 disabled:opacity-50">
-													<SelectValue
-														placeholder={t("addStudent.selectMajor")}
-													/>
-												</SelectTrigger>
-												<SelectContent>
-													<SelectGroup>
-														<SelectLabel>{t("addStudent.major")}</SelectLabel>
-														{majors.map((m) => (
-															<SelectItem key={m.id} value={m.id}>
-																{m.name}
-															</SelectItem>
-														))}
-													</SelectGroup>
-												</SelectContent>
-											</Select>
-										</div>
-
-										<div className="space-y-1.5">
-											<label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-												{t("addStudent.specialty")}
-											</label>
-											<Select
-												value={selectedSpecialty}
-												onValueChange={setSelectedSpecialty}
-												disabled={!selectedMajor}
-											>
-												<SelectTrigger className="w-full h-10 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-gray-500 dark:focus:border-gray-400 text-gray-900 dark:text-white disabled:opacity-50">
-													<SelectValue
-														placeholder={t("addStudent.selectSpecialty")}
-													/>
-												</SelectTrigger>
-												<SelectContent>
-													<SelectGroup>
-														<SelectLabel>
-															{t("addStudent.specialty")}
-														</SelectLabel>
-														{specialties.map((s) => (
-															<SelectItem key={s.id} value={s.id}>
-																{s.name}
-															</SelectItem>
-														))}
-													</SelectGroup>
-												</SelectContent>
-											</Select>
-										</div>
-									</div>
+									))}
 								</div>
 							</div>
 						</div>
 
-						{/* Footer - Fixed */}
-						<div className="p-4 border-t border-[#d1d0d0] dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900 rounded-b-lg flex justify-end">
+						{/* Footer */}
+						<div className="px-5 py-3.5 border-t border-gray-100 bg-gray-50 rounded-b-[14px] flex justify-between items-center">
+							<button
+								onClick={() => {
+									setMatricule("");
+									setGraduationYear("");
+									setSelectedFaculty("");
+									setSelectedDepartment("");
+									setSelectedField("");
+									setSelectedMajor("");
+									setSelectedSpecialty("");
+									setSearchQuery("");
+								}}
+								className="text-sm text-gray-400 hover:text-gray-600 transition-colors"
+							>
+								Reset all
+							</button>
 							<Button
 								onClick={() => setIsFilterOpen(false)}
-								className="text-sm px-6"
+								className="text-sm px-5 h-9 bg-gray-900 hover:bg-gray-700 text-white rounded-lg"
 							>
 								{t("filterPanel.apply")}
 							</Button>
