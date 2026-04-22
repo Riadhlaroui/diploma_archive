@@ -193,7 +193,7 @@ const CreateStudentPage = () => {
 		];
 
 		const missingField = requiredFields.find(
-			(key) => !form[key as keyof typeof form]
+			(key) => !form[key as keyof typeof form],
 		);
 		if (missingField) {
 			toast.error(t("students.requiredField", { field: missingField }));
@@ -245,7 +245,7 @@ const CreateStudentPage = () => {
 			console.log("Form: ", form);
 			const result = await createStudentWithDocuments(
 				form,
-				documents.map(({ file, typeId }) => ({ file, fileType: typeId }))
+				documents.map(({ file, typeId }) => ({ file, fileType: typeId })),
 			);
 
 			if (result?.error) {
@@ -257,7 +257,7 @@ const CreateStudentPage = () => {
 							</div>
 							<div className="text-sm">{t("students.chooseDifferent")}</div>
 						</div>
-					</div>
+					</div>,
 				);
 				return;
 			}
@@ -291,7 +291,7 @@ const CreateStudentPage = () => {
 							{t("students.creationError")}
 						</div>
 					</div>
-				</div>
+				</div>,
 			);
 		}
 	};
@@ -701,7 +701,7 @@ const CreateStudentPage = () => {
 																onClick={(e) => {
 																	e.stopPropagation();
 																	setDocuments((prev) =>
-																		prev.filter((_, i) => i !== index)
+																		prev.filter((_, i) => i !== index),
 																	);
 																}}
 																className="ml-2 p-1 text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"

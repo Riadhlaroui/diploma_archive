@@ -36,7 +36,13 @@
 	},
 
 	"settings": {
-		"title": "Paramètres"
+		"addType": "Ajouter un type",
+		"title": "Paramètres",
+		"documentTypes": "Types de Documents",
+		"documentTypesDescription": "Gérer les types qui peuvent être attribués aux documents téléchargés.",
+		"noDocumentTypes": "Aucun type de document pour le moment.",
+		"addYourFirstType": "Ajoutez votre premier type de document",
+		"documentTypesNote": "Supprimer un type déjà attribué aux documents échouera. Renommez-le à la place."
 	},
 
 	"profile": {
@@ -323,6 +329,8 @@
 	},
 
 	"uploadDocuments": {
+		"manageTypesInfo": "Besoin d'ajouter ou de supprimer un type?",
+		"manageTypesLink": "Gérer les types de documents",
 		"title": "Téléverser des documents",
 		"dragAndDrop": "Glissez et déposez les fichiers ici",
 		"orClick": "ou cliquez pour parcourir votre ordinateur",

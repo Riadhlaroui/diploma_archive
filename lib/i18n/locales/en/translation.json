@@ -36,7 +36,13 @@
 	},
 
 	"settings": {
-		"title": "Settings page"
+		"addType": "Add type",
+		"title": "Settings page",
+		"documentTypes": "Document Types",
+		"documentTypesDescription": "Manage the types that can be assigned to uploaded documents.",
+		"noDocumentTypes": "No document types yet.",
+		"addYourFirstType": "Add your first document type",
+		"documentTypesNote": "Deleting a type that is already assigned to documents will fail. Rename it instead."
 	},
 
 	"profile": {
@@ -331,6 +337,8 @@
 	},
 
 	"uploadDocuments": {
+		"manageTypesInfo": "Need to add or remove a type?",
+		"manageTypesLink": "Manage document types",
 		"title": "Upload Documents",
 		"dragAndDrop": "Drag & drop files here",
 		"orClick": "or click to browse your computer",

@@ -101,7 +101,7 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
 		if (!trimmed) return;
 		if (
 			documentTypes.some(
-				(type) => type.name.toLowerCase() === trimmed.toLowerCase()
+				(type) => type.name.toLowerCase() === trimmed.toLowerCase(),
 			)
 		) {
 			alert("This type already exists");
@@ -290,7 +290,7 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
 
 					<Separator className="my-6" />
 
-					{/* Add new document type */}
+					{/* Add new document type Old Code - moved to settings page
 					<div className="space-y-4">
 						<h4 className="text-sm font-medium text-gray-900 dark:text-white">
 							{t("uploadDocuments.documentTypes")}
@@ -348,6 +348,18 @@ const DocumentUploadDialog: React.FC<DocumentUploadDialogProps> = ({
 							</div>
 						)}
 					</div>
+					*/}
+					<p className="text-xs text-gray-400 text-center pt-2">
+						{t("uploadDocuments.manageTypesInfo")}
+						<a
+							href="/settings/document-types"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="text-gray-600 underline underline-offset-2 hover:text-black"
+						>
+							{t("uploadDocuments.manageTypesLink")}
+						</a>
+					</p>
 				</div>
 
 				{/* Footer */}

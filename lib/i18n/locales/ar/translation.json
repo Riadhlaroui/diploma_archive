@@ -36,7 +36,13 @@
 	},
 
 	"settings": {
-		"title": "صفحة الإعدادات"
+		"addType": "إضافة نوع جديد",
+		"title": "صفحة الإعدادات",
+		"documentTypes": "أنواع الوثائق",
+		"documentTypesDescription": "إدارة الأنواع التي يمكن تعيينها للمستندات المرفوعة.",
+		"noDocumentTypes": "لا توجد أنواع الوثائق بعد.",
+		"addYourFirstType": "أضف نوع الوثيقة الأول",
+		"documentTypesNote": "لن ينجح حذف نوع معيّن إلى الوثائق. قم بإعادة تسمية ذلك بدلاً من ذلك."
 	},
 
 	"profile": {
@@ -323,10 +329,12 @@
 	},
 
 	"uploadDocuments": {
+		"manageTypesInfo": "تحتاج إلى إضافة أو إزالة نوع؟ ",
+		"manageTypesLink": "إدارة أنواع الوثائق",
 		"title": "تحميل وثائق",
 		"dragAndDrop": "اسحب وأفلت الملفات  هنا",
 		"orClick": "أو انقر لتصفح جهازك",
-		"supportedFormats": "الصيغ المدعومة: PDF، PNG، JPG، JPEG، DOC، DOCX",
+		"supportedFormats": "الصيغ المدعومة: PDF， PNG， JPG， JPEG， DOC， DOCX",
 		"uploadedFiles": "الملفات التي تم تحميلها ({{count}})",
 		"documentType": "نوع وثيقة",
 		"loadingTypes": "جارٍ تحميل الأنواع...",
