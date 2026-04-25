@@ -10,15 +10,17 @@ import {
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { ThemeProvider } from "@/components/theme-provider";
+import { useSessionGuard } from "../src/hooks/useSessionGuard";
 
 export default function MainLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
+	useSessionGuard();
 	const { i18n } = useTranslation();
 	const [dir, setDir] = useState<"ltr" | "rtl">("ltr");
-	const [defaultOpen, setDefaultOpen] = useState<boolean>(true); // fallback default
+	const [defaultOpen, setDefaultOpen] = useState<boolean>(true);
 
 	useEffect(() => {
 		// Set text direction based on language

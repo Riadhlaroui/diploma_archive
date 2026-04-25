@@ -8,7 +8,6 @@ import {
 	Users,
 	UserRoundPlus,
 	UserRoundX,
-	ChevronRight,
 	MoreVertical,
 } from "lucide-react";
 
@@ -18,7 +17,6 @@ import {
 	DropdownMenuContent,
 	DropdownMenuGroup,
 	DropdownMenuItem,
-	DropdownMenuLabel,
 	DropdownMenuPortal,
 	DropdownMenuSeparator,
 	DropdownMenuSub,
@@ -33,19 +31,21 @@ import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
 import AddStaffDialog from "./StaffComponents/AddStaffDialog";
 import DeleteStaffDialog from "./StaffComponents/DeleteStaffDialog";
-import { getCurrentUser } from "@/app/src/services/userService";
-import { User } from "@/app/src/core/domain/entities/User";
+import { getCurrentUser, UserList } from "@/app/src/services/userService"; // ← UserList not User
+import { usePermission } from "@/app/src/hooks/usePermission";
+import { PERMISSIONS } from "@/app/src/config/permissions";
 
 export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 	const { i18n, t } = useTranslation();
 	const isRtl = i18n.language === "ar";
 	const router = useRouter();
+	const { can } = usePermission();
 
 	const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 	const [openAddDialog, setOpenAddDialog] = useState(false);
 	const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 	const [isClient, setIsClient] = useState(false);
-	const [user, setUser] = useState<User | null>(null);
+	const [user, setUser] = useState<UserList | null>(null);
 
 	useEffect(() => {
 		setIsClient(true);
@@ -56,13 +56,11 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 	if (!user) return null;
 
 	const handleLogout = () => {
-		console.log("User logged out.");
 		clearAurthStore();
 		router.push("/");
 		setShowLogoutDialog(false);
 	};
 
-	// Helper to get initials
 	const initials =
 		`${user.firstName?.charAt(0) || ""}${user.lastName?.charAt(0) || ""}`.toUpperCase();
 
@@ -109,6 +107,7 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 					side={isCollapsed ? "right" : "bottom"}
 					sideOffset={8}
 				>
+					{/* User info header */}
 					<div className="flex items-center gap-2 p-2">
 						<div className="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-full items-center justify-center bg-muted border border-border">
 							<span className="font-medium text-xs">
@@ -127,6 +126,7 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 
 					<DropdownMenuSeparator />
 
+					{/* Profile & Settings — everyone sees these */}
 					<DropdownMenuGroup>
 						<DropdownMenuItem
 							onClick={() => router.push("/profile")}
@@ -135,54 +135,74 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 							<UserIcon className="size-4 text-muted-foreground" />
 							<span>{t("profile.profile")}</span>
 						</DropdownMenuItem>
-						<DropdownMenuItem
-							onClick={() => router.push("/settings")}
-							className="gap-2 cursor-pointer"
-						>
-							<Settings className="size-4 text-muted-foreground" />
-							<span>{t("profile.settings")}</span>
-						</DropdownMenuItem>
+
+						{/* Only show Settings if user has permission */}
+						{can(PERMISSIONS.settings_view) && (
+							<DropdownMenuItem
+								onClick={() => router.push("/settings")}
+								className="gap-2 cursor-pointer"
+							>
+								<Settings className="size-4 text-muted-foreground" />
+								<span>{t("profile.settings")}</span>
+							</DropdownMenuItem>
+						)}
 					</DropdownMenuGroup>
 
-					<DropdownMenuSeparator />
+					{/* Staff management — only if user can view/create/delete staff */}
+					{(can(PERMISSIONS.staff_view) || can(PERMISSIONS.staff_create)) && (
+						<>
+							<DropdownMenuSeparator />
+							<DropdownMenuGroup>
+								{can(PERMISSIONS.staff_view) && (
+									<DropdownMenuItem
+										className="gap-2 cursor-pointer"
+										onClick={() => router.replace("/team")}
+									>
+										<Users className="size-4 text-muted-foreground" />
+										<span>{t("profile.team")}</span>
+									</DropdownMenuItem>
+								)}
 
-					{user?.role !== "staff" && (
-						<DropdownMenuGroup>
-							<DropdownMenuItem
-								className="gap-2 cursor-pointer"
-								onClick={() => router.replace("/team")}
-							>
-								<Users className="size-4 text-muted-foreground" />
-								<span>{t("profile.team")}</span>
-							</DropdownMenuItem>
-
-							<DropdownMenuSub>
-								<DropdownMenuSubTrigger className="gap-2 cursor-pointer">
-									<UserRoundPlus className="size-4 text-muted-foreground" />
-									<span>{t("profile.addUser")}</span>
-								</DropdownMenuSubTrigger>
-
-								<DropdownMenuPortal>
-									<DropdownMenuSubContent>
-										<DropdownMenuItem
-											className="gap-2 cursor-pointer"
-											onClick={() => setOpenAddDialog(true)}
-										>
+								{(can(PERMISSIONS.staff_create) ||
+									can(PERMISSIONS.staff_delete)) && (
+									<DropdownMenuSub>
+										<DropdownMenuSubTrigger className="gap-2 cursor-pointer">
 											<UserRoundPlus className="size-4 text-muted-foreground" />
-											<span>{t("profile.addMember")}</span>
-										</DropdownMenuItem>
-										<DropdownMenuSeparator />
-										<DropdownMenuItem
-											className="gap-2 cursor-pointer text-destructive focus:text-destructive"
-											onClick={() => setOpenDeleteDialog(true)}
-										>
-											<UserRoundX className="size-4" />
-											<span>{t("profile.deleteMember")}</span>
-										</DropdownMenuItem>
-									</DropdownMenuSubContent>
-								</DropdownMenuPortal>
-							</DropdownMenuSub>
-						</DropdownMenuGroup>
+											<span>{t("profile.addUser")}</span>
+										</DropdownMenuSubTrigger>
+
+										<DropdownMenuPortal>
+											<DropdownMenuSubContent>
+												{can(PERMISSIONS.staff_create) && (
+													<DropdownMenuItem
+														className="gap-2 cursor-pointer"
+														onClick={() => setOpenAddDialog(true)}
+													>
+														<UserRoundPlus className="size-4 text-muted-foreground" />
+														<span>{t("profile.addMember")}</span>
+													</DropdownMenuItem>
+												)}
+
+												{can(PERMISSIONS.staff_create) &&
+													can(PERMISSIONS.staff_delete) && (
+														<DropdownMenuSeparator />
+													)}
+
+												{can(PERMISSIONS.staff_delete) && (
+													<DropdownMenuItem
+														className="gap-2 cursor-pointer text-destructive focus:text-destructive"
+														onClick={() => setOpenDeleteDialog(true)}
+													>
+														<UserRoundX className="size-4" />
+														<span>{t("profile.deleteMember")}</span>
+													</DropdownMenuItem>
+												)}
+											</DropdownMenuSubContent>
+										</DropdownMenuPortal>
+									</DropdownMenuSub>
+								)}
+							</DropdownMenuGroup>
+						</>
 					)}
 
 					<DropdownMenuSeparator />
@@ -197,7 +217,6 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 				</DropdownMenuContent>
 			</DropdownMenu>
 
-			{/* Dialogs */}
 			<AddStaffDialog open={openAddDialog} onOpenChange={setOpenAddDialog} />
 			<DeleteStaffDialog
 				open={openDeleteDialog}
@@ -210,22 +229,19 @@ export function ProfileDropDownMenu({ isCollapsed }: { isCollapsed: boolean }) {
 						<h2 className="text-xl font-semibold">
 							{t("profile.logoutConfirm")}
 						</h2>
-
 						<p className="text-sm text-zinc-600 dark:text-zinc-400">
 							{t("profile.logoutMessage")}
 						</p>
-
 						<div className="flex justify-center gap-4 pt-4">
 							<Button
-								className=" hover:cursor-pointer flex-1 h-10 text-sm"
+								className="flex-1 h-10 text-sm"
 								variant="outline"
 								onClick={() => setShowLogoutDialog(false)}
 							>
 								{t("profile.cancel")}
 							</Button>
-
 							<Button
-								className="hover:cursor-pointer flex-1 h-10 text-sm"
+								className="flex-1 h-10 text-sm"
 								variant="destructive"
 								onClick={handleLogout}
 							>

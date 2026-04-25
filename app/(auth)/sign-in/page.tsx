@@ -16,6 +16,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { checkAndLogin } from "@/app/src/services/authService";
 
 export default function SignIn() {
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -57,10 +58,11 @@ export default function SignIn() {
 
 	const handleLogin = async (e: React.FormEvent) => {
 		e.preventDefault();
-		try {
-			await pb.collection("Archive_users").authWithPassword(email, password);
-			router.push("/dashboard");
 
+		const result = await checkAndLogin(email, password);
+
+		if (result.success) {
+			router.push("/dashboard");
 			toast.success(
 				<div className="flex items-center gap-2">
 					<div>
@@ -69,17 +71,43 @@ export default function SignIn() {
 					</div>
 				</div>,
 			);
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		} catch (err) {
-			toast.error(
-				<div className="flex items-center gap-2">
-					<div>
-						<div className="font-semibold">{t("login.failed")}</div>
-						<div className="text-sm">{t("login.incorrect")}</div>
-					</div>
-				</div>,
-			);
+			return;
 		}
+
+		const messages: Record<
+			typeof result.reason,
+			{ title: string; body: string }
+		> = {
+			disabled: {
+				title: t("login.disabledTitle") || "Account Disabled",
+				body:
+					t("login.disabledMessage") ||
+					"Your account has been disabled. Contact an administrator.",
+			},
+			expired: {
+				title: t("login.expiredTitle") || "Account Expired",
+				body:
+					t("login.expiredMessage") ||
+					"Your account has expired. Contact an administrator.",
+			},
+			invalid_credentials: {
+				title: t("login.failed") || "Login Failed",
+				body: t("login.incorrect") || "Incorrect email or password.",
+			},
+			unknown: {
+				title: t("login.failed") || "Login Failed",
+				body:
+					t("login.unknownError") || "Something went wrong. Please try again.",
+			},
+		};
+
+		const { title, body } = messages[result.reason];
+		toast.error(
+			<div>
+				<div className="font-semibold">{title}</div>
+				<div className="text-sm">{body}</div>
+			</div>,
+		);
 	};
 
 	return (

@@ -18,7 +18,7 @@ export type FileWithType = {
 
 export async function createStudentWithDocuments(
 	studentData: StudentPayload,
-	files: FileWithType[]
+	files: FileWithType[],
 ) {
 	try {
 		// Step 1: Create the student
@@ -51,8 +51,8 @@ export async function createStudentWithDocuments(
 			"Error creating student with documents:",
 			typeof error === "object" && error !== null && "response" in error
 				? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-				  (error as any).response
-				: error
+					(error as any).response
+				: error,
 		);
 		return { success: false, error };
 	}
@@ -123,7 +123,7 @@ export async function fetchStudentDocuments(studentId: string) {
 export async function getStudentsByDepartment(
 	departmentId: string,
 	page = 1,
-	perPage = 10
+	perPage = 10,
 ) {
 	if (!departmentId) {
 		console.error("Missing departmentId!");
@@ -165,7 +165,7 @@ export async function getStudentsWithSpecialtyAndDocumentCount() {
 		// Step 3: Map students and count their documents
 		const result = students.map((student) => {
 			const documentCount = documents.filter(
-				(doc) => doc.studentId === student.id
+				(doc) => doc.studentId === student.id,
 			).length;
 			const specialtyName = student.expand?.specialtyId?.name || "N/A";
 
@@ -237,16 +237,13 @@ interface StudentFilter {
 export async function searchStudents(
 	filter: StudentFilter,
 	page = 1,
-	perPage = 15
+	perPage = 15,
 ) {
 	const filters: string[] = [];
 
-	// ✅ PRIORITIZE fieldId if present (no need to resolve from department/faculty)
 	if (filter.fieldId) {
 		filters.push(`fieldId.id="${filter.fieldId}"`);
-	}
-	// ✅ Else resolve fieldIds from department/faculty
-	else if (filter.departmentId || filter.facultyId) {
+	} else if (filter.departmentId || filter.facultyId) {
 		const departmentFilter = filter.departmentId
 			? `departmentId.id="${filter.departmentId}"`
 			: "";
@@ -263,7 +260,8 @@ export async function searchStudents(
 		if (filter.facultyId) {
 			filteredFields = filteredFields.filter(
 				(field) =>
-					field.expand?.departmentId?.expand?.facultyId?.id === filter.facultyId
+					field.expand?.departmentId?.expand?.facultyId?.id ===
+					filter.facultyId,
 			);
 		}
 
@@ -292,7 +290,7 @@ export async function searchStudents(
 		filters.push(`graduationYear ~ "${filter.graduationYear}"`);
 	if (filter.searchQuery) {
 		filters.push(
-			`firstName~"${filter.searchQuery}" || lastName~"${filter.searchQuery}"`
+			`firstName~"${filter.searchQuery}" || lastName~"${filter.searchQuery}"`,
 		);
 	}
 

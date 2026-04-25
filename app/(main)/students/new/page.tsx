@@ -24,6 +24,8 @@ import DocumentUploadDialog from "@/components/DocumentUploadDialog";
 import { ArrowLeft, Upload, X, FileText, ImageIcon, File } from "lucide-react";
 import { useRouter } from "next/navigation";
 import DocumentViewer from "@/components/DocumentViewr";
+import { DatePicker } from "@/components/ui/DatePicker";
+import { YearPicker } from "@/components/ui/YearPicker";
 
 const CreateStudentPage = () => {
 	const { t } = useTranslation();
@@ -583,13 +585,17 @@ const CreateStudentPage = () => {
 													{t("addStudent.dateOfBirth")}{" "}
 													<span className="text-red-500">*</span>
 												</label>
-												<input
-													type="date"
-													name="dateOfBirth"
-													value={form.dateOfBirth}
-													max={`${new Date().getFullYear()}-12-31`}
-													onChange={handleChange}
-													className="w-full h-9 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-gray-500 dark:focus:border-gray-400 text-gray-900 dark:text-white"
+												<DatePicker
+													value={form.dateOfBirth || null}
+													onChange={(val) =>
+														setForm((prev) => ({
+															...prev,
+															dateOfBirth: val ?? "",
+														}))
+													}
+													max={new Date().toISOString().split("T")[0]}
+													placeholder="Select date of birth"
+													clearable={false}
 												/>
 											</div>
 
@@ -598,14 +604,16 @@ const CreateStudentPage = () => {
 													{t("addStudent.enrollmentYear")}{" "}
 													<span className="text-red-500">*</span>
 												</label>
-												<input
-													type="number"
-													name="enrollmentYear"
+												<YearPicker
 													value={form.enrollmentYear}
-													onChange={handleChange}
-													min="1900"
+													onChange={(year) =>
+														setForm((prev) => ({
+															...prev,
+															enrollmentYear: year,
+														}))
+													}
+													min={1900}
 													max={new Date().getFullYear()}
-													className="w-full h-9 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-gray-500 dark:focus:border-gray-400 text-gray-900 dark:text-white"
 													placeholder={t("addStudent.enterEnrollmentYear")}
 												/>
 											</div>
@@ -615,15 +623,18 @@ const CreateStudentPage = () => {
 													{t("addStudent.graduationYear")}{" "}
 													<span className="text-red-500">*</span>
 												</label>
-												<input
-													type="number"
-													name="graduationYear"
+												<YearPicker
 													value={form.graduationYear}
-													onChange={handleChange}
-													min="1900"
+													onChange={(year) =>
+														setForm((prev) => ({
+															...prev,
+															graduationYear: year,
+														}))
+													}
+													min={1900}
 													max={new Date().getFullYear() + 10}
-													className="w-full h-9 px-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-gray-500 dark:focus:border-gray-400 text-gray-900 dark:text-white"
 													placeholder={t("addStudent.enterGraduationYear")}
+													clearable
 												/>
 											</div>
 										</div>

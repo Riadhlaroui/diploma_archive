@@ -1,7 +1,6 @@
-// userService.ts
-
 import pb from "@/lib/pocketbase";
 import { User } from "../core/domain/entities/User";
+import { Permission, ROLE_PRESETS } from "../config/permissions";
 
 export type UserRole = "admin" | "staff";
 
@@ -11,8 +10,11 @@ type createUserInput = {
 	email: string;
 	password: string;
 	passwordConfirm?: string;
-	role: "admin" | "staff";
+	role: UserRole;
 	phone: string;
+	isActive?: boolean;
+	expiresAt?: string | null;
+	permissions?: Permission[];
 };
 
 export type InboxRecord = {
@@ -31,73 +33,173 @@ export interface UserList {
 	email: string;
 	role: UserRole;
 	phone: string;
+	isActive: boolean;
+	expiresAt: string | null;
+	permissions: Permission[];
 	createdAt: string;
 	updatedAt?: string;
 }
 
-export async function getCurrentUser(): Promise<User | null> {
-	try {
-		const record = pb.authStore.model;
-		if (!record) return null;
+// ─── Helpers ────────────────────────────────────────────────
 
-		return {
-			id: record.id,
-			firstName: record.firstName,
-			lastName: record.lastName,
-			email: record.email,
-			role: record.role,
-			phone: record.phone,
-			createdAt: new Date(record.created),
-			updatedAt: new Date(record.updated),
-		};
-	} catch (error) {
-		console.error("Error fetching current user:", error);
-		return null;
+export function isAccountExpired(expiresAt: string | null): boolean {
+	if (!expiresAt) return false;
+	return new Date(expiresAt) < new Date();
+}
+
+export function hasPermission(
+	user: UserList | null,
+	permission: Permission,
+): boolean {
+	if (!user) return false;
+	if (user.role === "admin") return true;
+	return user.permissions.includes(permission);
+}
+
+export function isAccountActive(user: UserList | null): boolean {
+	if (!user) return false;
+	if (!user.isActive) return false;
+	if (isAccountExpired(user.expiresAt)) return false;
+	return true;
+}
+
+// ─── Auth check with expiry ──────────────────────────────────
+
+export async function validateSession(): Promise<{
+	valid: boolean;
+	reason?: "not_authenticated" | "account_disabled" | "account_expired";
+}> {
+	if (!pb.authStore.isValid || !pb.authStore.model) {
+		return { valid: false, reason: "not_authenticated" };
 	}
+
+	const model = pb.authStore.model;
+
+	if (model.isActive === false) {
+		pb.authStore.clear();
+		return { valid: false, reason: "account_disabled" };
+	}
+
+	if (model.expiresAt && new Date(model.expiresAt) < new Date()) {
+		pb.authStore.clear();
+		return { valid: false, reason: "account_expired" };
+	}
+
+	return { valid: true };
 }
 
 export async function createUser(data: createUserInput): Promise<User | null> {
-	try {
-		const record = await pb.collection("Archive_users").create({
-			...data,
-			passwordConfirm: data.password,
-			emailVisibility: true,
+	const permissions = data.permissions ?? ROLE_PRESETS[data.role] ?? [];
+
+	const record = await pb.collection("Archive_users").create({
+		...data,
+		passwordConfirm: data.password,
+		emailVisibility: true,
+		isActive: data.isActive ?? true,
+		expiresAt: data.expiresAt ?? null,
+		permissions,
+	});
+
+	console.log("Created user: ", record);
+
+	const currentUser = pb.authStore.model;
+	if (currentUser) {
+		await pb.collection("Archive_inbox").create({
+			action: "create_user",
+			userEmail: currentUser.email,
+			targetType: "user",
+			targetId: record.id,
+			timestamp: new Date().toISOString(),
+			details: { createdUserEmail: record.email, role: record.role },
 		});
-
-		const currentUser = pb.authStore.model;
-
-		if (currentUser) {
-			await pb.collection("Archive_inbox").create({
-				action: "create_user",
-				userEmail: currentUser.email,
-				targetType: "user",
-				targetId: record.id,
-				timestamp: new Date().toISOString(),
-				details: {
-					createdUserEmail: record.email,
-					role: record.role,
-				},
-			});
-		}
-
-		return {
-			id: record.id,
-			firstName: record.firstName,
-			lastName: record.lastName,
-			email: record.email,
-			phone: record.phone,
-			role: record.role,
-			createdAt: new Date(record.created),
-			updatedAt: new Date(record.updated),
-		};
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	} catch (error: any) {
-		console.error(
-			"Error response from PocketBase: Error in creating user",
-			error?.response || error,
-		);
-		throw error;
 	}
+
+	return mapRecord(record);
+}
+
+export async function updateUser(
+	id: string,
+	data: Partial<createUserInput>,
+): Promise<User | null> {
+	const updated = await pb.collection("Archive_users").update(id, data);
+
+	const currentUser = pb.authStore.model;
+	if (currentUser) {
+		await pb.collection("Archive_inbox").create({
+			action: "update_user",
+			userEmail: currentUser.email,
+			targetType: "user",
+			targetId: id,
+			timestamp: new Date().toISOString(),
+			details: { updatedFields: Object.keys(data) },
+		});
+	}
+
+	return mapRecord(updated);
+}
+
+export async function getUsers(): Promise<UserList[]> {
+	const records = await pb.collection("Archive_users").getFullList({
+		sort: "-created",
+	});
+	return records.map(mapUserList);
+}
+
+export async function getUsersList(page = 1, perPage = 13, searchTerm = "") {
+	const filter = searchTerm
+		? `firstName ~ "${searchTerm}" || lastName ~ "${searchTerm}" || email ~ "${searchTerm}"`
+		: "";
+
+	const result = await pb
+		.collection("Archive_users")
+		.getList(page, perPage, { sort: "-created", filter });
+
+	return {
+		items: result.items.map(mapUserList),
+		page: result.page,
+		perPage: result.perPage,
+		totalPages: result.totalPages,
+		totalItems: result.totalItems,
+	};
+}
+
+export async function deleteUser(id: string): Promise<void> {
+	await pb.collection("Archive_users").delete(id);
+
+	const currentUser = pb.authStore.model;
+	if (currentUser) {
+		await pb.collection("Archive_inbox").create({
+			action: "delete_user",
+			userEmail: currentUser.email,
+			targetType: "user",
+			targetId: id,
+			timestamp: new Date().toISOString(),
+		});
+	}
+}
+
+export async function toggleUserActive(
+	id: string,
+	isActive: boolean,
+): Promise<void> {
+	await pb.collection("Archive_users").update(id, { isActive });
+
+	const currentUser = pb.authStore.model;
+	if (currentUser) {
+		await pb.collection("Archive_inbox").create({
+			action: isActive ? "enable_user" : "disable_user",
+			userEmail: currentUser.email,
+			targetType: "user",
+			targetId: id,
+			timestamp: new Date().toISOString(),
+		});
+	}
+}
+
+export async function getCurrentUser(): Promise<UserList | null> {
+	const model = pb.authStore.model;
+	if (!model) return null;
+	return mapUserList(model);
 }
 
 export async function getInbox(page = 1, perPage = 13) {
@@ -118,162 +220,33 @@ export async function getInbox(page = 1, perPage = 13) {
 	}
 }
 
-export async function getUsersList(
-	page = 1,
-	perPage = 13,
-	searchTerm: string = "",
-) {
-	try {
-		const filter = searchTerm
-			? `firstName ~ "${searchTerm}" || lastName ~ "${searchTerm}" || email ~ "${searchTerm}"`
-			: "";
+// ─── Mappers ─────────────────────────────────────────────────
 
-		const result = await pb.collection("Archive_users").getList(page, perPage, {
-			sort: "-created",
-			filter,
-		});
-
-		const users: UserList[] = result.items.map((item) => ({
-			id: item.id,
-			firstName: item.firstName,
-			lastName: item.lastName,
-			email: item.email,
-			role: item.role,
-			phone: item.phone,
-			createdAt: item.created,
-			updatedAt: item.updated,
-		}));
-
-		return {
-			items: users,
-			page: result.page,
-			perPage: result.perPage,
-			totalPages: result.totalPages,
-			totalItems: result.totalItems,
-		};
-	} catch (error) {
-		console.error("Failed to fetch users:", error);
-		return {
-			items: [],
-			page: 1,
-			perPage,
-			totalPages: 1,
-			totalItems: 0,
-		};
-	}
+function mapRecord(r: any): User {
+	return {
+		id: r.id,
+		firstName: r.firstName,
+		lastName: r.lastName,
+		email: r.email,
+		role: r.role,
+		phone: r.phone,
+		createdAt: new Date(r.created),
+		updatedAt: new Date(r.updated),
+	};
 }
 
-export async function getUsers() {
-	try {
-		const records = await pb.collection("Archive_users").getFullList({
-			sort: "-created",
-		});
-
-		return records.map((record) => ({
-			id: record.id,
-			firstName: record.firstName,
-			lastName: record.lastName,
-			email: record.email,
-			phone: record.phone,
-			role: record.role,
-			createdAt: new Date(record.created),
-			updatedAt: new Date(record.updated),
-		}));
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	} catch (error: any) {
-		console.error(
-			"Error response from PocketBase: Getting list of users",
-			error?.response || error,
-		);
-		throw error;
-	}
-}
-
-export async function deleteUsers(userIds: string[]): Promise<void> {
-	try {
-		// Delete users one by one (PocketBase doesn't support batch delete natively)
-		await Promise.all(
-			userIds.map((id) => pb.collection("Archive_users").delete(id)),
-		);
-	} catch (error) {
-		console.error("Error deleting users:", error);
-		throw error;
-	}
-}
-
-export async function deleteUser(id: string): Promise<void> {
-	try {
-		await pb.collection("Archive_users").delete(id);
-
-		const currentUser = pb.authStore.model;
-
-		if (currentUser) {
-			await pb.collection("Archive_inbox").create({
-				action: "delete_user",
-				userEmail: currentUser.email,
-				targetType: "user",
-				targetId: id,
-				timestamp: new Date().toISOString(),
-			});
-		}
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	} catch (error: any) {
-		console.error("Error response from PocketBase:", error?.response || error);
-		throw error;
-	}
-}
-
-export async function getCurrentUserRole(): Promise<"admin" | "staff" | null> {
-	try {
-		const record = pb.authStore.model;
-		if (!record) return null;
-
-		return record.role as "admin" | "staff";
-	} catch {
-		return null;
-	}
-}
-
-export async function updateUser(
-	id: string,
-	data: Partial<createUserInput>,
-): Promise<User | null> {
-	try {
-		const updatedRecord = await pb.collection("Archive_users").update(id, data);
-
-		const currentUser = pb.authStore.model;
-
-		if (currentUser) {
-			await pb.collection("Archive_inbox").create({
-				action: "update_user",
-				userEmail: currentUser.email,
-				targetType: "user",
-				targetId: id,
-				timestamp: new Date().toISOString(),
-				details: {
-					updatedFields: Object.keys(data),
-					updatedUserEmail: updatedRecord.email,
-				},
-			});
-		}
-
-		return {
-			id: updatedRecord.id,
-			firstName: updatedRecord.firstName,
-			lastName: updatedRecord.lastName,
-			email: updatedRecord.email,
-			phone: updatedRecord.phone,
-			role: updatedRecord.role,
-			createdAt: new Date(updatedRecord.created),
-			updatedAt: new Date(updatedRecord.updated),
-		};
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	} catch (error: any) {
-		console.error(
-			"Error updating user:",
-			error?.response?.data || error.message || error,
-		);
-		throw error;
-	}
+function mapUserList(item: any): UserList {
+	return {
+		id: item.id,
+		firstName: item.firstName,
+		lastName: item.lastName,
+		email: item.email,
+		role: item.role,
+		phone: item.phone,
+		isActive: item.isActive ?? true,
+		expiresAt: item.expiresAt || null,
+		permissions: item.permissions ?? ROLE_PRESETS[item.role] ?? [],
+		createdAt: item.created,
+		updatedAt: item.updated,
+	};
 }
