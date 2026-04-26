@@ -8,6 +8,8 @@
 	"password": "Mot de passe",
 	"forgotPassword": "Mot de passe oublié?",
 	"login": {
+		"email": "E-mail",
+		"password": "Mot de passe",
 		"button": "Se connecter",
 		"success": "Connexion réussie",
 		"welcome": "Bienvenue!",

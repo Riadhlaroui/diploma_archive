@@ -8,6 +8,8 @@
 	"password": "Password",
 	"forgotPassword": "Forgot password?",
 	"login": {
+		"email": "Email",
+		"password": "Password",
 		"button": "Sign in",
 		"success": "Login successful",
 		"welcome": "Welcome!",
