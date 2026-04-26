@@ -1,12 +1,11 @@
 import { Permission } from "./permissions";
 
 export const PERMISSION_GROUPS: {
-	label: string;
+	labelKey: string;
 	permissions: Permission[];
 }[] = [
 	{
-		label: "Students",
-
+		labelKey: "permissionGroups.students",
 		permissions: [
 			"students_view",
 			"students_create",
@@ -15,11 +14,11 @@ export const PERMISSION_GROUPS: {
 		],
 	},
 	{
-		label: "Documents",
+		labelKey: "permissionGroups.documents",
 		permissions: ["documents_view", "documents_upload", "documents_delete"],
 	},
 	{
-		label: "Document Types",
+		labelKey: "permissionGroups.documentTypes",
 		permissions: [
 			"document_type_view",
 			"document_type_create",
@@ -28,11 +27,11 @@ export const PERMISSION_GROUPS: {
 		],
 	},
 	{
-		label: "Staff",
+		labelKey: "permissionGroups.staff",
 		permissions: ["staff_view", "staff_create", "staff_edit", "staff_delete"],
 	},
 	{
-		label: "Faculties",
+		labelKey: "permissionGroups.faculties",
 		permissions: [
 			"faculty_view",
 			"faculty_create",
@@ -41,7 +40,7 @@ export const PERMISSION_GROUPS: {
 		],
 	},
 	{
-		label: "Departments",
+		labelKey: "permissionGroups.departments",
 		permissions: [
 			"department_view",
 			"department_create",
@@ -50,15 +49,15 @@ export const PERMISSION_GROUPS: {
 		],
 	},
 	{
-		label: "Fields",
+		labelKey: "permissionGroups.fields",
 		permissions: ["field_view", "field_create", "field_edit", "field_delete"],
 	},
 	{
-		label: "Majors",
+		labelKey: "permissionGroups.majors",
 		permissions: ["major_view", "major_create", "major_edit", "major_delete"],
 	},
 	{
-		label: "Specialties",
+		labelKey: "permissionGroups.specialties",
 		permissions: [
 			"specialty_view",
 			"specialty_create",

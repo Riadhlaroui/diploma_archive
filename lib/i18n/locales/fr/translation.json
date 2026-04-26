@@ -63,7 +63,43 @@
 		"logout": "Se déconnecter",
 		"logoutConfirm": "Confirmer la déconnexion",
 		"logoutMessage": "Êtes-vous sûr de vouloir vous déconnecter ?",
-		"cancel": "Annuler"
+		"cancel": "Annuler",
+		"sections": {
+			"info": "Informations personnelles",
+			"email": "Adresse e-mail",
+			"password": "Mot de passe",
+			"permissions": "Mes permissions"
+		},
+		"phoneHint": "Utilisez un numéro d'un opérateur autorisé : 05 (Ooredoo), 06 (Mobilis), ou 07 (Djezzy).",
+		"infoDescription": "Mettez à jour votre nom et numéro de téléphone",
+		"emailDescription": "Modifiez l'adresse e-mail associée à votre compte",
+		"passwordDescription": "Choisissez un mot de passe fort pour sécuriser votre compte",
+		"save": "Enregistrer",
+		"updateEmail": "Mettre à jour l'e-mail",
+		"updatePassword": "Mettre à jour le mot de passe",
+		"currentEmail": "E-mail actuel",
+		"newEmail": "Nouvel e-mail",
+		"currentPassword": "Mot de passe actuel",
+		"currentPasswordConfirm": "Confirmer avec le mot de passe actuel",
+		"passwordConfirmHint": "Entrez votre mot de passe actuel pour confirmer le changement d'e-mail",
+		"newPassword": "Nouveau mot de passe",
+		"confirmPassword": "Confirmer le nouveau mot de passe",
+		"infoUpdated": "Profil mis à jour avec succès",
+		"emailUpdated": "E-mail mis à jour avec succès",
+		"passwordUpdated": "Mot de passe mis à jour avec succès",
+		"errors": {
+			"nameRequired": "Le prénom et le nom sont requis",
+			"fillAll": "Veuillez remplir tous les champs",
+			"invalidEmail": "Veuillez entrer une adresse e-mail valide",
+			"sameEmail": "Le nouvel e-mail doit être différent de l'actuel",
+			"emailExists": "Cet e-mail est déjà utilisé par un autre compte",
+			"wrongPassword": "Le mot de passe actuel est incorrect",
+			"samePassword": "Le nouveau mot de passe doit être différent de l'actuel",
+			"updateFailed": "La mise à jour a échoué. Veuillez réessayer."
+		},
+		"permissionsDescription": "Vue en lecture seule de ce à quoi vous avez accès dans ce système",
+		"adminAccessNote": "En tant qu'administrateur, vous avez accès à toutes les fonctionnalités",
+		"permissionsGranted": "Permissions accordées"
 	},
 
 	"sidebar": {
@@ -104,6 +140,7 @@
 		"submitButton": "Soumettre",
 		"errors": {
 			"mismatchTitle": "Les mots de passe ne correspondent pas",
+			"mismatchShort": "Mots de passe non correspondants",
 			"mismatchDesc": "Veuillez vous assurer que les deux mots de passe sont identiques.",
 			"missingTitle": "Champs requis manquants",
 			"missingDesc": "Veuillez remplir tous les champs obligatoires marqués d’un *.",
@@ -122,7 +159,42 @@
 			"number": "Un chiffre",
 			"special": "Un caractère spécial"
 		},
-		"passwordRequirements": "Exigences du mot de passe"
+		"passwordRequirements": "Exigences du mot de passe",
+		"selectAll": "Sélectionner tout",
+		"deselectAll": "Désélectionner tout"
+	},
+
+	"staffDetail": {
+		"title": "Détails du membre",
+		"info": "Informations sur le personnel",
+		"role&access": "Rôle et accès",
+		"active": "Actif",
+		"expired": "Expiré",
+		"disabled": "Désactivé",
+		"contact": "Contact",
+		"email": "E-mail",
+		"phone": "Téléphone",
+		"account": "Compte",
+		"created": "Créé le",
+		"expires": "Expire le",
+		"never": "Jamais",
+		"status": "Statut",
+		"permissions": "Permissions",
+		"adminFullAccess": "Administrateur — accès complet à tout",
+		"noPermissions": "Aucune permission attribuée"
+	},
+
+	"permissionGroups": {
+		"students": "Étudiants",
+		"documents": "Documents",
+		"documentTypes": "Types de documents",
+		"staff": "Personnel",
+		"faculties": "Facultés",
+		"departments": "Départements",
+		"fields": "Filières",
+		"majors": "Spécialités principales",
+		"specialties": "Spécialités",
+		"settings": "Paramètres"
 	},
 
 	"auditLogs": {
@@ -185,7 +257,8 @@
 		"roleLabel": "Rôle",
 		"errors": {
 			"fetchFailed": "Échec de la récupération de la liste du personnel",
-			"deleteFailed": "Échec de la suppression des membres du personnel"
+			"deleteFailed": "Échec de la suppression des membres du personnel",
+			"partialFail": "{{count}} utilisateur(s) n'ont pas pu être supprimés"
 		},
 		"success": "{{count}} membre(s) du personnel supprimé(s) avec succès",
 		"warnings": {
@@ -195,7 +268,12 @@
 		"confirm": {
 			"title": "Confirmer la suppression",
 			"description": "Êtes-vous sûr de vouloir supprimer {{count}} membre(s) du personnel ? Cette action est irréversible."
-		}
+		},
+		"selectedCount": "{{count}} sélectionné(s)",
+		"selectAll": "Tout sélectionner",
+		"deselectAll": "Tout désélectionner",
+		"you": "Vous",
+		"warningMessage": "{{count}} utilisateur(s) sera supprimé définitivement. Cette action est irréversible."
 	},
 	"roles": {
 		"admin": "Administrateur",

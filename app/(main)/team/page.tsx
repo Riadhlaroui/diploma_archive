@@ -36,6 +36,7 @@ import { useRouter } from "next/navigation";
 import pb from "@/lib/pocketbase";
 import { Skeleton } from "@/components/ui/skeleton";
 import { checkAuthOrRedirect } from "@/app/src/services/authService";
+import { StaffDetailDrawer } from "@/components/StaffComponents/StaffDetailDrawer";
 
 const StaffList = () => {
 	const router = useRouter();
@@ -61,6 +62,10 @@ const StaffList = () => {
 	const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
 	const [selectedUser, setSelectedUser] = useState<UserList | null>(null);
+
+	// Add state
+	const [drawerUser, setDrawerUser] = useState<UserList | null>(null);
+	const [drawerOpen, setDrawerOpen] = useState(false);
 
 	const { t, i18n } = useTranslation();
 
@@ -261,7 +266,11 @@ const StaffList = () => {
 							logs.map((user) => (
 								<TableRow
 									key={user.id}
-									className="hover:bg-gray-100 dark:hover:bg-zinc-800 hover:cursor-pointer"
+									className="hover:bg-gray-100 dark:hover:bg-zinc-800 cursor-pointer"
+									onDoubleClick={() => {
+										setDrawerUser(user);
+										setDrawerOpen(true);
+									}}
 								>
 									<TableCell>
 										<span className="inline-flex items-center gap-2 rounded-full bg-gray-200 px-3 py-1 text-sm font-medium">
@@ -300,16 +309,21 @@ const StaffList = () => {
 											<Button
 												size="sm"
 												variant="outline"
-												onClick={() => handleEdit(user)}
-												className=" hover:cursor-pointer"
+												onClick={(e) => {
+													e.stopPropagation();
+													handleEdit(user);
+												}}
 											>
 												<UserRoundPen />
 											</Button>
 											<Button
 												size="sm"
 												variant="destructive"
-												onClick={() => handleDelete(user.id)}
-												className=" hover:cursor-pointer bg-[#f44336] text-white"
+												onClick={(e) => {
+													e.stopPropagation();
+													handleDelete(user.id);
+												}}
+												className="bg-[#f44336] text-white"
 											>
 												<Trash2 />
 											</Button>
@@ -364,6 +378,14 @@ const StaffList = () => {
 				open={openEditDialog}
 				onOpenChange={setOpenEditDialog}
 				user={selectedUser}
+			/>
+
+			<StaffDetailDrawer
+				user={drawerUser}
+				open={drawerOpen}
+				onClose={() => setDrawerOpen(false)}
+				onEdit={handleEdit}
+				onDelete={handleDelete}
 			/>
 
 			<ConfirmDialog

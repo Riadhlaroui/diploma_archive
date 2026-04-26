@@ -63,7 +63,43 @@
 		"logout": "Log out",
 		"logoutConfirm": "Confirm Log Out",
 		"logoutMessage": "Are you sure you want to log out?",
-		"cancel": "Cancel"
+		"cancel": "Cancel",
+		"sections": {
+			"info": "Personal Info",
+			"email": "Email Address",
+			"password": "Password",
+			"permissions": "My Permissions"
+		},
+		"phoneHint": "Use a number from an authorized operator: 05 (Ooredoo), 06 (Mobilis), or 07 (Djezzy).",
+		"infoDescription": "Update your name and phone number",
+		"emailDescription": "Change the email address associated with your account",
+		"passwordDescription": "Choose a strong password to keep your account secure",
+		"save": "Save changes",
+		"updateEmail": "Update email",
+		"updatePassword": "Update password",
+		"currentEmail": "Current email",
+		"newEmail": "New email",
+		"currentPassword": "Current password",
+		"currentPasswordConfirm": "Confirm with current password",
+		"passwordConfirmHint": "Enter your current password to confirm the email change",
+		"newPassword": "New password",
+		"confirmPassword": "Confirm new password",
+		"infoUpdated": "Profile updated successfully",
+		"emailUpdated": "Email updated successfully",
+		"passwordUpdated": "Password updated successfully",
+		"errors": {
+			"nameRequired": "First and last name are required",
+			"fillAll": "Please fill in all fields",
+			"invalidEmail": "Please enter a valid email address",
+			"sameEmail": "New email must be different from your current email",
+			"emailExists": "This email is already in use by another account",
+			"wrongPassword": "Current password is incorrect",
+			"samePassword": "New password must be different from your current password",
+			"updateFailed": "Update failed. Please try again."
+		},
+		"permissionsDescription": "A read-only view of what you can access in this system",
+		"adminAccessNote": "As an admin you have unrestricted access to all features",
+		"permissionsGranted": "Permissions granted"
 	},
 
 	"sidebar": {
@@ -104,6 +140,7 @@
 		"submitButton": "Submit",
 		"errors": {
 			"mismatchTitle": "Passwords do not match",
+			"mismatchShort": "Passwords don't match",
 			"mismatchDesc": "Please make sure both passwords are the same.",
 			"missingTitle": "Missing Required Fields",
 			"missingDesc": "Please fill in all required fields marked with *.",
@@ -122,7 +159,42 @@
 			"number": "One number",
 			"special": "One special character"
 		},
-		"passwordRequirements": "Password Requirements"
+		"passwordRequirements": "Password Requirements",
+		"selectAll": "Select All",
+		"deselectAll": "Deselect All"
+	},
+
+	"staffDetail": {
+		"title": "Staff Details",
+		"info": "Staff Information",
+		"role&access": "Role & Access",
+		"active": "Active",
+		"expired": "Expired",
+		"disabled": "Disabled",
+		"contact": "Contact",
+		"email": "Email",
+		"phone": "Phone",
+		"account": "Account",
+		"created": "Created",
+		"expires": "Expires",
+		"never": "Never",
+		"status": "Status",
+		"permissions": "Permissions",
+		"adminFullAccess": "Admin — full access to everything",
+		"noPermissions": "No permissions assigned"
+	},
+
+	"permissionGroups": {
+		"students": "Students",
+		"documents": "Documents",
+		"documentTypes": "Document Types",
+		"staff": "Staff",
+		"faculties": "Faculties",
+		"departments": "Departments",
+		"fields": "Fields",
+		"majors": "Majors",
+		"specialties": "Specialties",
+		"settings": "Settings"
 	},
 
 	"auditLogs": {
@@ -195,7 +267,8 @@
 		"roleLabel": "Role",
 		"errors": {
 			"fetchFailed": "Failed to fetch staff list",
-			"deleteFailed": "Failed to delete staff members"
+			"deleteFailed": "Failed to delete staff members",
+			"partialFail": "{{count}} user(s) failed to delete"
 		},
 		"success": "{{count}} staff member(s) deleted successfully",
 		"warnings": {
@@ -205,7 +278,12 @@
 		"confirm": {
 			"title": "Confirm Deletion",
 			"description": "Are you sure you want to delete {{count}} staff member(s)? This action cannot be undone."
-		}
+		},
+		"selectedCount": "{{count}} selected",
+		"selectAll": "Select all",
+		"deselectAll": "Deselect all",
+		"you": "You",
+		"warningMessage": "{{count}} user(s) will be permanently deleted. This cannot be undone."
 	},
 	"roles": {
 		"admin": "Admin",

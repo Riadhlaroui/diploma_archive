@@ -63,7 +63,43 @@
 		"logout": "تسجيل الخروج",
 		"logoutConfirm": "تأكيد تسجيل الخروج",
 		"logoutMessage": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
-		"cancel": "إلغاء"
+		"cancel": "إلغاء",
+		"sections": {
+			"info": "المعلومات الشخصية",
+			"email": "البريد الإلكتروني",
+			"password": "كلمة المرور",
+			"permissions": "صلاحياتي"
+		},
+		"phoneHint": "استخدم رقم من مشغل معتمد (Ooredoo) 05 ,06 (Mobilis), (Djezzy) 07 ",
+		"infoDescription": "تحديث اسمك ورقم هاتفك",
+		"emailDescription": "تغيير البريد الإلكتروني المرتبط بحسابك",
+		"passwordDescription": "اختر كلمة مرور قوية لحماية حسابك",
+		"save": "حفظ التغييرات",
+		"updateEmail": "تحديث البريد الإلكتروني",
+		"updatePassword": "تحديث كلمة المرور",
+		"currentEmail": "البريد الإلكتروني الحالي",
+		"newEmail": "البريد الإلكتروني الجديد",
+		"currentPassword": "كلمة المرور الحالية",
+		"currentPasswordConfirm": "تأكيد بكلمة المرور الحالية",
+		"passwordConfirmHint": "أدخل كلمة مرورك الحالية لتأكيد تغيير البريد الإلكتروني",
+		"newPassword": "كلمة المرور الجديدة",
+		"confirmPassword": "تأكيد كلمة المرور الجديدة",
+		"infoUpdated": "تم تحديث الملف الشخصي بنجاح",
+		"emailUpdated": "تم تحديث البريد الإلكتروني بنجاح",
+		"passwordUpdated": "تم تحديث كلمة المرور بنجاح",
+		"errors": {
+			"nameRequired": "الاسم الأول والأخير مطلوبان",
+			"fillAll": "يرجى ملء جميع الحقول",
+			"invalidEmail": "يرجى إدخال بريد إلكتروني صحيح",
+			"sameEmail": "يجب أن يكون البريد الجديد مختلفاً عن الحالي",
+			"emailExists": "هذا البريد الإلكتروني مستخدم بالفعل من قِبل حساب آخر",
+			"wrongPassword": "كلمة المرور الحالية غير صحيحة",
+			"samePassword": "يجب أن تكون كلمة المرور الجديدة مختلفة عن الحالية",
+			"updateFailed": "فشل التحديث. يرجى المحاولة مجدداً."
+		},
+		"permissionsDescription": "عرض للقراءة فقط لما يمكنك الوصول إليه في النظام",
+		"adminAccessNote": "بصفتك مسؤولاً، لديك وصول غير مقيد لجميع الميزات",
+		"permissionsGranted": "الصلاحيات الممنوحة"
 	},
 
 	"sidebar": {
@@ -104,6 +140,7 @@
 		"submitButton": "إرسال",
 		"errors": {
 			"mismatchTitle": "كلمتا المرور غير متطابقتين",
+			"mismatchShort": "كلمات المرور غير متطابقة",
 			"mismatchDesc": "يرجى التأكد من تطابق كلمتي المرور.",
 			"missingTitle": "حقول مطلوبة مفقودة",
 			"missingDesc": "يرجى ملء جميع الحقول الإلزامية المحددة بـ *.",
@@ -122,7 +159,42 @@
 			"number": "رقم واحد",
 			"special": "رمز خاص واحد"
 		},
-		"passwordRequirements": "متطلبات كلمة المرور"
+		"passwordRequirements": "متطلبات كلمة المرور",
+		"selectAll": "تحديد الجميع",
+		"deselectAll": "إلغاء تحديد الجميع"
+	},
+
+	"staffDetail": {
+		"info": "معلومات الموظف",
+		"title": "تفاصيل الموظف",
+		"role&access": "الدور والصلاحيات",
+		"active": "ناشط",
+		"expired": "منتهي الصلاحية",
+		"disabled": "معطل",
+		"contact": "معلومات الاتصال",
+		"email": "البريد الإلكتروني",
+		"phone": "رقم الهاتف",
+		"account": "معلومات الحساب",
+		"created": "تاريخ الإنشاء",
+		"expires": "تاريخ الانتهاء",
+		"never": "لا انتهاء",
+		"status": "الحالة",
+		"permissions": "الصلاحيات",
+		"adminFullAccess": "لديه حق لي جميع الصلاحيات",
+		"noPermissions": "لا توجد صلاحيات مخصصة"
+	},
+
+	"permissionGroups": {
+		"students": "الطلاب",
+		"documents": "الوثائق",
+		"documentTypes": "أنواع الوثائق",
+		"staff": "الموظفون",
+		"faculties": "الكليات",
+		"departments": "الأقسام",
+		"fields": "الميادين",
+		"majors": "التخصصات الرئيسية",
+		"specialties": "التخصصات",
+		"settings": "الإعدادات"
 	},
 
 	"auditLogs": {
@@ -186,7 +258,8 @@
 		"roleLabel": "الدور",
 		"errors": {
 			"fetchFailed": "فشل جلب قائمة الموظفين",
-			"deleteFailed": "فشل حذف أعضاء الموظفين"
+			"deleteFailed": "فشل حذف أعضاء الموظفين",
+			"partialFail": "فشل حذف {{count}} مستخدم(ين)"
 		},
 		"success": "تم حذف {{count}} من أعضاء الموظفين بنجاح",
 		"warnings": {
@@ -196,7 +269,12 @@
 		"confirm": {
 			"title": "تأكيد الحذف",
 			"description": "هل أنت متأكد أنك تريد حذف {{count}} عضو من الموظفين؟ لا يمكن التراجع عن هذا الإجراء."
-		}
+		},
+		"selectedCount": "{{count}} محدد",
+		"selectAll": "تحديد الكل",
+		"deselectAll": "إلغاء تحديد الكل",
+		"you": "أنت",
+		"warningMessage": "سيتم حذف {{count}} مستخدم(ين) نهائياً. لا يمكن التراجع عن هذا الإجراء."
 	},
 	"roles": {
 		"admin": "مدير",

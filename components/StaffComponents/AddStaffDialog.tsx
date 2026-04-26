@@ -19,6 +19,7 @@ import { Separator } from "../ui/separator";
 import { ROLE_PRESETS, type Permission } from "@/app/src/config/permissions";
 import { PERMISSION_GROUPS } from "../../app/src/config/permissionGroups";
 import { DatePicker } from "../ui/DatePicker";
+import { PhoneInput } from "../ui/PhoneInput";
 
 type Props = {
 	open: boolean;
@@ -234,11 +235,9 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 								{t("addStaffDialog.phoneNumber")}{" "}
 								<span className="text-red-500">*</span>
 							</label>
-							<input
-								type="tel"
+							<PhoneInput
 								value={form.phone}
-								className={inputClass}
-								onChange={(e) => set({ phone: e.target.value })}
+								onChange={(val) => set({ phone: val })}
 							/>
 						</div>
 
@@ -434,14 +433,14 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 
 									return (
 										<div
-											key={group.label}
+											key={group.labelKey}
 											className="border rounded-lg overflow-hidden"
 										>
 											{/* Group header */}
 											<div className="flex items-center justify-between px-3 py-2 bg-gray-50 border-b">
 												<div className="flex items-center gap-2">
-													<span className="text-sm font-semibold text-gray-700">
-														{group.label}
+													<span className="text-xs font-semibold text-gray-600">
+														{t(group.labelKey)}
 													</span>
 												</div>
 												{/* Select all toggle for this group */}
@@ -463,7 +462,11 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 													}}
 													className="text-xs text-gray-400 hover:text-gray-700 transition-colors"
 												>
-													{allChecked ? "Deselect all" : "Select all"}
+													{t(
+														allChecked
+															? "addStaffDialog.deselectAll"
+															: "addStaffDialog.selectAll",
+													)}
 												</button>
 											</div>
 

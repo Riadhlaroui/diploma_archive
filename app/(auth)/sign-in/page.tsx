@@ -137,12 +137,12 @@ export default function SignIn() {
 				</Select>
 			</div>
 
-			<form onSubmit={handleLogin}>
+			<form onSubmit={handleLogin} dir={isRtl ? "rtl" : "ltr"}>
 				<div className="flex flex-col items-center justify-center min-h-screen gap-4 ">
 					<h1 className="text-2xl font-bold italic">{t("welcome")}</h1>
 
 					<div className="flex flex-col gap-[0.7rem]">
-						<div className="relative ">
+						<div className="relative">
 							<input
 								type="email"
 								className="peer w-full h-16 bg-[#D7DDE3] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3.5px] px-3 pt-6 pb-2 focus:outline-none"
@@ -150,8 +150,10 @@ export default function SignIn() {
 								dir={isRtl ? "rtl" : "ltr"}
 								onChange={(e) => setEmail(e.target.value)}
 							/>
-							<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
-								{t("email")}
+							<label
+								className={`absolute top-2 ${isRtl ? "right-3" : "left-3"} text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white`}
+							>
+								{t("login.email")}
 								<span className="text-[#D81212]">*</span>
 							</label>
 						</div>
@@ -159,19 +161,23 @@ export default function SignIn() {
 						<div className="relative w-100">
 							<input
 								type={isPasswordVisible ? "text" : "password"}
-								className="peer w-full bg-[#D7DDE3] h-16 dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3.5px] px-3 pt-6 pb-2 focus:outline-none placeholder-transparent"
+								className={`peer w-full bg-[#D7DDE3] h-16 dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3.5px] px-3 pt-6 pb-2 focus:outline-none placeholder-transparent ${
+									isRtl ? "pl-10" : "pr-10"
+								}`}
 								onChange={(e) => setPassword(e.target.value)}
 								dir={isRtl ? "rtl" : "ltr"}
 							/>
-							<label className="absolute top-2 left-3 text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white">
-								{t("password")}
+							<label
+								className={`absolute top-2 ${isRtl ? "right-3" : "left-3"} text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white`}
+							>
+								{t("login.password")}
 								<span className="text-[#D81212]">*</span>
 							</label>
 							<button
 								type="button"
 								onClick={togglePasswordVisibility}
-								className={`absolute inset-y-0 ${
-									isRtl ? "left-3 mt-5" : "right-3"
+								className={`absolute top-1/2 -translate-y-1/2 ${
+									isRtl ? "left-3" : "right-3"
 								} flex items-center text-gray-500`}
 							>
 								{isPasswordVisible ? (
@@ -181,12 +187,6 @@ export default function SignIn() {
 								)}
 							</button>
 						</div>
-					</div>
-
-					<div className="flex items-start w-full">
-						<span className="ml-2 opacity-70 font-semibold text-sm hover:cursor-pointer">
-							{t("forgotPassword")}
-						</span>
 					</div>
 
 					<div

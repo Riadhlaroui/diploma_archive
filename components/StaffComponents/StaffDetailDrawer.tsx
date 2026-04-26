@@ -31,7 +31,8 @@ export function StaffDetailDrawer({
 	onEdit,
 	onDelete,
 }: Props) {
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation(); // ← add i18n
+	const isRtl = i18n.language === "ar"; // ← add this
 
 	if (!user) return null;
 
@@ -39,7 +40,6 @@ export function StaffDetailDrawer({
 		? new Date(user.expiresAt) < new Date()
 		: false;
 	const isActive = user.isActive && !isExpired;
-
 	const initials =
 		`${user.firstName?.charAt(0) || ""}${user.lastName?.charAt(0) || ""}`.toUpperCase();
 
@@ -53,16 +53,24 @@ export function StaffDetailDrawer({
 				onClick={onClose}
 			/>
 
-			{/* Drawer */}
+			{/* Drawer — flip side based on RTL */}
 			<div
-				className={`fixed top-0 right-0 z-50 h-full w-full max-w-md bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
-					open ? "translate-x-0" : "translate-x-full"
-				}`}
+				dir={isRtl ? "rtl" : "ltr"}
+				className={`fixed top-0 z-50 h-full w-full max-w-md bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out
+          ${isRtl ? "left-0" : "right-0"}
+          ${
+						open
+							? "translate-x-0"
+							: isRtl
+								? "-translate-x-full"
+								: "translate-x-full"
+					}
+        `}
 			>
 				{/* Header */}
 				<div className="flex items-center justify-between px-5 py-4 border-b">
 					<h2 className="text-base font-semibold text-gray-900">
-						Staff Details
+						{t("staffDetail.title") || "Staff Details"}
 					</h2>
 					<button
 						onClick={onClose}
@@ -86,7 +94,7 @@ export function StaffDetailDrawer({
 								<h3 className="text-lg font-semibold text-gray-900">
 									{user.firstName} {user.lastName}
 								</h3>
-								<div className="flex items-center gap-2 mt-1">
+								<div className="flex items-center gap-2 mt-1 flex-wrap">
 									<span
 										className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full ${
 											user.role === "admin"
@@ -106,12 +114,15 @@ export function StaffDetailDrawer({
 									>
 										{isActive ? (
 											<>
-												<CheckCircle2 className="w-3 h-3" /> Active
+												<CheckCircle2 className="w-3 h-3" />{" "}
+												{t("staffDetail.active") || "Active"}
 											</>
 										) : (
 											<>
 												<XCircle className="w-3 h-3" />{" "}
-												{isExpired ? "Expired" : "Disabled"}
+												{isExpired
+													? t("staffDetail.expired") || "Expired"
+													: t("staffDetail.disabled") || "Disabled"}
 											</>
 										)}
 									</span>
@@ -120,153 +131,155 @@ export function StaffDetailDrawer({
 						</div>
 					</div>
 
-					{/* Info section */}
+					{/* Contact section */}
 					<div className="px-5 py-4 border-b space-y-3">
 						<h4 className="text-xs font-semibold uppercase tracking-widest text-gray-400">
-							Contact
+							{t("staffDetail.contact") || "Contact"}
 						</h4>
 
-						<div className="flex items-center gap-3 text-sm">
-							<div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-								<Mail className="w-4 h-4 text-gray-500" />
+						{[
+							{
+								icon: <Mail className="w-4 h-4 text-gray-500" />,
+								label: t("staffDetail.email") || "Email",
+								value: user.email,
+							},
+							{
+								icon: <Phone className="w-4 h-4 text-gray-500" />,
+								label: t("staffDetail.phone") || "Phone",
+								value: user.phone || "—",
+							},
+						].map((item) => (
+							<div key={item.label} className="flex items-center gap-3 text-sm">
+								<div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
+									{item.icon}
+								</div>
+								<div>
+									<p className="text-xs text-gray-400">{item.label}</p>
+									<p className="text-gray-800 font-medium">{item.value}</p>
+								</div>
 							</div>
-							<div>
-								<p className="text-xs text-gray-400">Email</p>
-								<p className="text-gray-800 font-medium">{user.email}</p>
-							</div>
-						</div>
-
-						<div className="flex items-center gap-3 text-sm">
-							<div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-								<Phone className="w-4 h-4 text-gray-500" />
-							</div>
-							<div>
-								<p className="text-xs text-gray-400">Phone</p>
-								<p className="text-gray-800 font-medium">{user.phone || "—"}</p>
-							</div>
-						</div>
+						))}
 					</div>
 
 					{/* Account section */}
 					<div className="px-5 py-4 border-b space-y-3">
 						<h4 className="text-xs font-semibold uppercase tracking-widest text-gray-400">
-							Account
+							{t("staffDetail.account") || "Account"}
 						</h4>
 
-						<div className="flex items-center gap-3 text-sm">
-							<div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-								<Clock className="w-4 h-4 text-gray-500" />
-							</div>
-							<div>
-								<p className="text-xs text-gray-400">Created</p>
-								<p className="text-gray-800 font-medium">
-									{new Date(user.createdAt).toLocaleDateString("en-GB", {
-										day: "2-digit",
-										month: "short",
-										year: "numeric",
-									})}
-								</p>
-							</div>
-						</div>
-
-						<div className="flex items-center gap-3 text-sm">
-							<div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-								<Calendar className="w-4 h-4 text-gray-500" />
-							</div>
-							<div>
-								<p className="text-xs text-gray-400">Expires</p>
-								<p
-									className={`font-medium ${isExpired ? "text-red-600" : "text-gray-800"}`}
-								>
-									{user.expiresAt
-										? new Date(user.expiresAt).toLocaleDateString("en-GB", {
-												day: "2-digit",
-												month: "short",
-												year: "numeric",
-											})
-										: "Never"}
-								</p>
-							</div>
-						</div>
-
-						<div className="flex items-center gap-3 text-sm">
-							<div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-								{user.isActive ? (
+						{[
+							{
+								icon: <Clock className="w-4 h-4 text-gray-500" />,
+								label: t("staffDetail.created") || "Created",
+								value: new Date(user.createdAt).toLocaleDateString(
+									isRtl ? "ar-DZ" : "en-GB",
+									{ day: "2-digit", month: "short", year: "numeric" },
+								),
+								className: "text-gray-800",
+							},
+							{
+								icon: <Calendar className="w-4 h-4 text-gray-500" />,
+								label: t("staffDetail.expires") || "Expires",
+								value: user.expiresAt
+									? new Date(user.expiresAt).toLocaleDateString(
+											isRtl ? "ar-DZ" : "en-GB",
+											{ day: "2-digit", month: "short", year: "numeric" },
+										)
+									: t("staffDetail.never") || "Never",
+								className: isExpired ? "text-red-600" : "text-gray-800",
+							},
+							{
+								icon: user.isActive ? (
 									<CheckCircle2 className="w-4 h-4 text-green-500" />
 								) : (
 									<ShieldOff className="w-4 h-4 text-red-500" />
-								)}
+								),
+								label: t("staffDetail.status") || "Status",
+								value: user.isActive
+									? t("staffDetail.active") || "Active"
+									: t("staffDetail.disabled") || "Disabled",
+								className: user.isActive ? "text-green-700" : "text-red-600",
+							},
+						].map((item) => (
+							<div key={item.label} className="flex items-center gap-3 text-sm">
+								<div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
+									{item.icon}
+								</div>
+								<div>
+									<p className="text-xs text-gray-400">{item.label}</p>
+									<p className={`font-medium ${item.className}`}>
+										{item.value}
+									</p>
+								</div>
 							</div>
-							<div>
-								<p className="text-xs text-gray-400">Status</p>
-								<p
-									className={`font-medium ${user.isActive ? "text-green-700" : "text-red-600"}`}
-								>
-									{user.isActive ? "Active" : "Disabled"}
-								</p>
-							</div>
-						</div>
+						))}
 					</div>
 
 					{/* Permissions section */}
 					<div className="px-5 py-4 space-y-3">
 						<h4 className="text-xs font-semibold uppercase tracking-widest text-gray-400">
-							Permissions
+							{t("addStaffDialog.permissions") || "Permissions"}
 						</h4>
 
 						{user.role === "admin" ? (
 							<div className="flex items-center gap-2 p-3 bg-purple-50 border border-purple-100 rounded-lg">
-								<Shield className="w-4 h-4 text-purple-600" />
+								<Shield className="w-4 h-4 text-purple-600 shrink-0" />
 								<p className="text-sm text-purple-700 font-medium">
-									Admin — full access to everything
+									{t("staffDetail.adminFullAccess")}
 								</p>
 							</div>
 						) : (
 							<div className="space-y-2">
-								{PERMISSION_GROUPS.map((group) => {
-									const granted = group.permissions.filter((p) =>
-										user.permissions?.includes(p as any),
+								{(() => {
+									const userPerms: string[] = (user.permissions ?? []).map(
+										String,
 									);
-									if (granted.length === 0) return null;
 
-									return (
-										<div
-											key={group.label}
-											className="border rounded-lg overflow-hidden"
-										>
-											<div className="flex items-center gap-2 px-3 py-2 bg-gray-50 border-b">
-												<span className="text-xs font-semibold text-gray-600">
-													{group.label}
-												</span>
-												<span className="ml-auto text-xs text-gray-400">
-													{granted.length}/{group.permissions.length}
-												</span>
+									return PERMISSION_GROUPS.map((group) => {
+										const granted = group.permissions.filter((p) =>
+											userPerms.includes(p),
+										);
+										if (granted.length === 0) return null;
+
+										return (
+											<div
+												key={group.labelKey}
+												className="border rounded-lg overflow-hidden"
+											>
+												<div className="flex items-center justify-between px-3 py-2 bg-gray-50 border-b">
+													<span className="text-xs font-semibold text-gray-600">
+														{t(group.labelKey)}
+													</span>
+													<span className="text-xs text-gray-400">
+														{granted.length}/{group.permissions.length}
+													</span>
+												</div>
+												<div className="flex flex-wrap gap-1.5 p-2.5">
+													{group.permissions.map((perm) => {
+														const has = userPerms.includes(perm);
+														const label = perm.replace(/^[^_]+_/, "");
+														return (
+															<span
+																key={perm}
+																className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+																	has
+																		? "bg-green-100 text-green-700"
+																		: "bg-gray-100 text-gray-400 line-through"
+																}`}
+															>
+																{label}
+															</span>
+														);
+													})}
+												</div>
 											</div>
-											<div className="flex flex-wrap gap-1.5 p-2.5">
-												{group.permissions.map((perm) => {
-													const has = user.permissions?.includes(perm as any);
-													const label = perm.replace(/^[^_]+_/, "");
-													return (
-														<span
-															key={perm}
-															className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-																has
-																	? "bg-green-100 text-green-700"
-																	: "bg-gray-100 text-gray-400 line-through"
-															}`}
-														>
-															{label}
-														</span>
-													);
-												})}
-											</div>
-										</div>
-									);
-								})}
+										);
+									});
+								})()}
 
 								{(!user.permissions || user.permissions.length === 0) && (
 									<p className="text-sm text-gray-400 text-center py-4">
-										No permissions assigned
+										{t("staffDetail.noPermissions")}
 									</p>
 								)}
 							</div>
@@ -274,7 +287,7 @@ export function StaffDetailDrawer({
 					</div>
 				</div>
 
-				{/* Footer actions */}
+				{/* Footer */}
 				<div className="px-5 py-4 border-t bg-gray-50 flex gap-2">
 					<button
 						onClick={() => {
@@ -283,7 +296,7 @@ export function StaffDetailDrawer({
 						}}
 						className="flex-1 h-9 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
 					>
-						Edit
+						{t("common.edit") || "Edit"}
 					</button>
 					<button
 						onClick={() => {
@@ -292,7 +305,7 @@ export function StaffDetailDrawer({
 						}}
 						className="flex-1 h-9 text-sm font-medium bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
 					>
-						Delete
+						{t("common.delete") || "Delete"}
 					</button>
 				</div>
 			</div>
