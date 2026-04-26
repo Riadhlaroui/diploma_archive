@@ -493,7 +493,6 @@ export default function ProfilePage() {
 												}))
 											}
 											className={inputClass}
-											placeholder="new@example.com"
 										/>
 									</div>
 
