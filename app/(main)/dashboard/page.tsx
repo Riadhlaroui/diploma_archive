@@ -232,7 +232,6 @@ function HierarchyDialog({
 		const debounceTimer = setTimeout(async () => {
 			setIsSearching(true);
 			try {
-				// Collections to search (exclude 'root')
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				const collectionsToSearch = Object.keys(HIERARCHY_MAP).filter(
 					(k) => k !== "root" && HIERARCHY_MAP[k]?.childCollection,
@@ -361,7 +360,6 @@ function HierarchyDialog({
 							)}
 						</div>
 					) : (
-						// Scenario 2: Hierarchy Tree
 						<div className="space-y-1">
 							{loadingTree ? (
 								<div className="flex justify-center items-center h-40">

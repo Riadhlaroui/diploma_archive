@@ -128,7 +128,7 @@ export function DatePicker({
 				}}
 				className="flex items-center gap-2 w-full h-10 px-3 border border-gray-300 rounded-lg bg-white text-sm text-left hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all"
 			>
-				<CalendarDays className="w-4 h-4 text-gray-400 flex-shrink-0" />
+				<CalendarDays className="w-4 h-4 text-gray-400 shrink-0" />
 				<span
 					className={
 						displayValue ? "text-gray-900 flex-1" : "text-gray-400 flex-1"
