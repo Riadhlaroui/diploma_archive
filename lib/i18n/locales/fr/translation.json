@@ -835,6 +835,9 @@
 	},
 
 	"errors": {
+		"invalidYearRange": "L'année d'inscription ne peut pas être après l'année de remise des diplômes.",
+		"requiredField": "Ce champ est obligatoire.",
+		"uploadFailed": "Échec du téléchargement. Veuillez réessayer.",
 		"deleteSpecialty": "Échec de la suppression de la spécialité '{{name}}'.",
 		"requiredRelation": "Impossible de supprimer '{{name}}' car elle est utilisée par des étudiants.",
 		"generic400": "Échec de la suppression de la spécialité : {{message}}"

@@ -844,6 +844,9 @@
 	},
 
 	"errors": {
+		"invalidYearRange": "لا يمكن أن يكون سنة التسجيل بعد سنة التخرج.",
+		"requiredField": "هذا الحقل مطلوب.",
+		"uploadFailed": "فشل رفع الملف. يرجى المحاولة مرة أخرى.",
 		"deleteSpecialty": "فشل حذف التخصص '{{name}}'.",
 		"requiredRelation": "لا يمكن حذف '{{name}}' لأنه قيد الاستخدام من قبل الطلاب.",
 		"generic400": "فشل حذف التخصص: {{message}}"

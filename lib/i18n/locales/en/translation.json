@@ -849,6 +849,10 @@
 	},
 
 	"errors": {
+		"invalidYearRange": "Enrollment year cannot be after graduation year.",
+		"invalidStudentYearRange": "Graduation year cannot be before enrollment year",
+		"requiredField": "This field is required.",
+		"uploadFailed": "Failed to upload file. Please try again.",
 		"deleteSpecialty": "Failed to delete specialty '{{name}}'.",
 		"requiredRelation": "Cannot delete '{{name}}' because it's being used by students.",
 		"generic400": "Failed to delete specialty: {{message}}"

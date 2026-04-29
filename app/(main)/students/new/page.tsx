@@ -16,6 +16,7 @@ import {
 	SelectItem,
 } from "@/components/ui/select";
 import { useTranslation } from "react-i18next";
+import { ERROR_KEYS } from "@/lib/constants/errors";
 
 import pb from "@/lib/pocketbase";
 import { toast } from "sonner";
@@ -211,7 +212,7 @@ const CreateStudentPage = () => {
 			}
 
 			if (gradYear < enrollYear) {
-				toast.error(t("students.graduationBeforeEnrollment"));
+				toast.error(t("ERROR_KEYS.INVALID_STUDENT_YEAR_RANGE"));
 				return;
 			}
 		}
