@@ -97,7 +97,7 @@ const StudentUpdatePage = () => {
 			fieldId: "",
 			majorId: "",
 			specialtyId: "",
-		}
+		},
 	);
 
 	const [pendingDocuments, setPendingDocuments] = useState<
@@ -146,7 +146,9 @@ const StudentUpdatePage = () => {
 				matricule: studentData.matricule,
 				firstName: studentData.firstName,
 				lastName: studentData.lastName,
-				dateOfBirth: studentData.dateOfBirth,
+				dateOfBirth: studentData.dateOfBirth
+					? new Date(studentData.dateOfBirth).toISOString().split("T")[0]
+					: "",
 				enrollmentYear: studentData.enrollmentYear,
 				graduationYear: studentData.graduationYear,
 				created: studentData.created,
@@ -155,13 +157,22 @@ const StudentUpdatePage = () => {
 				specialtyId: studentData.specialtyId,
 				expand: studentData.expand,
 			});
+
+			const rawDate = studentData.dateOfBirth;
+			let formattedDate = "";
+
+			if (rawDate) {
+				const parsedDate = new Date(rawDate);
+				// Check if the date is actually valid before calling toISOString
+				if (!isNaN(parsedDate.getTime())) {
+					formattedDate = parsedDate.toISOString().split("T")[0];
+				}
+			}
 			setForm({
 				matricule: studentData.matricule,
 				firstName: studentData.firstName,
 				lastName: studentData.lastName,
-				dateOfBirth: new Date(studentData.dateOfBirth)
-					.toISOString()
-					.split("T")[0],
+				dateOfBirth: formattedDate,
 				enrollmentYear: studentData.enrollmentYear,
 				graduationYear: studentData.graduationYear,
 			});
@@ -191,14 +202,14 @@ const StudentUpdatePage = () => {
 					studentId: doc.studentId ?? "",
 					expand: doc.expand,
 					typeInfo: doc.typeInfo,
-				}))
+				})),
 			);
 
 			setDocumentTypes(
 				docTypes.map((dt: any) => ({
 					id: dt.id,
 					name: dt.name,
-				}))
+				})),
 			);
 		} catch (err) {
 			console.error("Failed to fetch student or document info:", err);
@@ -302,7 +313,7 @@ const StudentUpdatePage = () => {
 
 	const fetchFileFromUrl = async (
 		url: string,
-		fileName: string
+		fileName: string,
 	): Promise<File> => {
 		const response = await fetch(url);
 		const blob = await response.blob();
@@ -327,14 +338,21 @@ const StudentUpdatePage = () => {
 		if (!documentToDelete) return;
 
 		try {
+			// Optional: Check if it still exists to prevent 404
 			await pb.collection("Archive_documents").delete(documentToDelete);
+
 			toast.success("Document deleted successfully");
-			fetchStudentData();
-		} catch (err) {
-			console.error("Failed to delete document:", err);
-			toast.error("Failed to delete document");
+			fetchStudentData(); // Refresh list
+		} catch (err: any) {
+			// If it's a 404, the item is already gone, so we can just update the UI
+			if (err.status === 404) {
+				toast.info("Document already removed.");
+				fetchStudentData();
+			} else {
+				console.error("Failed to delete document:", err);
+				toast.error("Failed to delete document");
+			}
 		} finally {
-			// Reset deletion state
 			setDocumentToDelete(null);
 			setShowDeleteConfirmation(false);
 		}
@@ -348,6 +366,11 @@ const StudentUpdatePage = () => {
 
 	const handleUpdateStudent = async () => {
 		if (!studentId) return;
+
+		if (!academicHierarchy.fieldId) {
+			toast.error("Please select a Field/Department");
+			return;
+		}
 
 		const dob = new Date(form.dateOfBirth);
 		if (isNaN(dob.getTime())) {
@@ -415,7 +438,7 @@ const StudentUpdatePage = () => {
 			toast.error(
 				`Failed to save changes: ${
 					err instanceof Error ? err.message : "Unknown error"
-				}`
+				}`,
 			);
 		} finally {
 			setIsUploading(false);
@@ -443,7 +466,7 @@ const StudentUpdatePage = () => {
 
 	const handleAcademicHierarchyChange = (
 		level: keyof AcademicHierarchy,
-		value: string
+		value: string,
 	) => {
 		setAcademicHierarchy((prev) => ({
 			...prev,
@@ -832,10 +855,10 @@ const StudentUpdatePage = () => {
 													<button
 														onClick={() => {
 															setPendingDocuments((prev) =>
-																prev.filter((_, i) => i !== index)
+																prev.filter((_, i) => i !== index),
 															);
 															toast.success(
-																t("updateStudent.documentRemovedPending")
+																t("updateStudent.documentRemovedPending"),
 															);
 														}}
 														className="text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-100 dark:hover:bg-red-900/30"
