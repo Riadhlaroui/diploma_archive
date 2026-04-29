@@ -288,7 +288,7 @@ const StudentPage = () => {
 							variant="ghost"
 							size="icon"
 							className="rounded-full h-8 w-8 hover:bg-gray-100 dark:hover:bg-zinc-800"
-							onClick={() => router.push("/students/bulk-import")}
+							onClick={() => router.push("/students/bulk-new")}
 							aria-label="Bulk add students"
 						>
 							<LayersPlus className="h-4 w-4 text-black dark:text-white" />

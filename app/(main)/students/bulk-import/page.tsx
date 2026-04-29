@@ -324,10 +324,6 @@ function formatEta(ms: number): string {
 	return `~${h}h`;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────
-
 const BulkImportPage: React.FC = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
@@ -477,7 +473,6 @@ const BulkImportPage: React.FC = () => {
 		}
 	}, []);
 
-	// ── Start OCR ─────────────────────────────────────────────────────────────────
 	const canStart =
 		dropped.length > 0 &&
 		!!config.fieldId &&
@@ -752,9 +747,6 @@ const BulkImportPage: React.FC = () => {
 					</p>
 				</div>
 
-				{/* ══════════════════════════════════════════════════════════════════════
-            PHASE: SETUP
-        ══════════════════════════════════════════════════════════════════════ */}
 				{phase === "setup" && (
 					<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 						{/* Left — drop zone + folder list */}
