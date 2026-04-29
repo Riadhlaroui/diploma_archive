@@ -39,15 +39,29 @@ export function DatePicker({
 	className = "",
 }: DatePickerProps) {
 	const today = new Date();
-	const parsed = value ? new Date(value + "T00:00:00") : null;
+	const parsed = value
+		? (() => {
+				// Handle "YYYY-MM-DD HH:mm:ss.sssZ" from PocketBase
+				const clean = value.split(" ")[0].split("T")[0]; // extract just "YYYY-MM-DD"
+				const [y, m, d] = clean.split("-").map(Number);
+				return isNaN(y) ? null : new Date(y, m - 1, d);
+			})()
+		: null;
 
 	const [open, setOpen] = useState(false);
-	const [viewYear, setViewYear] = useState(
-		parsed?.getFullYear() ?? today.getFullYear(),
-	);
-	const [viewMonth, setViewMonth] = useState(
-		parsed?.getMonth() ?? today.getMonth(),
-	);
+	const [viewYear, setViewYear] = useState(() => {
+		if (!value) return today.getFullYear();
+		const clean = value.split(" ")[0].split("T")[0];
+		const y = Number(clean.split("-")[0]);
+		return isNaN(y) ? today.getFullYear() : y;
+	});
+
+	const [viewMonth, setViewMonth] = useState(() => {
+		if (!value) return today.getMonth();
+		const clean = value.split(" ")[0].split("T")[0];
+		const m = Number(clean.split("-")[1]);
+		return isNaN(m) ? today.getMonth() : m - 1;
+	});
 	const [mode, setMode] = useState<"calendar" | "month" | "year">("calendar");
 
 	const ref = useRef<HTMLDivElement>(null);
@@ -97,8 +111,8 @@ export function DatePicker({
 	};
 
 	// Build calendar grid
-	const firstDay = new Date(viewYear, viewMonth, 1).getDay();
-	const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+	const firstDay = new Date(viewYear, viewMonth, 1).getDay() || 0;
+	const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate() || 0;
 	const cells: (number | null)[] = [
 		...Array(firstDay).fill(null),
 		...Array.from({ length: daysInMonth }, (_, i) => i + 1),
@@ -152,7 +166,10 @@ export function DatePicker({
 
 			{/* Popover */}
 			{open && (
-				<div className="absolute z-50 mt-1.5 left-0 bg-white border border-gray-200 rounded-xl shadow-xl p-3 w-72 select-none">
+				<div
+					className="absolute z-50 mt-1.5 left-0 bg-white border border-gray-200 rounded-xl shadow-xl p-3 w-72 select-none"
+					dir="ltr"
+				>
 					{/* ── Calendar view ── */}
 					{mode === "calendar" && (
 						<>

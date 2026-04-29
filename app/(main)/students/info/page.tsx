@@ -16,6 +16,7 @@ import {
 	UserRound,
 	File,
 	Eye,
+	Printer,
 } from "lucide-react";
 import pb from "@/lib/pocketbase";
 import { toast } from "sonner";
@@ -25,6 +26,8 @@ import DocumentViewer from "@/components/DocumentViewr";
 import { fetchStudentDocuments } from "@/app/src/services/documentTypesServices";
 import { useTranslation } from "react-i18next";
 import ConfirmDialog from "@/components/ConfirmDialog";
+
+import { PrintDiplomaDialog } from "@/components/Printdiplomadialog";
 
 interface Student {
 	id: string;
@@ -72,6 +75,8 @@ const StudentInfoPage = () => {
 
 	//const [updateDialog, setUpdateDialog] = useState(false);
 
+	const [diplomaDialogOpen, setDiplomaDialogOpen] = useState(false);
+
 	const { t } = useTranslation();
 
 	const fetchFileFromUrl = useCallback(
@@ -93,7 +98,7 @@ const StudentInfoPage = () => {
 				return fallback;
 			}
 		},
-		[]
+		[],
 	);
 
 	const fetchStudentData = useCallback(async () => {
@@ -131,7 +136,7 @@ const StudentInfoPage = () => {
 					fileId: doc.fileId ?? "", // ADDED
 					expand: doc.expand,
 					typeInfo: doc.typeInfo,
-				}))
+				})),
 			);
 		} catch (err) {
 			console.error("Failed to fetch student or document info:", err);
@@ -259,6 +264,14 @@ const StudentInfoPage = () => {
 					name: student ? `${student.firstName} ${student.lastName}` : "",
 				})}
 			/>
+
+			{student && (
+				<PrintDiplomaDialog
+					open={diplomaDialogOpen}
+					onClose={() => setDiplomaDialogOpen(false)}
+					student={student}
+				/>
+			)}
 			<button
 				onClick={() => router.back()}
 				className="mb-4 flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-gray-100 hover:underline transition-colors hover:cursor-pointer"
@@ -288,6 +301,14 @@ const StudentInfoPage = () => {
 						>
 							<Trash2 className="w-4 h-4 mr-2" />
 							{t("common.delete")}
+						</Button>
+						<Button
+							onClick={() => setDiplomaDialogOpen(true)}
+							variant="outline"
+							className="flex-1 md:flex-none"
+						>
+							<Printer className="w-4 h-4 mr-2" />
+							{t("diploma.printDiploma", { defaultValue: "Print Diploma" })}
 						</Button>
 					</div>
 				</div>
@@ -489,7 +510,7 @@ const DocumentsSection: React.FC<DocumentsSectionProps> = ({
 						<div className="flex items-center gap-3 flex-1 min-w-0">
 							<div
 								className={`p-2 rounded-lg ${getFileTypeColor(
-									fileName.split(".").pop()?.toLowerCase() || ""
+									fileName.split(".").pop()?.toLowerCase() || "",
 								)}`}
 							>
 								{getFileIcon(fileName)}
