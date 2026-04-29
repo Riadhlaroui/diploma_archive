@@ -274,6 +274,8 @@ const AddInBulk = () => {
 	const [importStartTime, setImportStartTime] = useState<number>(0);
 	const [showLog, setShowLog] = useState(false);
 
+	const folderInputRef = useRef<HTMLInputElement>(null);
+
 	const pausedRef = useRef(false);
 	const stopRef = useRef(false);
 	const droppingRef = useRef(false);
@@ -356,75 +358,110 @@ const AddInBulk = () => {
 
 	const handleDragLeave = useCallback(() => setIsDragging(false), []);
 
+	async function getFilesFromEntry(entry: FileSystemEntry): Promise<File[]> {
+		const files: File[] = [];
+		if (entry.isFile) {
+			const fileEntry = entry as FileSystemFileEntry;
+			const file = await new Promise<File>((res, rej) =>
+				fileEntry.file(res, rej),
+			);
+			const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+			if (SUPPORTED_EXTS.includes(ext)) files.push(file);
+		} else if (entry.isDirectory) {
+			const dirEntry = entry as FileSystemDirectoryEntry;
+			const reader = dirEntry.createReader();
+			const entries = await new Promise<FileSystemEntry[]>((res, rej) =>
+				reader.readEntries(res, rej),
+			);
+			for (const e of entries) {
+				const subFiles = await getFilesFromEntry(e);
+				files.push(...subFiles);
+			}
+		}
+		return files;
+	}
+
+	const handleFolderSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		const allFiles = Array.from(e.target.files || []);
+		if (allFiles.length === 0) return;
+
+		const folderMap = new Map<string, File[]>();
+
+		allFiles.forEach((file) => {
+			const parts = file.webkitRelativePath.split("/");
+			// If path is "Parent/Student/file.jpg", parts[1] is the student folder name.
+			// If path is "Student/file.jpg", parts[0] is the student folder name.
+			const folderName = parts.length > 2 ? parts[1] : parts[0];
+
+			const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+			if (SUPPORTED_EXTS.includes(ext)) {
+				if (!folderMap.has(folderName)) folderMap.set(folderName, []);
+				folderMap.get(folderName)?.push(file);
+			}
+		});
+
+		const newFolders: DroppedFolder[] = Array.from(folderMap.entries()).map(
+			([name, files]) => ({
+				id: crypto.randomUUID(),
+				name,
+				files,
+			}),
+		);
+
+		setDropped((prev) => [...prev, ...newFolders]);
+		if (folderInputRef.current) folderInputRef.current.value = "";
+	};
+
 	const handleDrop = useCallback(
 		async (e: React.DragEvent) => {
 			e.preventDefault();
+			e.stopPropagation();
 			setIsDragging(false);
+
 			if (droppingRef.current) return;
 			droppingRef.current = true;
+
 			const items = Array.from(e.dataTransfer.items);
 			const newFolders: DroppedFolder[] = [];
 
 			for (const item of items) {
-				if (item.kind !== "file") continue;
 				const entry = item.webkitGetAsEntry();
-				if (!entry?.isDirectory) continue;
-				const dirEntry = entry as FileSystemDirectoryEntry;
+				if (!entry || !entry.isDirectory) continue;
 
-				const readBatch = (
-					r: FileSystemDirectoryReader,
-				): Promise<FileSystemEntry[]> =>
-					new Promise((res, rej) => r.readEntries(res, rej));
+				const dirEntry = entry as FileSystemDirectoryEntry;
 				const reader = dirEntry.createReader();
-				const children: FileSystemEntry[] = [];
-				let batch: FileSystemEntry[];
-				do {
-					batch = await readBatch(reader);
-					children.push(...batch);
-				} while (batch.length > 0);
+				const children = await new Promise<FileSystemEntry[]>((res, rej) =>
+					reader.readEntries(res, rej),
+				);
 
 				const subDirs = children.filter((c) => c.isDirectory);
 
 				if (subDirs.length > 0) {
+					// Case: User dropped a folder containing multiple student folders
 					for (const sub of subDirs) {
-						try {
-							const files = await readDirEntry(sub as FileSystemDirectoryEntry);
-							if (files.length > 0)
-								newFolders.push({
-									id: `${Date.now()}-${Math.random()}`,
-									name: sub.name,
-									files,
-								});
-						} catch (err) {
-							console.error("Error reading subfolder:", sub.name, err);
+						const files = await getFilesFromEntry(sub);
+						if (files.length > 0) {
+							newFolders.push({
+								id: crypto.randomUUID(),
+								name: sub.name,
+								files,
+							});
 						}
 					}
 				} else {
-					try {
-						const files = await readDirEntry(dirEntry);
-						if (files.length > 0)
-							newFolders.push({
-								id: `${Date.now()}-${Math.random()}`,
-								name: dirEntry.name,
-								files,
-							});
-					} catch (err) {
-						console.error("Error reading folder:", dirEntry.name, err);
+					// Case: User dropped a single student folder
+					const files = await getFilesFromEntry(dirEntry);
+					if (files.length > 0) {
+						newFolders.push({
+							id: crypto.randomUUID(),
+							name: dirEntry.name,
+							files,
+						});
 					}
 				}
 			}
 
-			if (newFolders.length) {
-				setDropped((prev) => {
-					const existingNames = new Set(prev.map((f) => f.name));
-					const unique = newFolders.filter((f) => !existingNames.has(f.name));
-					const dupes = newFolders.length - unique.length;
-					if (dupes > 0)
-						toast.warning(t("students.duplicatesSkipped", { count: dupes }));
-					toast.success(t("students.foldersAdded", { count: unique.length }));
-					return [...prev, ...unique];
-				});
-			}
+			setDropped((prev) => [...prev, ...newFolders]);
 			droppingRef.current = false;
 		},
 		[t],
@@ -595,7 +632,7 @@ const AddInBulk = () => {
 	// ─────────────────────────────────────────────────────────────────────────
 
 	return (
-		<div dir={dir} className="min-h-full dark:bg-gray-900 p-4">
+		<div dir={dir} className="min-h-full bg-gray-50 p-4">
 			<div className="max-w-7xl mx-auto">
 				{/* Header */}
 				<div className="mb-6">
@@ -618,13 +655,25 @@ const AddInBulk = () => {
 				{/* ── PHASE: SETUP ────────────────────────────────────────────────── */}
 				{phase === "setup" && (
 					<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+						<input
+							type="file"
+							ref={folderInputRef}
+							className="hidden"
+							{...({
+								webkitdirectory: "",
+								mozdirectory: "",
+								directory: "",
+							} as any)}
+							onChange={handleFolderSelect}
+						/>
 						{/* Drop zone + folder list */}
 						<div className="lg:col-span-2 space-y-4">
 							<div
 								onDragOver={handleDragOver}
 								onDragLeave={handleDragLeave}
 								onDrop={handleDrop}
-								className={`rounded-lg border-2 border-dashed p-14 text-center transition-all select-none ${
+								onClick={() => folderInputRef.current?.click()} // Click anywhere to open
+								className={`cursor-pointer rounded-lg border-2 border-dashed p-14 text-center transition-all select-none ${
 									isDragging
 										? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
 										: "border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/40 hover:border-gray-400"
@@ -636,10 +685,22 @@ const AddInBulk = () => {
 								<p className="text-base font-medium text-gray-700 dark:text-gray-200 mb-1">
 									{isDragging
 										? t("students.dropRelease")
-										: t("students.dropHere")}
+										: "Drag & Drop folders or click to select"}
 								</p>
-								<p className="text-sm text-gray-500 dark:text-gray-400">
-									{t("students.dropHint")}
+								<Button
+									variant="outline"
+									size="sm"
+									className="mt-4"
+									onClick={(e) => {
+										e.stopPropagation(); // Prevent double trigger from parent div
+										folderInputRef.current?.click();
+									}}
+								>
+									<FolderOpen className="w-4 h-4 mr-2" />
+									Select Folder
+								</Button>
+								<p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+									Supports: JPG, PNG, WEBP, PDF
 								</p>
 							</div>
 
