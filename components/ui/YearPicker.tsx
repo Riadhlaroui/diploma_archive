@@ -81,7 +81,10 @@ export function YearPicker({
 
 			{/* Popover */}
 			{open && (
-				<div className="absolute z-50 mt-1.5 left-0 bg-white border border-gray-200 rounded-xl shadow-xl p-3 w-64 select-none">
+				<div
+					className="absolute z-50 mt-1.5 left-0 bg-white border border-gray-200 rounded-xl shadow-xl p-3 w-64 select-none"
+					dir="ltr"
+				>
 					{/* Range navigation */}
 					<div className="flex items-center justify-between mb-3">
 						<button

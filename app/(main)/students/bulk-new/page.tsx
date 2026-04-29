@@ -923,7 +923,7 @@ const AddInBulk = () => {
 												enrollmentYear: year,
 											}))
 										}
-										min={1990}
+										min={1900}
 										max={new Date().getFullYear() + 10} // Allows for future enrollments if needed
 										placeholder={t("students.enrollmentYearPlaceholder")}
 									/>
@@ -945,7 +945,7 @@ const AddInBulk = () => {
 												graduationYear: year,
 											}))
 										}
-										min={1990}
+										min={1900}
 										max={new Date().getFullYear() + 20} // Students might graduate years from now
 										placeholder={t("students.graduationYearPlaceholder")}
 									/>

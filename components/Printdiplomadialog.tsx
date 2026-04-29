@@ -568,7 +568,7 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
 	const canProceed = !!data.placeOfBirth;
 
 	return (
-		<div className="space-y-5 pb-2">
+		<div className="space-y-5 pb-2 bg-gray-50">
 			{/* ── Section 1: Auto-filled ── */}
 			<div className="rounded-xl border border-gray-200 dark:border-zinc-700">
 				<div className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700">
@@ -1039,7 +1039,7 @@ export const PrintDiplomaDialog: React.FC<PrintDiplomaDialogProps> = ({
 
 	return (
 		<Dialog open={open} onOpenChange={handleClose}>
-			<DialogContent className="max-w-[90vw]! w-[90vw]! h-[83vh]! max-h-[90vh] overflow-y-auto p-4 flex flex-col gap-2">
+			<DialogContent className="max-w-[90vw]! w-[90vw]! h-[83vh]! max-h-[90vh] overflow-y-auto p-4 flex flex-col gap-2 bg-gray-50">
 				<DialogHeader className="pb-0 mb-0">
 					<DialogTitle className="flex items-center gap-2 text-lg">
 						<Printer className="w-5 h-5 text-green-700" />
