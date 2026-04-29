@@ -24,6 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import { DatePicker } from "@/components/ui/DatePicker";
 
 interface Student {
 	id: string;
@@ -141,6 +142,8 @@ const StudentUpdatePage = () => {
 				pb.collection("Document_types").getFullList(),
 			]);
 
+			console.log("Raw DB Date:", studentData.dateOfBirth);
+
 			setStudent({
 				id: studentData.id,
 				matricule: studentData.matricule,
@@ -160,6 +163,13 @@ const StudentUpdatePage = () => {
 
 			const rawDate = studentData.dateOfBirth;
 			let formattedDate = "";
+			if (studentData.dateOfBirth) {
+				const d = new Date(studentData.dateOfBirth);
+				// Ensure it's a valid date and format it as YYYY-MM-DD
+				if (!isNaN(d.getTime())) {
+					formattedDate = d.toISOString().split("T")[0];
+				}
+			}
 
 			if (rawDate) {
 				const parsedDate = new Date(rawDate);
@@ -732,13 +742,25 @@ const StudentUpdatePage = () => {
 								/>
 							</div>
 							<div className="space-y-1">
-								<Label>{t("updateStudent.dateOfBirth")}</Label>
-								<Input
-									type="date"
-									value={form.dateOfBirth}
-									onChange={(e) =>
-										setForm({ ...form, dateOfBirth: e.target.value })
+								<Label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+									{t("updateStudent.dateOfBirth")}{" "}
+									<span className="text-red-500">*</span>
+								</Label>
+
+								<DatePicker
+									value={form.dateOfBirth || null}
+									onChange={(val) =>
+										setForm((prev) => ({
+											...prev,
+											dateOfBirth: val ?? "",
+										}))
 									}
+									// Prevents users from selecting a birth date in the future
+									max={new Date().toISOString().split("T")[0]}
+									placeholder={
+										t("updateStudent.dateOfBirth") || "Select date of birth"
+									}
+									clearable={false}
 								/>
 							</div>
 							<div className="space-y-1">
