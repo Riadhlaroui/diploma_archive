@@ -389,6 +389,7 @@
 		"deleteSuccess": "Student deleted successfully",
 		"deleteFailed": "Failed to delete student",
 
+		"selectFolder": "Select folder",
 		"invalidGraduationYear": "Invalid graduation year",
 		"graduationBeforeEnrollment": "Graduation year cannot be before enrollment year",
 		"graduationYear": "Graduation Year",
@@ -413,8 +414,8 @@
 		"selectSpecialty": "Select specialty",
 		"defaultDocType": "Default Document Type",
 		"selectDocType": "Select document type",
-		"enrollmentYearPlaceholder": "e.g. 2021 or leave blank",
-		"graduationYearPlaceholder": "e.g. 2024 or leave blank",
+		"enrollmentYearPlaceholder": "e.g. 2021",
+		"graduationYearPlaceholder": "e.g. 2024",
 		"reviewParsedNames": "Review Parsed Names",
 		"reviewParsedNamesCount": "Review Parsed Names ({{count}} folders)",
 		"largeBatchWarning": "Large batch — est. {{eta}}",

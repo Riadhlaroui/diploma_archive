@@ -32,6 +32,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import pb from "@/lib/pocketbase";
+import { YearPicker } from "@/components/ui/YearPicker";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -708,10 +709,10 @@ const AddInBulk = () => {
 									<p className="text-base font-medium text-gray-700 dark:text-gray-200 mb-1">
 										{isDragging
 											? t("students.dropRelease")
-											: "Drag & Drop folders or click to select"}
+											: t("students.dropHere")}
 									</p>
 									<p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-										Supports: JPG, PNG, WEBP, PDF
+										{t("students.dropHint")}
 									</p>
 								</div>
 
@@ -726,7 +727,7 @@ const AddInBulk = () => {
 									}}
 								>
 									<FolderOpen className="w-4 h-4 mr-2" />
-									Select Folder
+									{t("students.selectFolder")}
 								</Button>
 							</div>
 
@@ -906,6 +907,7 @@ const AddInBulk = () => {
 
 							{/* Year inputs */}
 							<div className="grid grid-cols-2 gap-2">
+								{/* Enrollment Year */}
 								<div className="space-y-1">
 									<label className="text-xs font-medium text-gray-600 dark:text-gray-400">
 										{t("students.enrollmentYear")}
@@ -913,18 +915,21 @@ const AddInBulk = () => {
 											({t("common.optional")})
 										</span>
 									</label>
-									<Input
-										className="h-8 text-sm"
-										placeholder={t("students.enrollmentYearPlaceholder")}
+									<YearPicker
 										value={config.enrollmentYear}
-										onChange={(e) =>
+										onChange={(year) =>
 											setConfig((c) => ({
 												...c,
-												enrollmentYear: e.target.value,
+												enrollmentYear: year,
 											}))
 										}
+										min={1990}
+										max={new Date().getFullYear() + 10} // Allows for future enrollments if needed
+										placeholder={t("students.enrollmentYearPlaceholder")}
 									/>
 								</div>
+
+								{/* Graduation Year */}
 								<div className="space-y-1">
 									<label className="text-xs font-medium text-gray-600 dark:text-gray-400">
 										{t("students.graduationYear")}
@@ -932,16 +937,17 @@ const AddInBulk = () => {
 											({t("common.optional")})
 										</span>
 									</label>
-									<Input
-										className="h-8 text-sm"
-										placeholder={t("students.graduationYearPlaceholder")}
+									<YearPicker
 										value={config.graduationYear}
-										onChange={(e) =>
+										onChange={(year) =>
 											setConfig((c) => ({
 												...c,
-												graduationYear: e.target.value,
+												graduationYear: year,
 											}))
 										}
+										min={1990}
+										max={new Date().getFullYear() + 20} // Students might graduate years from now
+										placeholder={t("students.graduationYearPlaceholder")}
 									/>
 								</div>
 							</div>

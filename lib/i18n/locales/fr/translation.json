@@ -383,6 +383,7 @@
 		"graduationBeforeEnrollment": "L'année de diplômation ne peut pas être antérieure à l'année d'inscription",
 		"graduationYear": "Année de Diplôme",
 
+		"selectFolder": "Sélectionner un dossier",
 		"totalStudents": "Total Students",
 		"bulkImportTitle": "Importation en masse des étudiants",
 		"bulkImportDescription": "Déposez les dossiers étudiants, configurez le lot, vérifiez les noms analysés, puis importez.",
@@ -405,8 +406,8 @@
 		"selectSpecialty": "Sélectionner une Spécialité",
 		"defaultDocType": "Type de document par défaut",
 		"selectDocType": "Sélectionner le type de document",
-		"enrollmentYearPlaceholder": "ex. 2021 ou laisser vide",
-		"graduationYearPlaceholder": "ex. 2024 ou laisser vide",
+		"enrollmentYearPlaceholder": "ex. 2021 ",
+		"graduationYearPlaceholder": "ex. 2024 ",
 		"reviewParsedNames": "Vérifier les noms analysés",
 		"reviewParsedNamesCount": "Vérifier les noms analysés ({{count}} dossiers)",
 		"largeBatchWarning": "Grand lot — est. {{eta}}",
