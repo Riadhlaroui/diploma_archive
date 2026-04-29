@@ -532,7 +532,7 @@ const StudentUpdatePage = () => {
 	}
 
 	return (
-		<div className="w-full min-h-screen p-4" dir={t("common.dir")}>
+		<div className="w-full min-h-screen p-4 bg-gray-50" dir={t("common.dir")}>
 			<ConfirmDialog
 				open={showDeleteConfirmation}
 				onClose={() => setShowDeleteConfirmation(false)}
