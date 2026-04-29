@@ -277,6 +277,11 @@ const AddInBulk = () => {
 
 	const folderInputRef = useRef<HTMLInputElement>(null);
 
+	const isYearRangeInvalid =
+		config.enrollmentYear &&
+		config.graduationYear &&
+		parseInt(config.enrollmentYear) > parseInt(config.graduationYear);
+
 	const pausedRef = useRef(false);
 	const stopRef = useRef(false);
 	const droppingRef = useRef(false);
@@ -499,6 +504,15 @@ const AddInBulk = () => {
 	}, []);
 
 	const handleStartReview = useCallback(() => {
+		// Final safety check before proceeding
+		if (isYearRangeInvalid) {
+			toast.error(
+				t("errors.invalidYearRange") ||
+					"Enrollment year cannot be after graduation year.",
+			);
+			return;
+		}
+
 		const cfg = configRef.current;
 		const parsed: ParsedStudent[] = dropped.map((folder, i) => {
 			const { firstName, lastName } = parseName(folder.name);
@@ -507,7 +521,7 @@ const AddInBulk = () => {
 				folderName: folder.name,
 				firstName,
 				lastName,
-				matricule: `IMP-${cfg.enrollmentYear || "0000"}-${String(i + 1).padStart(5, "0")}`,
+				matricule: `MAT-${cfg.enrollmentYear || "0000"}-${String(i + 1).padStart(5, "0")}`,
 				files: folder.files,
 				enrollmentYear: cfg.enrollmentYear.trim() || "N/A",
 				graduationYear: cfg.graduationYear.trim() || "N/A",
@@ -519,7 +533,7 @@ const AddInBulk = () => {
 		});
 		setStudents(parsed);
 		setPhase("reviewing");
-	}, [dropped]);
+	}, [dropped, isYearRangeInvalid, t]);
 
 	const updateStudent = useCallback(
 		(folderId: string, key: keyof ParsedStudent, value: string) => {
@@ -952,17 +966,28 @@ const AddInBulk = () => {
 								</div>
 							</div>
 
-							<Button
-								onClick={handleStartReview}
-								disabled={!canStart}
-								className="w-full bg-gray-900 hover:bg-gray-800 text-white mt-2"
-							>
-								{dropped.length > 0
-									? t("students.reviewParsedNamesCount", {
-											count: dropped.length,
-										})
-									: t("students.reviewParsedNames")}
-							</Button>
+							<div className="">
+								{isYearRangeInvalid && (
+									<div className="flex items-center gap-2 p-3 text-xs bg-red-50 border border-red-200 text-red-600 rounded-md animate-in fade-in zoom-in duration-200">
+										<AlertTriangle className="h-4 w-4 shrink-0" />
+										<p>
+											{t("students.errorEnrollmentAfterGraduation") ||
+												"Enrollment year must be before Graduation year."}
+										</p>
+									</div>
+								)}
+								<Button
+									onClick={handleStartReview}
+									disabled={!!(!canStart || isYearRangeInvalid)}
+									className="w-full bg-gray-900 hover:bg-gray-800 text-white mt-2"
+								>
+									{dropped.length > 0
+										? t("students.reviewParsedNamesCount", {
+												count: dropped.length,
+											})
+										: t("students.reviewParsedNames")}
+								</Button>
+							</div>
 
 							{dropped.length > 100 && (
 								<p className="text-xs text-amber-600 dark:text-amber-400 text-center flex items-center gap-1 justify-center">
