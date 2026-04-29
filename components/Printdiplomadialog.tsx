@@ -17,11 +17,17 @@ import {
 	AlertCircle,
 	CheckCircle2,
 	Eye,
+	FileText,
+	GraduationCap,
+	ScrollText,
+	ClipboardList,
+	BookOpen,
+	Award,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { DatePicker } from "./ui/DatePicker";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// Types
 
 interface Student {
 	id: string;
@@ -39,7 +45,6 @@ interface Student {
 }
 
 interface DiplomaData {
-	/* Auto-filled from DB */
 	firstNameFr: string;
 	lastNameFr: string;
 	dateOfBirth: string;
@@ -47,11 +52,10 @@ interface DiplomaData {
 	majorFr: string;
 	specialtyFr: string;
 	graduationYear: string;
-	/* Manual / supplemental */
-	placeOfBirth: string; // required – not in DB
-	placeOfBirthAr: string; // Arabic transliteration – optional
-	firstNameAr: string; // Arabic first name – for Arabic block
-	lastNameAr: string; // Arabic last name  – for Arabic block
+	placeOfBirth: string;
+	placeOfBirthAr: string;
+	firstNameAr: string;
+	lastNameAr: string;
 	issuanceDate: string;
 	issuanceLocationFr: string;
 	issuanceLocationAr: string;
@@ -63,8 +67,75 @@ interface PrintDiplomaDialogProps {
 	student: Student;
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// Document Type Registry
+// TO ADD CONDITIONS LATER: populate `eligibleFields`, `eligibleMajors`, or
+// `eligibleSpecialties` on any entry and uncomment the filter in SelectTypeStep.
+// Leave them undefined to mean "available to all students".
 
+export interface DocType {
+	id: string;
+	labelAr: string;
+	labelFr: string;
+	descriptionAr: string;
+	descriptionFr: string;
+	icon: React.ReactNode;
+	eligibleFields?: string[]; // match against student.expand?.fieldId?.name
+	eligibleMajors?: string[]; // match against student.expand?.majorId?.name
+	eligibleSpecialties?: string[]; // match against student.expand?.specialtyId?.name
+}
+
+const ALL_DOC_TYPES: DocType[] = [
+	{
+		id: "licence",
+		labelAr: "شهادة الليسانس",
+		labelFr: "Diplôme de Licence",
+		descriptionAr: "شهادة تخرج مرحلة الليسانس (L.M.D)",
+		descriptionFr: "Diplôme de fin de cycle Licence (L.M.D)",
+		icon: <GraduationCap className="w-6 h-6" />,
+	},
+	{
+		id: "master",
+		labelAr: "شهادة الماستر",
+		labelFr: "Diplôme de Master",
+		descriptionAr: "شهادة تخرج مرحلة الماستر (L.M.D)",
+		descriptionFr: "Diplôme de fin de cycle Master (L.M.D)",
+		icon: <Award className="w-6 h-6" />,
+	},
+	{
+		id: "transcript",
+		labelAr: "كشف النقاط",
+		labelFr: "Relevé de Notes",
+		descriptionAr: "كشف النقاط السنوي أو الإجمالي",
+		descriptionFr: "Relevé de notes annuel ou global",
+		icon: <ClipboardList className="w-6 h-6" />,
+	},
+	{
+		id: "enrollment",
+		labelAr: "شهادة التسجيل",
+		labelFr: "Attestation d'Inscription",
+		descriptionAr: "وثيقة تثبت تسجيل الطالب في الجامعة",
+		descriptionFr: "Attestation prouvant l'inscription de l'étudiant",
+		icon: <ScrollText className="w-6 h-6" />,
+	},
+	{
+		id: "completion",
+		labelAr: "شهادة إتمام الدراسة",
+		labelFr: "Attestation de Fin d'Études",
+		descriptionAr: "وثيقة تثبت إتمام الدراسة",
+		descriptionFr: "Attestation de fin de cycle d'études",
+		icon: <BookOpen className="w-6 h-6" />,
+	},
+	{
+		id: "custom",
+		labelAr: "وثيقة أخرى",
+		labelFr: "Autre Document",
+		descriptionAr: "نموذج مخصص حسب الحاجة",
+		descriptionFr: "Formulaire personnalisé selon le besoin",
+		icon: <FileText className="w-6 h-6" />,
+	},
+];
+
+// Helpers
 const fmtDateFr = (d: string) => {
 	if (!d) return "—";
 	const dt = new Date(d);
@@ -95,7 +166,7 @@ const fmtDateAr = (d: string) => {
 	return `${dt.getDate()} ${months[dt.getMonth()]} ${dt.getFullYear()}`;
 };
 
-// ─── Diploma HTML Generator ───────────────────────────────────────────────────
+// Diploma HTML Generator
 
 function buildDiplomaHTML(d: DiplomaData): string {
 	const nameFr = `${d.lastNameFr.toUpperCase()} ${d.firstNameFr}`;
@@ -108,7 +179,7 @@ function buildDiplomaHTML(d: DiplomaData): string {
 	const issueAr = fmtDateAr(d.issuanceDate);
 	const placeFr = d.placeOfBirth || "—";
 	const placeAr = d.placeOfBirthAr || d.placeOfBirth || "—";
-	const fieldAr = d.fieldFr; // shown as-is; user may have entered Arabic already
+	const fieldAr = d.fieldFr;
 	const specAr = d.specialtyFr;
 
 	return `<!DOCTYPE html>
@@ -121,318 +192,51 @@ function buildDiplomaHTML(d: DiplomaData): string {
 <style>
   @page { size: A4 portrait; margin: 0; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    width: 210mm;
-    height: 297mm;
-    background: #fff;
-    font-family: 'Amiri', 'Times New Roman', serif;
-    color: #1a1a1a;
-    overflow: hidden;
-    print-color-adjust: exact;
-    -webkit-print-color-adjust: exact;
-  }
-
-  .page {
-    width: 210mm;
-    height: 297mm;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: #fff;
-  }
-
-  /* ── Decorative border ── */
-  .border-frame {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .border-outer {
-    position: absolute;
-    inset: 6mm;
-    border: 3.5mm solid transparent;
-    border-image: repeating-linear-gradient(
-      45deg,
-      #1a6b35 0px, #1a6b35 5px,
-      #c8a850 5px, #c8a850 8px,
-      #1a6b35 8px, #1a6b35 13px,
-      #fff     13px, #fff  15px
-    ) 14;
-  }
-
-  .border-inner {
-    position: absolute;
-    inset: 13mm;
-    border: 1px solid #1a6b35;
-    box-shadow: inset 0 0 0 2px #c8a850, inset 0 0 0 4px #1a6b35;
-  }
-
-  /* Corner ornaments */
-  .corner {
-    position: absolute;
-    width: 22mm;
-    height: 22mm;
-  }
+  body { width: 210mm; height: 297mm; background: #fff; font-family: 'Amiri', 'Times New Roman', serif; color: #1a1a1a; overflow: hidden; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .page { width: 210mm; height: 297mm; position: relative; display: flex; flex-direction: column; align-items: center; background: #fff; }
+  .border-frame { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+  .border-outer { position: absolute; inset: 6mm; border: 3.5mm solid transparent; border-image: repeating-linear-gradient(45deg, #1a6b35 0px, #1a6b35 5px, #c8a850 5px, #c8a850 8px, #1a6b35 8px, #1a6b35 13px, #fff 13px, #fff 15px) 14; }
+  .border-inner { position: absolute; inset: 13mm; border: 1px solid #1a6b35; box-shadow: inset 0 0 0 2px #c8a850, inset 0 0 0 4px #1a6b35; }
+  .corner { position: absolute; width: 22mm; height: 22mm; }
   .corner svg { width: 100%; height: 100%; }
-  .corner-tl { top: 5mm;  left: 5mm; }
-  .corner-tr { top: 5mm;  right: 5mm; transform: scaleX(-1); }
-  .corner-bl { bottom: 5mm; left: 5mm;  transform: scaleY(-1); }
-  .corner-br { bottom: 5mm; right: 5mm;  transform: scale(-1,-1); }
-
-  /* ── Content ── */
-  .content {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 22mm 20mm 18mm;
-    align-items: center;
-  }
-
-  /* Republic seal area */
-  .republic-seal {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 3mm;
-  }
-
-  .seal-badge {
-    width: 22mm;
-    height: 22mm;
-    border-radius: 50%;
-    border: 2px solid #1a6b35;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #f0faf3 0%, #e0f3e6 100%);
-    box-shadow: 0 0 0 1.5px #c8a850;
-    margin-bottom: 2mm;
-    padding: 2mm;
-    text-align: center;
-    line-height: 1.2;
-  }
-
-  .seal-badge span {
-    font-size: 5pt;
-    color: #1a6b35;
-    font-weight: 700;
-    display: block;
-  }
-
-  .ministry-title {
-    font-size: 10.5pt;
-    color: #1a1a1a;
-    text-align: center;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    margin-bottom: 1mm;
-  }
-
-  /* Main title */
-  .diploma-title {
-    font-family: 'Scheherazade New', 'Amiri', serif;
-    font-size: 26pt;
-    font-weight: 700;
-    color: #1a1a1a;
-    text-align: center;
-    margin: 2mm 0 5mm;
-    letter-spacing: 2px;
-  }
-
-  /* Decree text */
-  .decree-text {
-    font-size: 8.5pt;
-    text-align: center;
-    color: #333;
-    line-height: 2;
-    max-width: 150mm;
-    margin-bottom: 5mm;
-    direction: rtl;
-  }
-
-  /* ── Arabic student block ── */
-  .student-block-ar {
-    width: 100%;
-    max-width: 160mm;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    padding: 4mm 0;
-    margin-bottom: 4mm;
-    direction: rtl;
-  }
-
-  .student-row {
-    display: flex;
-    align-items: baseline;
-    gap: 4mm;
-    margin: 2mm 0;
-    font-size: 11pt;
-    line-height: 1.8;
-  }
-
-  .row-label {
-    font-weight: 700;
-    color: #1a1a1a;
-    white-space: nowrap;
-    min-width: 38mm;
-  }
-
-  .row-value {
-    font-size: 12pt;
-    font-weight: 700;
-    color: #000;
-    border-bottom: 1px dotted #888;
-    flex: 1;
-    padding-bottom: 0.5mm;
-  }
-
-  .diploma-type-ar {
-    text-align: center;
-    font-size: 14pt;
-    font-weight: 700;
-    margin: 3mm 0;
-    color: #1a1a1a;
-  }
-
-  .field-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    width: 100%;
-    max-width: 160mm;
-    direction: rtl;
-    font-size: 10.5pt;
-    gap: 3mm;
-    margin-bottom: 6mm;
-  }
-
-  .field-item {
-    display: flex;
-    align-items: baseline;
-    gap: 2mm;
-  }
-
-  .field-label {
-    font-weight: 700;
-    white-space: nowrap;
-  }
-
-  .field-value {
-    border-bottom: 1px dotted #888;
-    min-width: 50mm;
-    padding-bottom: 0.5mm;
-    font-size: 11pt;
-    font-weight: 700;
-  }
-
-  /* ── French section ── */
-  .french-section {
-    width: 100%;
-    max-width: 160mm;
-    direction: ltr;
-    text-align: left;
-    border-top: 1px solid #ccc;
-    padding-top: 4mm;
-    margin-bottom: 5mm;
-  }
-
-  .fr-line {
-    display: flex;
-    align-items: baseline;
-    gap: 3mm;
-    margin: 1.5mm 0;
-    font-size: 9.5pt;
-  }
-
-  .fr-label {
-    font-weight: 700;
-    white-space: nowrap;
-    min-width: 30mm;
-    font-style: italic;
-  }
-
-  .fr-value {
-    font-size: 10pt;
-    font-weight: 700;
-    border-bottom: 1px dotted #888;
-    flex: 1;
-    padding-bottom: 0.5mm;
-    font-style: normal;
-    text-transform: uppercase;
-  }
-
-  .fr-diploma-line {
-    font-size: 9.5pt;
-    margin: 2mm 0 1mm;
-  }
-
-  /* ── Signatures ── */
-  .signatures-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    width: 100%;
-    max-width: 160mm;
-    margin-top: auto;
-    gap: 8mm;
-    direction: rtl;
-  }
-
-  .sig-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 45mm;
-  }
-
-  .sig-title {
-    font-size: 7.5pt;
-    text-align: center;
-    font-weight: 700;
-    color: #1a1a1a;
-    line-height: 1.5;
-    margin-bottom: 12mm;
-  }
-
-  .sig-line {
-    width: 40mm;
-    border-top: 1px solid #666;
-  }
-
-  .location-date {
-    font-size: 9pt;
-    text-align: center;
-    color: #333;
-    margin-bottom: 4mm;
-    direction: rtl;
-    width: 100%;
-    max-width: 160mm;
-  }
-
-  @media print {
-    body, .page {
-      width: 210mm;
-      height: 297mm;
-    }
-  }
+  .corner-tl { top: 5mm; left: 5mm; }
+  .corner-tr { top: 5mm; right: 5mm; transform: scaleX(-1); }
+  .corner-bl { bottom: 5mm; left: 5mm; transform: scaleY(-1); }
+  .corner-br { bottom: 5mm; right: 5mm; transform: scale(-1,-1); }
+  .content { position: relative; z-index: 1; width: 100%; height: 100%; display: flex; flex-direction: column; padding: 22mm 20mm 18mm; align-items: center; }
+  .republic-seal { display: flex; flex-direction: column; align-items: center; margin-bottom: 3mm; }
+  .seal-badge { width: 22mm; height: 22mm; border-radius: 50%; border: 2px solid #1a6b35; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(135deg, #f0faf3 0%, #e0f3e6 100%); box-shadow: 0 0 0 1.5px #c8a850; margin-bottom: 2mm; padding: 2mm; text-align: center; line-height: 1.2; }
+  .seal-badge span { font-size: 5pt; color: #1a6b35; font-weight: 700; display: block; }
+  .ministry-title { font-size: 10.5pt; color: #1a1a1a; text-align: center; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 1mm; }
+  .diploma-title { font-family: 'Scheherazade New', 'Amiri', serif; font-size: 26pt; font-weight: 700; color: #1a1a1a; text-align: center; margin: 2mm 0 5mm; letter-spacing: 2px; }
+  .decree-text { font-size: 8.5pt; text-align: center; color: #333; line-height: 2; max-width: 150mm; margin-bottom: 5mm; direction: rtl; }
+  .student-block-ar { width: 100%; max-width: 160mm; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; padding: 4mm 0; margin-bottom: 4mm; direction: rtl; }
+  .student-row { display: flex; align-items: baseline; gap: 4mm; margin: 2mm 0; font-size: 11pt; line-height: 1.8; }
+  .row-label { font-weight: 700; color: #1a1a1a; white-space: nowrap; min-width: 38mm; }
+  .row-value { font-size: 12pt; font-weight: 700; color: #000; border-bottom: 1px dotted #888; flex: 1; padding-bottom: 0.5mm; }
+  .diploma-type-ar { text-align: center; font-size: 14pt; font-weight: 700; margin: 3mm 0; color: #1a1a1a; }
+  .field-row { display: flex; justify-content: space-between; align-items: baseline; width: 100%; max-width: 160mm; direction: rtl; font-size: 10.5pt; gap: 3mm; margin-bottom: 6mm; }
+  .field-item { display: flex; align-items: baseline; gap: 2mm; }
+  .field-label { font-weight: 700; white-space: nowrap; }
+  .field-value { border-bottom: 1px dotted #888; min-width: 50mm; padding-bottom: 0.5mm; font-size: 11pt; font-weight: 700; }
+  .french-section { width: 100%; max-width: 160mm; direction: ltr; text-align: left; border-top: 1px solid #ccc; padding-top: 4mm; margin-bottom: 5mm; }
+  .fr-line { display: flex; align-items: baseline; gap: 3mm; margin: 1.5mm 0; font-size: 9.5pt; }
+  .fr-label { font-weight: 700; white-space: nowrap; min-width: 30mm; font-style: italic; }
+  .fr-value { font-size: 10pt; font-weight: 700; border-bottom: 1px dotted #888; flex: 1; padding-bottom: 0.5mm; font-style: normal; text-transform: uppercase; }
+  .fr-diploma-line { font-size: 9.5pt; margin: 2mm 0 1mm; }
+  .signatures-row { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; max-width: 160mm; margin-top: auto; gap: 8mm; direction: rtl; }
+  .sig-block { display: flex; flex-direction: column; align-items: center; min-width: 45mm; }
+  .sig-title { font-size: 7.5pt; text-align: center; font-weight: 700; color: #1a1a1a; line-height: 1.5; margin-bottom: 12mm; }
+  .sig-line { width: 40mm; border-top: 1px solid #666; }
+  .location-date { font-size: 9pt; text-align: center; color: #333; margin-bottom: 4mm; direction: rtl; width: 100%; max-width: 160mm; }
+  @media print { body, .page { width: 210mm; height: 297mm; } }
 </style>
 </head>
 <body>
 <div class="page">
-
-  <!-- Border Frame -->
   <div class="border-frame">
     <div class="border-outer"></div>
     <div class="border-inner"></div>
-    <!-- Corner ornaments -->
     ${["corner-tl", "corner-tr", "corner-bl", "corner-br"]
 			.map(
 				(cls) => `
@@ -441,7 +245,6 @@ function buildDiplomaHTML(d: DiplomaData): string {
         <path d="M0 0 L60 0 L60 8 L8 8 L8 60 L0 60 Z" fill="#1a6b35"/>
         <path d="M8 8 L52 8 L52 15 L15 15 L15 52 L8 52 Z" fill="#c8a850"/>
         <path d="M15 15 L45 15 L45 22 L22 22 L22 45 L15 45 Z" fill="#1a6b35"/>
-        <!-- Diamond -->
         <circle cx="30" cy="30" r="8" fill="none" stroke="#1a6b35" stroke-width="2"/>
         <rect x="25" y="25" width="10" height="10" transform="rotate(45 30 30)" fill="#c8a850"/>
         <rect x="27.5" y="27.5" width="5" height="5" transform="rotate(45 30 30)" fill="#1a6b35"/>
@@ -450,11 +253,7 @@ function buildDiplomaHTML(d: DiplomaData): string {
 			)
 			.join("")}
   </div>
-
-  <!-- Content -->
   <div class="content">
-
-    <!-- Republic seal -->
     <div class="republic-seal">
       <div class="seal-badge">
         <span>الجمهورية الجزائرية</span>
@@ -462,18 +261,12 @@ function buildDiplomaHTML(d: DiplomaData): string {
       </div>
       <div class="ministry-title">وزارة التعليم العالي والبحث العلمي</div>
     </div>
-
-    <!-- Diploma title -->
     <div class="diploma-title">شهادة الليسانس</div>
-
-    <!-- Decree text -->
     <div class="decree-text">
       إن وزير التعليم العالي والبحث العلمي، بمقتضى المرسوم التنفيذي المتضمن إنشاء شهادة الليسانس
       <br/>
       وبمقتضى محضر لجنة المداولات
     </div>
-
-    <!-- Arabic student block -->
     <div class="student-block-ar">
       <div class="student-row">
         <span class="row-label">:يمنح السيد(ة) :</span>
@@ -486,11 +279,7 @@ function buildDiplomaHTML(d: DiplomaData): string {
         <span class="row-value">${placeAr}</span>
       </div>
     </div>
-
-    <!-- Diploma type AR -->
     <div class="diploma-type-ar">شهادة الليسانس</div>
-
-    <!-- Field / specialty row -->
     <div class="field-row">
       <div class="field-item">
         <span class="field-label">الميدان</span>
@@ -501,8 +290,6 @@ function buildDiplomaHTML(d: DiplomaData): string {
         <span class="field-value">${specAr}</span>
       </div>
     </div>
-
-    <!-- French section -->
     <div class="french-section">
       <div class="fr-line">
         <span class="fr-label">Il est décerné à M: ${nameFr}</span>
@@ -521,14 +308,10 @@ function buildDiplomaHTML(d: DiplomaData): string {
         <span class="fr-value">${specAr.toUpperCase()}</span>
       </div>
     </div>
-
-    <!-- Location & date -->
     <div class="location-date">
       بـ ${d.issuanceLocationAr} في ${issueAr} &nbsp;|&nbsp;
       <span dir="ltr">à ${d.issuanceLocationFr} le ${issueFr}</span>
     </div>
-
-    <!-- Signatures -->
     <div class="signatures-row">
       <div class="sig-block">
         <div class="sig-title">رئيس لجنة المداولات</div>
@@ -543,24 +326,144 @@ function buildDiplomaHTML(d: DiplomaData): string {
         <div class="sig-line"></div>
       </div>
     </div>
-
-  </div><!-- /content -->
-</div><!-- /page -->
+  </div>
+</div>
 </body>
 </html>`;
 }
 
-// ─── Review Step ──────────────────────────────────────────────────────────────
+// Step 0: Select Document Type
 
-// ─── Review Step ──────────────────────────────────────────────────────────────
+interface SelectTypeStepProps {
+	student: Student;
+	selectedId: string | null;
+	onSelect: (id: string) => void;
+	onNext: () => void;
+}
+
+const SelectTypeStep: React.FC<SelectTypeStepProps> = ({
+	student,
+	selectedId,
+	onSelect,
+	onNext,
+}) => {
+	// FUTURE: Uncomment and extend to filter types by student attributes:
+	// const available = ALL_DOC_TYPES.filter((dt) => {
+	//   if (dt.eligibleFields && !dt.eligibleFields.includes(student.expand?.fieldId?.name ?? "")) return false;
+	//   if (dt.eligibleMajors && !dt.eligibleMajors.includes(student.expand?.majorId?.name ?? "")) return false;
+	//   if (dt.eligibleSpecialties && !dt.eligibleSpecialties.includes(student.expand?.specialtyId?.name ?? "")) return false;
+	//   return true;
+	// });
+	const available = ALL_DOC_TYPES;
+
+	return (
+		<div className="space-y-4 pb-2">
+			{/* Student context banner */}
+			<div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800">
+				<GraduationCap className="w-5 h-5 text-green-700 dark:text-green-400 shrink-0" />
+				<div className="text-sm">
+					<span className="font-semibold text-green-800 dark:text-green-300">
+						{student.firstName} {student.lastName}
+					</span>
+					<span className="text-green-600 dark:text-green-500 mx-1.5">·</span>
+					<span className="text-green-600 dark:text-green-500">
+						{student.expand?.fieldId?.name || "—"}
+					</span>
+					{student.expand?.specialtyId?.name && (
+						<>
+							<span className="text-green-600 dark:text-green-500 mx-1.5">
+								/
+							</span>
+							<span className="text-green-600 dark:text-green-500">
+								{student.expand.specialtyId.name}
+							</span>
+						</>
+					)}
+				</div>
+			</div>
+
+			{/* Type grid */}
+			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+				{available.map((dt) => {
+					const isSelected = selectedId === dt.id;
+					return (
+						<button
+							key={dt.id}
+							onClick={() => onSelect(dt.id)}
+							className={`
+								group relative text-left p-4 rounded-xl border-2 transition-all duration-150 cursor-pointer
+								${
+									isSelected
+										? "border-green-600 bg-green-50 dark:bg-green-900/25 dark:border-green-500 shadow-sm"
+										: "border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800/50 hover:border-green-300 dark:hover:border-green-700 hover:bg-green-50/40 dark:hover:bg-green-900/10"
+								}
+							`}
+						>
+							{isSelected && (
+								<span className="absolute top-2.5 right-2.5">
+									<CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400" />
+								</span>
+							)}
+
+							<div
+								className={`
+									w-10 h-10 rounded-lg flex items-center justify-center mb-3 transition-colors
+									${
+										isSelected
+											? "bg-green-600 text-white"
+											: "bg-gray-100 dark:bg-zinc-700 text-gray-500 dark:text-gray-400 group-hover:bg-green-100 group-hover:text-green-700 dark:group-hover:bg-green-900/30 dark:group-hover:text-green-400"
+									}
+								`}
+							>
+								{dt.icon}
+							</div>
+
+							<div className="font-semibold text-sm text-gray-900 dark:text-white leading-tight mb-0.5">
+								{dt.labelFr}
+							</div>
+							<div
+								className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1"
+								dir="rtl"
+							>
+								{dt.labelAr}
+							</div>
+							<div className="text-xs text-gray-400 dark:text-gray-500 leading-relaxed">
+								{dt.descriptionFr}
+							</div>
+						</button>
+					);
+				})}
+			</div>
+
+			<div className="flex justify-end pt-1">
+				<Button
+					onClick={onNext}
+					disabled={!selectedId}
+					className="flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white px-6"
+				>
+					Continue
+					<ChevronRight className="w-4 h-4" />
+				</Button>
+			</div>
+		</div>
+	);
+};
+
+// Step 1: Review & Fill
 
 interface ReviewStepProps {
 	data: DiplomaData;
 	setData: React.Dispatch<React.SetStateAction<DiplomaData>>;
 	onNext: () => void;
+	onBack: () => void;
 }
 
-const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
+const ReviewStep: React.FC<ReviewStepProps> = ({
+	data,
+	setData,
+	onNext,
+	onBack,
+}) => {
 	const set =
 		(key: keyof DiplomaData) => (e: React.ChangeEvent<HTMLInputElement>) =>
 			setData((prev) => ({ ...prev, [key]: e.target.value }));
@@ -569,7 +472,7 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
 
 	return (
 		<div className="space-y-5 pb-2 bg-gray-50">
-			{/* ── Section 1: Auto-filled ── */}
+			{/* Section 1: Auto-filled */}
 			<div className="rounded-xl border border-gray-200 dark:border-zinc-700">
 				<div className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700">
 					<CheckCircle2 className="w-4 h-4 text-green-500" />
@@ -577,9 +480,7 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
 						Auto-filled from database
 					</h3>
 				</div>
-
 				<div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-					{/* First Name */}
 					<div className="space-y-1">
 						<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
 							First Name (French)
@@ -596,8 +497,6 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
 							className="h-9 text-sm"
 						/>
 					</div>
-
-					{/* Last Name */}
 					<div className="space-y-1">
 						<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
 							Last Name (French)
@@ -614,8 +513,6 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
 							className="h-9 text-sm"
 						/>
 					</div>
-
-					{/* Date of Birth */}
 					<div className="space-y-1">
 						<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
 							Date of Birth
@@ -635,8 +532,6 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
 							clearable={false}
 						/>
 					</div>
-
-					{/* Graduation Year */}
 					<div className="space-y-1">
 						<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
 							Graduation Year
@@ -653,8 +548,6 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
 							className="h-9 text-sm"
 						/>
 					</div>
-
-					{/* Field */}
 					<div className="space-y-1">
 						<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
 							Field of Study
@@ -671,7 +564,6 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
 							className="h-9 text-sm"
 						/>
 					</div>
-
 					<div className="space-y-1">
 						<label className="text-xs font-medium text-gray-500 uppercase">
 							Major (Filière)
@@ -683,8 +575,6 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
 							className="h-9 text-sm"
 						/>
 					</div>
-
-					{/* Specialty */}
 					<div className="space-y-1">
 						<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
 							Specialty
@@ -704,9 +594,9 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
 				</div>
 			</div>
 
-			{/* ── Side-by-Side Wrapper for Section 2 & 3 ── */}
+			{/* Side-by-side: Missing fields + Issuance */}
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-				{/* ── Section 2: Arabic names + place of birth ── */}
+				{/* Section 2: Required manual */}
 				<div className="rounded-xl border border-gray-200 dark:border-zinc-700 overflow-hidden flex flex-col">
 					<div className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700">
 						<AlertCircle className="w-4 h-4 text-red-400" />
@@ -714,12 +604,10 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
 							Required — not in database
 						</h3>
 					</div>
-
 					<div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 flex-1">
-						{/* Place of Birth FR */}
 						<div className="space-y-1">
 							<label className="flex items-center gap-1 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-								Place of Birth (French)
+								Place of Birth (French){" "}
 								<span className="text-red-500 ml-0.5">*</span>
 							</label>
 							<Input
@@ -734,11 +622,9 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
 								</p>
 							)}
 						</div>
-
-						{/* Place of Birth AR */}
 						<div className="space-y-1">
 							<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1">
-								Place of Birth (Arabic)
+								Place of Birth (Arabic){" "}
 								<span className="normal-case font-normal text-gray-400 ml-1">
 									(optional)
 								</span>
@@ -751,11 +637,9 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
 								className="h-9 text-sm"
 							/>
 						</div>
-
-						{/* Last Name AR */}
 						<div className="space-y-1">
 							<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1">
-								Last Name (Arabic)
+								Last Name (Arabic){" "}
 								<span className="normal-case font-normal text-gray-400 ml-1">
 									(optional)
 								</span>
@@ -768,11 +652,9 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
 								className="h-9 text-sm"
 							/>
 						</div>
-
-						{/* First Name AR */}
 						<div className="space-y-1">
 							<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1">
-								First Name (Arabic)
+								First Name (Arabic){" "}
 								<span className="normal-case font-normal text-gray-400 ml-1">
 									(optional)
 								</span>
@@ -788,7 +670,7 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
 					</div>
 				</div>
 
-				{/* ── Section 3: Issuance ── */}
+				{/* Section 3: Issuance */}
 				<div className="rounded-xl border border-gray-200 dark:border-zinc-700 flex flex-col">
 					<div className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700">
 						<Printer className="w-4 h-4 text-gray-400" />
@@ -796,7 +678,6 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
 							Issuance details
 						</h3>
 					</div>
-
 					<div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 flex-1">
 						<div className="space-y-1 sm:col-span-2">
 							<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -838,8 +719,15 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
 				</div>
 			</div>
 
-			{/* ── Footer ── */}
-			<div className="flex justify-end pt-1">
+			<div className="flex justify-between pt-1">
+				<Button
+					variant="outline"
+					onClick={onBack}
+					className="flex items-center gap-2"
+				>
+					<ChevronLeft className="w-4 h-4" />
+					Back
+				</Button>
 				<Button
 					onClick={onNext}
 					disabled={!canProceed}
@@ -853,15 +741,21 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, setData, onNext }) => {
 	);
 };
 
-// ─── Preview Step ─────────────────────────────────────────────────────────────
+// Step 2: Preview & Print
 
 interface PreviewStepProps {
 	data: DiplomaData;
+	selectedType: DocType;
 	onBack: () => void;
 	onPrint: () => void;
 }
 
-const PreviewStep: React.FC<PreviewStepProps> = ({ data, onBack, onPrint }) => {
+const PreviewStep: React.FC<PreviewStepProps> = ({
+	data,
+	selectedType,
+	onBack,
+	onPrint,
+}) => {
 	const html = buildDiplomaHTML(data);
 	const [zoom, setZoom] = useState(1.35);
 
@@ -870,9 +764,15 @@ const PreviewStep: React.FC<PreviewStepProps> = ({ data, onBack, onPrint }) => {
 			<div className="flex items-center justify-between">
 				<p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
 					<Eye className="w-4 h-4" />
-					This is how the diploma will look when printed.
+					<span>
+						Printing:&nbsp;
+						<strong className="text-gray-700 dark:text-gray-300">
+							{selectedType.labelFr}
+						</strong>
+						<span className="mx-1 text-gray-400">·</span>
+						<span dir="rtl">{selectedType.labelAr}</span>
+					</span>
 				</p>
-				{/* Zoom controls */}
 				<div className="flex items-center gap-2">
 					<button
 						onClick={() => setZoom((z) => Math.max(0.3, z - 0.1))}
@@ -898,7 +798,6 @@ const PreviewStep: React.FC<PreviewStepProps> = ({ data, onBack, onPrint }) => {
 				</div>
 			</div>
 
-			{/* Scaled preview iframe */}
 			<div
 				className="w-full overflow-auto rounded-lg border border-gray-200 dark:border-zinc-700 bg-gray-100 dark:bg-zinc-900 flex justify-center py-4"
 				style={{ height: "75vh" }}
@@ -906,7 +805,7 @@ const PreviewStep: React.FC<PreviewStepProps> = ({ data, onBack, onPrint }) => {
 				<div
 					style={{
 						width: "200mm",
-						height: "350mm", // matches your custom size
+						height: "350mm",
 						transform: `scale(${zoom})`,
 						transformOrigin: "top center",
 						flexShrink: 0,
@@ -926,7 +825,6 @@ const PreviewStep: React.FC<PreviewStepProps> = ({ data, onBack, onPrint }) => {
 				</div>
 			</div>
 
-			{/* Summary of key fields */}
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
 				{[
 					["Name (FR)", `${data.lastNameFr} ${data.firstNameFr}`],
@@ -975,8 +873,6 @@ const PreviewStep: React.FC<PreviewStepProps> = ({ data, onBack, onPrint }) => {
 	);
 };
 
-// ─── Main Dialog ──────────────────────────────────────────────────────────────
-
 export const PrintDiplomaDialog: React.FC<PrintDiplomaDialogProps> = ({
 	open,
 	onClose,
@@ -985,7 +881,9 @@ export const PrintDiplomaDialog: React.FC<PrintDiplomaDialogProps> = ({
 	const { t } = useTranslation();
 	const today = new Date().toISOString().split("T")[0];
 
-	const [step, setStep] = useState<"review" | "preview">("review");
+	const [step, setStep] = useState<"select" | "review" | "preview">("select");
+	const [selectedTypeId, setSelectedTypeId] = useState<string | null>(null);
+
 	const [data, setData] = useState<DiplomaData>({
 		firstNameFr: student.firstName,
 		lastNameFr: student.lastName,
@@ -1005,7 +903,8 @@ export const PrintDiplomaDialog: React.FC<PrintDiplomaDialogProps> = ({
 	});
 
 	const handleClose = () => {
-		setStep("review");
+		setStep("select");
+		setSelectedTypeId(null);
 		onClose();
 	};
 
@@ -1026,7 +925,14 @@ export const PrintDiplomaDialog: React.FC<PrintDiplomaDialogProps> = ({
 		}, 800);
 	};
 
-	const STEPS = [
+	const selectedType =
+		ALL_DOC_TYPES.find((dt) => dt.id === selectedTypeId) ?? null;
+
+	const STEPS: { key: typeof step; label: string }[] = [
+		{
+			key: "select",
+			label: t("diploma.stepSelect", { defaultValue: "Select Type" }),
+		},
 		{
 			key: "review",
 			label: t("diploma.stepReview", { defaultValue: "Review & Fill" }),
@@ -1037,64 +943,83 @@ export const PrintDiplomaDialog: React.FC<PrintDiplomaDialogProps> = ({
 		},
 	];
 
+	const stepIndex: Record<typeof step, number> = {
+		select: 0,
+		review: 1,
+		preview: 2,
+	};
+
 	return (
 		<Dialog open={open} onOpenChange={handleClose}>
 			<DialogContent className="max-w-[90vw]! w-[90vw]! h-[83vh]! max-h-[90vh] overflow-y-auto p-4 flex flex-col gap-2 bg-gray-50">
 				<DialogHeader className="pb-0 mb-0">
 					<DialogTitle className="flex items-center gap-2 text-lg">
 						<Printer className="w-5 h-5 text-green-700" />
-						{t("diploma.generateTitle", {
-							defaultValue: "Generate Licence Diploma",
-						})}
+						{t("diploma.generateTitle", { defaultValue: "Generate Document" })}
 					</DialogTitle>
 				</DialogHeader>
 
 				{/* Step indicator */}
 				<div className="flex items-center gap-2 py-1 border-b border-gray-100 dark:border-zinc-800 mb-2 mt-2">
-					{STEPS.map((s, i) => (
-						<React.Fragment key={s.key}>
-							<button
-								onClick={() => i === 0 && setStep("review")}
-								className={`flex items-center gap-2 text-sm font-medium transition-colors ${
-									step === s.key
-										? "text-green-700 dark:text-green-400"
-										: "text-gray-400 dark:text-gray-500"
-								}`}
-							>
-								<span
-									className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
-										step === s.key
-											? "bg-green-700 text-white"
-											: step === "preview" && i === 0
-												? "bg-green-100 text-green-700 dark:bg-green-900/30"
-												: "bg-gray-200 text-gray-500 dark:bg-zinc-700"
+					{STEPS.map((s, i) => {
+						const current = stepIndex[step];
+						const isDone = i < current;
+						const isActive = step === s.key;
+						return (
+							<React.Fragment key={s.key}>
+								<button
+									onClick={() => {
+										if (isDone) setStep(s.key);
+									}}
+									className={`flex items-center gap-2 text-sm font-medium transition-colors ${
+										isActive
+											? "text-green-700 dark:text-green-400"
+											: isDone
+												? "text-green-600 dark:text-green-500 hover:text-green-700 cursor-pointer"
+												: "text-gray-400 dark:text-gray-500 cursor-default"
 									}`}
 								>
-									{step === "preview" && i === 0 ? (
-										<CheckCircle2 className="w-3.5 h-3.5" />
-									) : (
-										i + 1
-									)}
-								</span>
-								{s.label}
-							</button>
-							{i < STEPS.length - 1 && (
-								<ChevronRight className="w-4 h-4 text-gray-300 dark:text-gray-600 flex-shrink-0" />
-							)}
-						</React.Fragment>
-					))}
+									<span
+										className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
+											isActive
+												? "bg-green-700 text-white"
+												: isDone
+													? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+													: "bg-gray-200 text-gray-500 dark:bg-zinc-700"
+										}`}
+									>
+										{isDone ? <CheckCircle2 className="w-3.5 h-3.5" /> : i + 1}
+									</span>
+									{s.label}
+								</button>
+								{i < STEPS.length - 1 && (
+									<ChevronRight className="w-4 h-4 text-gray-300 dark:text-gray-600 flex-shrink-0" />
+								)}
+							</React.Fragment>
+						);
+					})}
 				</div>
 
+				{step === "select" && (
+					<SelectTypeStep
+						student={student}
+						selectedId={selectedTypeId}
+						onSelect={setSelectedTypeId}
+						onNext={() => setStep("review")}
+					/>
+				)}
 				{step === "review" && (
 					<ReviewStep
 						data={data}
 						setData={setData}
 						onNext={() => setStep("preview")}
+						onBack={() => setStep("select")}
 					/>
 				)}
-				{step === "preview" && (
+				{step === "preview" && selectedType && (
 					<PreviewStep
 						data={data}
+						selectedType={selectedType}
 						onBack={() => setStep("review")}
 						onPrint={handlePrint}
 					/>

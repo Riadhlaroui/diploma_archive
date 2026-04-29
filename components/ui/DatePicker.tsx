@@ -170,7 +170,7 @@ export function DatePicker({
 					className="absolute z-50 mt-1.5 left-0 bg-white border border-gray-200 rounded-xl shadow-xl p-3 w-72 select-none"
 					dir="ltr"
 				>
-					{/* ── Calendar view ── */}
+					{/* Calendar view */}
 					{mode === "calendar" && (
 						<>
 							<div className="flex items-center justify-between mb-3">
@@ -263,7 +263,7 @@ export function DatePicker({
 						</>
 					)}
 
-					{/* ── Month picker ── */}
+					{/* Month picker */}
 					{mode === "month" && (
 						<>
 							<div className="flex items-center justify-between mb-3">
@@ -310,7 +310,7 @@ export function DatePicker({
 						</>
 					)}
 
-					{/* ── Year picker ── */}
+					{/* Year picker */}
 					{mode === "year" && (
 						<>
 							<div className="flex items-center justify-between mb-3">

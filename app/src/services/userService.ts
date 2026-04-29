@@ -40,8 +40,6 @@ export interface UserList {
 	updatedAt?: string;
 }
 
-// ─── Helpers ────────────────────────────────────────────────
-
 export function isAccountExpired(expiresAt: string | null): boolean {
 	if (!expiresAt) return false;
 	return new Date(expiresAt) < new Date();
@@ -62,8 +60,6 @@ export function isAccountActive(user: UserList | null): boolean {
 	if (isAccountExpired(user.expiresAt)) return false;
 	return true;
 }
-
-// ─── Auth check with expiry ──────────────────────────────────
 
 export async function validateSession(): Promise<{
 	valid: boolean;
@@ -219,8 +215,6 @@ export async function getInbox(page = 1, perPage = 13) {
 		};
 	}
 }
-
-// ─── Mappers ─────────────────────────────────────────────────
 
 function mapRecord(r: any): User {
 	return {

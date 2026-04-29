@@ -29,9 +29,7 @@ import { toast } from "sonner";
 
 import { ocrRateLimiter } from "@/lib/utils/rateLimiter";
 
-// ─────────────────────────────────────────────────────────────────────────────
 // TYPES
-// ─────────────────────────────────────────────────────────────────────────────
 
 type Phase = "setup" | "processing" | "reviewing" | "importing" | "done";
 type ItemStatus = "queued" | "processing" | "done" | "error";
@@ -77,9 +75,7 @@ interface ImportResult {
 	message: string;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // HELPERS
-// ─────────────────────────────────────────────────────────────────────────────
 
 const SUPPORTED_EXTS = ["jpg", "jpeg", "png", "webp", "pdf"];
 const BATCH_SIZE = 5;
@@ -328,10 +324,10 @@ const BulkImportPage: React.FC = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
 
-	// ── phases ──────────────────────────────────────────────────────────────────
+	// phases
 	const [phase, setPhase] = useState<Phase>("setup");
 
-	// ── PocketBase data ──────────────────────────────────────────────────────────
+	// PocketBase data
 	const [faculties, setFaculties] = useState<any[]>([]);
 	const [departments, setDepartments] = useState<any[]>([]);
 	const [fields, setFields] = useState<any[]>([]);
@@ -339,7 +335,7 @@ const BulkImportPage: React.FC = () => {
 	const [specialties, setSpecialties] = useState<any[]>([]);
 	const [docTypes, setDocTypes] = useState<any[]>([]);
 
-	// ── batch config ─────────────────────────────────────────────────────────────
+	// batch config
 	const [config, setConfig] = useState<BatchConfig>({
 		facultyId: "",
 		departmentId: "",
@@ -350,11 +346,11 @@ const BulkImportPage: React.FC = () => {
 		concurrency: 1,
 	});
 
-	// ── drag & drop ──────────────────────────────────────────────────────────────
+	// drag & drop
 	const [isDragging, setIsDragging] = useState(false);
 	const [dropped, setDropped] = useState<DroppedFolder[]>([]);
 
-	// ── OCR state ────────────────────────────────────────────────────────────────
+	// OCR state
 	const [drafts, setDrafts] = useState<StudentDraft[]>([]);
 	const [processedCount, setProcessedCount] = useState(0);
 	const [isPaused, setIsPaused] = useState(false);
@@ -362,24 +358,24 @@ const BulkImportPage: React.FC = () => {
 	const cancelRef = useRef(false);
 	const startTimeRef = useRef<number>(0);
 
-	// ── review filters / pagination ──────────────────────────────────────────────
+	// review filters / pagination
 	const [reviewFilter, setReviewFilter] = useState<
 		"all" | "missing" | "errors"
 	>("all");
 	const [reviewPage, setReviewPage] = useState(0);
 	const PAGE_SIZE = 50;
 
-	// ── import state ─────────────────────────────────────────────────────────────
+	// import state
 	const [importResults, setImportResults] = useState<ImportResult[]>([]);
 	const [importDone, setImportDone] = useState(0);
 
-	// ── Initial loads ────────────────────────────────────────────────────────────
+	// Initial loads
 	useEffect(() => {
 		pb.collection("Archive_faculties").getFullList().then(setFaculties);
 		pb.collection("Document_types").getFullList().then(setDocTypes);
 	}, []);
 
-	// ── Cascade selects ──────────────────────────────────────────────────────────
+	// Cascade selects
 	useEffect(() => {
 		if (config.facultyId) {
 			pb.collection("Archive_departments")
@@ -428,7 +424,7 @@ const BulkImportPage: React.FC = () => {
 		setConfig((c) => ({ ...c, specialtyId: "" }));
 	}, [config.majorId]);
 
-	// ── Drag & Drop ──────────────────────────────────────────────────────────────
+	// Drag & Drop
 	const handleDragOver = useCallback((e: React.DragEvent) => {
 		e.preventDefault();
 		setIsDragging(true);
@@ -569,7 +565,7 @@ const BulkImportPage: React.FC = () => {
 		if (!cancelRef.current) setPhase("reviewing");
 	};
 
-	// ── Retry single folder ───────────────────────────────────────────────────────
+	// Retry single folder
 	const retryOcr = async (folderId: string) => {
 		const draft = drafts.find((d) => d.folderId === folderId);
 		if (!draft) return;
@@ -598,7 +594,7 @@ const BulkImportPage: React.FC = () => {
 		}
 	};
 
-	// ── Start Import ──────────────────────────────────────────────────────────────
+	// Start Import
 	const toImport = drafts.filter(
 		(d) => !d.skip && d.status === "done" && getMissingFields(d).length === 0,
 	);
@@ -677,7 +673,7 @@ const BulkImportPage: React.FC = () => {
 		setPhase("done");
 	};
 
-	// ── Review table helpers ──────────────────────────────────────────────────────
+	// Review table helpers
 	const updateDraft = (
 		folderId: string,
 		field: keyof StudentDraft,
@@ -700,14 +696,14 @@ const BulkImportPage: React.FC = () => {
 		(reviewPage + 1) * PAGE_SIZE,
 	);
 
-	// ── ETA calculation ───────────────────────────────────────────────────────────
+	// ETA calculation
 	const etaMs =
 		processedCount > 0
 			? ((Date.now() - startTimeRef.current) / processedCount) *
 				(drafts.length - processedCount)
 			: Infinity;
 
-	// ── CSV export ────────────────────────────────────────────────────────────────
+	// CSV export
 	const downloadErrors = () => {
 		const lines = [
 			"Folder,Matricule,Error",
@@ -722,14 +718,11 @@ const BulkImportPage: React.FC = () => {
 		a.click();
 	};
 
-	// ─────────────────────────────────────────────────────────────────────────────
 	// RENDER
-	// ─────────────────────────────────────────────────────────────────────────────
 
 	return (
 		<div className="min-h-full dark:bg-gray-900 p-4">
 			<div className="max-w-7xl mx-auto">
-				{/* ── Header ─────────────────────────────────────────────────────────── */}
 				<div className="mb-6">
 					<button
 						onClick={() => router.back()}
@@ -1068,15 +1061,8 @@ const BulkImportPage: React.FC = () => {
 					</div>
 				)}
 
-				{/* ══════════════════════════════════════════════════════════════════════
-            PHASE: REVIEWING
-        ══════════════════════════════════════════════════════════════════════ */}
-				{/* ══════════════════════════════════════════════════════════════════════
-    PHASE: REVIEWING
-══════════════════════════════════════════════════════════════════════ */}
 				{phase === "reviewing" && (
 					<div className="space-y-4">
-						{/* ── Stats + action bar ─────────────────────────────────────────── */}
 						<div
 							className="flex flex-wrap items-center gap-4 bg-white dark:bg-gray-800
                     rounded-lg border border-gray-200 dark:border-gray-700 p-4"
@@ -1186,7 +1172,6 @@ const BulkImportPage: React.FC = () => {
 							</div>
 						</div>
 
-						{/* ── Table ──────────────────────────────────────────────────────── */}
 						<div
 							className="bg-white dark:bg-gray-800 rounded-lg border
                     border-gray-200 dark:border-gray-700 overflow-x-auto"

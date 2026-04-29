@@ -34,7 +34,7 @@ import { Input } from "@/components/ui/input";
 import pb from "@/lib/pocketbase";
 import { YearPicker } from "@/components/ui/YearPicker";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// Types
 
 type Phase = "setup" | "reviewing" | "importing" | "done";
 
@@ -83,8 +83,7 @@ interface PBRecord {
 	name: string;
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
+// Helpers
 async function createStudent(student: ParsedStudent): Promise<string> {
 	const record = await pb.collection("Archive_students").create({
 		matricule: student.matricule,
@@ -206,7 +205,7 @@ function FileIcon({ name }: { name: string }) {
 	);
 }
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
+// Sub-components
 
 function ProgressBar({
 	value,
@@ -227,18 +226,16 @@ function ProgressBar({
 	);
 }
 
-// ─── Main Component ───────────────────────────────────────────────────────────
-
+// Main
 const AddInBulk = () => {
 	const [phase, setPhase] = useState<Phase>("setup");
 	const router = useRouter();
 	const { t, i18n } = useTranslation();
 
-	// RTL support — Arabic is RTL
 	const isRTL = i18n.language === "ar";
 	const dir = isRTL ? "rtl" : "ltr";
 
-	// ── Dropdown data
+	// Dropdown data
 	const [faculties, setFaculties] = useState<PBRecord[]>([]);
 	const [departments, setDepartments] = useState<PBRecord[]>([]);
 	const [fields, setFields] = useState<PBRecord[]>([]);
@@ -246,14 +243,14 @@ const AddInBulk = () => {
 	const [specialties, setSpecialties] = useState<PBRecord[]>([]);
 	const [docTypes, setDocTypes] = useState<PBRecord[]>([]);
 
-	// ── Drag & drop
+	// Drag & drop
 	const [isDragging, setIsDragging] = useState(false);
 	const [dropped, setDropped] = useState<DroppedFolder[]>([]);
 	const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
 		new Set(),
 	);
 
-	// ── Config
+	// Config
 	const [config, setConfig] = useState<BatchConfig>({
 		facultyId: "",
 		departmentId: "",
@@ -265,10 +262,10 @@ const AddInBulk = () => {
 		defaultDocTypeId: "",
 	});
 
-	// ── Parsed students
+	// Parsed students
 	const [students, setStudents] = useState<ParsedStudent[]>([]);
 
-	// ── Import progress
+	// Import progress
 	const [importIndex, setImportIndex] = useState(0);
 	const [results, setResults] = useState<ImportResult[]>([]);
 	const [isPaused, setIsPaused] = useState(false);
@@ -290,7 +287,7 @@ const AddInBulk = () => {
 		configRef.current = config;
 	}, [config]);
 
-	// ── Initial loads
+	// Initial loads
 	useEffect(() => {
 		pb.collection("Archive_faculties")
 			.getFullList()
@@ -300,7 +297,7 @@ const AddInBulk = () => {
 			.then((r) => setDocTypes(r as unknown as PBRecord[]));
 	}, []);
 
-	// ── Cascade selects
+	// Cascade selects
 	useEffect(() => {
 		if (config.facultyId) {
 			pb.collection("Archive_departments")
@@ -356,10 +353,10 @@ const AddInBulk = () => {
 		!!config.specialtyId &&
 		!!config.defaultDocTypeId;
 
-	// ── Drag handlers
+	// Drag handlers
 	const handleDragOver = useCallback((e: React.DragEvent) => {
 		e.preventDefault();
-		e.stopPropagation(); // Prevent the browser from opening the file/folder
+		e.stopPropagation();
 
 		// This tells the OS/Browser that a copy is allowed
 		if (e.dataTransfer) {
@@ -373,8 +370,6 @@ const AddInBulk = () => {
 		e.preventDefault();
 		e.stopPropagation();
 
-		// Only stop dragging if we are actually leaving the container,
-		// not just moving over a child element (like the icon or text)
 		const rect = e.currentTarget.getBoundingClientRect();
 		if (
 			e.clientX <= rect.left ||
@@ -416,8 +411,6 @@ const AddInBulk = () => {
 
 		allFiles.forEach((file) => {
 			const parts = file.webkitRelativePath.split("/");
-			// If path is "Parent/Student/file.jpg", parts[1] is the student folder name.
-			// If path is "Student/file.jpg", parts[0] is the student folder name.
 			const folderName = parts.length > 2 ? parts[1] : parts[0];
 
 			const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
@@ -613,7 +606,7 @@ const AddInBulk = () => {
 		setIsPaused(next);
 	}, []);
 
-	// ─── Derived progress values
+	// Derived progress values
 	const total = students.length;
 	const done = results.length;
 	const successes = results.filter((r) => r.status === "success").length;
@@ -663,10 +656,6 @@ const AddInBulk = () => {
 		},
 	];
 
-	// ─────────────────────────────────────────────────────────────────────────
-	// RENDER
-	// ─────────────────────────────────────────────────────────────────────────
-
 	return (
 		<div dir={dir} className="min-h-full bg-gray-50 p-4">
 			<div className="max-w-7xl mx-auto">
@@ -688,7 +677,6 @@ const AddInBulk = () => {
 					</p>
 				</div>
 
-				{/* ── PHASE: SETUP ────────────────────────────────────────────────── */}
 				{phase === "setup" && (
 					<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 						<input
@@ -1001,7 +989,6 @@ const AddInBulk = () => {
 					</div>
 				)}
 
-				{/* ── PHASE: REVIEWING ───────────────────────────────────────────── */}
 				{phase === "reviewing" && (
 					<div className="space-y-4">
 						<div className="flex items-center justify-between flex-wrap gap-2">
@@ -1135,7 +1122,6 @@ const AddInBulk = () => {
 					</div>
 				)}
 
-				{/* ── PHASE: IMPORTING ──────────────────────────────────────────── */}
 				{phase === "importing" && (
 					<div className="space-y-5 max-w-2xl mx-auto">
 						<div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 space-y-5">
@@ -1261,7 +1247,6 @@ const AddInBulk = () => {
 					</div>
 				)}
 
-				{/* ── PHASE: DONE ───────────────────────────────────────────────── */}
 				{phase === "done" && (
 					<div className="max-w-lg mx-auto text-center space-y-6 py-10">
 						<div className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto">

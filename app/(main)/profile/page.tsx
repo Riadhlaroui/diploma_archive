@@ -36,7 +36,7 @@ export default function ProfilePage() {
 
 	const model = pb.authStore.model;
 
-	// ── Info form ──────────────────────────────────────────────
+	// Info form
 	const [info, setInfo] = useState({
 		firstName: model?.firstName || "",
 		lastName: model?.lastName || "",
@@ -44,7 +44,7 @@ export default function ProfilePage() {
 	});
 	const [savingInfo, setSavingInfo] = useState(false);
 
-	// ── Email form ─────────────────────────────────────────────
+	// Email form
 	const [emailForm, setEmailForm] = useState({
 		newEmail: "",
 		currentPassword: "",
@@ -52,7 +52,7 @@ export default function ProfilePage() {
 	const [showEmailPassword, setShowEmailPassword] = useState(false);
 	const [savingEmail, setSavingEmail] = useState(false);
 
-	// ── Password form ──────────────────────────────────────────
+	// Password form
 	const [passwordForm, setPasswordForm] = useState({
 		currentPassword: "",
 		newPassword: "",
@@ -69,7 +69,7 @@ export default function ProfilePage() {
 		if (!pb.authStore.isValid) router.replace("/sign-in");
 	}, [router]);
 
-	// ── Password requirements ──────────────────────────────────
+	// Password requirements
 	const passwordRequirements = useMemo(
 		() => [
 			{
@@ -103,7 +103,7 @@ export default function ProfilePage() {
 
 	const isPasswordStrong = passwordRequirements.every((r) => r.valid);
 
-	// ── Handlers ───────────────────────────────────────────────
+	// Handlers
 	const handleInfoSave = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!info.firstName.trim() || !info.lastName.trim()) {
@@ -337,7 +337,7 @@ export default function ProfilePage() {
 
 					{/* Main panel */}
 					<div className="md:col-span-3 bg-white border border-gray-200 rounded-xl overflow-hidden">
-						{/* ── Personal Info ── */}
+						{/* Personal Info */}
 						{activeSection === "info" && (
 							<form onSubmit={handleInfoSave}>
 								<div className="px-5 py-4 border-b">
@@ -456,7 +456,7 @@ export default function ProfilePage() {
 							</form>
 						)}
 
-						{/* ── Email ── */}
+						{/* Email */}
 						{activeSection === "email" && (
 							<form onSubmit={handleEmailSave}>
 								<div className="px-5 py-4 border-b">
@@ -547,7 +547,7 @@ export default function ProfilePage() {
 							</form>
 						)}
 
-						{/* ── Password ── */}
+						{/* Password */}
 						{activeSection === "password" && (
 							<form onSubmit={handlePasswordSave}>
 								<div className="px-5 py-4 border-b">
@@ -674,7 +674,7 @@ export default function ProfilePage() {
 							</form>
 						)}
 
-						{/* ── Permissions ── */}
+						{/* Permissions */}
 						{activeSection === "permissions" && (
 							<div>
 								<div className="px-5 py-4 border-b">
