@@ -3,7 +3,8 @@ import "@/lib/i18n/i18n";
 import { useTranslation } from "react-i18next";
 
 import React, { useEffect, useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+// 1. Import Loader2 from lucide-react
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import pb from "@/lib/pocketbase";
@@ -20,6 +21,9 @@ import { checkAndLogin } from "@/app/src/services/authService";
 
 export default function SignIn() {
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+	// 2. Add a loading state
+	const [isLoading, setIsLoading] = useState(false);
 
 	const { t, i18n } = useTranslation();
 
@@ -59,6 +63,9 @@ export default function SignIn() {
 	const handleLogin = async (e: React.FormEvent) => {
 		e.preventDefault();
 
+		// 3. Set loading to true when starting the request
+		setIsLoading(true);
+
 		const result = await checkAndLogin(email, password);
 
 		if (result.success) {
@@ -71,6 +78,8 @@ export default function SignIn() {
 					</div>
 				</div>,
 			);
+			// We intentionally don't set isLoading to false here so the button
+			// stays in a loading state while Next.js routes to the dashboard.
 			return;
 		}
 
@@ -108,6 +117,9 @@ export default function SignIn() {
 				<div className="text-sm">{body}</div>
 			</div>,
 		);
+
+		// 4. Set loading back to false if there was an error
+		setIsLoading(false);
 	};
 
 	return (
@@ -189,15 +201,14 @@ export default function SignIn() {
 						</div>
 					</div>
 
-					<div
-						className="w-full inline-block group relative bg-[#c2c0c0c8] p-0.5 rounded-lg 
-               shadow-lg hover:shadow-xl transition-all duration-300 border border-[#bbbbbbc8]"
-					>
+					<div className="w-full inline-block group relative bg-[#c2c0c0c8] p-0.5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-[#bbbbbbc8]">
+						{/* 5. Update Button to handle disabled state and show the spinner */}
 						<Button
-							className="w-full h-16 text-lg cursor-pointer font-semibold bg-black hover:bg-neutral-900 
-                   text-white rounded-lg transition-all duration-300 
-                   group-hover:-translate-y-0.5 border-none flex items-center justify-center gap-2"
+							type="submit"
+							disabled={isLoading}
+							className="w-full h-16 text-lg cursor-pointer font-semibold bg-black hover:bg-neutral-900 text-white rounded-lg transition-all duration-300 group-hover:-translate-y-0.5 border-none flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
 						>
+							{isLoading && <Loader2 className="w-5 h-5 animate-spin" />}
 							{t("login.button")}
 						</Button>
 					</div>
