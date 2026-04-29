@@ -27,7 +27,7 @@ const SettingsPage = () => {
 	}, [i18n]);
 
 	return (
-		<div className="w-full flex flex-col gap-4 p-4">
+		<div className="w-full flex flex-col gap-4 p-4 bg-gray-50">
 			<span className="text-2xl text-start font-semibold mt-4">
 				{t("settings.title")}
 			</span>

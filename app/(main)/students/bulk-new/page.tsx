@@ -353,11 +353,32 @@ const AddInBulk = () => {
 	// ── Drag handlers
 	const handleDragOver = useCallback((e: React.DragEvent) => {
 		e.preventDefault();
+		e.stopPropagation(); // Prevent the browser from opening the file/folder
+
+		// This tells the OS/Browser that a copy is allowed
+		if (e.dataTransfer) {
+			e.dataTransfer.dropEffect = "copy";
+		}
+
 		setIsDragging(true);
 	}, []);
 
-	const handleDragLeave = useCallback(() => setIsDragging(false), []);
+	const handleDragLeave = useCallback((e: React.DragEvent) => {
+		e.preventDefault();
+		e.stopPropagation();
 
+		// Only stop dragging if we are actually leaving the container,
+		// not just moving over a child element (like the icon or text)
+		const rect = e.currentTarget.getBoundingClientRect();
+		if (
+			e.clientX <= rect.left ||
+			e.clientX >= rect.right ||
+			e.clientY <= rect.top ||
+			e.clientY >= rect.bottom
+		) {
+			setIsDragging(false);
+		}
+	}, []);
 	async function getFilesFromEntry(entry: FileSystemEntry): Promise<File[]> {
 		const files: File[] = [];
 		if (entry.isFile) {
@@ -672,36 +693,41 @@ const AddInBulk = () => {
 								onDragOver={handleDragOver}
 								onDragLeave={handleDragLeave}
 								onDrop={handleDrop}
-								onClick={() => folderInputRef.current?.click()} // Click anywhere to open
+								onClick={() => folderInputRef.current?.click()}
 								className={`cursor-pointer rounded-lg border-2 border-dashed p-14 text-center transition-all select-none ${
 									isDragging
 										? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
 										: "border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/40 hover:border-gray-400"
 								}`}
 							>
-								<FolderOpen
-									className={`w-12 h-12 mx-auto mb-3 ${isDragging ? "text-blue-500" : "text-gray-400"}`}
-								/>
-								<p className="text-base font-medium text-gray-700 dark:text-gray-200 mb-1">
-									{isDragging
-										? t("students.dropRelease")
-										: "Drag & Drop folders or click to select"}
-								</p>
+								{/* Wrap children in a div that ignores pointer events during drag */}
+								<div className="pointer-events-none">
+									<FolderOpen
+										className={`w-12 h-12 mx-auto mb-3 ${isDragging ? "text-blue-500" : "text-gray-400"}`}
+									/>
+									<p className="text-base font-medium text-gray-700 dark:text-gray-200 mb-1">
+										{isDragging
+											? t("students.dropRelease")
+											: "Drag & Drop folders or click to select"}
+									</p>
+									<p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+										Supports: JPG, PNG, WEBP, PDF
+									</p>
+								</div>
+
+								{/* The button should keep its pointer events so it stays clickable */}
 								<Button
 									variant="outline"
 									size="sm"
-									className="mt-4"
+									className="mt-4 relative z-10"
 									onClick={(e) => {
-										e.stopPropagation(); // Prevent double trigger from parent div
+										e.stopPropagation();
 										folderInputRef.current?.click();
 									}}
 								>
 									<FolderOpen className="w-4 h-4 mr-2" />
 									Select Folder
 								</Button>
-								<p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-									Supports: JPG, PNG, WEBP, PDF
-								</p>
 							</div>
 
 							{/* Folder list */}

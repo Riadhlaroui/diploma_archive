@@ -89,7 +89,7 @@ const AuditLogTable = () => {
 	}
 
 	return (
-		<div className="flex flex-col h-full mt-10 p-6 rounded-xl shadow-lg">
+		<div className="flex flex-col h-full mt-10 p-6 rounded-xl shadow-lg bg-gray-50">
 			<div className="flex gap-2 mb-4 items-center">
 				<h3 className="text-2xl font-semibold">{t("auditLogs.title")}</h3>
 				<Button

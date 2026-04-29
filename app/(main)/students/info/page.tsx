@@ -254,7 +254,7 @@ const StudentInfoPage = () => {
 	}
 
 	return (
-		<div className="p-4 md:p-6 mx-auto w-full">
+		<div className="p-4 md:p-6 mx-auto w-full bg-gray-50">
 			<ConfirmDialog
 				open={isDeleteDialogOpen}
 				onClose={() => setIsDeleteDialogOpen(false)}

@@ -243,7 +243,7 @@ export default function ProfilePage() {
 	];
 
 	return (
-		<div className="min-h-full p-6" dir={isRtl ? "rtl" : "ltr"}>
+		<div className="min-h-full p-6 bg-gray-50" dir={isRtl ? "rtl" : "ltr"}>
 			<div className="max-w-3xl mx-auto">
 				{/* Back */}
 				<button
