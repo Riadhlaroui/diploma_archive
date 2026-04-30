@@ -9,6 +9,7 @@ version: "3.9"
 
 services:
   web:
+    restart: unless-stopped
     build:
       context: .
       args:
@@ -27,6 +28,7 @@ services:
     command: "npm run start -- -p 3000 -H 0.0.0.0"
 
   pocketbase:
+    restart: unless-stopped
     build:
       context: ./pocketbase
     # REMOVE the ports entry for PocketBase for better security.
@@ -38,6 +40,7 @@ services:
 
   # --- NEW NGINX PROXY SERVICE ---
   proxy:
+    restart: unless-stopped
     image: nginx:alpine
     container_name: nextjs_proxy
     ports:
