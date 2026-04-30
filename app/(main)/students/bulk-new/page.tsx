@@ -410,15 +410,36 @@ const AddInBulk = () => {
 		const folderMap = new Map<string, File[]>();
 
 		allFiles.forEach((file) => {
-			const parts = file.webkitRelativePath.split("/");
-			const folderName = parts.length > 2 ? parts[1] : parts[0];
-
 			const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
-			if (SUPPORTED_EXTS.includes(ext)) {
-				if (!folderMap.has(folderName)) folderMap.set(folderName, []);
-				folderMap.get(folderName)?.push(file);
+			if (!SUPPORTED_EXTS.includes(ext)) return;
+
+			const parts = file.webkitRelativePath.split("/");
+			// parts[0] = the folder the user selected
+			// parts[1] = immediate child (subfolder name OR the file itself if depth=1)
+			// parts[last] = always the file name
+
+			let folderName: string;
+
+			if (parts.length === 2) {
+				// User selected a single student folder directly:
+				// "StudentName/file.jpg" → group under "StudentName"
+				folderName = parts[0];
+			} else if (parts.length >= 3) {
+				// User selected a parent folder containing student subfolders:
+				// "ParentFolder/StudentName/file.jpg" → group under "StudentName"
+				folderName = parts[1];
+			} else {
+				return; // flat file with no path info, skip
 			}
+
+			if (!folderMap.has(folderName)) folderMap.set(folderName, []);
+			folderMap.get(folderName)!.push(file);
 		});
+
+		if (folderMap.size === 0) {
+			toast.warning(t("students.noValidFilesFound"));
+			return;
+		}
 
 		const newFolders: DroppedFolder[] = Array.from(folderMap.entries()).map(
 			([name, files]) => ({
@@ -428,7 +449,17 @@ const AddInBulk = () => {
 			}),
 		);
 
-		setDropped((prev) => [...prev, ...newFolders]);
+		setDropped((prev) => {
+			const existingNames = new Set(prev.map((f) => f.name));
+			const unique = newFolders.filter((f) => !existingNames.has(f.name));
+			const dupes = newFolders.length - unique.length;
+			if (dupes > 0)
+				toast.warning(t("students.duplicatesSkipped", { count: dupes }));
+			if (unique.length > 0)
+				toast.success(t("students.foldersAdded", { count: unique.length }));
+			return [...prev, ...unique];
+		});
+
 		if (folderInputRef.current) folderInputRef.current.value = "";
 	};
 
