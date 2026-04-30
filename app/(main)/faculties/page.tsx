@@ -122,7 +122,7 @@ const FacultiesList = () => {
 	}
 
 	return (
-		<div className="relative p-4 flex-1 flex-col overflow-hidden bg-gray-50">
+		<div className="relative p-4 flex-1 flex-col overflow-hidden bg-[oklch(0.985_0_0)]">
 			<div className="flex gap-2 mb-4 items-center">
 				<h3
 					className="text-2xl font-semibold cursor-pointer hover:underline"
