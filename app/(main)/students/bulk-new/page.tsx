@@ -366,6 +366,22 @@ const AddInBulk = () => {
 		setIsDragging(true);
 	}, []);
 
+	// Add this helper near the top of the file, alongside your other helpers
+	function generateId(): string {
+		if (
+			typeof crypto !== "undefined" &&
+			typeof crypto.randomUUID === "function"
+		) {
+			return crypto.randomUUID();
+		}
+		// Fallback for non-secure contexts (HTTP)
+		return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+			const r = (Math.random() * 16) | 0;
+			const v = c === "x" ? r : (r & 0x3) | 0x8;
+			return v.toString(16);
+		});
+	}
+
 	const handleDragLeave = useCallback((e: React.DragEvent) => {
 		e.preventDefault();
 		e.stopPropagation();
@@ -443,7 +459,7 @@ const AddInBulk = () => {
 
 		const newFolders: DroppedFolder[] = Array.from(folderMap.entries()).map(
 			([name, files]) => ({
-				id: crypto.randomUUID(),
+				id: generateId(),
 				name,
 				files,
 			}),
@@ -504,7 +520,7 @@ const AddInBulk = () => {
 					const files = await getFilesFromEntry(dirEntry);
 					if (files.length > 0) {
 						newFolders.push({
-							id: crypto.randomUUID(),
+							id: generateId(),
 							name: dirEntry.name,
 							files,
 						});
