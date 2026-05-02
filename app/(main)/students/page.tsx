@@ -677,7 +677,7 @@ const StudentPage = () => {
 								<TableCell colSpan={11} className="text-center py-10">
 									<Loader2 className="mx-auto h-8 w-8 animate-spin text-gray-500 dark:text-gray-400" />
 									<span className="text-sm text-gray-500 dark:text-gray-400 mt-2 block">
-										{t("loading")}
+										{t("common.loading")}
 									</span>
 								</TableCell>
 							</TableRow>

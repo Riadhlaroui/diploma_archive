@@ -1,5 +1,12 @@
 // lib/constants/errors.ts
 export const ERROR_KEYS = {
+	// Authentication Errors
+	INVALID_CREDENTIALS: "errors.sign-in.invalidCredentials",
+	ACCOUNT_DISABLED: "errors.sign-in.accountDisabled",
+	ACCOUNT_EXPIRED: "errors.sign-in.accountExpired",
+	TOO_MANY_ATTEMPTS: "errors.sign-in.tooManyAttempts",
+	NOT_FOUND: "errors.sign-in.notFound",
+
 	// Faculties Errors
 	CREATE_FACULTY_FAILED: "errors.createFacultyFailed",
 	UPDATE_FACULTY_FAILED: "errors.updateFacultyFailed",

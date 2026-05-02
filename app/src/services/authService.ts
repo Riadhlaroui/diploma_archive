@@ -1,13 +1,11 @@
-// application/services/authService.ts
 import { ensureUserIsAuthenticated } from "../core/use-cases/ensureUserIsAuthenticated";
 import pb from "@/lib/pocketbase";
+import { ERROR_KEYS, ErrorKey } from "@/lib/constants/errors";
 
-type AuthCheckResult =
-	| { success: true }
-	| {
-			success: false;
-			reason: "disabled" | "expired" | "invalid_credentials" | "unknown";
-	  };
+interface AuthCheckResult {
+	success: boolean;
+	errorKey?: ErrorKey;
+}
 
 export function checkAuthOrRedirect(
 	router: ReturnType<typeof import("next/navigation").useRouter>,
@@ -30,19 +28,25 @@ export async function checkAndLogin(
 
 		if (user.isActive === false) {
 			pb.authStore.clear();
-			return { success: false, reason: "disabled" };
+			return { success: false, errorKey: ERROR_KEYS.ACCOUNT_DISABLED };
 		}
 
 		if (user.expiresAt && new Date(user.expiresAt) < new Date()) {
 			pb.authStore.clear();
-			return { success: false, reason: "expired" };
+			return { success: false, errorKey: ERROR_KEYS.ACCOUNT_EXPIRED };
 		}
 
 		return { success: true };
 	} catch (error: any) {
 		if (error?.status === 400) {
-			return { success: false, reason: "invalid_credentials" };
+			return { success: false, errorKey: ERROR_KEYS.INVALID_CREDENTIALS };
 		}
-		return { success: false, reason: "unknown" };
+		if (error?.status === 404) {
+			return { success: false, errorKey: ERROR_KEYS.NOT_FOUND };
+		}
+		if (error?.status === 429) {
+			return { success: false, errorKey: ERROR_KEYS.TOO_MANY_ATTEMPTS };
+		}
+		return { success: false, errorKey: ERROR_KEYS.UNKNOWN_ERROR };
 	}
 }

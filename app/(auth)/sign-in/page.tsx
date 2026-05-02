@@ -1,14 +1,8 @@
 "use client";
 import "@/lib/i18n/i18n";
-import { useTranslation } from "react-i18next";
-
-import React, { useEffect, useState } from "react";
-// 1. Import Loader2 from lucide-react
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import pb from "@/lib/pocketbase";
-import { toast } from "sonner";
+
 import FullScreenLoader from "@/components/FullScreenLoader";
 import {
 	Select,
@@ -17,110 +11,27 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { checkAndLogin } from "@/app/src/services/authService";
+import { useSignInForm } from "@/app/src/features/auth/hooks/useSignInForm";
 
 export default function SignIn() {
-	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
-	// 2. Add a loading state
-	const [isLoading, setIsLoading] = useState(false);
-
-	const { t, i18n } = useTranslation();
+	const {
+		email,
+		setEmail,
+		password,
+		setPassword,
+		isLoading,
+		isPasswordVisible,
+		checkingAuth,
+		t,
+		i18n,
+		switchLanguage,
+		togglePasswordVisibility,
+		handleLogin,
+	} = useSignInForm();
 
 	const isRtl = i18n.language === "ar";
 
-	const switchLanguage = (lang: "en" | "fr" | "ar") => {
-		i18n.changeLanguage(lang);
-		localStorage.setItem("lang", lang);
-	};
-
-	useEffect(() => {
-		const savedLang = localStorage.getItem("lang") as "en" | "fr" | null;
-		if (savedLang && savedLang !== i18n.language) {
-			i18n.changeLanguage(savedLang);
-		}
-	}, [i18n]);
-
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const router = useRouter();
-	const [checkingAuth, setCheckingAuth] = React.useState(true);
-
-	useEffect(() => {
-		if (pb.authStore.isValid) {
-			router.replace("/dashboard");
-		} else {
-			setCheckingAuth(false);
-		}
-	}, [router]);
-
 	if (checkingAuth) return <FullScreenLoader />;
-
-	const togglePasswordVisibility = () => {
-		setIsPasswordVisible((prev) => !prev);
-	};
-
-	const handleLogin = async (e: React.FormEvent) => {
-		e.preventDefault();
-
-		// 3. Set loading to true when starting the request
-		setIsLoading(true);
-
-		const result = await checkAndLogin(email, password);
-
-		if (result.success) {
-			router.push("/dashboard");
-			toast.success(
-				<div className="flex items-center gap-2">
-					<div>
-						<div className="font-semibold">{t("login.success")}</div>
-						<div className="text-sm">{t("login.welcome")}</div>
-					</div>
-				</div>,
-			);
-			// We intentionally don't set isLoading to false here so the button
-			// stays in a loading state while Next.js routes to the dashboard.
-			return;
-		}
-
-		const messages: Record<
-			typeof result.reason,
-			{ title: string; body: string }
-		> = {
-			disabled: {
-				title: t("login.disabledTitle") || "Account Disabled",
-				body:
-					t("login.disabledMessage") ||
-					"Your account has been disabled. Contact an administrator.",
-			},
-			expired: {
-				title: t("login.expiredTitle") || "Account Expired",
-				body:
-					t("login.expiredMessage") ||
-					"Your account has expired. Contact an administrator.",
-			},
-			invalid_credentials: {
-				title: t("login.failed") || "Login Failed",
-				body: t("login.incorrect") || "Incorrect email or password.",
-			},
-			unknown: {
-				title: t("login.failed") || "Login Failed",
-				body:
-					t("login.unknownError") || "Something went wrong. Please try again.",
-			},
-		};
-
-		const { title, body } = messages[result.reason];
-		toast.error(
-			<div>
-				<div className="font-semibold">{title}</div>
-				<div className="text-sm">{body}</div>
-			</div>,
-		);
-
-		// 4. Set loading back to false if there was an error
-		setIsLoading(false);
-	};
 
 	return (
 		<div className="relative flex flex-col items-center justify-center h-screen overflow-hidden">
@@ -158,14 +69,13 @@ export default function SignIn() {
 							<input
 								type="email"
 								className="peer w-full h-16 bg-[#D7DDE3] dark:bg-transparent dark:border-2 dark:text-white text-black border rounded-[3.5px] px-3 pt-6 pb-2 focus:outline-none"
-								placeholder=""
 								dir={isRtl ? "rtl" : "ltr"}
 								onChange={(e) => setEmail(e.target.value)}
 							/>
 							<label
 								className={`absolute top-2 ${isRtl ? "right-3" : "left-3"} text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white`}
 							>
-								{t("login.email")}
+								{t("sign-in.email")}
 								<span className="text-[#D81212]">*</span>
 							</label>
 						</div>
@@ -182,7 +92,7 @@ export default function SignIn() {
 							<label
 								className={`absolute top-2 ${isRtl ? "right-3" : "left-3"} text-[#697079] font-semibold text-sm transition-all duration-200 peer-focus:text-black dark:peer-focus:text-white`}
 							>
-								{t("login.password")}
+								{t("sign-in.password")}
 								<span className="text-[#D81212]">*</span>
 							</label>
 							<button
@@ -209,7 +119,7 @@ export default function SignIn() {
 							className="w-full h-16 text-lg cursor-pointer font-semibold bg-black hover:bg-neutral-900 text-white rounded-lg transition-all duration-300 group-hover:-translate-y-0.5 border-none flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
 						>
 							{isLoading && <Loader2 className="w-5 h-5 animate-spin" />}
-							{t("login.button")}
+							{t("sign-in.button")}
 						</Button>
 					</div>
 				</div>

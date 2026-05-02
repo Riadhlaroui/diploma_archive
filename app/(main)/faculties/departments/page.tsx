@@ -257,7 +257,7 @@ export default function DepartmentsPage() {
 								<TableCell colSpan={4} className="text-center py-6">
 									<Loader2 className="mx-auto animate-spin text-gray-500" />
 									<span className="text-sm text-gray-500 mt-2 block">
-										{t("loading")}
+										{t("common.loading")}
 									</span>
 								</TableCell>
 							</TableRow>

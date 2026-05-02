@@ -262,7 +262,7 @@ export default function MajorsPage() {
 							<TableRow>
 								<TableCell colSpan={4} className="text-center py-6">
 									<Loader2 className="animate-spin mx-auto text-gray-500" />
-									<span>{t("loading")}</span>
+									<span>{t("common.loading")}</span>
 								</TableCell>
 							</TableRow>
 						) : majors.length > 0 ? (

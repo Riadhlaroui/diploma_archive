@@ -4,14 +4,14 @@
 	"noPermission": "ليس لديك إذن للوصول إلى هذه الصفحة",
 	"redirecting": "جاري إعادة التوجيه...",
 	"welcome": "مرحبًا بعودتك!",
-	"login": {
+
+	"sign-in": {
 		"email": "البريد الإلكتروني",
 		"password": "كلمة المرور",
 		"forgotPassword": "هل نسيت كلمة المرور؟",
 		"button": "تسجيل الدخول",
 		"success": "تم تسجيل الدخول بنجاح",
 		"welcome": "أهلًا وسهلًا!",
-		"failed": "فشل تسجيل الدخول",
 		"incorrect": "بيانات الدخول غير صحيحة",
 		"disabledTitle": "الحساب معطّل",
 		"disabledMessage": "تم تعطيل حسابك. يرجى التواصل مع المسؤول.",
@@ -19,6 +19,7 @@
 		"expiredMessage": "انتهت صلاحية حسابك. يرجى التواصل مع المسؤول.",
 		"unknownError": "حدث خطأ غير متوقع. يرجى المحاولة مجددًا."
 	},
+
 	"noAccount": "ليس لديك حساب؟",
 	"signUp": "سجّل الآن",
 	"language": "اللغة",
@@ -27,6 +28,7 @@
 		"title": "لوحة التحكم",
 		"searchPlaceholder": "ابحث...",
 		"overview": "نظرة عامة",
+
 		"stats": {
 			"faculties": "الكليات",
 			"departments": "الأقسام",
@@ -276,25 +278,10 @@
 		"you": "أنت",
 		"warningMessage": "سيتم حذف {{count}} مستخدم(ين) نهائياً. لا يمكن التراجع عن هذا الإجراء."
 	},
+
 	"roles": {
 		"admin": "مدير",
 		"staff": "موظف"
-	},
-	"common": {
-		"cancel": "إلغاء",
-		"delete": "حذف",
-		"edit": "تعديل",
-		"view": "عرض",
-		"back": "عودة",
-		"na": "غير متوفر",
-		"copy": "نسخ {{field}}",
-		"confirm": "تأكيد ({{count}})",
-		"dir": "rtl",
-		"optional": "اختياري",
-		"pause": "إيقاف مؤقت",
-		"resume": "استئناف",
-		"done": "تم",
-		"searchPlaceholder": "بحث..."
 	},
 
 	"editUserDialog": {
@@ -533,8 +520,6 @@
 		"apply": "تطبيق التصفية",
 		"graduationYear": "سنة التخرج"
 	},
-
-	"loading": "جارٍ التحميل...",
 
 	"departments": {
 		"titleWithFaculty": "الاقسام في: {{faculty}}",
@@ -835,6 +820,7 @@
 		"teamPlaceholder": "ابحث في قائمة الموظفين...",
 		"button": "بحث"
 	},
+
 	"terms": {
 		"faculty": "كلية",
 		"department": "قسم",
@@ -843,12 +829,38 @@
 		"specialty": "تخصص"
 	},
 
+	"common": {
+		"cancel": "إلغاء",
+		"delete": "حذف",
+		"edit": "تعديل",
+		"view": "عرض",
+		"back": "عودة",
+		"na": "غير متوفر",
+		"copy": "نسخ {{field}}",
+		"confirm": "تأكيد ({{count}})",
+		"dir": "rtl",
+		"optional": "اختياري",
+		"pause": "إيقاف مؤقت",
+		"resume": "استئناف",
+		"done": "تم",
+		"searchPlaceholder": "بحث...",
+		"loading": "جارٍ التحميل..."
+	},
+
 	"errors": {
 		"invalidYearRange": "لا يمكن أن يكون سنة التسجيل بعد سنة التخرج.",
 		"requiredField": "هذا الحقل مطلوب.",
 		"uploadFailed": "فشل رفع الملف. يرجى المحاولة مرة أخرى.",
 		"deleteSpecialty": "فشل حذف التخصص '{{name}}'.",
 		"requiredRelation": "لا يمكن حذف '{{name}}' لأنه قيد الاستخدام من قبل الطلاب.",
-		"generic400": "فشل حذف التخصص: {{message}}"
+		"generic400": "فشل حذف التخصص: {{message}}",
+
+		"sign-in": {
+			"invalidCredentials": "فشل تسجيل الدخول",
+			"accountDisabled": "تم تعطيل حسابك يرجى الاتصال بالمسؤول",
+			"accountExpired": "انتهت صلاحية حسابك يرجى الاتصال بالمسؤول",
+			"tooManyAttempts": "عدد محاولات تسجيل الدخول كثيرة جدًا يرجى المحاولة مرة أخرى لاحقًا",
+			"NotFound": "لم يتم العثور على حساب مرتبط بهذا البريد الإلكتروني"
+		}
 	}
 }

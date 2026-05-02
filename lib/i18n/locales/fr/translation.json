@@ -7,7 +7,8 @@
 	"email": "E-mail",
 	"password": "Mot de passe",
 	"forgotPassword": "Mot de passe oublié?",
-	"login": {
+
+	"sign-in": {
 		"email": "E-mail",
 		"password": "Mot de passe",
 		"button": "Se connecter",
@@ -211,6 +212,7 @@
 		"fetchError": "Une erreur est survenue lors du chargement des journaux d'audit.",
 		"noLogs": "Aucun journal disponible."
 	},
+
 	"pagination": {
 		"previous": "Précédent",
 		"next": "Suivant",
@@ -277,25 +279,10 @@
 		"you": "Vous",
 		"warningMessage": "{{count}} utilisateur(s) sera supprimé définitivement. Cette action est irréversible."
 	},
+
 	"roles": {
 		"admin": "Administrateur",
 		"staff": "Personnel"
-	},
-	"common": {
-		"cancel": "Annuler",
-		"delete": "Supprimer",
-		"edit": "Modifier",
-		"view": "Voir",
-		"back": "Retour",
-		"na": "N/D",
-		"copy": "Copier {{field}}",
-		"confirm": "Confirmer ({{count}})",
-		"dir": "ltr",
-		"optional": "facultatif",
-		"pause": "Pause",
-		"resume": "Reprendre",
-		"done": "Terminer",
-		"searchPlaceholder": "Rechercher..."
 	},
 
 	"editUserDialog": {
@@ -505,6 +492,7 @@
 		"missingFields": "Veuillez sélectionner un type de document et un fichier",
 		"success": "Document ajouté aux modifications en attente"
 	},
+
 	"filterPanel": {
 		"title": "Rechercher et filtrer les étudiants",
 		"close": "Fermer le panneau de filtre",
@@ -527,8 +515,6 @@
 		"apply": "Appliquer les filtres",
 		"graduationYear": "Année de Diplôme"
 	},
-
-	"loading": "Chargement...",
 
 	"departments": {
 		"titleWithFaculty": "Départements dans: {{faculty}}",
@@ -826,6 +812,7 @@
 		"button": "Rechercher",
 		"teamPlaceholder": "Rechercher du personnel..."
 	},
+
 	"terms": {
 		"faculty": "Faculté",
 		"department": "Département",
@@ -834,12 +821,38 @@
 		"specialty": "Spécialité"
 	},
 
+	"common": {
+		"cancel": "Annuler",
+		"delete": "Supprimer",
+		"edit": "Modifier",
+		"view": "Voir",
+		"back": "Retour",
+		"na": "N/D",
+		"copy": "Copier {{field}}",
+		"confirm": "Confirmer ({{count}})",
+		"dir": "ltr",
+		"optional": "facultatif",
+		"pause": "Pause",
+		"resume": "Reprendre",
+		"done": "Terminer",
+		"searchPlaceholder": "Rechercher...",
+		"loading": "Chargement..."
+	},
+
 	"errors": {
 		"invalidYearRange": "L'année d'inscription ne peut pas être après l'année de remise des diplômes.",
 		"requiredField": "Ce champ est obligatoire.",
 		"uploadFailed": "Échec du téléchargement. Veuillez réessayer.",
 		"deleteSpecialty": "Échec de la suppression de la spécialité '{{name}}'.",
 		"requiredRelation": "Impossible de supprimer '{{name}}' car elle est utilisée par des étudiants.",
-		"generic400": "Échec de la suppression de la spécialité : {{message}}"
+		"generic400": "Échec de la suppression de la spécialité : {{message}}",
+
+		"sign-in": {
+			"invalidCredentials": "Identifiants invalides. Veuillez réessayer.",
+			"accountDisabled": "Votre compte a été désactivé. Veuillez contacter l'administrateur.",
+			"accountExpired": "Votre compte a expiré. Veuillez contacter l'administrateur.",
+			"tooManyAttempts": "Trop de tentatives de connexion. Veuillez réessayer plus tard.",
+			"notFound": "Aucun compte trouvé avec cet e-mail."
+		}
 	}
 }

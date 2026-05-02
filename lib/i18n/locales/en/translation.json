@@ -7,7 +7,8 @@
 	"email": "Email",
 	"password": "Password",
 	"forgotPassword": "Forgot password?",
-	"login": {
+
+	"sign-in": {
 		"email": "Email",
 		"password": "Password",
 		"button": "Sign in",
@@ -211,6 +212,7 @@
 		"fetchError": "An error occurred while fetching audit logs.",
 		"noLogs": "No logs available."
 	},
+
 	"pagination": {
 		"previous": "Previous",
 		"next": "Next",
@@ -222,6 +224,7 @@
 		"show": "Show",
 		"perPage": "per page"
 	},
+
 	"actions": {
 		"create_user": "Create User",
 		"delete_user": "Delete User",
@@ -287,25 +290,10 @@
 		"you": "You",
 		"warningMessage": "{{count}} user(s) will be permanently deleted. This cannot be undone."
 	},
+
 	"roles": {
 		"admin": "Admin",
 		"staff": "Staff"
-	},
-	"common": {
-		"cancel": "Cancel",
-		"delete": "Delete",
-		"edit": "Edit",
-		"view": "View",
-		"back": "Back",
-		"na": "N/A",
-		"copy": "Copy {{field}}",
-		"confirm": "Confirm ({{count}})",
-		"dir": "ltr",
-		"optional": "optional",
-		"pause": "Pause",
-		"resume": "Resume",
-		"done": "Done",
-		"searchPlaceholder": "Search..."
 	},
 
 	"faculties": {
@@ -536,8 +524,6 @@
 		"apply": "Apply Filters",
 		"graduationYear": "Graduation Year"
 	},
-
-	"loading": "Loading...",
 
 	"confirm": {
 		"title": "Confirm Deletion",
@@ -840,12 +826,31 @@
 		"button": "Search",
 		"teamPlaceholder": "Search staff..."
 	},
+
 	"terms": {
 		"faculty": "Faculty",
 		"department": "Department",
 		"field": "Field",
 		"major": "Major",
 		"specialty": "Specialty"
+	},
+
+	"common": {
+		"cancel": "Cancel",
+		"delete": "Delete",
+		"edit": "Edit",
+		"view": "View",
+		"back": "Back",
+		"na": "N/A",
+		"copy": "Copy {{field}}",
+		"confirm": "Confirm ({{count}})",
+		"dir": "ltr",
+		"optional": "optional",
+		"pause": "Pause",
+		"resume": "Resume",
+		"done": "Done",
+		"searchPlaceholder": "Search...",
+		"loading": "Loading..."
 	},
 
 	"errors": {
@@ -855,6 +860,14 @@
 		"uploadFailed": "Failed to upload file. Please try again.",
 		"deleteSpecialty": "Failed to delete specialty '{{name}}'.",
 		"requiredRelation": "Cannot delete '{{name}}' because it's being used by students.",
-		"generic400": "Failed to delete specialty: {{message}}"
+		"generic400": "Failed to delete specialty: {{message}}",
+
+		"sign-in": {
+			"invalidCredentials": "Invalid email or password.",
+			"accountDisabled": "Your account has been disabled. Please contact the administrator.",
+			"accountExpired": "Your account has expired. Please contact the administrator.",
+			"tooManyAttempts": "Too many failed login attempts. Please try again later.",
+			"notFound": "No account found with that email."
+		}
 	}
 }
