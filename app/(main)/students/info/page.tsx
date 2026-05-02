@@ -49,14 +49,12 @@ interface Document {
 	id: string;
 	typeId: string;
 	studentId: string;
-	fileId: string; // ADDED
+	fileId: string | string[];
 	expand?: {
 		fileId?: any;
 		typeId?: { name: string };
 	};
-	typeInfo?: {
-		name: string;
-	};
+	typeInfo?: { name: string };
 }
 
 const StudentInfoPage = () => {
@@ -127,13 +125,12 @@ const StudentInfoPage = () => {
 				expand: studentData.expand,
 			});
 
-			// FIXED: Store fileId in document state
 			setDocuments(
 				docs.map((doc: any) => ({
 					id: doc.id,
 					typeId: doc.typeId ?? "",
 					studentId: doc.studentId ?? "",
-					fileId: doc.fileId ?? "", // ADDED
+					fileId: doc.fileId ?? "",
 					expand: doc.expand,
 					typeInfo: doc.typeInfo,
 				})),
@@ -192,19 +189,19 @@ const StudentInfoPage = () => {
 		if (!student) return;
 
 		try {
-			// Delete all documents and associated files
-			for (const doc of documents) {
-				try {
-					if (doc.fileId) {
-						await pb.collection("Archive_files").delete(doc.fileId);
-					}
-					await pb.collection("Archive_documents").delete(doc.id);
-				} catch (err) {
-					console.warn("Failed to delete document or file:", err);
-				}
-			}
+			// Collect all file IDs across all documents (fileId is a multi-relation)
+			const fileIds = documents.flatMap((doc) => {
+				const raw = doc.fileId;
+				if (!raw) return [];
+				return Array.isArray(raw) ? raw : [raw];
+			});
 
-			// Delete the student record
+			// Delete Archive_files records — PocketBase cascades to Archive_documents
+			await Promise.allSettled(
+				fileIds.map((id) => pb.collection("Archive_files").delete(id)),
+			);
+
+			// Delete the student — cascades to any remaining Archive_documents
 			await pb.collection("Archive_students").delete(student.id);
 
 			toast.success(t("students.deleteSuccess"));

@@ -11,6 +11,17 @@ type StudentPayload = {
 	specialtyId: string;
 };
 
+interface StudentFilter {
+	matricule?: string;
+	graduationYear?: string;
+	searchQuery?: string;
+	facultyId?: string;
+	departmentId?: string;
+	fieldId?: string;
+	majorId?: string;
+	specialtyId?: string;
+}
+
 export type FileWithType = {
 	file: File;
 	fileType: string;
@@ -221,17 +232,6 @@ export async function fetchStudents(page = 1, perPage = 15) {
 		console.error("Error fetching students:", error);
 		return { items: [], totalPages: 1 };
 	}
-}
-
-interface StudentFilter {
-	matricule?: string;
-	graduationYear?: string;
-	searchQuery?: string;
-	facultyId?: string;
-	departmentId?: string;
-	fieldId?: string;
-	majorId?: string;
-	specialtyId?: string;
 }
 
 export async function searchStudents(
