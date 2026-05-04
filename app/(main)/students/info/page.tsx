@@ -189,19 +189,25 @@ const StudentInfoPage = () => {
 		if (!student) return;
 
 		try {
-			// Collect all file IDs across all documents (fileId is a multi-relation)
-			const fileIds = documents.flatMap((doc) => {
+			// Fetch all Archive_documents for this student fresh at delete time
+			const docs = await pb.collection("Archive_documents").getFullList({
+				filter: `studentId = "${student.id}"`,
+				fields: "id,fileId", // only what we need
+			});
+
+			// fileId is a multi-relation — always normalize to array of strings
+			const fileIds = docs.flatMap((doc) => {
 				const raw = doc.fileId;
 				if (!raw) return [];
 				return Array.isArray(raw) ? raw : [raw];
 			});
 
-			// Delete Archive_files records — PocketBase cascades to Archive_documents
+			// Deleting Archive_files records also deletes the actual bytes from storage
 			await Promise.allSettled(
 				fileIds.map((id) => pb.collection("Archive_files").delete(id)),
 			);
 
-			// Delete the student — cascades to any remaining Archive_documents
+			// Deleting the student cascades to any Archive_documents not yet cleaned up
 			await pb.collection("Archive_students").delete(student.id);
 
 			toast.success(t("students.deleteSuccess"));
