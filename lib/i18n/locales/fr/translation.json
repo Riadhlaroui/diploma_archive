@@ -1,30 +1,21 @@
 {
 	"GoToLogin": "Aller à la connexion",
+	"language": "Langue",
 
 	"noPermission": "Vous n'avez pas la permission d'accéder à cette page",
 	"redirecting": "Redirection en cours...",
 	"welcome": "Bon retour!",
-	"email": "E-mail",
-	"password": "Mot de passe",
-	"forgotPassword": "Mot de passe oublié?",
 
 	"sign-in": {
 		"email": "E-mail",
 		"password": "Mot de passe",
 		"button": "Se connecter",
 		"success": "Connexion réussie",
-		"welcome": "Bienvenue!",
-		"failed": "Échec de la connexion",
-		"incorrect": "Identifiants incorrects",
-		"disabledTitle": "Compte désactivé",
-		"disabledMessage": "Votre compte a été désactivé. Contactez un administrateur.",
-		"expiredTitle": "Compte expiré",
-		"expiredMessage": "Votre compte a expiré. Contactez un administrateur.",
-		"unknownError": "Une erreur est survenue. Veuillez réessayer."
+		"welcome": "Bienvenue!"
 	},
+
 	"noAccount": "Vous n'avez pas de compte?",
 	"signUp": "S'inscrire",
-	"language": "Langue",
 
 	"dashboard": {
 		"title": "Tableau de Bord",
@@ -90,16 +81,6 @@
 		"infoUpdated": "Profil mis à jour avec succès",
 		"emailUpdated": "E-mail mis à jour avec succès",
 		"passwordUpdated": "Mot de passe mis à jour avec succès",
-		"errors": {
-			"nameRequired": "Le prénom et le nom sont requis",
-			"fillAll": "Veuillez remplir tous les champs",
-			"invalidEmail": "Veuillez entrer une adresse e-mail valide",
-			"sameEmail": "Le nouvel e-mail doit être différent de l'actuel",
-			"emailExists": "Cet e-mail est déjà utilisé par un autre compte",
-			"wrongPassword": "Le mot de passe actuel est incorrect",
-			"samePassword": "Le nouveau mot de passe doit être différent de l'actuel",
-			"updateFailed": "La mise à jour a échoué. Veuillez réessayer."
-		},
 		"permissionsDescription": "Vue en lecture seule de ce à quoi vous avez accès dans ce système",
 		"adminAccessNote": "En tant qu'administrateur, vous avez accès à toutes les fonctionnalités",
 		"permissionsGranted": "Permissions accordées"
@@ -853,6 +834,17 @@
 			"accountExpired": "Votre compte a expiré. Veuillez contacter l'administrateur.",
 			"tooManyAttempts": "Trop de tentatives de connexion. Veuillez réessayer plus tard.",
 			"notFound": "Aucun compte trouvé avec cet e-mail."
+		},
+
+		"profile": {
+			"nameRequired": "Le prénom et le nom sont requis",
+			"fillAll": "Veuillez remplir tous les champs",
+			"invalidEmail": "Veuillez entrer une adresse e-mail valide",
+			"sameEmail": "Le nouvel e-mail doit être différent de l'actuel",
+			"emailExists": "Cet e-mail est déjà utilisé par un autre compte",
+			"wrongPassword": "Le mot de passe actuel est incorrect",
+			"samePassword": "Le nouveau mot de passe doit être différent de l'actuel",
+			"updateFailed": "La mise à jour a échoué. Veuillez réessayer."
 		}
 	}
 }

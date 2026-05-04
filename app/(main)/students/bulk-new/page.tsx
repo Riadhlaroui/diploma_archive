@@ -10,7 +10,6 @@ import {
 	Play,
 	CheckCircle,
 	XCircle,
-	Loader2,
 	FileText,
 	ChevronDown,
 	ChevronUp,
@@ -33,6 +32,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import pb from "@/lib/pocketbase";
 import { YearPicker } from "@/components/ui/YearPicker";
+import { ERROR_KEYS } from "@/lib/constants/errors";
 
 // Types
 
@@ -544,12 +544,8 @@ const AddInBulk = () => {
 	}, []);
 
 	const handleStartReview = useCallback(() => {
-		// Final safety check before proceeding
 		if (isYearRangeInvalid) {
-			toast.error(
-				t("errors.invalidYearRange") ||
-					"Enrollment year cannot be after graduation year.",
-			);
+			toast.error(t(ERROR_KEYS.INVALID_YEAR_RANGE));
 			return;
 		}
 

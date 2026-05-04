@@ -1,30 +1,21 @@
 {
 	"GoToLogin": "Go to Login",
+	"language": "Language",
 
 	"noPermission": "You don't have permission to access this page",
 	"redirecting": "Redirecting...",
 	"welcome": "Welcome back!",
-	"email": "Email",
-	"password": "Password",
-	"forgotPassword": "Forgot password?",
 
 	"sign-in": {
 		"email": "Email",
 		"password": "Password",
 		"button": "Sign in",
 		"success": "Login successful",
-		"welcome": "Welcome!",
-		"failed": "Login failed",
-		"incorrect": "Incorrect credentials",
-		"disabledTitle": "Account Disabled",
-		"disabledMessage": "Your account has been disabled. Contact an administrator.",
-		"expiredTitle": "Account Expired",
-		"expiredMessage": "Your account has expired. Contact an administrator.",
-		"unknownError": "Something went wrong. Please try again."
+		"welcome": "Welcome!"
 	},
+
 	"noAccount": "Don't have an account?",
 	"signUp": "Sign up",
-	"language": "Language",
 
 	"dashboard": {
 		"title": "Dashboard",
@@ -90,16 +81,6 @@
 		"infoUpdated": "Profile updated successfully",
 		"emailUpdated": "Email updated successfully",
 		"passwordUpdated": "Password updated successfully",
-		"errors": {
-			"nameRequired": "First and last name are required",
-			"fillAll": "Please fill in all fields",
-			"invalidEmail": "Please enter a valid email address",
-			"sameEmail": "New email must be different from your current email",
-			"emailExists": "This email is already in use by another account",
-			"wrongPassword": "Current password is incorrect",
-			"samePassword": "New password must be different from your current password",
-			"updateFailed": "Update failed. Please try again."
-		},
 		"permissionsDescription": "A read-only view of what you can access in this system",
 		"adminAccessNote": "As an admin you have unrestricted access to all features",
 		"permissionsGranted": "Permissions granted"
@@ -868,6 +849,17 @@
 			"accountExpired": "Your account has expired. Please contact the administrator.",
 			"tooManyAttempts": "Too many failed login attempts. Please try again later.",
 			"notFound": "No account found with that email."
+		},
+
+		"profile": {
+			"nameRequired": "First and last name are required",
+			"fillAll": "Please fill in all fields",
+			"invalidEmail": "Please enter a valid email address",
+			"sameEmail": "New email must be different from your current email",
+			"emailExists": "This email is already in use by another account",
+			"wrongPassword": "Current password is incorrect",
+			"samePassword": "New password must be different from your current password",
+			"updateFailed": "Update failed. Please try again."
 		}
 	}
 }
