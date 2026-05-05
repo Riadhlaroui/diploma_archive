@@ -20,6 +20,26 @@ import {
 } from "lucide-react";
 import { t } from "i18next";
 
+const COLLECTION_ROUTES: Record<string, { path: string; paramKey: string }> = {
+	Archive_faculties: { path: "/faculties", paramKey: "" },
+	Archive_departments: {
+		path: "/faculties/departments",
+		paramKey: "facultyId",
+	},
+	Archive_fields: {
+		path: "/faculties/departments/fields",
+		paramKey: "departmentId",
+	},
+	Archive_majors: {
+		path: "/faculties/departments/fields/majors",
+		paramKey: "fieldId",
+	},
+	Archive_specialties: {
+		path: "/faculties/departments/fields/majors/specialties",
+		paramKey: "majorId",
+	},
+};
+
 // --- Configuration ---
 const HIERARCHY_MAP: Record<
 	string,
@@ -64,13 +84,16 @@ function TreeNode({
 	id,
 	label,
 	depth = 0,
+	parentId,
 }: {
 	collection: string;
 	id: string;
 	label: string;
 	depth?: number;
+	parentId?: string;
 }) {
 	const { i18n } = useTranslation();
+	const router = useRouter();
 	const [isOpen, setIsOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [children, setChildren] = useState<any[]>([]);
@@ -103,6 +126,17 @@ function TreeNode({
 		setIsOpen(!isOpen);
 	};
 
+	const handleNavigate = (e: React.MouseEvent) => {
+		e.stopPropagation();
+		const route = COLLECTION_ROUTES[collection];
+		if (!route) return;
+		const url =
+			route.paramKey && parentId
+				? `${route.path}?${route.paramKey}=${parentId}`
+				: route.path;
+		router.push(url);
+	};
+
 	const indentationClass = `ps-${depth * 4}`;
 	const isRtl = i18n.dir() === "rtl";
 	const borderContainerClasses = isRtl
@@ -114,8 +148,10 @@ function TreeNode({
 			className={`select-none text-gray-800 dark:text-gray-200 ${indentationClass}`}
 		>
 			<div
-				className={`flex items-center gap-2 py-1.5 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors`}
+				className={`flex items-center gap-2 py-1.5 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors group`}
 				onClick={handleToggle}
+				onDoubleClick={handleNavigate}
+				title="Double-click to open"
 			>
 				<div className="text-gray-400 w-4 h-4 flex items-center justify-center shrink-0">
 					{loading ? (
@@ -155,6 +191,7 @@ function TreeNode({
 									id={child.id}
 									label={nextLabel}
 									depth={depth + 1}
+									parentId={id} // ← add this
 								/>
 							);
 						})
