@@ -1,7 +1,10 @@
-import XLSX from "xlsx";
+import { createRequire } from "module";
 import * as path from "path";
 import * as fs from "fs";
 import { fileURLToPath } from "url";
+
+const require = createRequire(import.meta.url);
+const XLSX = require("xlsx");
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,7 +39,10 @@ async function pbCreate(collection: string, body: Record<string, unknown>) {
 	return res.json() as Promise<{ id: string }>;
 }
 
-async function pbExists(collection: string, filter: string): Promise<boolean> {
+async function pbFindOne(
+	collection: string,
+	filter: string,
+): Promise<{ id: string } | null> {
 	const url = new URL(`${PB_URL}/api/collections/${collection}/records`);
 	url.searchParams.set("page", "1");
 	url.searchParams.set("perPage", "1");
@@ -45,9 +51,12 @@ async function pbExists(collection: string, filter: string): Promise<boolean> {
 	const res = await fetch(url.toString(), {
 		headers: { Authorization: token },
 	});
-	if (!res.ok) return false;
-	const data = (await res.json()) as { totalItems: number };
-	return data.totalItems > 0;
+	if (!res.ok) return null;
+	const data = (await res.json()) as {
+		items: { id: string }[];
+		totalItems: number;
+	};
+	return data.totalItems > 0 ? data.items[0] : null;
 }
 
 function readXlsx(filename: string): Record<string, unknown>[] {
@@ -61,7 +70,7 @@ function readXlsx(filename: string): Record<string, unknown>[] {
 }
 
 const str = (v: unknown) => String(v ?? "").trim();
-const esc = (s: string) => s.replace(/"/g, '\\"');
+const esc = (s: string) => s.replace(/'/g, "\\'");
 const isNull = (v: unknown) => {
 	const s = String(v ?? "")
 		.trim()
@@ -72,34 +81,38 @@ const isNull = (v: unknown) => {
 async function importFaculties(
 	rows: Record<string, unknown>[],
 ): Promise<Map<number, string>> {
-	console.log("\n📚  Stage 1 — Faculties");
+	console.log("\n📚  Stage 1 — Faculties (كليات)");
 	const idMap = new Map<number, string>();
 	let created = 0,
 		skipped = 0;
 
 	for (const row of rows) {
-		const name = str(row["nomar"]);
-		if (!name) {
+		const raw = str(row["nomar"])
+			.replace(/^كلية:\s*/, "")
+			.trim();
+		if (!raw) {
 			skipped++;
 			continue;
 		}
 
-		if (await pbExists("Archive_faculties", `name = "${esc(name)}"`)) {
-			console.log(`   ~ already exists, skipped: ${name}`);
+		const existing = await pbFindOne(
+			"Archive_faculties",
+			`name = '${esc(raw)}'`,
+		);
+		if (existing) {
+			idMap.set(Number(row["idfaculte"]), existing.id);
+			console.log(`   ~ skip (exists): ${raw}`);
 			skipped++;
 			continue;
 		}
 
 		try {
-			const rec = await pbCreate("Archive_faculties", {
-				name,
-				numberOfDepartments: 0,
-			});
+			const rec = await pbCreate("Archive_faculties", { name: raw });
 			idMap.set(Number(row["idfaculte"]), rec.id);
-			console.log(`   ✓ ${name}`);
+			console.log(`   ✓ ${raw}`);
 			created++;
 		} catch (err) {
-			console.error(`   ✗ ${name}: ${String(err)}`);
+			console.error(`   ✗ ${raw}: ${String(err)}`);
 			skipped++;
 		}
 	}
@@ -112,7 +125,7 @@ async function importDepartments(
 	rows: Record<string, unknown>[],
 	facultyMap: Map<number, string>,
 ): Promise<Map<number, string>> {
-	console.log("\n🏛️   Stage 2 — Departments");
+	console.log("\n🏛️   Stage 2 — Departments (أقسام)");
 	const idMap = new Map<number, string>();
 	let created = 0,
 		skipped = 0;
@@ -124,28 +137,31 @@ async function importDepartments(
 			continue;
 		}
 
-		const facultyId = facultyMap.get(Number(row["faculte"]));
-		if (!facultyId) {
+		const facultyPbId = facultyMap.get(Number(row["faculte"]));
+		if (!facultyPbId) {
 			console.warn(
-				`   ⚠ "${name}" — faculte ${row["faculte"]} not found, skipped`,
+				`   ⚠ "${name}" — faculte ${row["faculte"]} not in map, skipped`,
 			);
 			skipped++;
 			continue;
 		}
 
-		if (
-			await pbExists(
-				"Archive_departments",
-				`name = "${esc(name)}" && facultyId = "${facultyId}"`,
-			)
-		) {
-			console.log(`   ~ already exists, skipped: ${name}`);
+		const existing = await pbFindOne(
+			"Archive_departments",
+			`name = '${esc(name)}' && facultyId = '${facultyPbId}'`,
+		);
+		if (existing) {
+			idMap.set(Number(row["id"]), existing.id);
+			console.log(`   ~ skip (exists): ${name}`);
 			skipped++;
 			continue;
 		}
 
 		try {
-			const rec = await pbCreate("Archive_departments", { name, facultyId });
+			const rec = await pbCreate("Archive_departments", {
+				name,
+				facultyId: facultyPbId,
+			});
 			idMap.set(Number(row["id"]), rec.id);
 			console.log(`   ✓ ${name}`);
 			created++;
@@ -163,7 +179,7 @@ async function importFields(
 	rows: Record<string, unknown>[],
 	departmentMap: Map<number, string>,
 ): Promise<Map<number, string>> {
-	console.log("\n📖  Stage 3 — Fields (Filières)");
+	console.log("\n📖  Stage 3 — Fields (فروع / Filières)");
 	const idMap = new Map<number, string>();
 	let created = 0,
 		skipped = 0;
@@ -181,28 +197,31 @@ async function importFields(
 			continue;
 		}
 
-		const departmentId = departmentMap.get(Number(row["departement"]));
-		if (!departmentId) {
+		const departmentPbId = departmentMap.get(Number(row["departement"]));
+		if (!departmentPbId) {
 			console.warn(
-				`   ⚠ "${name}" — departement ${row["departement"]} not found, skipped`,
+				`   ⚠ "${name}" — departement ${row["departement"]} not in map, skipped`,
 			);
 			skipped++;
 			continue;
 		}
 
-		if (
-			await pbExists(
-				"Archive_fields",
-				`name = "${esc(name)}" && departmentId = "${departmentId}"`,
-			)
-		) {
-			console.log(`   ~ already exists, skipped: ${name}`);
+		const existing = await pbFindOne(
+			"Archive_fields",
+			`name = '${esc(name)}' && departmentId = '${departmentPbId}'`,
+		);
+		if (existing) {
+			idMap.set(Number(row["idfiliere"]), existing.id);
+			console.log(`   ~ skip (exists): ${name}`);
 			skipped++;
 			continue;
 		}
 
 		try {
-			const rec = await pbCreate("Archive_fields", { name, departmentId });
+			const rec = await pbCreate("Archive_fields", {
+				name,
+				departmentId: departmentPbId,
+			});
 			idMap.set(Number(row["idfiliere"]), rec.id);
 			console.log(`   ✓ ${name}`);
 			created++;
@@ -220,7 +239,7 @@ async function importMajors(
 	rows: Record<string, unknown>[],
 	fieldMap: Map<number, string>,
 ): Promise<void> {
-	console.log("\n🎓  Stage 4 — Majors (Spécialités)");
+	console.log("\n🎓  Stage 4 — Majors (تخصصات / Spécialités)");
 	let created = 0,
 		skipped = 0;
 
@@ -237,28 +256,27 @@ async function importMajors(
 			continue;
 		}
 
-		const fieldId = fieldMap.get(Number(row["filiere"]));
-		if (!fieldId) {
+		const fieldPbId = fieldMap.get(Number(row["filiere"]));
+		if (!fieldPbId) {
 			console.warn(
-				`   ⚠ "${name}" — filiere ${row["filiere"]} not found, skipped`,
+				`   ⚠ "${name}" — filiere ${row["filiere"]} not in map, skipped`,
 			);
 			skipped++;
 			continue;
 		}
 
-		if (
-			await pbExists(
-				"Archive_majors",
-				`name = "${esc(name)}" && fieldId = "${fieldId}"`,
-			)
-		) {
-			console.log(`   ~ already exists, skipped: ${name}`);
+		const existing = await pbFindOne(
+			"Archive_majors",
+			`name = '${esc(name)}' && fieldId = '${fieldPbId}'`,
+		);
+		if (existing) {
+			console.log(`   ~ skip (exists): ${name}`);
 			skipped++;
 			continue;
 		}
 
 		try {
-			await pbCreate("Archive_majors", { name, fieldId });
+			await pbCreate("Archive_majors", { name, fieldId: fieldPbId });
 			console.log(`   ✓ ${name}`);
 			created++;
 		} catch (err) {
@@ -275,23 +293,29 @@ async function main() {
 	console.log("   PocketBase University Data Seeder");
 	console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 	console.log(`PocketBase : ${PB_URL}`);
-	console.log(`Data dir   : ${DATA_DIR}\n`);
+	console.log(`Data dir   : ${DATA_DIR}`);
 
 	await pbAuth();
-	console.log("✔ Authenticated as admin");
+	console.log("✔ Authenticated\n");
 
-	const facultyMap = await importFaculties(readXlsx("faculte.xlsx"));
-	const departmentMap = await importDepartments(
-		readXlsx("departement.xlsx"),
-		facultyMap,
+	const faculteRows = readXlsx("faculte.xlsx");
+	const departementRows = readXlsx("departement.xlsx");
+	const filiereRows = readXlsx("filiere.xlsx");
+	const specialiteRows = readXlsx("specialite.xlsx");
+
+	console.log(
+		`Loaded: ${faculteRows.length} faculties, ${departementRows.length} departments, ${filiereRows.length} fields, ${specialiteRows.length} majors`,
 	);
-	const fieldMap = await importFields(readXlsx("filiere.xlsx"), departmentMap);
-	await importMajors(readXlsx("specialite.xlsx"), fieldMap);
+
+	const facultyMap = await importFaculties(faculteRows);
+	const departmentMap = await importDepartments(departementRows, facultyMap);
+	const fieldMap = await importFields(filiereRows, departmentMap);
+	await importMajors(specialiteRows, fieldMap);
 
 	console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 	console.log("   ✅  Seeding complete!");
-	console.log("   Archive_specialties is empty.");
-	console.log("   Add specialties via addSpecialty() in the app.");
+	console.log("   Archive_specialties remains empty —");
+	console.log("   add specialties via the app UI.");
 	console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 }
 
