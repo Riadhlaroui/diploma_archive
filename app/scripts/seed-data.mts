@@ -1,4 +1,5 @@
 import { createRequire } from "module";
+import * as dotenv from "dotenv";
 import * as path from "path";
 import * as fs from "fs";
 import { fileURLToPath } from "url";
@@ -9,10 +10,17 @@ const XLSX = require("xlsx");
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const envPath = path.resolve(__dirname, "../../.env.local");
+console.log("Loading env from:", envPath);
+dotenv.config({ path: envPath });
+
 const PB_URL = process.env.PB_URL ?? "http://127.0.0.1:8090";
-const PB_EMAIL = process.env.PB_EMAIL ?? "";
-const PB_PASSWORD = process.env.PB_PASSWORD ?? "";
+const PB_ADMIN_EMAIL = process.env.PB_ADMIN_EMAIL ?? "";
+const PB_ADMIN_PASSWORD = process.env.PB_ADMIN_PASSWORD ?? "";
 const DATA_DIR = path.join(__dirname, "data");
+
+console.log("EMAIL:", process.env.PB_ADMIN_EMAIL);
+console.log("PASS:", process.env.PB_ADMIN_PASSWORD);
 
 let token = "";
 
@@ -22,7 +30,10 @@ async function pbAuth() {
 		{
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ identity: PB_EMAIL, password: PB_PASSWORD }),
+			body: JSON.stringify({
+				identity: PB_ADMIN_EMAIL,
+				password: PB_ADMIN_PASSWORD,
+			}),
 		},
 	);
 	if (!res.ok) throw new Error(`Auth failed: ${await res.text()}`);
