@@ -9,9 +9,9 @@ const XLSX = require("xlsx");
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PB_URL = "http://127.0.0.1:8090";
-const PB_EMAIL = "archive@gmail.com";
-const PB_PASSWORD = "12345678910";
+const PB_URL = process.env.PB_URL ?? "http://127.0.0.1:8090";
+const PB_EMAIL = process.env.PB_EMAIL ?? "";
+const PB_PASSWORD = process.env.PB_PASSWORD ?? "";
 const DATA_DIR = path.join(__dirname, "data");
 
 let token = "";

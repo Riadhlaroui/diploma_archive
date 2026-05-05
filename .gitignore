@@ -41,3 +41,7 @@ yarn-error.log*
 next-env.d.ts
 .docker-compose.yml
 .dockerfile
+.env
+.env.local
+.env*.local
+/app/scripts/data
