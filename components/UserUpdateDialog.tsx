@@ -27,6 +27,7 @@ import { DatePicker } from "./ui/DatePicker";
 import { PERMISSION_GROUPS } from "@/app/src/config/permissionGroups";
 import { ROLE_PRESETS, type Permission } from "@/app/src/config/permissions";
 import { PhoneInput } from "./ui/PhoneInput";
+import { ERROR_KEYS } from "@/lib/constants/errors";
 
 type Props = {
 	open: boolean;
@@ -97,7 +98,7 @@ export function UserUpdateDialog({ open, onOpenChange, user }: Props) {
 			onOpenChange(false);
 		} catch (error: any) {
 			console.error("Error updating user:", error);
-			toast.error(t("addStaffDialog.errors.userCreatedError"));
+			toast.error(t(ERROR_KEYS.FAILED_TO_UPDATE_STAFF));
 		}
 	};
 

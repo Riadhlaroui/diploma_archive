@@ -17,11 +17,8 @@ import {
 	AlertCircle,
 	CheckCircle2,
 	Eye,
-	FileText,
 	GraduationCap,
-	ScrollText,
 	ClipboardList,
-	BookOpen,
 	Award,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -63,6 +60,7 @@ interface DiplomaData {
 	certDate: string;
 	addresseeTitle: string;
 	addresseeWilaya: string;
+	paperSize: "A4" | "A5" | "Letter";
 }
 
 const CERT_COUNTER_KEY = "lagh_auth_cert_counter";
@@ -331,243 +329,154 @@ function buildAuthCertHTML(d: DiplomaData): string {
 			? `${d.lastNameAr} ${d.firstNameAr}`
 			: `${d.lastNameFr.toUpperCase()} ${d.firstNameFr}`;
 
-	const certDateFormatted = d.certDate
-		? new Date(d.certDate).toLocaleDateString("ar-DZ").replace(/\//g, "/")
+	const dobFormatted = d.dateOfBirth
+		? new Date(d.dateOfBirth).toLocaleDateString("ar-DZ")
 		: "—";
 
-	const dobAr = fmtDateAr(d.dateOfBirth);
-	const placeAr = d.placeOfBirthAr || d.placeOfBirth || "—";
+	const certDateFormatted = d.certDate
+		? new Date(d.certDate).toLocaleDateString("ar-DZ")
+		: "—";
 
 	return `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width"/>
 <title>شهادة توثيق – ${nameAr}</title>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
-  @page { size: A4 portrait; margin: 0; }
+  @page { size: ${d.paperSize || "A4"} portrait; margin: 20mm 15mm; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    width: 210mm; min-height: 297mm;
-    background: #fff;
     font-family: 'Amiri', 'Times New Roman', serif;
-    color: #1a1a1a;
+    font-size: 13pt;
+    color: #000;
+    line-height: 2.2;
+    direction: rtl;
+	padding: 20mm 18mm;
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }
-  .page {
-    width: 210mm; min-height: 297mm;
-    padding: 8mm 14mm 8mm 14mm;
-    display: flex; flex-direction: column;
-  }
 
-  /* ── Header ── */
   .header {
-    display: flex; justify-content: space-between; align-items: flex-start;
-    border-bottom: 3px double #1a1a1a;
-    padding-bottom: 4mm; margin-bottom: 3mm;
-    gap: 3mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8mm;
+    font-size: 11pt;
+    line-height: 1.9;
   }
-  .hcol { flex: 1; }
-  .hcol-ar { direction: rtl; text-align: right; font-size: 8.5pt; line-height: 1.75; }
-  .hcol-ar .hl1 { font-size: 10.5pt; font-weight: 700; }
-  .hcol-ar .hl2, .hcol-ar .hl3 { font-size: 9.5pt; font-weight: 700; }
-  .hcol-ar .hl4 { font-size: 7.5pt; line-height: 1.6; }
-  .hcol-fr { direction: ltr; text-align: left; font-size: 7.5pt; line-height: 1.6; }
-  .hcol-fr strong { font-size: 8pt; }
-  .hcol-fr em { font-size: 7pt; }
-  .hcol-center {
-    flex: 0 0 28mm; display: flex;
-    flex-direction: column; align-items: center; justify-content: center;
-  }
-  .seal { width: 26mm; height: 26mm; }
+  .header-right { text-align: right; }
+  .header-left  { text-align: left; direction: ltr; }
 
-  /* ── Ref line ── */
-  .ref-line {
-    display: flex; justify-content: space-between;
-    font-size: 9pt; font-weight: 700;
-    direction: rtl; margin: 3mm 0 2mm;
-  }
+  .divider { border: none; border-top: 1.5px solid #000; margin: 5mm 0; }
 
-  /* ── Addressee ── */
   .addressee {
-    direction: rtl; font-size: 10pt;
-    margin: 3mm 0; line-height: 1.9;
-    border-right: 3px solid #1a1a1a;
-    padding-right: 3mm;
-  }
-  .addressee .to-line { font-weight: 700; }
-
-  .divider { border: none; border-top: 1px solid #888; margin: 3mm 0; }
-
-  /* ── Subject block ── */
-  .subj-block { direction: rtl; font-size: 10pt; line-height: 2.1; margin: 2mm 0; }
-  .subj-row { display: flex; gap: 3mm; align-items: baseline; }
-  .subj-label { font-weight: 700; white-space: nowrap; min-width: 20mm; }
-  .blank-line {
-    display: inline-block;
-    border-bottom: 1px solid #444;
-    min-width: 38mm; margin: 0 1mm;
-    vertical-align: bottom;
-  }
-
-  /* ── Body ── */
-  .body-text {
-    direction: rtl; font-size: 10.5pt;
-    line-height: 2.3; text-align: justify;
     margin: 5mm 0;
+    font-size: 13pt;
   }
 
-  /* ── Closing ── */
+  .meta-block {
+    margin: 4mm 0;
+    font-size: 13pt;
+    line-height: 2.4;
+  }
+  .meta-row { display: flex; gap: 4mm; align-items: baseline; }
+  .meta-label { font-weight: 700; white-space: nowrap; }
+  .meta-blank {
+  min-width: 50mm;
+  display: inline-block;
+  vertical-align: bottom;
+  background: transparent;
+}
+
+  .body-text {
+    font-size: 13pt;
+    line-height: 2.4;
+    text-align: justify;
+    margin: 6mm 0;
+  }
+
   .closing {
-    text-align: center; font-size: 10pt;
-    margin: 6mm 0 2mm; direction: rtl;
+    text-align: center;
+    font-size: 13pt;
+    font-weight: 700;
+    margin: 8mm 0 6mm;
+  }
+
+  .sigs {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4mm;
+    font-size: 12pt;
     font-weight: 700;
   }
-
-  /* ── Signatures ── */
-  .sigs {
-    display: flex; justify-content: space-between;
-    margin-top: 6mm; direction: rtl;
-  }
-  .sig-block { text-align: center; font-size: 9.5pt; font-weight: 700; }
-  .sig-space { height: 18mm; }
-
-  /* ── Footer ── */
-  .footer {
-    margin-top: auto; border-top: 2px solid #1a1a1a;
-    padding-top: 2mm;
-    display: flex; justify-content: space-between;
-    font-size: 7pt;
-  }
-  .footer-right { direction: rtl; text-align: right; }
-  .footer-left { direction: ltr; text-align: left; }
+  .sig-space { height: 20mm; }
 
   @media print {
-    body, .page { width: 210mm; min-height: 297mm; }
+    body { font-size: 13pt; }
   }
 </style>
 </head>
 <body>
-<div class="page">
 
-  <!-- Header -->
+  <!-- Header: ref number left, date right -->
   <div class="header">
-    <div class="hcol hcol-ar">
-      <div class="hl1">الجمهورية الجزائرية الديمقراطية الشعبية</div>
-      <div class="hl2">وزارة التعليم العالي والبحث العلمي</div>
-      <div class="hl3">جامعة عمار تليجي - الأغواط</div>
-      <div class="hl4">
-        نيابة رئاسة الجامعة مكلفة بالتكوين<br/>
-        العالي في الطورين الأول والثاني والتكوين<br/>
-        المتواصل والشهادات وكذا التكوين
-      </div>
+  <div class="header-right" dir="rtl">
+      رقم/.........:ن.ر.ج.تع.تم.ش/م.ش.م/${new Date(d.certDate || Date.now()).getFullYear()}/
     </div>
-
-    <div class="hcol-center">
-      <svg class="seal" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="50" r="48" fill="none" stroke="#1a6b35" stroke-width="2.5"/>
-        <circle cx="50" cy="50" r="43" fill="none" stroke="#c8a850" stroke-width="1"/>
-        <circle cx="50" cy="50" r="22" fill="#1a6b35" opacity="0.12"/>
-        <circle cx="50" cy="50" r="22" fill="none" stroke="#1a6b35" stroke-width="1.5"/>
-        <!-- decorative inner ring text arc placeholder -->
-        <text x="50" y="18" text-anchor="middle" font-size="6.5" fill="#1a1a1a"
-              font-family="Amiri" font-weight="700">جامعة عمار تليجي</text>
-        <text x="50" y="87" text-anchor="middle" font-size="5.5" fill="#1a1a1a"
-              font-family="Arial">UNIVERSITÉ AMAR TELIDJI</text>
-        <text x="50" y="95" text-anchor="middle" font-size="5.5" fill="#1a1a1a"
-              font-family="Arial">LAGHOUAT</text>
-        <line x1="15" y1="26" x2="85" y2="26" stroke="#c8a850" stroke-width="0.8"/>
-        <line x1="15" y1="78" x2="85" y2="78" stroke="#c8a850" stroke-width="0.8"/>
-      </svg>
-    </div>
-
-    <div class="hcol hcol-fr">
-      <div>Ministère de l'Enseignement Supérieur</div>
-      <div>et de la Recherche Scientifique</div>
-      <div><strong>Université Amar Telidji – Laghouat</strong></div>
-      <div><em>
-        Vice rectorat chargé de la formation<br/>
-        supérieure du premier et deuxième cycles,<br/>
-        la formation continue et les diplômes,<br/>
-        et la formation supérieure de graduation
-      </em></div>
+    <div class="header-left">
+      الأغواط ${certDateFormatted}
     </div>
   </div>
 
-  <!-- Reference line -->
-  <div class="ref-line">
-    <span>رقم : ${d.certNumber}/ل.ج.ق.ت.م.ش.م.ش/د</span>
-    <span>الأغواط في : ${certDateFormatted}</span>
-  </div>
 
-  <!-- Addressee -->
+  <!-- Addressee — left blank for handwriting -->
   <div class="addressee">
-    <div class="to-line">إلى السّيد(ة) : ${d.addresseeTitle}</div>
-    <div style="padding-right: 6mm">– ${d.addresseeWilaya} –</div>
+    إلى السّيد(ة) : <span class="meta-blank"></span>
   </div>
 
-  <hr class="divider"/>
 
   <!-- Subject + Reference -->
-  <div class="subj-block">
-    <div class="subj-row">
-      <span class="subj-label">الموضوع :</span>
-      <span>ب/خ توثيق شهادة نجاح للسّيد(ة) : <strong>${nameAr}</strong></span>
+  <div class="meta-block">
+    <div class="meta-row">
+      <span class="meta-label">الموضوع :</span>
+      <span>ب/خ توثيق شهادة الدراسات الجامعية التطبيقية السّيد(ة) : <strong>${nameAr}</strong></span>
     </div>
-    <div class="subj-row">
-      <span class="subj-label">المرجع :</span>
+    <div class="meta-row">
+      <span class="meta-label">المرجع :</span>
       <span>
-        إرسالكم رقم : <span class="blank-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        &nbsp; المؤرخة : <span class="blank-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        إرسالكم رقم :
+        <span class="meta-blank"></span>
+        ، المؤرخة في :
+        <span class="meta-blank"></span>
       </span>
     </div>
   </div>
 
-  <hr class="divider"/>
 
   <!-- Body -->
   <div class="body-text">
-    ردًّا على إرسالكم في المرجع أعلاه، بخصوص التأكّد من صحّة شهادة نجاح السّيد(ة) :<br/>
-    <strong>${nameAr}</strong>
-    &nbsp;&nbsp; المولود(ة) بتاريخ : <strong>${dobAr}</strong>
-    &nbsp;&nbsp; بـ : <strong>${placeAr}</strong>.<br/>
-    يشرّفنا أن نؤكّد لكم أنّ المعني(ة) قد تخرّج(ت) من جامعة عمّار تليجي بالأغواط بشهادة الليسانس<br/>
-    شعبة : <strong>${d.fieldFr}</strong>
-    &nbsp;&nbsp;&nbsp; تخصص : <strong>${d.specialtyFr}</strong>
-    &nbsp;&nbsp;&nbsp; دورة : <strong>${d.graduationYear}</strong>
+    ردًّا على إرسالكم في المرجع أعلاه، بخصوص التَّأكُّد من صحَّة شهادة نجاح السّيد(ة) :<br/>
+    <strong>${nameAr}</strong> ،المولود(ة) بتاريخ <strong>${dobFormatted}</strong> <strong>${d.placeOfBirthAr || d.placeOfBirth || "—"}</strong><br/>
+    يشرّفنا أن نؤكّد لكم بأنّ المعني(ة) قد تخرّج(ت) من جامعة عمّار تليجي بالأغواط بشهادة ،<br/>
+    الدراسات الجامعية التطبيقية ، شعبة : <strong>${d.fieldFr}</strong> ، تخصّص : <strong>${d.specialtyFr}</strong> ، دورة : <strong>${d.graduationYear}</strong>
   </div>
 
   <!-- Closing -->
-  <div class="closing">تقبّلوا منّا فائق الاحترام والتّقدير</div>
+  <div class="closing">تقبَّلوا منَّا فائق الاحترام و التَّقدير</div>
 
   <!-- Signatures -->
   <div class="sigs">
-    <div class="sig-block">
-      <div>المحرر : ........................</div>
+    <div>
+      <div>المحرّر :</div>
       <div class="sig-space"></div>
     </div>
-    <div class="sig-block">
+    <div style="text-align:center">
       <div>نائب رئيس الجامعة</div>
       <div class="sig-space"></div>
     </div>
   </div>
 
-  <!-- Footer -->
-  <div class="footer">
-    <div class="footer-left">
-      Mail: Http://www.lagh-univ.dz<br/>
-      <span>الموقـع :</span>
-    </div>
-    <div class="footer-right">
-      الهاتف : 029.14.53.32 / 029.14.54.36 / 029.14.54.39 / 029.14.54.35<br/>
-      الفاكس : 029.14.54.42<br/>
-      العنوان : ص.ب. رقم : 37 ح (3000) الأغواط
-    </div>
-  </div>
-
-</div>
 </body>
 </html>`;
 }
@@ -595,6 +504,9 @@ const SelectTypeStep: React.FC<SelectTypeStepProps> = ({
 	//   return true;
 	// });
 	const available = ALL_DOC_TYPES;
+
+	const { t, i18n } = useTranslation();
+	const isRtl = i18n.language === "ar";
 
 	return (
 		<div className="flex flex-col flex-1 gap-4 pb-2 min-h-0">
@@ -682,8 +594,12 @@ const SelectTypeStep: React.FC<SelectTypeStepProps> = ({
 					disabled={!selectedId}
 					className="flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white px-6"
 				>
-					Continue
-					<ChevronRight className="w-4 h-4" />
+					{t("common.continue")}
+					{isRtl ? (
+						<ChevronLeft className="w-4 h-4" />
+					) : (
+						<ChevronRight className="w-4 h-4" />
+					)}
 				</Button>
 			</div>
 		</div>
@@ -712,346 +628,404 @@ const ReviewStep: React.FC<ReviewStepProps> = ({
 			setData((prev) => ({ ...prev, [key]: e.target.value }));
 
 	const isAuthCert = selectedTypeId === "transcript";
-	const canProceed = isAuthCert
-		? !!data.placeOfBirth && !!data.addresseeTitle && !!data.addresseeWilaya
-		: !!data.placeOfBirth;
+	const canProceed = isAuthCert ? !!data.certDate : !!data.placeOfBirth;
+
+	const { t, i18n } = useTranslation();
+	const isRtl = i18n.language === "ar";
 
 	return (
-		<div className="space-y-5 pb-2 bg-gray-50">
-			{/* ── Auth-cert specific section ── */}
-			{isAuthCert && (
-				<div className="rounded-xl border border-blue-200 dark:border-blue-800">
-					<div className="flex items-center gap-2 px-4 py-2.5 bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-800">
-						<ClipboardList className="w-4 h-4 text-blue-500" />
-						<h3 className="text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-widest">
-							Certificat d'authentification — معلومات الوثيقة
+		<div className="flex flex-col flex-1 min-h-0">
+			<div className="flex-1 overflow-y-auto min-h-0 space-y-5 py-2 pr-1">
+				{/* ── Auth-cert specific section ── */}
+				{isAuthCert && (
+					<div className="rounded-xl border border-blue-200 dark:border-blue-800">
+						<div className="flex items-center gap-2 px-4 py-2.5 bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-800">
+							<ClipboardList className="w-4 h-4 text-blue-500" />
+							<h3 className="text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-widest">
+								{t("diploma.certInfo")} — معلومات الوثيقة
+							</h3>
+						</div>
+						<div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+							{/* Doc date */}
+							<div className="space-y-1">
+								<label className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+									تاريخ الوثيقة
+								</label>
+								<DatePicker
+									value={data.certDate || null}
+									onChange={(val) =>
+										setData((p) => ({ ...p, certDate: val ?? "" }))
+									}
+									placeholder="Select date"
+									clearable={false}
+								/>
+							</div>
+
+							{/* Paper size */}
+							<div className="space-y-1">
+								<label className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+									{t("diploma.paperSize")}
+								</label>
+								<select
+									value={data.paperSize}
+									onChange={(e) =>
+										setData((p) => ({
+											...p,
+											paperSize: e.target.value as DiplomaData["paperSize"],
+										}))
+									}
+									className="w-full h-9 px-3 border border-gray-200 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-gray-200"
+								>
+									<option value="A4">A4</option>
+									<option value="A5">A5</option>
+									<option value="Letter">Letter</option>
+								</select>
+							</div>
+
+							{/* Place of birth Arabic — required for the body text */}
+							<div className="space-y-1">
+								<label className="flex items-center gap-1 text-xs font-medium text-gray-500 uppercase tracking-wider">
+									مكان الميلاد <span className="text-red-500">*</span>
+								</label>
+								<Input
+									placeholder="مثال: عين وسارة-الجلفة"
+									value={data.placeOfBirthAr}
+									onChange={set("placeOfBirthAr")}
+									dir="rtl"
+									className={`h-9 text-sm ${!data.placeOfBirthAr ? "border-red-300" : ""}`}
+								/>
+							</div>
+
+							{/* Arabic name override */}
+							<div className="space-y-1">
+								<label className="text-xs font-medium text-gray-500 uppercase tracking-wider flex items-center gap-1">
+									الاسم واللقب بالعربية
+									<span className="normal-case font-normal text-gray-400 ml-1">
+										(اختياري)
+									</span>
+								</label>
+								<Input
+									placeholder="مثال: بن شويطة محمد"
+									value={`${data.lastNameAr} ${data.firstNameAr}`.trim()}
+									onChange={(e) => {
+										const parts = e.target.value.trim().split(" ");
+										setData((p) => ({
+											...p,
+											lastNameAr: parts.slice(0, -1).join(" "),
+											firstNameAr: parts.at(-1) ?? "",
+										}));
+									}}
+									dir="rtl"
+									className="h-9 text-sm"
+								/>
+							</div>
+						</div>
+					</div>
+				)}
+				{/* Section 1: Auto-filled */}
+				<div className="rounded-xl border border-gray-200 dark:border-zinc-700">
+					<div className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700">
+						<CheckCircle2 className="w-4 h-4 text-green-500" />
+						<h3 className="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-widest">
+							Auto-filled from database
 						</h3>
 					</div>
+
 					<div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+						{!isAuthCert && (
+							<>
+								<div className="space-y-1 md:col-span-2">
+									<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+										Full Name (French)
+										<CheckCircle2 className="w-3 h-3 text-green-500" />
+									</label>
+									<Input
+										value={`${data.lastNameFr} ${data.firstNameFr}`.trim()}
+										onChange={(e) => {
+											const parts = e.target.value.trim().split(" ");
+											setData((p) => ({
+												...p,
+												lastNameFr: parts.slice(0, -1).join(" "),
+												firstNameFr: parts.at(-1) ?? "",
+											}));
+										}}
+										placeholder="e.g. KADRI Ayoub"
+										className="h-9 text-sm"
+									/>
+								</div>
+
+								<div className="space-y-1">
+									<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+										First Name (French)
+										{data.firstNameFr ? (
+											<CheckCircle2 className="w-3 h-3 text-green-500" />
+										) : (
+											<AlertCircle className="w-3 h-3 text-amber-400" />
+										)}
+									</label>
+									<Input
+										value={data.firstNameFr}
+										onChange={set("firstNameFr")}
+										placeholder="First name"
+										className="h-9 text-sm"
+									/>
+								</div>
+								<div className="space-y-1">
+									<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+										Last Name (French)
+										{data.lastNameFr ? (
+											<CheckCircle2 className="w-3 h-3 text-green-500" />
+										) : (
+											<AlertCircle className="w-3 h-3 text-amber-400" />
+										)}
+									</label>
+									<Input
+										value={data.lastNameFr}
+										onChange={set("lastNameFr")}
+										placeholder="Last name"
+										className="h-9 text-sm"
+									/>
+								</div>
+							</>
+						)}
+
 						<div className="space-y-1">
-							<label className="text-xs font-medium text-gray-500 uppercase tracking-wider flex items-center gap-1">
-								رقم الوثيقة (تلقائي)
-								<CheckCircle2 className="w-3 h-3 text-green-500" />
-							</label>
-							<Input
-								type="number"
-								value={data.certNumber}
-								onChange={(e) =>
-									setData((p) => ({
-										...p,
-										certNumber: parseInt(e.target.value) || p.certNumber,
-									}))
-								}
-								className="h-9 text-sm"
-							/>
-							<p className="text-[11px] text-gray-400">
-								Auto-incremented — edit only if needed
-							</p>
-						</div>
-						<div className="space-y-1">
-							<label className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-								تاريخ الوثيقة
+							<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+								Date of Birth
+								{data.dateOfBirth ? (
+									<CheckCircle2 className="w-3 h-3 text-green-500" />
+								) : (
+									<AlertCircle className="w-3 h-3 text-amber-400" />
+								)}
 							</label>
 							<DatePicker
-								value={data.certDate || null}
+								value={data.dateOfBirth || null}
 								onChange={(val) =>
-									setData((p) => ({ ...p, certDate: val ?? "" }))
+									setData((prev) => ({ ...prev, dateOfBirth: val ?? "" }))
 								}
-								placeholder="Select date"
+								max={new Date().toISOString().split("T")[0]}
+								placeholder="Select date of birth"
 								clearable={false}
 							/>
 						</div>
 						<div className="space-y-1">
-							<label className="flex items-center gap-1 text-xs font-medium text-gray-500 uppercase tracking-wider">
-								صفة المرسَل إليه <span className="text-red-500">*</span>
+							<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+								Graduation Year
+								{data.graduationYear ? (
+									<CheckCircle2 className="w-3 h-3 text-green-500" />
+								) : (
+									<AlertCircle className="w-3 h-3 text-amber-400" />
+								)}
 							</label>
 							<Input
-								placeholder="مثال: مدير الجهوي للأملاك الوطنية"
-								value={data.addresseeTitle}
-								onChange={set("addresseeTitle")}
-								dir="rtl"
-								className={`h-9 text-sm ${!data.addresseeTitle ? "border-red-300" : ""}`}
+								value={data.graduationYear}
+								onChange={set("graduationYear")}
+								placeholder="e.g. 2024"
+								className="h-9 text-sm"
 							/>
 						</div>
 						<div className="space-y-1">
-							<label className="flex items-center gap-1 text-xs font-medium text-gray-500 uppercase tracking-wider">
-								الولاية <span className="text-red-500">*</span>
+							<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+								Field of Study
+								{data.fieldFr ? (
+									<CheckCircle2 className="w-3 h-3 text-green-500" />
+								) : (
+									<AlertCircle className="w-3 h-3 text-amber-400" />
+								)}
 							</label>
 							<Input
-								placeholder="مثال: ولاية بسكرة"
-								value={data.addresseeWilaya}
-								onChange={set("addresseeWilaya")}
-								dir="rtl"
-								className={`h-9 text-sm ${!data.addresseeWilaya ? "border-red-300" : ""}`}
+								value={data.fieldFr}
+								onChange={set("fieldFr")}
+								placeholder="Field of study"
+								className="h-9 text-sm"
+							/>
+						</div>
+						<div className="space-y-1">
+							<label className="text-xs font-medium text-gray-500 uppercase">
+								Major (Filière)
+							</label>
+							<Input
+								value={data.majorFr}
+								onChange={set("majorFr")}
+								placeholder="Optional major"
+								className="h-9 text-sm"
+							/>
+						</div>
+						<div className="space-y-1">
+							<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+								Specialty
+								{data.specialtyFr ? (
+									<CheckCircle2 className="w-3 h-3 text-green-500" />
+								) : (
+									<AlertCircle className="w-3 h-3 text-amber-400" />
+								)}
+							</label>
+							<Input
+								value={data.specialtyFr}
+								onChange={set("specialtyFr")}
+								placeholder="Specialty"
+								className="h-9 text-sm"
 							/>
 						</div>
 					</div>
 				</div>
-			)}
 
-			{/* Section 1: Auto-filled */}
-			<div className="rounded-xl border border-gray-200 dark:border-zinc-700">
-				<div className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700">
-					<CheckCircle2 className="w-4 h-4 text-green-500" />
-					<h3 className="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-widest">
-						Auto-filled from database
-					</h3>
-				</div>
-				<div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-					<div className="space-y-1">
-						<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-							First Name (French)
-							{data.firstNameFr ? (
-								<CheckCircle2 className="w-3 h-3 text-green-500" />
-							) : (
-								<AlertCircle className="w-3 h-3 text-amber-400" />
-							)}
-						</label>
-						<Input
-							value={data.firstNameFr}
-							onChange={set("firstNameFr")}
-							placeholder="First name"
-							className="h-9 text-sm"
-						/>
-					</div>
-					<div className="space-y-1">
-						<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-							Last Name (French)
-							{data.lastNameFr ? (
-								<CheckCircle2 className="w-3 h-3 text-green-500" />
-							) : (
-								<AlertCircle className="w-3 h-3 text-amber-400" />
-							)}
-						</label>
-						<Input
-							value={data.lastNameFr}
-							onChange={set("lastNameFr")}
-							placeholder="Last name"
-							className="h-9 text-sm"
-						/>
-					</div>
-					<div className="space-y-1">
-						<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-							Date of Birth
-							{data.dateOfBirth ? (
-								<CheckCircle2 className="w-3 h-3 text-green-500" />
-							) : (
-								<AlertCircle className="w-3 h-3 text-amber-400" />
-							)}
-						</label>
-						<DatePicker
-							value={data.dateOfBirth || null}
-							onChange={(val) =>
-								setData((prev) => ({ ...prev, dateOfBirth: val ?? "" }))
-							}
-							max={new Date().toISOString().split("T")[0]}
-							placeholder="Select date of birth"
-							clearable={false}
-						/>
-					</div>
-					<div className="space-y-1">
-						<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-							Graduation Year
-							{data.graduationYear ? (
-								<CheckCircle2 className="w-3 h-3 text-green-500" />
-							) : (
-								<AlertCircle className="w-3 h-3 text-amber-400" />
-							)}
-						</label>
-						<Input
-							value={data.graduationYear}
-							onChange={set("graduationYear")}
-							placeholder="e.g. 2024"
-							className="h-9 text-sm"
-						/>
-					</div>
-					<div className="space-y-1">
-						<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-							Field of Study
-							{data.fieldFr ? (
-								<CheckCircle2 className="w-3 h-3 text-green-500" />
-							) : (
-								<AlertCircle className="w-3 h-3 text-amber-400" />
-							)}
-						</label>
-						<Input
-							value={data.fieldFr}
-							onChange={set("fieldFr")}
-							placeholder="Field of study"
-							className="h-9 text-sm"
-						/>
-					</div>
-					<div className="space-y-1">
-						<label className="text-xs font-medium text-gray-500 uppercase">
-							Major (Filière)
-						</label>
-						<Input
-							value={data.majorFr}
-							onChange={set("majorFr")}
-							placeholder="Optional major"
-							className="h-9 text-sm"
-						/>
-					</div>
-					<div className="space-y-1">
-						<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-							Specialty
-							{data.specialtyFr ? (
-								<CheckCircle2 className="w-3 h-3 text-green-500" />
-							) : (
-								<AlertCircle className="w-3 h-3 text-amber-400" />
-							)}
-						</label>
-						<Input
-							value={data.specialtyFr}
-							onChange={set("specialtyFr")}
-							placeholder="Specialty"
-							className="h-9 text-sm"
-						/>
-					</div>
+				{/* Side-by-side: Missing fields + Issuance */}
+				<div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+					{/* Section 2: Required manual */}
+
+					{!isAuthCert && (
+						<>
+							<div className="rounded-xl border border-gray-200 dark:border-zinc-700 overflow-hidden flex flex-col">
+								<div className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700">
+									<AlertCircle className="w-4 h-4 text-red-400" />
+									<h3 className="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-widest">
+										Required — not in database
+									</h3>
+								</div>
+								<div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 flex-1">
+									<div className="space-y-1">
+										<label className="flex items-center gap-1 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+											Place of Birth (French){" "}
+											<span className="text-red-500 ml-0.5">*</span>
+										</label>
+										<Input
+											placeholder="e.g. Laghouat"
+											value={data.placeOfBirth}
+											onChange={set("placeOfBirth")}
+											className={`h-9 text-sm ${!data.placeOfBirth ? "border-red-300 focus:border-red-400" : ""}`}
+										/>
+										{!data.placeOfBirth && (
+											<p className="text-[11px] text-red-400 flex items-center gap-1 mt-0.5">
+												<AlertCircle className="w-3 h-3" /> Required
+											</p>
+										)}
+									</div>
+									<div className="space-y-1">
+										<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1">
+											Place of Birth (Arabic){" "}
+											<span className="normal-case font-normal text-gray-400 ml-1">
+												(optional)
+											</span>
+										</label>
+										<Input
+											placeholder="مثال: الأغواط"
+											value={data.placeOfBirthAr}
+											onChange={set("placeOfBirthAr")}
+											dir="rtl"
+											className="h-9 text-sm"
+										/>
+									</div>
+									<div className="space-y-1">
+										<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1">
+											Last Name (Arabic){" "}
+											<span className="normal-case font-normal text-gray-400 ml-1">
+												(optional)
+											</span>
+										</label>
+										<Input
+											placeholder="مثال: قداري"
+											value={data.lastNameAr}
+											onChange={set("lastNameAr")}
+											dir="rtl"
+											className="h-9 text-sm"
+										/>
+									</div>
+									<div className="space-y-1">
+										<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1">
+											First Name (Arabic){" "}
+											<span className="normal-case font-normal text-gray-400 ml-1">
+												(optional)
+											</span>
+										</label>
+										<Input
+											placeholder="مثال: أيوب"
+											value={data.firstNameAr}
+											onChange={set("firstNameAr")}
+											dir="rtl"
+											className="h-9 text-sm"
+										/>
+									</div>
+								</div>
+							</div>
+							<div className="rounded-xl border border-gray-200 dark:border-zinc-700 flex flex-col">
+								<div className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700">
+									<Printer className="w-4 h-4 text-gray-400" />
+									<h3 className="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-widest">
+										Issuance details
+									</h3>
+								</div>
+								<div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 flex-1">
+									<div className="space-y-1 sm:col-span-2">
+										<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+											Date of Issuance
+										</label>
+										<DatePicker
+											value={data.issuanceDate || null}
+											onChange={(val) =>
+												setData((prev) => ({
+													...prev,
+													issuanceDate: val ?? "",
+												}))
+											}
+											placeholder="Select issuance date"
+											clearable={false}
+										/>
+									</div>
+									<div className="space-y-1">
+										<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+											Location (French)
+										</label>
+										<Input
+											placeholder="Laghouat"
+											value={data.issuanceLocationFr}
+											onChange={set("issuanceLocationFr")}
+											className="h-9 text-sm"
+										/>
+									</div>
+									<div className="space-y-1">
+										<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+											Location (Arabic)
+										</label>
+										<Input
+											placeholder="الأغواط"
+											value={data.issuanceLocationAr}
+											onChange={set("issuanceLocationAr")}
+											dir="rtl"
+											className="h-9 text-sm"
+										/>
+									</div>
+								</div>
+							</div>
+						</>
+					)}
 				</div>
 			</div>
 
-			{/* Side-by-side: Missing fields + Issuance */}
-			<div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-				{/* Section 2: Required manual */}
-				<div className="rounded-xl border border-gray-200 dark:border-zinc-700 overflow-hidden flex flex-col">
-					<div className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700">
-						<AlertCircle className="w-4 h-4 text-red-400" />
-						<h3 className="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-widest">
-							Required — not in database
-						</h3>
-					</div>
-					<div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 flex-1">
-						<div className="space-y-1">
-							<label className="flex items-center gap-1 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-								Place of Birth (French){" "}
-								<span className="text-red-500 ml-0.5">*</span>
-							</label>
-							<Input
-								placeholder="e.g. Laghouat"
-								value={data.placeOfBirth}
-								onChange={set("placeOfBirth")}
-								className={`h-9 text-sm ${!data.placeOfBirth ? "border-red-300 focus:border-red-400" : ""}`}
-							/>
-							{!data.placeOfBirth && (
-								<p className="text-[11px] text-red-400 flex items-center gap-1 mt-0.5">
-									<AlertCircle className="w-3 h-3" /> Required
-								</p>
-							)}
-						</div>
-						<div className="space-y-1">
-							<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1">
-								Place of Birth (Arabic){" "}
-								<span className="normal-case font-normal text-gray-400 ml-1">
-									(optional)
-								</span>
-							</label>
-							<Input
-								placeholder="مثال: الأغواط"
-								value={data.placeOfBirthAr}
-								onChange={set("placeOfBirthAr")}
-								dir="rtl"
-								className="h-9 text-sm"
-							/>
-						</div>
-						<div className="space-y-1">
-							<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1">
-								Last Name (Arabic){" "}
-								<span className="normal-case font-normal text-gray-400 ml-1">
-									(optional)
-								</span>
-							</label>
-							<Input
-								placeholder="مثال: قداري"
-								value={data.lastNameAr}
-								onChange={set("lastNameAr")}
-								dir="rtl"
-								className="h-9 text-sm"
-							/>
-						</div>
-						<div className="space-y-1">
-							<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1">
-								First Name (Arabic){" "}
-								<span className="normal-case font-normal text-gray-400 ml-1">
-									(optional)
-								</span>
-							</label>
-							<Input
-								placeholder="مثال: أيوب"
-								value={data.firstNameAr}
-								onChange={set("firstNameAr")}
-								dir="rtl"
-								className="h-9 text-sm"
-							/>
-						</div>
-					</div>
-				</div>
-
-				{/* Section 3: Issuance */}
-				<div className="rounded-xl border border-gray-200 dark:border-zinc-700 flex flex-col">
-					<div className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700">
-						<Printer className="w-4 h-4 text-gray-400" />
-						<h3 className="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-widest">
-							Issuance details
-						</h3>
-					</div>
-					<div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 flex-1">
-						<div className="space-y-1 sm:col-span-2">
-							<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-								Date of Issuance
-							</label>
-							<DatePicker
-								value={data.issuanceDate || null}
-								onChange={(val) =>
-									setData((prev) => ({ ...prev, issuanceDate: val ?? "" }))
-								}
-								placeholder="Select issuance date"
-								clearable={false}
-							/>
-						</div>
-						<div className="space-y-1">
-							<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-								Location (French)
-							</label>
-							<Input
-								placeholder="Laghouat"
-								value={data.issuanceLocationFr}
-								onChange={set("issuanceLocationFr")}
-								className="h-9 text-sm"
-							/>
-						</div>
-						<div className="space-y-1">
-							<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-								Location (Arabic)
-							</label>
-							<Input
-								placeholder="الأغواط"
-								value={data.issuanceLocationAr}
-								onChange={set("issuanceLocationAr")}
-								dir="rtl"
-								className="h-9 text-sm"
-							/>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div className="flex justify-between pt-1">
+			<div className="flex justify-between pt-3 border-t border-gray-100 dark:border-zinc-800 shrink-0">
 				<Button
 					variant="outline"
 					onClick={onBack}
 					className="flex items-center gap-2"
 				>
-					<ChevronLeft className="w-4 h-4" />
-					Back
+					{isRtl ? (
+						<ChevronRight className="w-4 h-4" />
+					) : (
+						<ChevronLeft className="w-4 h-4" />
+					)}
+					{t("common.back")}
 				</Button>
 				<Button
 					onClick={onNext}
 					disabled={!canProceed}
 					className="flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white px-6"
 				>
-					Preview Document
-					<ChevronRight className="w-4 h-4" />
+					{t("diploma.previewDocument")}
+					{isRtl ? (
+						<ChevronLeft className="w-4 h-4" />
+					) : (
+						<ChevronRight className="w-4 h-4" />
+					)}
 				</Button>
 			</div>
 		</div>
@@ -1080,114 +1054,123 @@ const PreviewStep: React.FC<PreviewStepProps> = ({
 
 	const [zoom, setZoom] = useState(1.35);
 
-	return (
-		<div className="space-y-4">
-			<div className="flex items-center justify-between">
-				<p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
-					<Eye className="w-4 h-4" />
-					<span>
-						Printing:&nbsp;
-						<strong className="text-gray-700 dark:text-gray-300">
-							{selectedType.labelFr}
-						</strong>
-						<span className="mx-1 text-gray-400">·</span>
-						<span dir="rtl">{selectedType.labelAr}</span>
-					</span>
-				</p>
-				<div className="flex items-center gap-2">
-					<button
-						onClick={() => setZoom((z) => Math.max(0.3, z - 0.1))}
-						className="px-2 py-1 rounded border text-sm hover:bg-gray-100 dark:hover:bg-zinc-700"
-					>
-						−
-					</button>
-					<span className="text-sm w-12 text-center">
-						{Math.round(zoom * 100)}%
-					</span>
-					<button
-						onClick={() => setZoom((z) => Math.min(1.5, z + 0.1))}
-						className="px-2 py-1 rounded border text-sm hover:bg-gray-100 dark:hover:bg-zinc-700"
-					>
-						+
-					</button>
-					<button
-						onClick={() => setZoom(1.35)}
-						className="px-2 py-1 rounded border text-sm hover:bg-gray-100 dark:hover:bg-zinc-700 text-gray-500"
-					>
-						Reset
-					</button>
-				</div>
-			</div>
+	const { t, i18n } = useTranslation();
+	const isRtl = i18n.language === "ar";
 
-			<div
-				className="w-full overflow-auto rounded-lg border border-gray-200 dark:border-zinc-700 bg-gray-100 dark:bg-zinc-900 flex justify-center py-4"
-				style={{ height: "75vh" }}
-			>
+	return (
+		<div className="flex flex-col flex-1 min-h-0 space-y-4">
+			<div className="flex-1 overflow-y-auto min-h-0 space-y-4 pr-1">
+				<div className="flex items-center justify-between">
+					<p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+						<Eye className="w-4 h-4" />
+						<span>
+							Printing:&nbsp;
+							<strong className="text-gray-700 dark:text-gray-300">
+								{selectedType.labelFr}
+							</strong>
+							<span className="mx-1 text-gray-400">·</span>
+							<span dir="rtl">{selectedType.labelAr}</span>
+						</span>
+					</p>
+					<div className="flex items-center gap-2" dir="ltr">
+						<button
+							onClick={() => setZoom((z) => Math.max(0.3, z - 0.1))}
+							className="px-2 py-1 rounded border text-sm hover:bg-gray-100 dark:hover:bg-zinc-700"
+						>
+							-
+						</button>
+						<span className="text-sm w-12 text-center">
+							{Math.round(zoom * 100)}%
+						</span>
+						<button
+							onClick={() => setZoom((z) => Math.min(1.5, z + 0.1))}
+							className="px-2 py-1 rounded border text-sm hover:bg-gray-100 dark:hover:bg-zinc-700"
+						>
+							+
+						</button>
+						<button
+							onClick={() => setZoom(1.35)}
+							className="px-2 py-1 rounded border text-sm hover:bg-gray-100 dark:hover:bg-zinc-700 text-gray-500"
+						>
+							Reset
+						</button>
+					</div>
+				</div>
+
 				<div
-					style={{
-						width: "200mm",
-						height: "350mm",
-						transform: `scale(${zoom})`,
-						transformOrigin: "top center",
-						flexShrink: 0,
-					}}
+					className="w-full overflow-auto rounded-lg border border-gray-200 dark:border-zinc-700 bg-gray-100 dark:bg-zinc-900 flex justify-center py-4"
+					style={{ height: "75vh" }}
 				>
-					<iframe
-						srcDoc={html}
-						title="Diploma Preview"
+					<div
 						style={{
 							width: "200mm",
 							height: "350mm",
-							border: "none",
-							background: "#fff",
-							boxShadow: "0 4px 32px rgba(0,0,0,0.18)",
+							transform: `scale(${zoom})`,
+							transformOrigin: "top center",
+							flexShrink: 0,
 						}}
-					/>
+					>
+						<iframe
+							srcDoc={html}
+							title="Diploma Preview"
+							style={{
+								width: "200mm",
+								height: "350mm",
+								border: "none",
+								background: "#fff",
+								boxShadow: "0 4px 32px rgba(0,0,0,0.18)",
+							}}
+						/>
+					</div>
+				</div>
+
+				<div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+					{[
+						["Name (FR)", `${data.lastNameFr} ${data.firstNameFr}`],
+						[
+							"Name (AR)",
+							`${data.lastNameAr || data.lastNameFr} ${data.firstNameAr || data.firstNameFr}`,
+						],
+						["Born", `${fmtDateFr(data.dateOfBirth)}, ${data.placeOfBirth}`],
+						[
+							"Issued",
+							`${fmtDateFr(data.issuanceDate)} – ${data.issuanceLocationFr}`,
+						],
+					].map(([label, value]) => (
+						<div
+							key={label}
+							className="bg-gray-50 dark:bg-zinc-800 rounded-md px-3 py-2"
+						>
+							<div className="text-gray-400 uppercase tracking-wider mb-0.5">
+								{label}
+							</div>
+							<div className="font-medium text-gray-800 dark:text-gray-200 truncate">
+								{value}
+							</div>
+						</div>
+					))}
 				</div>
 			</div>
 
-			<div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
-				{[
-					["Name (FR)", `${data.lastNameFr} ${data.firstNameFr}`],
-					[
-						"Name (AR)",
-						`${data.lastNameAr || data.lastNameFr} ${data.firstNameAr || data.firstNameFr}`,
-					],
-					["Born", `${fmtDateFr(data.dateOfBirth)}, ${data.placeOfBirth}`],
-					[
-						"Issued",
-						`${fmtDateFr(data.issuanceDate)} – ${data.issuanceLocationFr}`,
-					],
-				].map(([label, value]) => (
-					<div
-						key={label}
-						className="bg-gray-50 dark:bg-zinc-800 rounded-md px-3 py-2"
-					>
-						<div className="text-gray-400 uppercase tracking-wider mb-0.5">
-							{label}
-						</div>
-						<div className="font-medium text-gray-800 dark:text-gray-200 truncate">
-							{value}
-						</div>
-					</div>
-				))}
-			</div>
-
-			<div className="flex justify-between items-center pt-2">
+			<div className="flex justify-between items-center pt-3 border-t border-gray-100 dark:border-zinc-800 shrink-0">
 				<Button
 					variant="outline"
 					onClick={onBack}
 					className="flex items-center gap-2"
 				>
-					<ChevronLeft className="w-4 h-4" />
-					Back to Review
+					{isRtl ? (
+						<ChevronRight className="w-4 h-4" />
+					) : (
+						<ChevronLeft className="w-4 h-4" />
+					)}
+					{t("diploma.backToReview")}
 				</Button>
 				<Button
 					onClick={onPrint}
 					className="flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white"
 				>
 					<Printer className="w-4 h-4" />
-					Print Diploma
+					{t("diploma.printDiploma")}
 				</Button>
 			</div>
 		</div>
@@ -1216,13 +1199,14 @@ export const PrintDiplomaDialog: React.FC<PrintDiplomaDialogProps> = ({
 		graduationYear: student.graduationYear || "",
 		placeOfBirth: "",
 		placeOfBirthAr: "",
-		firstNameAr: "",
-		lastNameAr: "",
+		firstNameAr: student.firstName,
+		lastNameAr: student.lastName,
 		issuanceDate: today,
 		issuanceLocationFr: "Laghouat",
 		issuanceLocationAr: "الأغواط",
 		certNumber: 108,
 		certDate: today,
+		paperSize: "A4",
 		addresseeTitle: "",
 		addresseeWilaya: "",
 	});
@@ -1283,12 +1267,16 @@ export const PrintDiplomaDialog: React.FC<PrintDiplomaDialogProps> = ({
 		review: 1,
 		preview: 2,
 	};
+	const { i18n } = useTranslation();
 
 	return (
 		<Dialog open={open} onOpenChange={handleClose}>
-			<DialogContent className="max-w-[90vw]! w-[90vw]! h-[83vh]! max-h-[90vh] overflow-hidden p-4 flex flex-col gap-2 bg-gray-50">
+			<DialogContent
+				className="max-w-[90vw]! w-[90vw]! h-[83vh]! max-h-[90vh] overflow-hidden p-4 flex flex-col gap-2 bg-gray-50"
+				dir={i18n.language === "ar" ? "rtl" : "ltr"}
+			>
 				<DialogHeader className="pb-0 mb-0">
-					<DialogTitle className="flex items-center gap-2 text-lg">
+					<DialogTitle className="flex items-center gap-2 text-lg pr-8">
 						<Printer className="w-5 h-5 text-green-700" />
 						{t("diploma.generateTitle", { defaultValue: "Generate Document" })}
 					</DialogTitle>

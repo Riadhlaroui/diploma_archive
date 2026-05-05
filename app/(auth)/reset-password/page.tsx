@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import pb from "@/lib/pocketbase";
 
+import { ERROR_KEYS } from "@/lib/constants/errors";
+
 function ResetPasswordForm() {
 	const { t, i18n } = useTranslation();
 	const isRtl = i18n.language === "ar";
@@ -89,11 +91,11 @@ function ResetPasswordForm() {
 		setError("");
 
 		if (!isStrong) {
-			setError(t("addStaffDialog.errors.weakTitle"));
+			setError(t(ERROR_KEYS.WEAK_PASSWORD_TITLE));
 			return;
 		}
 		if (form.password !== form.confirmPassword) {
-			setError(t("addStaffDialog.errors.mismatchTitle"));
+			setError(t(ERROR_KEYS.MISMATCHED_PASSWORDS));
 			return;
 		}
 
@@ -238,7 +240,7 @@ function ResetPasswordForm() {
 					{form.confirmPassword && form.password !== form.confirmPassword && (
 						<p className="text-xs text-red-500 mt-1 flex items-center gap-1">
 							<AlertCircle className="w-3 h-3" />
-							{t("addStaffDialog.errors.mismatchShort")}
+							{t(ERROR_KEYS.MISMATCHED_PASSWORDS_SHORT)}
 						</p>
 					)}
 				</div>

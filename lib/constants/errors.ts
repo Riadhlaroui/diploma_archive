@@ -7,6 +7,31 @@ export const ERROR_KEYS = {
 	TOO_MANY_ATTEMPTS: "errors.sign-in.tooManyAttempts",
 	NOT_FOUND: "errors.sign-in.notFound",
 
+	// Profile Errors
+	NAME_REQUIRED: "errors.profile.nameRequired",
+	FILL_ALL_FIELDS: "errors.profile.fillAll",
+	INVALID_EMAIL: "errors.profile.invalidEmail",
+	SAME_EMAIL: "errors.profile.sameEmail",
+	EMAIL_ALREADY_EXISTS: "errors.profile.emailExists",
+	WRONG_PASSWORD: "errors.profile.wrongPassword",
+	SAME_PASSWORD: "errors.profile.samePassword",
+	UPDATE_FAILED: "errors.profile.updateFailed",
+
+	// AddStaff Errors
+	MISMATCHED_PASSWORDS: "errors.addStaff.mismatchTitle",
+	MISMATCHED_PASSWORDS_SHORT: "errors.addStaff.mismatchShort",
+	MISSMATCHED_PASSWORDS_DESCRIPTION: "errors.addStaff.mismatchDesc",
+	MISSING_FIELDS_TITLE: "errors.addStaff.missingTitle",
+	MISSING_FIELDS_DESC: "errors.addStaff.missingDesc",
+	WEAK_PASSWORD_TITLE: "errors.addStaff.weakTitle",
+	WEAK_PASSWORD_DESC: "errors.addStaff.weakDesc",
+	FAILED_TO_CREATE_STAFF: "errors.addStaff.userCreatedError",
+	EMAIL_STAFF_ALREADY_EXISTS: "errors.addStaff.emailExistsTitle",
+	EMAIL_STAFF_ALREADY_EXISTS_DESC: "errors.addStaff.emailExistsDesc",
+
+	// UpdateStaff Errors
+	FAILED_TO_UPDATE_STAFF: "errors.updateStaff.failedToUpdate",
+
 	// Faculties Errors
 	CREATE_FACULTY_FAILED: "errors.createFacultyFailed",
 	UPDATE_FACULTY_FAILED: "errors.updateFacultyFailed",

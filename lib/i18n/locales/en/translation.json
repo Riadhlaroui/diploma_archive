@@ -30,20 +30,28 @@
 		},
 
 		"hierarchy": {
+			"goTo": "Go to {{item}} page",
 			"title": "System Hierarchy Explorer",
 			"hint": "Click arrows to expand levels",
-			"noItems": "No items found."
+			"noItems": "No items found.",
+			"noResults": "No results found for \"{{query}}\""
 		}
 	},
 
 	"settings": {
-		"addType": "Add type",
-		"title": "Settings page",
-		"documentTypes": "Document Types",
-		"documentTypesDescription": "Manage the types that can be assigned to uploaded documents.",
-		"noDocumentTypes": "No document types yet.",
-		"addYourFirstType": "Add your first document type",
-		"documentTypesNote": "Deleting a type that is already assigned to documents will fail. Rename it instead."
+		"documentSettings": {
+			"title": "Document Settings",
+			"description": "Manage the types that can be assigned to uploaded documents.",
+			"addType": "Add type",
+			"documentTypes": "Document Types",
+			"documentTypesDescription": "Manage the types that can be assigned to uploaded documents.",
+			"noDocumentTypes": "No document types yet.",
+			"addYourFirstType": "Add your first document type",
+			"documentTypesNote": "Deleting a type that is already assigned to documents will fail. Rename it instead.",
+			"typeNamePlaceholder": "Enter document type name"
+		},
+
+		"title": "Settings page"
 	},
 
 	"profile": {
@@ -81,6 +89,7 @@
 		"infoUpdated": "Profile updated successfully",
 		"emailUpdated": "Email updated successfully",
 		"passwordUpdated": "Password updated successfully",
+
 		"permissionsDescription": "A read-only view of what you can access in this system",
 		"adminAccessNote": "As an admin you have unrestricted access to all features",
 		"permissionsGranted": "Permissions granted"
@@ -122,18 +131,7 @@
 		"staffRole": "Staff",
 		"adminRole": "Admin",
 		"submitButton": "Submit",
-		"errors": {
-			"mismatchTitle": "Passwords do not match",
-			"mismatchShort": "Passwords don't match",
-			"mismatchDesc": "Please make sure both passwords are the same.",
-			"missingTitle": "Missing Required Fields",
-			"missingDesc": "Please fill in all required fields marked with *.",
-			"weakTitle": "Weak Password",
-			"weakDesc": "Password must be at least 8 characters long, include an uppercase letter and a number or special character.",
-			"userCreatedError": "Failed to create user. Please try again.",
-			"emailExistsTitle": "Email Already Exists",
-			"emailExistsDesc": "The email you entered is already registered. Please try another."
-		},
+
 		"cancelButton": "Cancel",
 		"userCreatedSuccess": "User successfully created!",
 		"req": {
@@ -816,6 +814,18 @@
 		"specialty": "Specialty"
 	},
 
+	"diploma": {
+		"previewDocument": "Preview Document",
+		"backToReview": "Back to Review",
+		"printDiploma": "Print Diploma",
+		"stepSelect": "Select Type",
+		"stepReview": "Review & Fill",
+		"stepPreview": "Preview & Print",
+		"generateTitle": "Generate Document",
+		"certInfo": "Certificate Info",
+		"paperSize": "Paper Size"
+	},
+
 	"common": {
 		"cancel": "Cancel",
 		"delete": "Delete",
@@ -831,7 +841,9 @@
 		"resume": "Resume",
 		"done": "Done",
 		"searchPlaceholder": "Search...",
-		"loading": "Loading..."
+		"loading": "Loading...",
+		"save": "Save",
+		"continue": "Continue"
 	},
 
 	"errors": {
@@ -860,6 +872,19 @@
 			"wrongPassword": "Current password is incorrect",
 			"samePassword": "New password must be different from your current password",
 			"updateFailed": "Update failed. Please try again."
+		},
+
+		"addStaffDialog": {
+			"mismatchTitle": "Passwords do not match",
+			"mismatchShort": "Passwords don't match",
+			"mismatchDesc": "Please make sure both passwords are the same.",
+			"missingTitle": "Missing Required Fields",
+			"missingDesc": "Please fill in all required fields marked with *.",
+			"weakTitle": "Weak Password",
+			"weakDesc": "Password must be at least 8 characters long, include an uppercase letter and a number or special character.",
+			"userCreatedError": "Failed to create user. Please try again.",
+			"emailExistsTitle": "Email Already Exists",
+			"emailExistsDesc": "The email you entered is already registered. Please try another."
 		}
 	}
 }

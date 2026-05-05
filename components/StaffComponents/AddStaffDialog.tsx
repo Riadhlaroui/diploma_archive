@@ -20,6 +20,7 @@ import { ROLE_PRESETS, type Permission } from "@/app/src/config/permissions";
 import { PERMISSION_GROUPS } from "../../app/src/config/permissionGroups";
 import { DatePicker } from "../ui/DatePicker";
 import { PhoneInput } from "../ui/PhoneInput";
+import { ERROR_KEYS } from "@/lib/constants/errors";
 
 type Props = {
 	open: boolean;
@@ -112,24 +113,16 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 			!form.email ||
 			!form.password
 		) {
-			toast.error(
-				t("addStaffDialog.errors.missingTitle", "Please fill in all fields"),
-			);
+			toast.error(t(ERROR_KEYS.MISSING_FIELDS_TITLE));
 			return;
 		}
 		if (form.password !== form.confirmPassword) {
-			toast.error(
-				t("addStaffDialog.errors.mismatchTitle", "Passwords do not match"),
-			);
+			toast.error(t(ERROR_KEYS.MISMATCHED_PASSWORDS));
 			return;
 		}
 		if (!isPasswordStrong) {
-			toast.error(
-				t(
-					"addStaffDialog.errors.weakTitle",
-					"Password does not meet requirements",
-				),
-			);
+			toast.error(t(ERROR_KEYS.WEAK_PASSWORD_TITLE));
+
 			return;
 		}
 
@@ -150,7 +143,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 			onOpenChange(false);
 		} catch (error) {
 			console.error("Error creating user:", error);
-			toast.error(t("addStaffDialog.errors.userCreatedError"));
+			toast.error(t(ERROR_KEYS.FAILED_TO_CREATE_STAFF));
 		}
 	};
 
@@ -336,10 +329,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 								form.password !== form.confirmPassword && (
 									<div className="flex items-center gap-2 text-red-500 text-xs mt-1">
 										<AlertCircle className="w-3 h-3" />
-										{t(
-											"addStaffDialog.errors.mismatchShort",
-											"Passwords do not match",
-										)}
+										{t(ERROR_KEYS.MISMATCHED_PASSWORDS_SHORT)}
 									</div>
 								)}
 						</div>

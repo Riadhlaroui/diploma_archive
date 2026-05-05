@@ -4,7 +4,6 @@ import React, { useEffect, useState, useMemo } from "react";
 import {
 	User2,
 	Mail,
-	Phone,
 	Lock,
 	Eye,
 	EyeOff,
@@ -26,6 +25,8 @@ import { PhoneInput } from "@/components/ui/PhoneInput";
 
 import { PERMISSION_GROUPS } from "@/app/src/config/permissionGroups";
 import { PERMISSIONS } from "@/app/src/config/permissions";
+
+import { ERROR_KEYS } from "@/lib/constants/errors";
 
 type Section = "info" | "email" | "password" | "permissions";
 
@@ -107,7 +108,7 @@ export default function ProfilePage() {
 	const handleInfoSave = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!info.firstName.trim() || !info.lastName.trim()) {
-			toast.error(t("profile.errors.nameRequired"));
+			toast.error(t(ERROR_KEYS.NAME_REQUIRED));
 			return;
 		}
 		try {
@@ -121,7 +122,7 @@ export default function ProfilePage() {
 			await pb.collection("Archive_users").authRefresh();
 			toast.success(t("profile.infoUpdated"));
 		} catch {
-			toast.error(t("profile.errors.updateFailed"));
+			toast.error(t(ERROR_KEYS.UPDATE_FAILED));
 		} finally {
 			setSavingInfo(false);
 		}
@@ -130,16 +131,16 @@ export default function ProfilePage() {
 	const handleEmailSave = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!emailForm.newEmail.trim() || !emailForm.currentPassword) {
-			toast.error(t("profile.errors.fillAll"));
+			toast.error(t(ERROR_KEYS.FILL_ALL_FIELDS));
 			return;
 		}
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 		if (!emailRegex.test(emailForm.newEmail)) {
-			toast.error(t("profile.errors.invalidEmail"));
+			toast.error(t(ERROR_KEYS.INVALID_EMAIL));
 			return;
 		}
 		if (emailForm.newEmail === model?.email) {
-			toast.error(t("profile.errors.sameEmail"));
+			toast.error(t(ERROR_KEYS.SAME_EMAIL));
 			return;
 		}
 		try {
@@ -153,11 +154,11 @@ export default function ProfilePage() {
 			setEmailForm({ newEmail: "", currentPassword: "" });
 		} catch (err: any) {
 			if (err?.response?.data?.email) {
-				toast.error(t("profile.errors.emailExists"));
+				toast.error(t(ERROR_KEYS.EMAIL_ALREADY_EXISTS));
 			} else if (err?.response?.status === 400) {
-				toast.error(t("profile.errors.wrongPassword"));
+				toast.error(t(ERROR_KEYS.WRONG_PASSWORD));
 			} else {
-				toast.error(t("profile.errors.updateFailed"));
+				toast.error(t(ERROR_KEYS.UPDATE_FAILED));
 			}
 		} finally {
 			setSavingEmail(false);
@@ -167,19 +168,20 @@ export default function ProfilePage() {
 	const handlePasswordSave = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!passwordForm.currentPassword || !passwordForm.newPassword) {
-			toast.error(t("profile.errors.fillAll"));
+			toast.error(t(ERROR_KEYS.FILL_ALL_FIELDS));
 			return;
 		}
 		if (!isPasswordStrong) {
-			toast.error(t("addStaffDialog.errors.weakTitle"));
+			toast.error(t(ERROR_KEYS.WEAK_PASSWORD_TITLE));
+
 			return;
 		}
 		if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-			toast.error(t("addStaffDialog.errors.mismatchTitle"));
+			toast.error(t(ERROR_KEYS.MISMATCHED_PASSWORDS));
 			return;
 		}
 		if (passwordForm.currentPassword === passwordForm.newPassword) {
-			toast.error(t("profile.errors.samePassword"));
+			toast.error(t(ERROR_KEYS.SAME_PASSWORD));
 			return;
 		}
 		try {
@@ -197,9 +199,9 @@ export default function ProfilePage() {
 			});
 		} catch (err: any) {
 			if (err?.response?.data?.oldPassword) {
-				toast.error(t("profile.errors.wrongPassword"));
+				toast.error(t(ERROR_KEYS.WRONG_PASSWORD));
 			} else {
-				toast.error(t("profile.errors.updateFailed"));
+				toast.error(t(ERROR_KEYS.UPDATE_FAILED));
 			}
 		} finally {
 			setSavingPassword(false);
@@ -653,7 +655,7 @@ export default function ProfilePage() {
 											passwordForm.confirmPassword && (
 											<div className="flex items-center gap-2 text-red-500 text-xs">
 												<AlertCircle className="w-3.5 h-3.5" />
-												{t("addStaffDialog.errors.mismatchShort")}
+												{t(ERROR_KEYS.MISMATCHED_PASSWORDS_SHORT)}
 											</div>
 										)}
 								</div>

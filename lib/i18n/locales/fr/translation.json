@@ -24,26 +24,33 @@
 		"stats": {
 			"faculties": "Facultés",
 			"departments": "Départements",
-			"majors": "Majeures",
+			"majors": "Filières",
 			"fields": "Domaines",
 			"specialties": "Spécialités"
 		},
 
 		"hierarchy": {
+			"goTo": "Aller à la page {{item}}",
 			"title": "Explorateur de Hiérarchie du Système",
 			"hint": "Cliquez sur les flèches pour développer les niveaux",
-			"noItems": "Aucun élément trouvé."
+			"noItems": "Aucun élément trouvé.",
+			"noResults": "Aucun résultat trouvé pour \"{{query}}\""
 		}
 	},
 
 	"settings": {
-		"addType": "Ajouter un type",
-		"title": "Paramètres",
-		"documentTypes": "Types de Documents",
-		"documentTypesDescription": "Gérer les types qui peuvent être attribués aux documents téléchargés.",
-		"noDocumentTypes": "Aucun type de document pour le moment.",
-		"addYourFirstType": "Ajoutez votre premier type de document",
-		"documentTypesNote": "Supprimer un type déjà attribué aux documents échouera. Renommez-le à la place."
+		"documentSettings": {
+			"title": "Paramètres des documents",
+			"description": "Gérez les types de documents qui peuvent être attribués aux fichiers téléchargés.",
+			"addType": "Ajouter un type",
+			"documentTypes": "Types de Documents",
+			"documentTypesDescription": "Gérer les types qui peuvent être attribués aux documents téléchargés.",
+			"noDocumentTypes": "Aucun type de document pour le moment.",
+			"addYourFirstType": "Ajoutez votre premier type de document",
+			"documentTypesNote": "Supprimer un type déjà attribué aux documents échouera. Renommez-le à la place.",
+			"typeNamePlaceholder": "Nom du type de document"
+		},
+		"title": "Paramètres"
 	},
 
 	"profile": {
@@ -81,6 +88,7 @@
 		"infoUpdated": "Profil mis à jour avec succès",
 		"emailUpdated": "E-mail mis à jour avec succès",
 		"passwordUpdated": "Mot de passe mis à jour avec succès",
+
 		"permissionsDescription": "Vue en lecture seule de ce à quoi vous avez accès dans ce système",
 		"adminAccessNote": "En tant qu'administrateur, vous avez accès à toutes les fonctionnalités",
 		"permissionsGranted": "Permissions accordées"
@@ -122,18 +130,7 @@
 		"staffRole": "Personnel",
 		"adminRole": "Administrateur",
 		"submitButton": "Soumettre",
-		"errors": {
-			"mismatchTitle": "Les mots de passe ne correspondent pas",
-			"mismatchShort": "Mots de passe non correspondants",
-			"mismatchDesc": "Veuillez vous assurer que les deux mots de passe sont identiques.",
-			"missingTitle": "Champs requis manquants",
-			"missingDesc": "Veuillez remplir tous les champs obligatoires marqués d’un *.",
-			"weakTitle": "Mot de passe faible",
-			"weakDesc": "Le mot de passe doit comporter au moins 8 caractères, inclure une majuscule et un chiffre ou un caractère spécial.",
-			"userCreatedError": "Échec de la création de l'utilisateur. Veuillez réessayer.",
-			"emailExistsTitle": "Email déjà utilisé",
-			"emailExistsDesc": "L'adresse email saisie est déjà enregistrée. Veuillez en essayer une autre."
-		},
+
 		"cancelButton": "Annuler",
 		"userCreatedSuccess": "Utilisateur créé avec succès !",
 		"req": {
@@ -602,7 +599,7 @@
 
 	"majors": {
 		"title": "Filières",
-		"titleWithfield": "Les filiales dans: {{field}}",
+		"titleWithfield": "Les filières dans: {{field}}",
 		"table": {
 			"code": "Code",
 			"name": "Nom",
@@ -802,6 +799,18 @@
 		"specialty": "Spécialité"
 	},
 
+	"diploma": {
+		"previewDocument": "Aperçu du document",
+		"backToReview": "Retour à la révision",
+		"printDiploma": "Imprimer le diplôme",
+		"stepSelect": "Choisir le type",
+		"stepReview": "Réviser et remplir",
+		"stepPreview": "Aperçu et impression",
+		"generateTitle": "Générer un document",
+		"certInfo": "Infos du certificat",
+		"paperSize": "Format du papier"
+	},
+
 	"common": {
 		"cancel": "Annuler",
 		"delete": "Supprimer",
@@ -817,7 +826,9 @@
 		"resume": "Reprendre",
 		"done": "Terminer",
 		"searchPlaceholder": "Rechercher...",
-		"loading": "Chargement..."
+		"loading": "Chargement...",
+		"save": "Enregistrer",
+		"continue": "Continuer"
 	},
 
 	"errors": {
@@ -845,6 +856,19 @@
 			"wrongPassword": "Le mot de passe actuel est incorrect",
 			"samePassword": "Le nouveau mot de passe doit être différent de l'actuel",
 			"updateFailed": "La mise à jour a échoué. Veuillez réessayer."
+		},
+
+		"addStaffDialog": {
+			"mismatchTitle": "Les mots de passe ne correspondent pas",
+			"mismatchShort": "Mots de passe non correspondants",
+			"mismatchDesc": "Veuillez vous assurer que les deux mots de passe sont identiques.",
+			"missingTitle": "Champs requis manquants",
+			"missingDesc": "Veuillez remplir tous les champs obligatoires marqués d’un *.",
+			"weakTitle": "Mot de passe faible",
+			"weakDesc": "Le mot de passe doit comporter au moins 8 caractères, inclure une majuscule et un chiffre ou un caractère spécial.",
+			"userCreatedError": "Échec de la création de l'utilisateur. Veuillez réessayer.",
+			"emailExistsTitle": "Email déjà utilisé",
+			"emailExistsDesc": "L'adresse email saisie est déjà enregistrée. Veuillez en essayer une autre."
 		}
 	}
 }

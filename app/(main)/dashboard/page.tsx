@@ -17,6 +17,7 @@ import {
 	ChevronLeft,
 	Search,
 	FileText,
+	SquareArrowOutUpLeft,
 } from "lucide-react";
 import { t } from "i18next";
 
@@ -72,7 +73,6 @@ const HIERARCHY_MAP: Record<
 	},
 };
 
-// Helper to get a readable name for the badge (e.g., "Archive_majors" -> "Major")
 const getCollectionLabel = (collectionName: string) => {
 	return collectionName.replace("Archive_", "").replace(/s$/, "");
 };
@@ -150,8 +150,6 @@ function TreeNode({
 			<div
 				className={`flex items-center gap-2 py-1.5 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors group`}
 				onClick={handleToggle}
-				onDoubleClick={handleNavigate}
-				title="Double-click to open"
 			>
 				<div className="text-gray-400 w-4 h-4 flex items-center justify-center shrink-0">
 					{loading ? (
@@ -163,7 +161,7 @@ function TreeNode({
 					) : isRtl ? (
 						<ChevronLeft className="w-4 h-4" />
 					) : (
-						<ChevronRight className="w-4 h-4" />
+						<SquareArrowOutUpLeft className="w-4 h-4" />
 					)}
 				</div>
 
@@ -172,6 +170,17 @@ function TreeNode({
 				<span className="text-[10px] uppercase text-gray-400 dark:text-gray-500 ms-auto border dark:border-gray-600 px-1 rounded bg-gray-50 dark:bg-gray-800">
 					{getCollectionLabel(collection)}
 				</span>
+
+				{/* Navigation button — only visible on hover */}
+				<button
+					onClick={handleNavigate}
+					title={t("dashboard.hierarchy.goTo", {
+						item: getCollectionLabel(collection),
+					})}
+					className="opacity-0 group-hover:opacity-100 transition-opacity ml-1 p-1 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-500 dark:text-blue-400 shrink-0"
+				>
+					<SquareArrowOutUpLeft className="w-3.5 h-3.5" />
+				</button>
 			</div>
 
 			{isOpen && (
@@ -191,7 +200,7 @@ function TreeNode({
 									id={child.id}
 									label={nextLabel}
 									depth={depth + 1}
-									parentId={id} // ← add this
+									parentId={id}
 								/>
 							);
 						})
@@ -358,13 +367,12 @@ function HierarchyDialog({
 
 				{/* Content Area */}
 				<div className="flex-1 overflow-y-auto p-2 sm:p-4 custom-scrollbar bg-gray-50/50 dark:bg-black/20">
-					{/* Scenario 1: Searching */}
 					{searchQuery.trim() !== "" ? (
 						<div className="space-y-2">
 							{isSearching ? (
 								<div className="flex flex-col items-center justify-center py-12 gap-3 text-gray-400">
 									<Loader2 className="w-6 h-6 animate-spin" />
-									<span className="text-sm">Searching...</span>
+									<span className="text-sm">{t("common.searching")}</span>
 								</div>
 							) : searchResults.length > 0 ? (
 								searchResults.map((item) => (
@@ -391,7 +399,7 @@ function HierarchyDialog({
 							) : (
 								<div className="flex flex-col items-center justify-center py-12 text-gray-400">
 									<p className="text-sm">
-										No results found for &quot;{searchQuery}&quot;
+										{t("dashboard.hierarchy.noResults", { query: searchQuery })}
 									</p>
 								</div>
 							)}
@@ -421,7 +429,7 @@ function HierarchyDialog({
 				<div className="px-6 py-3 bg-gray-50 dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 text-xs text-gray-500 flex justify-between">
 					<span>
 						{searchQuery
-							? `${searchResults.length} results found`
+							? `${searchResults.length}`
 							: t("dashboard.hierarchy.hint")}
 					</span>
 				</div>

@@ -145,10 +145,10 @@ export default function DocumentTypesPage() {
 						{t("common.back")}
 					</button>
 					<h1 className="text-xl font-semibold text-gray-900">
-						{t("settings.documentTypes")}
+						{t("settings.documentSettings.title")}
 					</h1>
 					<p className="text-sm text-gray-500 mt-1">
-						{t("settings.documentTypesDescription")}
+						{t("settings.documentSettings.description")}
 					</p>
 				</div>
 
@@ -168,7 +168,7 @@ export default function DocumentTypesPage() {
 								className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-black border border-gray-200 hover:border-gray-400 rounded-lg px-3 h-8 transition-colors"
 							>
 								<Plus className="w-3.5 h-3.5" />
-								{t("settings.addType")}
+								{t("settings.documentSettings.addType")}
 							</button>
 						)}
 					</div>
@@ -179,7 +179,7 @@ export default function DocumentTypesPage() {
 							<input
 								type="text"
 								autoFocus
-								placeholder="Type name…"
+								placeholder={t("settings.documentSettings.typeNamePlaceholder")}
 								value={newName}
 								onChange={(e) => setNewName(e.target.value)}
 								onKeyDown={(e) => {
@@ -196,7 +196,7 @@ export default function DocumentTypesPage() {
 								disabled={savingNew || !newName.trim()}
 								className="h-8 px-3 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 disabled:opacity-50 transition-colors"
 							>
-								{savingNew ? "Saving…" : "Save"}
+								{savingNew ? t("common.saving") : t("common.save")}
 							</button>
 							<button
 								onClick={() => {
@@ -213,7 +213,7 @@ export default function DocumentTypesPage() {
 					{/* List */}
 					{loading ? (
 						<div className="py-12 text-center text-sm text-gray-400">
-							Loading…
+							{t("common.loading")}
 						</div>
 					) : types.length === 0 && !adding ? (
 						<div className="py-12 text-center">
@@ -221,13 +221,13 @@ export default function DocumentTypesPage() {
 								<FileText className="w-5 h-5 text-gray-400" />
 							</div>
 							<p className="text-sm text-gray-500">
-								{t("settings.noDocumentTypes")}
+								{t("settings.documentSettings.noDocumentTypes")}
 							</p>
 							<button
 								onClick={() => setAdding(true)}
 								className="mt-3 text-sm font-medium text-gray-700 hover:text-black underline underline-offset-2"
 							>
-								{t("settings.addYourFirstType")}
+								{t("settings.documentSettings.addYourFirstType")}
 							</button>
 						</div>
 					) : (
@@ -299,7 +299,7 @@ export default function DocumentTypesPage() {
 				</div>
 
 				<p className="mt-3 text-xs text-gray-400">
-					{t("settings.documentTypesNote")}
+					{t("settings.documentSettings.documentTypesNote")}
 				</p>
 			</div>
 		</div>
