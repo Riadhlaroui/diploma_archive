@@ -1,4 +1,4 @@
-import * as XLSX from "xlsx";
+import XLSX from "xlsx";
 import * as path from "path";
 import * as fs from "fs";
 import { fileURLToPath } from "url";
@@ -14,11 +14,14 @@ const DATA_DIR = path.join(__dirname, "data");
 let token = "";
 
 async function pbAuth() {
-	const res = await fetch(`${PB_URL}/api/admins/auth-with-password`, {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ identity: PB_EMAIL, password: PB_PASSWORD }),
-	});
+	const res = await fetch(
+		`${PB_URL}/api/collections/_superusers/auth-with-password`,
+		{
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ identity: PB_EMAIL, password: PB_PASSWORD }),
+		},
+	);
 	if (!res.ok) throw new Error(`Auth failed: ${await res.text()}`);
 	token = ((await res.json()) as { token: string }).token;
 }
