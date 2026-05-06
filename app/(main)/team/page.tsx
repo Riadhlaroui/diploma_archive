@@ -31,7 +31,7 @@ import {
 import AddStaffDialog from "@/components/StaffComponents/AddStaffDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { toast } from "sonner";
-import { UserUpdateDialog } from "@/components/UserUpdateDialog";
+import { UserUpdateDialog } from "@/components/StaffComponents/UserUpdateDialog";
 import { useRouter } from "next/navigation";
 import pb from "@/lib/pocketbase";
 import { Skeleton } from "@/components/ui/skeleton";

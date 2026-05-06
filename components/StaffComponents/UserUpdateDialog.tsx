@@ -18,15 +18,15 @@ import {
 	SelectLabel,
 	SelectTrigger,
 	SelectValue,
-} from "./ui/select";
-import { Switch } from "./ui/switch";
-import { Separator } from "./ui/separator";
+} from "../ui/select";
+import { Switch } from "../ui/switch";
+import { Separator } from "../ui/separator";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { DatePicker } from "./ui/DatePicker";
+import { DatePicker } from "../ui/DatePicker";
 import { PERMISSION_GROUPS } from "@/app/src/config/permissionGroups";
 import { ROLE_PRESETS, type Permission } from "@/app/src/config/permissions";
-import { PhoneInput } from "./ui/PhoneInput";
+import { PhoneInput } from "../ui/PhoneInput";
 import { ERROR_KEYS } from "@/lib/constants/errors";
 
 type Props = {

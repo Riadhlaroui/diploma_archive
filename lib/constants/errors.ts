@@ -29,13 +29,23 @@ export const ERROR_KEYS = {
 	EMAIL_STAFF_ALREADY_EXISTS: "errors.addStaff.emailExistsTitle",
 	EMAIL_STAFF_ALREADY_EXISTS_DESC: "errors.addStaff.emailExistsDesc",
 
+	// DeleteStaff Errors
+	FETCH_STAFF_FAILED: "errors.deleteStaffDialog.fetchFailed",
+	DELETE_STAFF_FAILED: "errors.deleteStaffDialog.deleteFailed",
+	PARTIAL_STAFF_FAIL: "errors.deleteStaffDialog.partialFail",
+
 	// UpdateStaff Errors
-	FAILED_TO_UPDATE_STAFF: "errors.updateStaff.failedToUpdate",
+	FAILED_TO_UPDATE_STAFF: "errors.editUserDialog.errorMessage",
 
 	// Faculties Errors
 	CREATE_FACULTY_FAILED: "errors.createFacultyFailed",
 	UPDATE_FACULTY_FAILED: "errors.updateFacultyFailed",
-	DELETE_FACULTY_FAILED: "errors.deleteFacultyFailed",
+	DELETE_FACULTY_FAILED: "errors.faculties.deleteError",
+	FACULTY_ERROR: "errors.faculties.error",
+	DUPLICATE_ADDFACULTY_ERROR_TITLE: "errors.addFaculty.duplicateTitle",
+	DUPLICATE_ADDFACULTY_ERROR_SUBTITLE: "errors.addFaculty.duplicateSubtitle",
+	ADDFACULTY_ERROR_TITLE: "errors.addFaculty.errorTitle",
+	ADDFACULTY_ERROR_SUBTITLE: "errors.addFaculty.errorSubtitle",
 
 	// Departments Errors
 	CREATE_DEPARTMENT_FAILED: "errors.createDepartmentFailed",
@@ -58,11 +68,21 @@ export const ERROR_KEYS = {
 	DELETE_SPECIALTY_FAILED: "errors.deleteSpecialtyFailed",
 
 	// Students Errors
-	CREATE_STUDENT_FAILED: "errors.createStudentFailed",
-	UPDATE_STUDENT_FAILED: "errors.updateStudentFailed",
-	DELETE_STUDENT_FAILED: "errors.deleteStudentFailed",
-	MATRICULE_ALREADY_EXISTS: "errors.matriculeAlreadyExists",
-	INVALID_STUDENT_YEAR_RANGE: "errors.invalidStudentYearRange",
+	CREATE_STUDENT_FAILED: "errors.students.createStudentFailed",
+	UPDATE_STUDENT_FAILED: "errors.students.updateStudentFailed",
+	DELETE_STUDENT_FAILED: "errors.students.deleteStudentFailed",
+	MATRICULE_ALREADY_EXISTS: "errors.students.matriculeAlreadyExists",
+	REQUIRED_STUDENT_FIELD: "errors.students.requiredField",
+	NO_DOCUMENTS: "errors.students.noDocuments",
+	INVALID_DOB: "errors.students.invalidDOB",
+	FUTURE_DOB: "errors.students.futureDOB",
+	INVALID_ENROLLMENT_YEAR: "errors.students.invalidEnrollmentYear",
+	EXISTS: "errors.students.exists",
+	CHOOSE_DIFFERENT: "errors.students.chooseDifferent",
+	CREATION_ERROR: "errors.students.creationError",
+	DELETE_FAILED: "errors.students.deleteFailed",
+	INVALID_GRADUATION_YEAR: "errors.students.invalidGraduationYear",
+	GRADUATION_BEFORE_ENROLLMENT: "errors.students.graduationBeforeEnrollment",
 
 	// Bulk Import Errors
 	IMPORT_FAILED: "errors.importFailed",

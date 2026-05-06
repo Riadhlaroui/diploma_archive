@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import ConfirmDialog from "../ConfirmDialog";
 import { useTranslation } from "react-i18next";
 import pb from "@/lib/pocketbase";
+import { ERROR_KEYS } from "@/lib/constants/errors";
 
 type Props = {
 	open: boolean;
@@ -43,7 +44,7 @@ const DeleteStaffDialog = ({ open, onOpenChange }: Props) => {
 			setStaffList(users);
 		} catch (err) {
 			console.error(err);
-			toast.error(t("deleteStaffDialog.errors.fetchFailed"));
+			toast.error(t(ERROR_KEYS.FETCH_STAFF_FAILED));
 		} finally {
 			setFetching(false);
 		}
@@ -88,9 +89,7 @@ const DeleteStaffDialog = ({ open, onOpenChange }: Props) => {
 			toast.success(t("deleteStaffDialog.success", { count: successCount }));
 		}
 		if (failCount > 0) {
-			toast.error(
-				t("deleteStaffDialog.errors.partialFail", { count: failCount }),
-			);
+			toast.error(t(ERROR_KEYS.PARTIAL_STAFF_FAIL, { count: failCount }));
 		}
 
 		setSelectedIds([]);

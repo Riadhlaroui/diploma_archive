@@ -197,36 +197,39 @@ const CreateStudentPage = () => {
 			(key) => !form[key as keyof typeof form],
 		);
 		if (missingField) {
-			toast.error(t("students.requiredField", { field: missingField }));
+			toast.error(
+				t(ERROR_KEYS.REQUIRED_STUDENT_FIELD, { field: missingField }),
+			);
 			return;
 		}
+
 		if (form.graduationYear) {
 			const gradYear = Number.parseInt(form.graduationYear);
 			const enrollYear = Number.parseInt(form.enrollmentYear);
 
 			if (isNaN(gradYear)) {
-				toast.error(t("students.invalidGraduationYear"));
+				toast.error(t(ERROR_KEYS.INVALID_GRADUATION_YEAR));
 				return;
 			}
 
 			if (gradYear < enrollYear) {
-				toast.error(t(ERROR_KEYS.INVALID_YEAR_RANGE));
+				toast.error(t(ERROR_KEYS.GRADUATION_BEFORE_ENROLLMENT));
 				return;
 			}
 		}
 
 		if (documents.length === 0) {
-			toast.error(t("students.noDocuments"));
+			toast.error(t(ERROR_KEYS.NO_DOCUMENTS));
 			return;
 		}
 
 		const dob = new Date(form.dateOfBirth);
 		if (isNaN(dob.getTime())) {
-			toast.error(t("students.invalidDOB"));
+			toast.error(t(ERROR_KEYS.INVALID_DOB));
 			return;
 		}
 		if (dob > new Date()) {
-			toast.error(t("students.futureDOB"));
+			toast.error(t(ERROR_KEYS.FUTURE_DOB));
 			return;
 		}
 
@@ -238,12 +241,11 @@ const CreateStudentPage = () => {
 			year < 1900 ||
 			year > currentYear
 		) {
-			toast.error(t("students.invalidEnrollmentYear", { year: currentYear }));
+			toast.error(t(ERROR_KEYS.INVALID_ENROLLMENT_YEAR, { year: currentYear }));
 			return;
 		}
 
 		try {
-			console.log("Form: ", form);
 			const result = await createStudentWithDocuments(
 				form,
 				documents.map(({ file, typeId }) => ({ file, fileType: typeId })),
@@ -254,9 +256,9 @@ const CreateStudentPage = () => {
 					<div className="flex items-center gap-2">
 						<div>
 							<div className="font-semibold text-[15px]">
-								{t("students.exists")}
+								{t(ERROR_KEYS.EXISTS)}
 							</div>
-							<div className="text-sm">{t("students.chooseDifferent")}</div>
+							<div className="text-sm">{t(ERROR_KEYS.CHOOSE_DIFFERENT)}</div>
 						</div>
 					</div>,
 				);
@@ -289,7 +291,7 @@ const CreateStudentPage = () => {
 				<div className="flex items-center gap-2">
 					<div>
 						<div className="font-semibold text-[15px]">
-							{t("students.creationError")}
+							{t(ERROR_KEYS.CREATION_ERROR)}
 						</div>
 					</div>
 				</div>,
@@ -593,7 +595,7 @@ const CreateStudentPage = () => {
 														}))
 													}
 													max={new Date().toISOString().split("T")[0]}
-													placeholder="Select date of birth"
+													placeholder={t("addStudent.dateOfBirthSelect")}
 													clearable={false}
 												/>
 											</div>

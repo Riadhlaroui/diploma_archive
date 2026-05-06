@@ -9,6 +9,7 @@ import {
 } from "../../app/src/services/facultieService";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { ERROR_KEYS } from "@/lib/constants/errors";
 
 const AddFacultyDialog = ({ onClose }: { onClose: () => void }) => {
 	const { t, i18n } = useTranslation();
@@ -66,16 +67,22 @@ const AddFacultyDialog = ({ onClose }: { onClose: () => void }) => {
 				toast.error(
 					<div className="flex flex-col">
 						<span className="font-semibold text-[15px]">
-							{t("addFaculty.duplicateTitle")}
+							{t(ERROR_KEYS.DUPLICATE_ADDFACULTY_ERROR_TITLE)}
 						</span>
-						<span className="text-sm">{t("addFaculty.duplicateSubtitle")}</span>
+						<span className="text-sm">
+							{t(ERROR_KEYS.DUPLICATE_ADDFACULTY_ERROR_SUBTITLE)}
+						</span>
 					</div>,
 				);
 			} else {
 				toast.error(
 					<div className="flex flex-col">
-						<span className="font-semibold">{t("addFaculty.errorTitle")}</span>
-						<span className="text-sm">{t("addFaculty.errorSubtitle")}</span>
+						<span className="font-semibold">
+							{t(ERROR_KEYS.ADDFACULTY_ERROR_TITLE)}
+						</span>
+						<span className="text-sm">
+							{t(ERROR_KEYS.ADDFACULTY_ERROR_SUBTITLE)}
+						</span>
 					</div>,
 				);
 			}

@@ -15,6 +15,7 @@ import {
 	getFacultyByName,
 	updateFaculty,
 } from "@/app/src/services/facultieService";
+import { ERROR_KEYS } from "@/lib/constants/errors";
 
 type Faculty = {
 	id: string;
@@ -47,10 +48,10 @@ export function FacultyUpdateDialog({ open, onOpenChange, user }: Props) {
 				toast.error(
 					<div>
 						<div className="font-semibold">
-							{t("editFacultyDialog.errors.nameExistsTitle")}
+							{t(ERROR_KEYS.DUPLICATE_ADDFACULTY_ERROR_TITLE)}
 						</div>
 						<div className="text-sm">
-							{t("editFacultyDialog.errors.nameExistsDesc")}
+							{t(ERROR_KEYS.DUPLICATE_ADDFACULTY_ERROR_SUBTITLE)}
 						</div>
 					</div>,
 				);
@@ -62,7 +63,7 @@ export function FacultyUpdateDialog({ open, onOpenChange, user }: Props) {
 			onOpenChange(false);
 		} catch (error) {
 			console.error("Error updating faculty:", error);
-			toast.error(t("editFacultyDialog.errorMessage"));
+			toast.error(t(ERROR_KEYS.FACULTY_ERROR));
 		}
 	};
 

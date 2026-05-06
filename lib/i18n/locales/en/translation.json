@@ -240,8 +240,7 @@
 		"phoneNumber": "Phone Number",
 		"email": "Email",
 		"description": "Update the selected user's information.",
-		"successMessage": "User updated successfully!",
-		"errorMessage": "Failed to update user. Please try again."
+		"successMessage": "User updated successfully!"
 	},
 
 	"deleteStaffDialog": {
@@ -249,11 +248,6 @@
 		"searchPlaceholder": "Search for a staff member",
 		"noStaffFound": "No staff found.",
 		"roleLabel": "Role",
-		"errors": {
-			"fetchFailed": "Failed to fetch staff list",
-			"deleteFailed": "Failed to delete staff members",
-			"partialFail": "{{count}} user(s) failed to delete"
-		},
 		"success": "{{count}} staff member(s) deleted successfully",
 		"warnings": {
 			"noSelection": "Please select at least one staff member"
@@ -290,11 +284,9 @@
 		"successCreate": "Faculty created successfully!",
 		"successUpdate": "Faculty updated successfully!",
 		"successDelete": "Faculty deleted successfully!",
-		"error": "An error occurred. Please try again.",
-		"notFound": "No faculties found.",
 		"departmentsOf": "Departments of {{name}}",
 		"deleteSuccess": "Faculty '{{name}}' deleted successfully!",
-		"deleteError": "Failed to delete faculty '{{name}}'."
+		"notFound": "No faculties found."
 	},
 
 	"addFaculty": {
@@ -304,10 +296,6 @@
 		"submit": "Submit",
 		"nameRequired": "Faculty name is required.",
 		"success": "Faculty added successfully!",
-		"duplicateTitle": "A faculty with this name already exists.",
-		"duplicateSubtitle": "Please choose a different name.",
-		"errorTitle": "An error occurred.",
-		"errorSubtitle": "Please try again later.",
 		"subtitle": "Please fill in the details below to create a new faculty."
 	},
 
@@ -329,8 +317,6 @@
 		"copyId": "Copy Matricule",
 		"numberOfDocuments": "Number of documents",
 		"inDepartment": "Students in {{department}}",
-		"exists": "A student with matricule already exists.",
-		"chooseDifferent": "Please choose a different matricule.",
 		"totalStudents": "Total Students",
 		"table": {
 			"id": "ID",
@@ -338,14 +324,7 @@
 			"email": "Email",
 			"createdAt": "Created At"
 		},
-
-		"requiredField": "Please fill in the required field: {{field}}",
-		"noDocuments": "Please upload at least one document.",
-		"invalidDOB": "Invalid date of birth format.",
-		"futureDOB": "Date of birth cannot be in the future.",
-		"invalidEnrollmentYear": "Enrollment year must be between 1900 and {{year}}.",
 		"created": "Student created successfully.",
-		"creationError": "Error creating student.",
 		"profile": "Student Profile",
 		"info": "Student Info",
 		"documents": "Documents",
@@ -354,11 +333,7 @@
 		"confirmDeleteTitle": "Delete Student",
 		"confirmDeleteDescription": "Are you sure you want to delete {{name}}? This action cannot be undone.",
 		"deleteSuccess": "Student deleted successfully",
-		"deleteFailed": "Failed to delete student",
-
 		"selectFolder": "Select folder",
-		"invalidGraduationYear": "Invalid graduation year",
-		"graduationBeforeEnrollment": "Graduation year cannot be before enrollment year",
 		"graduationYear": "Graduation Year",
 		"bulkImportTitle": "Bulk Import Students",
 		"bulkImportDescription": "Drop student folders, configure the batch, review parsed names, then import.",
@@ -444,7 +419,8 @@
 		"enterEnrollmentYear": "Enter enrollment year",
 		"createStudent": "Create Student",
 		"graduationYear": "Graduation Year",
-		"enterGraduationYear": "Enter graduation year"
+		"enterGraduationYear": "Enter graduation year",
+		"dateOfBirthSelect": "Select date of birth"
 	},
 
 	"documents": {
@@ -885,6 +861,46 @@
 			"userCreatedError": "Failed to create user. Please try again.",
 			"emailExistsTitle": "Email Already Exists",
 			"emailExistsDesc": "The email you entered is already registered. Please try another."
+		},
+
+		"editUserDialog": {
+			"errorMessage": "Failed to update user. Please try again."
+		},
+
+		"deleteStaffDialog": {
+			"fetchFailed": "Failed to fetch staff list",
+			"deleteFailed": "Failed to delete staff members",
+			"partialFail": "{{count}} user(s) failed to delete"
+		},
+
+		"faculties": {
+			"error": "An error occurred. Please try again.",
+			"deleteError": "Failed to delete faculty '{{name}}'."
+		},
+
+		"addFaculty": {
+			"duplicateTitle": "A faculty with this name already exists.",
+			"duplicateSubtitle": "Please choose a different name.",
+			"errorTitle": "An error occurred.",
+			"errorSubtitle": "Please try again later."
+		},
+
+		"students": {
+			"requiredField": "Please fill in the required field: {{field}}",
+			"noDocuments": "Please upload at least one document.",
+			"invalidDOB": "Invalid date of birth format.",
+			"futureDOB": "Date of birth cannot be in the future.",
+			"invalidEnrollmentYear": "Enrollment year must be between 1900 and {{year}}.",
+			"exists": "A student with matricule already exists.",
+			"chooseDifferent": "Please choose a different matricule.",
+			"creationError": "Error creating student.",
+			"deleteFailed": "Failed to delete student",
+			"invalidGraduationYear": "Invalid graduation year",
+			"graduationBeforeEnrollment": "Graduation year cannot be before enrollment year",
+			"createStudentFailed": "Error creating student.",
+			"updateStudentFailed": "Error updating student.",
+			"deleteStudentFailed": "Failed to delete student.",
+			"matriculeAlreadyExists": "A student with this matricule already exists. Please choose a different one."
 		}
 	}
 }

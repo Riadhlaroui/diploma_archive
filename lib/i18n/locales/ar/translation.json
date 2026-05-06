@@ -235,16 +235,21 @@
 		"deleteError": "فشل في حذف المستخدم."
 	},
 
+	"editUserDialog": {
+		"title": "تعديل المستخدم",
+		"firstName": "الاسم",
+		"lastName": "اللقب",
+		"phoneNumber": "رقم الهاتف",
+		"email": "البريد الإلكتروني",
+		"description": "تحديث معلومات المستخدم المحدد.",
+		"successMessage": "تم تحديث المستخدم بنجاح!"
+	},
+
 	"deleteStaffDialog": {
 		"title": "حذف عضو من الموظفين",
 		"searchPlaceholder": "ابحث عن عضو من الموظفين",
 		"noStaffFound": "لا يوجد موظفون.",
 		"roleLabel": "الدور",
-		"errors": {
-			"fetchFailed": "فشل جلب قائمة الموظفين",
-			"deleteFailed": "فشل حذف أعضاء الموظفين",
-			"partialFail": "فشل حذف {{count}} مستخدم(ين)"
-		},
 		"success": "تم حذف {{count}} من أعضاء الموظفين بنجاح",
 		"warnings": {
 			"noSelection": "الرجاء تحديد عضو واحد على الأقل من الموظفين"
@@ -266,17 +271,6 @@
 		"staff": "موظف"
 	},
 
-	"editUserDialog": {
-		"title": "تعديل المستخدم",
-		"firstName": "الاسم",
-		"lastName": "اللقب",
-		"phoneNumber": "رقم الهاتف",
-		"email": "البريد الإلكتروني",
-		"description": "تحديث معلومات المستخدم المحدد.",
-		"successMessage": "تم تحديث المستخدم بنجاح!",
-		"errorMessage": "فشل في تحديث المستخدم. حاول مرة أخرى."
-	},
-
 	"faculties": {
 		"title": "الكليات",
 		"addFaculty": "إضافة كلية",
@@ -292,10 +286,8 @@
 		"successCreate": "تم إنشاء الكلية بنجاح!",
 		"successUpdate": "تم تحديث الكلية بنجاح!",
 		"successDelete": "تم حذف الكلية بنجاح!",
-		"error": "حدث خطأ. يرجى المحاولة مرة أخرى.",
-		"notFound": "لم يتم العثور على كليات.",
 		"deleteSuccess": "تم حذف الكلية '{{name}}' بنجاح!",
-		"deleteError": "فشل في حذف الكلية '{{name}}'."
+		"notFound": "لم يتم العثور على كليات."
 	},
 
 	"addFaculty": {
@@ -305,10 +297,6 @@
 		"submit": "إرسال",
 		"nameRequired": "اسم الكلية مطلوب.",
 		"success": "تمت إضافة الكلية بنجاح!",
-		"duplicateTitle": "كلية بهذا الاسم موجودة بالفعل.",
-		"duplicateSubtitle": "يرجى اختيار اسم مختلف.",
-		"errorTitle": "حدث خطأ.",
-		"errorSubtitle": "يرجى المحاولة مرة أخرى لاحقًا.",
 		"subtitle": "يرجى ملء التفاصيل أدناه لإنشاء كلية جديدة."
 	},
 
@@ -329,28 +317,16 @@
 		"actions": "إجراءات",
 		"notFound": "لم يتم العثور على طلاب",
 		"copyId": "نسخ الرقم الجامعي",
-		"requiredField": "يرجى ملء الحقل المطلوب: {{field}}",
-		"noDocuments": "يرجى تحميل وثيقة واحد على الأقل.",
-		"invalidDOB": "تنسيق تاريخ الميلاد غير صالح.",
-		"futureDOB": "لا يمكن أن يكون تاريخ الميلاد في المستقبل.",
-		"invalidEnrollmentYear": "يجب أن تكون سنة التسجيل بين 1900 و{{year}}.",
-		"exists": "يوجد طالب بهذا الرقم التسلسلي بالفعل.",
-		"chooseDifferent": "يرجى اختيار رقم تسلسلي مختلف.",
 		"created": "تم إنشاء الطالب بنجاح.",
-		"creationError": "حدث خطأ أثناء إنشاء الطالب.",
 		"profile": "ملف الطالب",
 		"info": "معلومات الطالب",
 		"documents": "الوثائق",
 		"name": "الاسم",
-
 		"selectFolder": "اختر مجلد",
 		"uploadToGetStarted": "قم بتحميل المستندات للبدء",
 		"confirmDeleteTitle": "حذف الطالب",
 		"confirmDeleteDescription": "هل أنت متأكد أنك تريد حذف {{name}}؟ هذا الإجراء لا يمكن التراجع عنه.",
 		"deleteSuccess": "تم حذف الطالب بنجاح",
-		"deleteFailed": "فشل في حذف الطالب",
-		"invalidGraduationYear": "سنة التخرج غير صالحة",
-		"graduationBeforeEnrollment": "لا يمكن أن تكون سنة التخرج قبل سنة التسجيل",
 		"graduationYear": "سنة التخرج",
 		"totalStudents": "إجمالي الطلاب",
 		"bulkImportTitle": "استيراد الطلاب بالجملة",
@@ -443,7 +419,8 @@
 		"enterEnrollmentYear": "أدخل سنة التسجيل",
 		"createStudent": "إنشاء طالب",
 		"graduationYear": "سنة التخرج",
-		"enterGraduationYear": "أدخل سنة التخرج"
+		"enterGraduationYear": "أدخل سنة التخرج",
+		"dateOfBirthSelect": "اختر تاريخ الميلاد"
 	},
 
 	"documents": {
@@ -881,6 +858,46 @@
 			"userCreatedError": "فشل في إنشاء المستخدم. حاول مرة أخرى.",
 			"emailExistsTitle": "البريد الإلكتروني مستخدم",
 			"emailExistsDesc": "البريد الإلكتروني المدخل مستخدم بالفعل. جرب بريدًا آخر."
+		},
+
+		"editUserDialog": {
+			"errorMessage": "فشل في تحديث المستخدم. حاول مرة أخرى."
+		},
+
+		"deleteStaffDialog": {
+			"fetchFailed": "فشل جلب قائمة الموظفين",
+			"deleteFailed": "فشل حذف أعضاء الموظفين",
+			"partialFail": "فشل حذف {{count}} مستخدم(ين)"
+		},
+
+		"faculties": {
+			"error": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+			"deleteError": "فشل في حذف الكلية '{{name}}'."
+		},
+
+		"addFaculty": {
+			"duplicateTitle": "كلية بهذا الاسم موجودة بالفعل.",
+			"duplicateSubtitle": "يرجى اختيار اسم مختلف.",
+			"errorTitle": "حدث خطأ.",
+			"errorSubtitle": "يرجى المحاولة مرة أخرى لاحقًا."
+		},
+
+		"students": {
+			"requiredField": "يرجى ملء الحقل المطلوب: {{field}}",
+			"noDocuments": "يرجى تحميل وثيقة واحد على الأقل.",
+			"invalidDOB": "تنسيق تاريخ الميلاد غير صالح.",
+			"futureDOB": "لا يمكن أن يكون تاريخ الميلاد في المستقبل.",
+			"invalidEnrollmentYear": "يجب أن تكون سنة التسجيل بين 1900 و{{year}}.",
+			"exists": "يوجد طالب بهذا الرقم التسلسلي بالفعل.",
+			"chooseDifferent": "يرجى اختيار رقم تسلسلي مختلف.",
+			"creationError": "حدث خطأ أثناء إنشاء الطالب.",
+			"deleteFailed": "فشل في حذف الطالب",
+			"invalidGraduationYear": "سنة التخرج غير صالحة",
+			"graduationBeforeEnrollment": "لا يمكن أن تكون سنة التخرج قبل سنة التسجيل",
+			"createStudentFailed": "حدث خطأ أثناء إنشاء الطالب.",
+			"updateStudentFailed": "حدث خطأ أثناء تحديث بيانات الطالب.",
+			"deleteStudentFailed": "فشل حذف الطالب.",
+			"matriculeAlreadyExists": "يوجد طالب بهذا الرقم التسجيلي مسبقاً. يرجى اختيار رقم آخر."
 		}
 	}
 }

@@ -40,13 +40,14 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-
+import { toast } from "sonner";
 import { checkAuthOrRedirect } from "@/app/src/services/authService";
+import { ERROR_KEYS } from "@/lib/constants/errors";
 
 interface StudentFilter {
 	matricule?: string;
 	graduationYear?: string;
-	searchQuery?: string; // for searching name or matricule
+	searchQuery?: string;
 	facultyId?: string;
 	departmentId?: string;
 	fieldId?: string;
@@ -111,10 +112,8 @@ const StudentPage = () => {
 				.getFullList({ filter: `facultyId="${selectedFaculty}"` })
 				.then(setDepartments);
 
-			// Reset downstream selections
 			setSelectedDepartment("");
 			setSpecialties([]);
-
 			setSelectedSpecialty("");
 		} else {
 			setDepartments([]);
@@ -148,7 +147,6 @@ const StudentPage = () => {
 		}
 	}, [selectedDepartment]);
 
-	// Get majors by field
 	useEffect(() => {
 		if (selectedField) {
 			pb.collection("Archive_majors")
@@ -166,7 +164,6 @@ const StudentPage = () => {
 		}
 	}, [selectedField]);
 
-	// Get specialties by major
 	useEffect(() => {
 		if (selectedMajor) {
 			pb.collection("Archive_specialties")
@@ -205,6 +202,22 @@ const StudentPage = () => {
 			setIsFilterOpen(false);
 		} catch (err) {
 			console.error("Search failed:", err);
+			toast.error(t(ERROR_KEYS.GENERIC_ERROR));
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const loadStudents = async () => {
+		setLoading(true);
+		try {
+			const data = await fetchStudents(page, limit);
+			setStudents(data.items);
+			setTotalPages(data.totalPages);
+			setTotalStudents(data.totalItems ?? 0);
+		} catch (err) {
+			console.error(err);
+			toast.error(t(ERROR_KEYS.GENERIC_ERROR));
 		} finally {
 			setLoading(false);
 		}
@@ -219,6 +232,7 @@ const StudentPage = () => {
 				setTotalStudents(data.totalItems ?? 0);
 			} catch (error) {
 				console.error("Failed to fetch:", error);
+				toast.error(t(ERROR_KEYS.GENERIC_ERROR));
 			} finally {
 				setLoading(false);
 			}
@@ -226,20 +240,6 @@ const StudentPage = () => {
 
 		loadData();
 	}, [page, limit]);
-
-	const loadStudents = async () => {
-		setLoading(true);
-		try {
-			const data = await fetchStudents(page, limit);
-			setStudents(data.items);
-			setTotalPages(data.totalPages);
-			setTotalStudents(data.totalItems ?? 0);
-		} catch (err) {
-			console.error(err);
-		} finally {
-			setLoading(false);
-		}
-	};
 
 	useEffect(() => {
 		loadStudents();
@@ -392,13 +392,11 @@ const StudentPage = () => {
 					)}
 				</div>
 
-				{/* Filter Panel (full width) */}
 				{isFilterOpen && (
 					<div
 						className={`absolute top-full mt-2 z-50 w-full md:w-150 border rounded-[14px] bg-white shadow-xl max-h-[80vh] flex flex-col overflow-hidden
     ${isRtl ? "right-0" : "left-0"}`}
 					>
-						{/* Header */}
 						<div className="flex justify-between items-center px-5 py-4 border-b border-gray-100">
 							<h4 className="text-[15px] font-semibold text-gray-900 tracking-tight">
 								{t("filterPanel.title")}
@@ -412,9 +410,7 @@ const StudentPage = () => {
 							</Button>
 						</div>
 
-						{/* Scrollable Body */}
 						<div className="flex-1 overflow-y-auto p-5 flex flex-col gap-5">
-							{/* Search */}
 							<div className="relative">
 								<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
 									<Search className="h-[14px] w-[14px] text-gray-400" />
@@ -432,10 +428,8 @@ const StudentPage = () => {
 
 							<hr className="border-gray-100" />
 
-							{/* Identity Section */}
 							<div>
 								<p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-3">
-									{/* "Identity" or your i18n key */}
 									Identity
 								</p>
 								<div className="grid grid-cols-2 gap-3">
@@ -472,14 +466,11 @@ const StudentPage = () => {
 
 							<hr className="border-gray-100" />
 
-							{/* Academic Path Section */}
 							<div>
 								<p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-3">
-									{/* "Academic Path" or your i18n key */}
 									Academic path
 								</p>
 
-								{/* Faculty & Department */}
 								<div className="grid grid-cols-2 gap-3 mb-3">
 									<div>
 										<label className="block text-[12.5px] font-medium text-gray-600 mb-1.5">
@@ -538,7 +529,6 @@ const StudentPage = () => {
 									</div>
 								</div>
 
-								{/* Chained Selects: Field → Major → Specialty */}
 								<div className="flex flex-col gap-3 border border-gray-100 rounded-xl p-4 bg-gray-50">
 									{[
 										{
@@ -602,7 +592,6 @@ const StudentPage = () => {
 							</div>
 						</div>
 
-						{/* Footer */}
 						<div className="px-5 py-3.5 border-t border-gray-100 bg-gray-50 rounded-b-[14px] flex justify-between items-center">
 							<button
 								onClick={() => {
@@ -782,10 +771,8 @@ const StudentPage = () => {
 											{t("pagination.Records")}
 										</span>
 
-										{/* Separator */}
 										<span className="hidden sm:inline text-gray-300">|</span>
 
-										{/* Dropdown */}
 										<div className="flex items-center gap-2 ml-2">
 											<span className="whitespace-nowrap">
 												{t("pagination.show")}
