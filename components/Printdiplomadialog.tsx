@@ -90,6 +90,16 @@ export interface DocType {
 
 const ALL_DOC_TYPES: DocType[] = [
 	{
+		id: "transcript",
+		labelAr: "شهادة توثيق",
+		labelFr: "Certificat d'Authentification",
+		descriptionAr:
+			"وثيقة رسمية تحتوي على معلومات الطالب وشهاداته للتحقق من صحتها",
+		descriptionFr:
+			"Document officiel contenant les informations de l'étudiant et ses diplômes pour vérification",
+		icon: <ClipboardList className="w-6 h-6" />,
+	},
+	{
 		id: "licence",
 		labelAr: "شهادة الليسانس",
 		labelFr: "Diplôme de Licence",
@@ -104,16 +114,6 @@ const ALL_DOC_TYPES: DocType[] = [
 		descriptionAr: "شهادة تخرج مرحلة الماستر (L.M.D)",
 		descriptionFr: "Diplôme de fin de cycle Master (L.M.D)",
 		icon: <Award className="w-6 h-6" />,
-	},
-	{
-		id: "transcript",
-		labelAr: "شهادة توثيق",
-		labelFr: "Certificat d'Authentification",
-		descriptionAr:
-			"وثيقة رسمية تحتوي على معلومات الطالب وشهاداته للتحقق من صحتها",
-		descriptionFr:
-			"Document officiel contenant les informations de l'étudiant et ses diplômes pour vérification",
-		icon: <ClipboardList className="w-6 h-6" />,
 	},
 ];
 
@@ -459,7 +459,7 @@ function buildAuthCertHTML(d: DiplomaData): string {
     ردًّا على إرسالكم في المرجع أعلاه، بخصوص التَّأكُّد من صحَّة شهادة نجاح السّيد(ة) :<br/>
     <strong>${nameAr}</strong> ،المولود(ة) بتاريخ <strong>${dobFormatted}</strong> <strong>${d.placeOfBirthAr || d.placeOfBirth || "—"}</strong><br/>
     يشرّفنا أن نؤكّد لكم بأنّ المعني(ة) قد تخرّج(ت) من جامعة عمّار تليجي بالأغواط بشهادة ،<br/>
-    الدراسات الجامعية التطبيقية ، شعبة : <strong>${d.fieldFr}</strong> ، تخصّص : <strong>${d.specialtyFr}</strong> ، دورة : <strong>${d.graduationYear}</strong>
+    الدراسات الجامعية التطبيقية، شعبة : <strong>${d.fieldFr}</strong> ، تخصّص : <strong>${d.specialtyFr}</strong> ، دورة : <strong>${d.graduationYear}</strong>
   </div>
 
   <!-- Closing -->
