@@ -25,7 +25,6 @@ import { useTranslation } from "react-i18next";
 import { DatePicker } from "./ui/DatePicker";
 
 // Types
-
 interface Student {
 	id: string;
 	matricule: string;
@@ -158,7 +157,6 @@ function saveCertNumber(n: number) {
 }
 
 // Diploma HTML Generator
-
 function buildDiplomaHTML(d: DiplomaData): string {
 	const nameFr = `${d.lastNameFr.toUpperCase()} ${d.firstNameFr}`;
 	const nameAr =
@@ -481,8 +479,7 @@ function buildAuthCertHTML(d: DiplomaData): string {
 </html>`;
 }
 
-// Step 0: Select Document Type
-
+// Step 0: Select Type
 interface SelectTypeStepProps {
 	student: Student;
 	selectedId: string | null;
@@ -509,7 +506,7 @@ const SelectTypeStep: React.FC<SelectTypeStepProps> = ({
 	const isRtl = i18n.language === "ar";
 
 	return (
-		<div className="flex flex-col flex-1 gap-4 pb-2 min-h-0">
+		<div className="flex flex-col gap-4 pb-2">
 			{/* Student context banner */}
 			<div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 shrink-0">
 				<GraduationCap className="w-5 h-5 text-green-700 dark:text-green-400 shrink-0" />
@@ -535,8 +532,8 @@ const SelectTypeStep: React.FC<SelectTypeStepProps> = ({
 			</div>
 
 			{/* Type grid — grows to fill remaining space */}
-			<div className="flex-1 overflow-y-auto min-h-0">
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-rows-3 gap-3 h-full">
+			<div className="flex flex-col">
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-rows-2 gap-3">
 					{available.map((dt) => {
 						const isSelected = selectedId === dt.id;
 						return (
@@ -559,7 +556,7 @@ const SelectTypeStep: React.FC<SelectTypeStepProps> = ({
 								)}
 								<div
 									className={`
-                  w-10 h-10 rounded-lg flex items-center justify-center mb-3 transition-colors
+                  w-10 h-10 rounded-lg mr-auto flex items-center justify-center mb-3 transition-colors
                   ${
 										isSelected
 											? "bg-green-600 text-white"
@@ -607,7 +604,6 @@ const SelectTypeStep: React.FC<SelectTypeStepProps> = ({
 };
 
 // Step 1: Review & Fill
-
 interface ReviewStepProps {
 	data: DiplomaData;
 	setData: React.Dispatch<React.SetStateAction<DiplomaData>>;
@@ -642,14 +638,14 @@ const ReviewStep: React.FC<ReviewStepProps> = ({
 						<div className="flex items-center gap-2 px-4 py-2.5 bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-800">
 							<ClipboardList className="w-4 h-4 text-blue-500" />
 							<h3 className="text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-widest">
-								{t("diploma.certInfo")} — معلومات الوثيقة
+								{t("diploma.certInfo")}
 							</h3>
 						</div>
 						<div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
 							{/* Doc date */}
 							<div className="space-y-1">
 								<label className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-									تاريخ الوثيقة
+									{t("diploma.certDate")}
 								</label>
 								<DatePicker
 									value={data.certDate || null}
@@ -1033,7 +1029,6 @@ const ReviewStep: React.FC<ReviewStepProps> = ({
 };
 
 // Step 2: Preview & Print
-
 interface PreviewStepProps {
 	data: DiplomaData;
 	selectedType: DocType;
@@ -1272,7 +1267,7 @@ export const PrintDiplomaDialog: React.FC<PrintDiplomaDialogProps> = ({
 	return (
 		<Dialog open={open} onOpenChange={handleClose}>
 			<DialogContent
-				className="max-w-[90vw]! w-[90vw]! h-[83vh]! max-h-[90vh] overflow-hidden p-4 flex flex-col gap-2 bg-gray-50"
+				className="max-w-[90vw]! w-[90vw]! max-h-[90vh] overflow-hidden p-4 flex flex-col gap-2 backdrop-blur-sm border "
 				dir={i18n.language === "ar" ? "rtl" : "ltr"}
 			>
 				<DialogHeader className="pb-0 mb-0">
