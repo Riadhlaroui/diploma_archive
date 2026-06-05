@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight, CalendarDays, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 type DatePickerProps = {
 	value: string | null; // "YYYY-MM-DD" or null
@@ -34,10 +35,12 @@ export function DatePicker({
 	onChange,
 	min,
 	max,
-	placeholder = "Select a date",
+	placeholder,
 	clearable = true,
 	className = "",
 }: DatePickerProps) {
+	const { t } = useTranslation();
+	const resolvedPlaceholder = placeholder ?? t("datePicker.placeholder");
 	const today = new Date();
 	const parsed = value
 		? (() => {
@@ -148,7 +151,7 @@ export function DatePicker({
 						displayValue ? "text-gray-900 flex-1" : "text-gray-400 flex-1"
 					}
 				>
-					{displayValue ?? placeholder}
+					{displayValue ?? resolvedPlaceholder}
 				</span>
 				{clearable && parsed && (
 					<span

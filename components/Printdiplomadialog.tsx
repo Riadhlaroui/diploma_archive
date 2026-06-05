@@ -23,6 +23,13 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { DatePicker } from "./ui/DatePicker";
+import {
+	SelectValue,
+	SelectTrigger,
+	SelectItem,
+	SelectContent,
+	Select,
+} from "./ui/select";
 
 // Types
 interface Student {
@@ -57,6 +64,9 @@ interface DiplomaData {
 	issuanceLocationAr: string;
 	certNumber: number;
 	certDate: string;
+	certReferenceNumber: string;
+	certRefDate: string;
+	certReferenceDate: string;
 	addresseeTitle: string;
 	addresseeWilaya: string;
 	paperSize: "A4" | "A5" | "Letter";
@@ -329,11 +339,29 @@ function buildAuthCertHTML(d: DiplomaData): string {
 
 	const dobFormatted = d.dateOfBirth
 		? new Date(d.dateOfBirth).toLocaleDateString("ar-DZ")
-		: "—";
+		: "";
 
 	const certDateFormatted = d.certDate
 		? new Date(d.certDate).toLocaleDateString("ar-DZ")
-		: "—";
+		: "";
+
+	const refNumber = d.certReferenceNumber || '<span class="meta-blank"></span>';
+
+	const refRefDate = d.certRefDate
+		? new Date(d.certRefDate).toLocaleDateString("ar-DZ", {
+				year: "numeric",
+				month: "2-digit",
+				day: "2-digit",
+			})
+		: '<span class="meta-blank"></span>';
+
+	const refDate = d.certReferenceDate
+		? new Date(d.certReferenceDate).toLocaleDateString("ar-DZ", {
+				year: "numeric",
+				month: "2-digit",
+				day: "2-digit",
+			})
+		: '<span class="meta-blank"></span>';
 
 	return `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -381,7 +409,7 @@ function buildAuthCertHTML(d: DiplomaData): string {
   .meta-row { display: flex; gap: 4mm; align-items: baseline; }
   .meta-label { font-weight: 700; white-space: nowrap; }
   .meta-blank {
-  min-width: 50mm;
+  min-width: 15mm;
   display: inline-block;
   vertical-align: bottom;
   background: transparent;
@@ -392,6 +420,7 @@ function buildAuthCertHTML(d: DiplomaData): string {
     line-height: 2.4;
     text-align: justify;
     margin: 6mm 0;
+	text-indent: 12mm;
   }
 
   .closing {
@@ -440,22 +469,25 @@ function buildAuthCertHTML(d: DiplomaData): string {
       <span class="meta-label">الموضوع :</span>
       <span>ب/خ توثيق شهادة الدراسات الجامعية التطبيقية السّيد(ة) : <strong>${nameAr}</strong></span>
     </div>
-    <div class="meta-row">
-      <span class="meta-label">المرجع :</span>
-      <span>
-        إرسالكم رقم :
-        <span class="meta-blank"></span>
-        ، المؤرخة في :
-        <span class="meta-blank"></span>
-      </span>
-    </div>
+
+  <div class="meta-row">
+  <span class="meta-label">المرجع :</span>
+  <span>
+    إرسالكم رقم :
+    <span style="display:inline-block; min-width: 20mm; text-align:center;">${refNumber}</span>
+    &nbsp;/&nbsp;
+    <span style="display:inline-block; min-width: 25mm; text-align:center;">${refDate}</span>
+    &nbsp;، المؤرخة في :&nbsp;
+    <span style="display:inline-block; min-width: 25mm; text-align:center;">${refRefDate}</span>
+  </span>
+</div>
   </div>
 
 
   <!-- Body -->
   <div class="body-text">
     ردًّا على إرسالكم في المرجع أعلاه، بخصوص التَّأكُّد من صحَّة شهادة نجاح السّيد(ة) :<br/>
-    <strong>${nameAr}</strong> ،المولود(ة) بتاريخ <strong>${dobFormatted}</strong> <strong>${d.placeOfBirthAr || d.placeOfBirth || "—"}</strong><br/>
+    <strong>${nameAr}</strong> ،المولود(ة) بتاريخ <strong>${dobFormatted}</strong> <strong>${d.placeOfBirthAr || d.placeOfBirth || ""}</strong><br/>
     يشرّفنا أن نؤكّد لكم بأنّ المعني(ة) قد تخرّج(ت) من جامعة عمّار تليجي بالأغواط بشهادة ،<br/>
     الدراسات الجامعية التطبيقية، شعبة : <strong>${d.fieldFr}</strong> ، تخصّص : <strong>${d.specialtyFr}</strong> ، دورة : <strong>${d.graduationYear}</strong>
   </div>
@@ -612,6 +644,69 @@ interface ReviewStepProps {
 	onBack: () => void;
 }
 
+type StatusIcon = "ok" | "warn" | "none";
+
+const FieldStatus: React.FC<{ status?: StatusIcon }> = ({ status }) => {
+	if (status === "ok")
+		return <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0" />;
+	if (status === "warn")
+		return <AlertCircle className="w-3 h-3 text-amber-400 shrink-0" />;
+	return null;
+};
+
+const FieldLabel: React.FC<{
+	children: React.ReactNode;
+	required?: boolean;
+	optional?: boolean;
+	status?: StatusIcon;
+}> = ({ children, required, optional, status }) => (
+	<label className="flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-widest text-[#202020] dark:text-zinc-500 mb-1.5">
+		<span className="flex items-center gap-1">
+			{children}
+			{required && <span className="text-red-500 text-xs">*</span>}
+		</span>
+		{optional && (
+			<span className="normal-case font-normal tracking-normal text-gray-300 dark:text-zinc-600 text-[12px]">
+				(optional)
+			</span>
+		)}
+		{status && (
+			<span className="ml-auto">
+				<FieldStatus status={status} />
+			</span>
+		)}
+	</label>
+);
+
+const SubGroupDivider: React.FC<{ label: string }> = ({ label }) => (
+	<div className="flex items-center gap-3 py-1">
+		<span className="h-px w-4 bg-gray-100 dark:bg-zinc-700 shrink-0" />
+		<span className="text-[9.5px] font-bold uppercase tracking-[0.15em] text-gray-300 dark:text-zinc-600 whitespace-nowrap">
+			{label}
+		</span>
+		<span className="h-px flex-1 bg-gray-100 dark:bg-zinc-700" />
+	</div>
+);
+
+const SectionCard: React.FC<{
+	icon: React.ElementType;
+	title: string;
+	children: React.ReactNode;
+	className?: string;
+}> = ({ icon: Icon, title, children, className = "" }) => {
+	return (
+		<div className={`rounded-xl border bg-white dark:bg-zinc-900 ${className}`}>
+			<div className={`flex items-center gap-2.5 px-5 py-3 border-b `}>
+				<Icon className={`w-4 h-4 shrink-0 `} />
+				<span className="text-[12px] font-semibold uppercase tracking-widest">
+					{title}
+				</span>
+			</div>
+			<div className="p-5">{children}</div>
+		</div>
+	);
+};
+
 const ReviewStep: React.FC<ReviewStepProps> = ({
 	data,
 	setData,
@@ -630,23 +725,13 @@ const ReviewStep: React.FC<ReviewStepProps> = ({
 	const isRtl = i18n.language === "ar";
 
 	return (
-		<div className="flex flex-col flex-1 min-h-0">
-			<div className="flex-1 overflow-y-auto min-h-0 space-y-5 py-2 pr-1">
-				{/* ── Auth-cert specific section ── */}
+		<div className="flex flex-col min-h-0 max-w-270">
+			<div className="flex-1 overflow-y-auto min-h-0 space-y-4 py-2 pr-1">
 				{isAuthCert && (
-					<div className="rounded-xl border border-blue-200 dark:border-blue-800">
-						<div className="flex items-center gap-2 px-4 py-2.5 bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-800">
-							<ClipboardList className="w-4 h-4 text-blue-500" />
-							<h3 className="text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-widest">
-								{t("diploma.certInfo")}
-							</h3>
-						</div>
-						<div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-							{/* Doc date */}
-							<div className="space-y-1">
-								<label className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-									{t("diploma.certDate")}
-								</label>
+					<SectionCard icon={ClipboardList} title={t("diploma.certInfo")}>
+						<div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4">
+							<div>
+								<FieldLabel required>{t("diploma.certDate")}</FieldLabel>
 								<DatePicker
 									value={data.certDate || null}
 									onChange={(val) =>
@@ -655,354 +740,301 @@ const ReviewStep: React.FC<ReviewStepProps> = ({
 									placeholder="Select date"
 									clearable={false}
 								/>
+								{!data.certDate && (
+									<p className="mt-1 flex items-center gap-1 text-[11px] text-red-400">
+										<AlertCircle className="w-3 h-3" />{" "}
+										{t("diploma.certDateRequired")}
+									</p>
+								)}
 							</div>
 
-							{/* Paper size */}
-							<div className="space-y-1">
-								<label className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-									{t("diploma.paperSize")}
-								</label>
-								<select
+							<div>
+								<FieldLabel>{t("diploma.paperSize")}</FieldLabel>
+								<Select
 									value={data.paperSize}
-									onChange={(e) =>
+									onValueChange={(value: string) =>
 										setData((p) => ({
 											...p,
-											paperSize: e.target.value as DiplomaData["paperSize"],
+											paperSize: value as DiplomaData["paperSize"],
 										}))
 									}
-									className="w-full h-9 px-3 border border-gray-200 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-gray-200"
 								>
-									<option value="A4">A4</option>
-									<option value="A5">A5</option>
-									<option value="Letter">Letter</option>
-								</select>
+									<SelectTrigger className="w-full h-9 px-3 rounded-lg border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400/30 focus:border-blue-400 transition-colors">
+										<SelectValue placeholder="Select paper size" />
+									</SelectTrigger>
+
+									<SelectContent>
+										<SelectItem value="A4">A4</SelectItem>
+										<SelectItem value="A5">A5</SelectItem>
+										<SelectItem value="Letter">Letter</SelectItem>
+									</SelectContent>
+								</Select>
 							</div>
 
-							{/* Place of birth Arabic — required for the body text */}
-							<div className="space-y-1">
-								<label className="flex items-center gap-1 text-xs font-medium text-gray-500 uppercase tracking-wider">
-									مكان الميلاد <span className="text-red-500">*</span>
-								</label>
+							<div>
+								<FieldLabel required>{t("diploma.placeOfBirth")}</FieldLabel>
 								<Input
-									placeholder="مثال: عين وسارة-الجلفة"
 									value={data.placeOfBirthAr}
 									onChange={set("placeOfBirthAr")}
 									dir="rtl"
-									className={`h-9 text-sm ${!data.placeOfBirthAr ? "border-red-300" : ""}`}
+									className={`h-9 text-sm transition-colors ${
+										!data.placeOfBirthAr
+											? "border-red-300 focus:border-red-400"
+											: "border-gray-200 focus:border-blue-400"
+									}`}
 								/>
+								{!data.placeOfBirthAr && (
+									<p className="mt-1 flex items-center gap-1 text-[11px] text-red-400">
+										<AlertCircle className="w-3 h-3" />{" "}
+										{t("diploma.placeOfBirthRequired")}
+									</p>
+								)}
 							</div>
 
-							{/* Arabic name override */}
-							<div className="space-y-1">
-								<label className="text-xs font-medium text-gray-500 uppercase tracking-wider flex items-center gap-1">
-									الاسم واللقب بالعربية
-									<span className="normal-case font-normal text-gray-400 ml-1">
-										(اختياري)
-									</span>
-								</label>
+							<div className="flex flex-row gap-3 items-start min-w-0">
+								<span className="text-sm shrink-0 mt-2.5">المرجع :</span>
 								<Input
-									placeholder="مثال: بن شويطة محمد"
-									value={`${data.lastNameAr} ${data.firstNameAr}`.trim()}
-									onChange={(e) => {
-										const parts = e.target.value.trim().split(" ");
-										setData((p) => ({
-											...p,
-											lastNameAr: parts.slice(0, -1).join(" "),
-											firstNameAr: parts.at(-1) ?? "",
-										}));
-									}}
-									dir="rtl"
-									className="h-9 text-sm"
+									value={data.certReferenceNumber}
+									onChange={set("certReferenceNumber")}
+									className="h-9 text-sm w-40 shrink-0"
 								/>
+								<span className="text-sm shrink-0 mt-2.5">/</span>
+								<div className="flex flex-col gap-1 min-w-60">
+									<DatePicker
+										value={data.certReferenceDate || null}
+										onChange={(val) =>
+											setData((p) => ({ ...p, certReferenceDate: val ?? "" }))
+										}
+										clearable={true}
+										className="w-full"
+									/>
+								</div>
+								<span className="text-sm shrink-0 mt-2.5">، المؤرخة في :</span>
+								<div className="flex flex-col gap-1 min-w-60">
+									<DatePicker
+										value={data.certRefDate || null}
+										onChange={(val) =>
+											setData((p) => ({ ...p, certRefDate: val ?? "" }))
+										}
+										clearable={true}
+										className="w-full"
+									/>
+								</div>
 							</div>
 						</div>
-					</div>
+					</SectionCard>
 				)}
-				{/* Section 1: Auto-filled */}
-				<div className="rounded-xl border border-gray-200 dark:border-zinc-700">
-					<div className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700">
-						<CheckCircle2 className="w-4 h-4 text-green-500" />
-						<h3 className="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-widest">
-							Auto-filled from database
-						</h3>
-					</div>
 
-					<div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+				{/* Auto-filled from DB */}
+				<SectionCard
+					icon={CheckCircle2}
+					title={t("diploma.autoFilledFromDB") || "Auto-filled from database"}
+				>
+					<div className="space-y-5">
 						{!isAuthCert && (
-							<>
-								<div className="space-y-1 md:col-span-2">
-									<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-										Full Name (French)
-										<CheckCircle2 className="w-3 h-3 text-green-500" />
-									</label>
-									<Input
-										value={`${data.lastNameFr} ${data.firstNameFr}`.trim()}
-										onChange={(e) => {
-											const parts = e.target.value.trim().split(" ");
-											setData((p) => ({
-												...p,
-												lastNameFr: parts.slice(0, -1).join(" "),
-												firstNameFr: parts.at(-1) ?? "",
-											}));
-										}}
-										placeholder="e.g. KADRI Ayoub"
-										className="h-9 text-sm"
-									/>
+							<div className="space-y-3">
+								<SubGroupDivider label="French Identity" />
+								<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+									<div>
+										<FieldLabel status={data.firstNameFr ? "ok" : "warn"}>
+											First Name
+										</FieldLabel>
+										<Input
+											value={data.firstNameFr}
+											onChange={set("firstNameFr")}
+											placeholder="First name"
+											className="h-9 text-sm"
+										/>
+									</div>
+									<div>
+										<FieldLabel status={data.lastNameFr ? "ok" : "warn"}>
+											Last Name
+										</FieldLabel>
+										<Input
+											value={data.lastNameFr}
+											onChange={set("lastNameFr")}
+											placeholder="Last name"
+											className="h-9 text-sm"
+										/>
+									</div>
 								</div>
-
-								<div className="space-y-1">
-									<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-										First Name (French)
-										{data.firstNameFr ? (
-											<CheckCircle2 className="w-3 h-3 text-green-500" />
-										) : (
-											<AlertCircle className="w-3 h-3 text-amber-400" />
-										)}
-									</label>
-									<Input
-										value={data.firstNameFr}
-										onChange={set("firstNameFr")}
-										placeholder="First name"
-										className="h-9 text-sm"
-									/>
-								</div>
-								<div className="space-y-1">
-									<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-										Last Name (French)
-										{data.lastNameFr ? (
-											<CheckCircle2 className="w-3 h-3 text-green-500" />
-										) : (
-											<AlertCircle className="w-3 h-3 text-amber-400" />
-										)}
-									</label>
-									<Input
-										value={data.lastNameFr}
-										onChange={set("lastNameFr")}
-										placeholder="Last name"
-										className="h-9 text-sm"
-									/>
-								</div>
-							</>
+							</div>
 						)}
 
-						<div className="space-y-1">
-							<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-								Date of Birth
-								{data.dateOfBirth ? (
-									<CheckCircle2 className="w-3 h-3 text-green-500" />
-								) : (
-									<AlertCircle className="w-3 h-3 text-amber-400" />
-								)}
-							</label>
-							<DatePicker
-								value={data.dateOfBirth || null}
-								onChange={(val) =>
-									setData((prev) => ({ ...prev, dateOfBirth: val ?? "" }))
-								}
-								max={new Date().toISOString().split("T")[0]}
-								placeholder="Select date of birth"
-								clearable={false}
-							/>
+						<div className="space-y-3">
+							<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+								<div>
+									<FieldLabel>{t("diploma.firstNameAr")}</FieldLabel>
+									<Input
+										value={data.firstNameAr}
+										onChange={set("firstNameAr")}
+										dir="rtl"
+										className="h-9 text-sm"
+									/>
+								</div>
+								<div>
+									<FieldLabel>{t("diploma.lastNameAr")}</FieldLabel>
+									<Input
+										placeholder="مثال: قداري"
+										value={data.lastNameAr}
+										onChange={set("lastNameAr")}
+										dir="rtl"
+										className="h-9 text-sm"
+									/>
+								</div>
+							</div>
 						</div>
-						<div className="space-y-1">
-							<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-								Graduation Year
-								{data.graduationYear ? (
-									<CheckCircle2 className="w-3 h-3 text-green-500" />
-								) : (
-									<AlertCircle className="w-3 h-3 text-amber-400" />
-								)}
-							</label>
-							<Input
-								value={data.graduationYear}
-								onChange={set("graduationYear")}
-								placeholder="e.g. 2024"
-								className="h-9 text-sm"
-							/>
-						</div>
-						<div className="space-y-1">
-							<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-								Field of Study
-								{data.fieldFr ? (
-									<CheckCircle2 className="w-3 h-3 text-green-500" />
-								) : (
-									<AlertCircle className="w-3 h-3 text-amber-400" />
-								)}
-							</label>
-							<Input
-								value={data.fieldFr}
-								onChange={set("fieldFr")}
-								placeholder="Field of study"
-								className="h-9 text-sm"
-							/>
-						</div>
-						<div className="space-y-1">
-							<label className="text-xs font-medium text-gray-500 uppercase">
-								Major (Filière)
-							</label>
-							<Input
-								value={data.majorFr}
-								onChange={set("majorFr")}
-								placeholder="Optional major"
-								className="h-9 text-sm"
-							/>
-						</div>
-						<div className="space-y-1">
-							<label className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-								Specialty
-								{data.specialtyFr ? (
-									<CheckCircle2 className="w-3 h-3 text-green-500" />
-								) : (
-									<AlertCircle className="w-3 h-3 text-amber-400" />
-								)}
-							</label>
-							<Input
-								value={data.specialtyFr}
-								onChange={set("specialtyFr")}
-								placeholder="Specialty"
-								className="h-9 text-sm"
-							/>
+
+						{/* Academic info */}
+						<div className="space-y-3">
+							<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+								<div>
+									<FieldLabel status={data.dateOfBirth ? "ok" : "warn"}>
+										{t("diploma.dateOfBirth")}
+									</FieldLabel>
+									<DatePicker
+										value={data.dateOfBirth || null}
+										onChange={(val) =>
+											setData((prev) => ({ ...prev, dateOfBirth: val ?? "" }))
+										}
+										max={new Date().toISOString().split("T")[0]}
+										placeholder={t("datePicker.placeholder")}
+										clearable={true}
+									/>
+								</div>
+								<div>
+									<FieldLabel status={data.graduationYear ? "ok" : "warn"}>
+										{t("diploma.graduationYear")}
+									</FieldLabel>
+									<Input
+										value={data.graduationYear}
+										onChange={set("graduationYear")}
+										placeholder="e.g. 2024"
+										className="h-9 text-sm"
+									/>
+								</div>
+								<div>
+									<FieldLabel status={data.fieldFr ? "ok" : "warn"}>
+										{t("diploma.fieldOfStudy")}
+									</FieldLabel>
+									<Input
+										value={data.fieldFr}
+										onChange={set("fieldFr")}
+										placeholder="Field of study"
+										className="h-9 text-sm"
+									/>
+								</div>
+								<div>
+									<FieldLabel status={data.majorFr ? "ok" : "warn"}>
+										{t("diploma.major")}
+									</FieldLabel>
+									<Input
+										value={data.majorFr}
+										onChange={set("majorFr")}
+										placeholder="Optional major"
+										className="h-9 text-sm"
+									/>
+								</div>
+								<div className="sm:col-span-2">
+									<FieldLabel status={data.specialtyFr ? "ok" : "warn"}>
+										{t("diploma.specialty")}
+									</FieldLabel>
+									<Input
+										value={data.specialtyFr}
+										onChange={set("specialtyFr")}
+										placeholder="Specialty"
+										className="h-9 text-sm"
+									/>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
+				</SectionCard>
 
-				{/* Side-by-side: Missing fields + Issuance */}
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-					{/* Section 2: Required manual */}
-
-					{!isAuthCert && (
-						<>
-							<div className="rounded-xl border border-gray-200 dark:border-zinc-700 overflow-hidden flex flex-col">
-								<div className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700">
-									<AlertCircle className="w-4 h-4 text-red-400" />
-									<h3 className="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-widest">
-										Required — not in database
-									</h3>
+				{!isAuthCert && (
+					<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+						{/* Required — not in DB */}
+						<SectionCard icon={AlertCircle} title="Required — not in database">
+							<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+								<div className="sm:col-span-2">
+									<FieldLabel required>Place of Birth (French)</FieldLabel>
+									<Input
+										placeholder="e.g. Laghouat"
+										value={data.placeOfBirth}
+										onChange={set("placeOfBirth")}
+										className={`h-9 text-sm transition-colors ${
+											!data.placeOfBirth
+												? "border-red-300 focus:border-red-400"
+												: ""
+										}`}
+									/>
+									{!data.placeOfBirth && (
+										<p className="mt-1 flex items-center gap-1 text-[11px] text-red-400">
+											<AlertCircle className="w-3 h-3" /> Required
+										</p>
+									)}
 								</div>
-								<div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 flex-1">
-									<div className="space-y-1">
-										<label className="flex items-center gap-1 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-											Place of Birth (French){" "}
-											<span className="text-red-500 ml-0.5">*</span>
-										</label>
-										<Input
-											placeholder="e.g. Laghouat"
-											value={data.placeOfBirth}
-											onChange={set("placeOfBirth")}
-											className={`h-9 text-sm ${!data.placeOfBirth ? "border-red-300 focus:border-red-400" : ""}`}
-										/>
-										{!data.placeOfBirth && (
-											<p className="text-[11px] text-red-400 flex items-center gap-1 mt-0.5">
-												<AlertCircle className="w-3 h-3" /> Required
-											</p>
-										)}
-									</div>
-									<div className="space-y-1">
-										<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1">
-											Place of Birth (Arabic){" "}
-											<span className="normal-case font-normal text-gray-400 ml-1">
-												(optional)
-											</span>
-										</label>
-										<Input
-											placeholder="مثال: الأغواط"
-											value={data.placeOfBirthAr}
-											onChange={set("placeOfBirthAr")}
-											dir="rtl"
-											className="h-9 text-sm"
-										/>
-									</div>
-									<div className="space-y-1">
-										<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1">
-											Last Name (Arabic){" "}
-											<span className="normal-case font-normal text-gray-400 ml-1">
-												(optional)
-											</span>
-										</label>
-										<Input
-											placeholder="مثال: قداري"
-											value={data.lastNameAr}
-											onChange={set("lastNameAr")}
-											dir="rtl"
-											className="h-9 text-sm"
-										/>
-									</div>
-									<div className="space-y-1">
-										<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1">
-											First Name (Arabic){" "}
-											<span className="normal-case font-normal text-gray-400 ml-1">
-												(optional)
-											</span>
-										</label>
-										<Input
-											placeholder="مثال: أيوب"
-											value={data.firstNameAr}
-											onChange={set("firstNameAr")}
-											dir="rtl"
-											className="h-9 text-sm"
-										/>
-									</div>
+								<div className="sm:col-span-2">
+									<FieldLabel optional>Place of Birth (Arabic)</FieldLabel>
+									<Input
+										placeholder="مثال: الأغواط"
+										value={data.placeOfBirthAr}
+										onChange={set("placeOfBirthAr")}
+										dir="rtl"
+										className="h-9 text-sm"
+									/>
 								</div>
 							</div>
-							<div className="rounded-xl border border-gray-200 dark:border-zinc-700 flex flex-col">
-								<div className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700">
-									<Printer className="w-4 h-4 text-gray-400" />
-									<h3 className="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-widest">
-										Issuance details
-									</h3>
+						</SectionCard>
+
+						{/* Issuance details */}
+						<SectionCard icon={Printer} title="Issuance Details">
+							<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+								<div className="sm:col-span-2">
+									<FieldLabel>Date of Issuance</FieldLabel>
+									<DatePicker
+										value={data.issuanceDate || null}
+										onChange={(val) =>
+											setData((prev) => ({
+												...prev,
+												issuanceDate: val ?? "",
+											}))
+										}
+										placeholder="Select issuance date"
+										clearable={false}
+									/>
 								</div>
-								<div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 flex-1">
-									<div className="space-y-1 sm:col-span-2">
-										<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-											Date of Issuance
-										</label>
-										<DatePicker
-											value={data.issuanceDate || null}
-											onChange={(val) =>
-												setData((prev) => ({
-													...prev,
-													issuanceDate: val ?? "",
-												}))
-											}
-											placeholder="Select issuance date"
-											clearable={false}
-										/>
-									</div>
-									<div className="space-y-1">
-										<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-											Location (French)
-										</label>
-										<Input
-											placeholder="Laghouat"
-											value={data.issuanceLocationFr}
-											onChange={set("issuanceLocationFr")}
-											className="h-9 text-sm"
-										/>
-									</div>
-									<div className="space-y-1">
-										<label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-											Location (Arabic)
-										</label>
-										<Input
-											placeholder="الأغواط"
-											value={data.issuanceLocationAr}
-											onChange={set("issuanceLocationAr")}
-											dir="rtl"
-											className="h-9 text-sm"
-										/>
-									</div>
+								<div>
+									<FieldLabel>Location (French)</FieldLabel>
+									<Input
+										placeholder="Laghouat"
+										value={data.issuanceLocationFr}
+										onChange={set("issuanceLocationFr")}
+										className="h-9 text-sm"
+									/>
+								</div>
+								<div>
+									<FieldLabel>Location (Arabic)</FieldLabel>
+									<Input
+										placeholder="الأغواط"
+										value={data.issuanceLocationAr}
+										onChange={set("issuanceLocationAr")}
+										dir="rtl"
+										className="h-9 text-sm"
+									/>
 								</div>
 							</div>
-						</>
-					)}
-				</div>
+						</SectionCard>
+					</div>
+				)}
 			</div>
 
-			<div className="flex justify-between pt-3 border-t border-gray-100 dark:border-zinc-800 shrink-0">
+			{/* ── Footer navigation ── */}
+			<div className="flex items-center justify-between gap-3 pt-3 mt-1 border-t border-gray-100 dark:border-zinc-800 shrink-0">
 				<Button
 					variant="outline"
 					onClick={onBack}
-					className="flex items-center gap-2"
+					className="flex items-center gap-2 h-9 px-4 text-sm"
 				>
 					{isRtl ? (
 						<ChevronRight className="w-4 h-4" />
@@ -1011,10 +1043,11 @@ const ReviewStep: React.FC<ReviewStepProps> = ({
 					)}
 					{t("common.back")}
 				</Button>
+
 				<Button
 					onClick={onNext}
 					disabled={!canProceed}
-					className="flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white px-6"
+					className="flex items-center gap-2 h-9 px-6 text-sm bg-emerald-700 hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg transition-all"
 				>
 					{t("diploma.previewDocument")}
 					{isRtl ? (
@@ -1047,103 +1080,74 @@ const PreviewStep: React.FC<PreviewStepProps> = ({
 			? buildAuthCertHTML(data)
 			: buildDiplomaHTML(data);
 
-	const [zoom, setZoom] = useState(1.35);
+	const [zoom, setZoom] = useState(1.15);
 
 	const { t, i18n } = useTranslation();
 	const isRtl = i18n.language === "ar";
 
 	return (
 		<div className="flex flex-col flex-1 min-h-0 space-y-4">
-			<div className="flex-1 overflow-y-auto min-h-0 space-y-4 pr-1">
-				<div className="flex items-center justify-between">
-					<p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
-						<Eye className="w-4 h-4" />
-						<span>
-							Printing:&nbsp;
-							<strong className="text-gray-700 dark:text-gray-300">
-								{selectedType.labelFr}
-							</strong>
-							<span className="mx-1 text-gray-400">·</span>
-							<span dir="rtl">{selectedType.labelAr}</span>
-						</span>
-					</p>
-					<div className="flex items-center gap-2" dir="ltr">
-						<button
-							onClick={() => setZoom((z) => Math.max(0.3, z - 0.1))}
-							className="px-2 py-1 rounded border text-sm hover:bg-gray-100 dark:hover:bg-zinc-700"
-						>
-							-
-						</button>
-						<span className="text-sm w-12 text-center">
-							{Math.round(zoom * 100)}%
-						</span>
-						<button
-							onClick={() => setZoom((z) => Math.min(1.5, z + 0.1))}
-							className="px-2 py-1 rounded border text-sm hover:bg-gray-100 dark:hover:bg-zinc-700"
-						>
-							+
-						</button>
-						<button
-							onClick={() => setZoom(1.35)}
-							className="px-2 py-1 rounded border text-sm hover:bg-gray-100 dark:hover:bg-zinc-700 text-gray-500"
-						>
-							Reset
-						</button>
-					</div>
+			<div className="flex items-center justify-between">
+				<p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+					<Eye className="w-4 h-4" />
+					<span>
+						Printing:&nbsp;
+						<strong className="text-gray-700 dark:text-gray-300">
+							{selectedType.labelFr}
+						</strong>
+						<span className="mx-1 text-gray-400">·</span>
+						<span dir="rtl">{selectedType.labelAr}</span>
+					</span>
+				</p>
+				<div className="flex items-center gap-2" dir="ltr">
+					<button
+						onClick={() => setZoom((z) => Math.max(0.3, z - 0.1))}
+						className="px-2 py-1 rounded border text-sm hover:bg-gray-100 dark:hover:bg-zinc-700"
+					>
+						-
+					</button>
+					<span className="text-sm w-12 text-center">
+						{Math.round(zoom * 100)}%
+					</span>
+					<button
+						onClick={() => setZoom((z) => Math.min(1.5, z + 0.1))}
+						className="px-2 py-1 rounded border text-sm hover:bg-gray-100 dark:hover:bg-zinc-700"
+					>
+						+
+					</button>
+					<button
+						onClick={() => setZoom(1.35)}
+						className="px-2 py-1 rounded border text-sm hover:bg-gray-100 dark:hover:bg-zinc-700 text-gray-500"
+					>
+						Reset
+					</button>
 				</div>
+			</div>
 
+			<div
+				className="w-full overflow-auto rounded-lg border border-gray-200 dark:border-zinc-700 bg-gray-100 dark:bg-zinc-900 flex justify-center py-4"
+				style={{ height: "75vh" }}
+			>
 				<div
-					className="w-full overflow-auto rounded-lg border border-gray-200 dark:border-zinc-700 bg-gray-100 dark:bg-zinc-900 flex justify-center py-4"
-					style={{ height: "75vh" }}
+					style={{
+						width: "200mm",
+						height: "350mm",
+						transform: `scale(${zoom})`,
+						transformOrigin: "top center",
+						flexShrink: 0,
+					}}
 				>
-					<div
+					<iframe
+						srcDoc={html}
+						title="Diploma Preview"
 						style={{
 							width: "200mm",
 							height: "350mm",
-							transform: `scale(${zoom})`,
-							transformOrigin: "top center",
-							flexShrink: 0,
+							border: "none",
+							background: "#fff",
+							boxShadow: "0 4px 32px rgba(0,0,0,0.18)",
 						}}
-					>
-						<iframe
-							srcDoc={html}
-							title="Diploma Preview"
-							style={{
-								width: "200mm",
-								height: "350mm",
-								border: "none",
-								background: "#fff",
-								boxShadow: "0 4px 32px rgba(0,0,0,0.18)",
-							}}
-						/>
-					</div>
-				</div>
-
-				<div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
-					{[
-						["Name (FR)", `${data.lastNameFr} ${data.firstNameFr}`],
-						[
-							"Name (AR)",
-							`${data.lastNameAr || data.lastNameFr} ${data.firstNameAr || data.firstNameFr}`,
-						],
-						["Born", `${fmtDateFr(data.dateOfBirth)}, ${data.placeOfBirth}`],
-						[
-							"Issued",
-							`${fmtDateFr(data.issuanceDate)} – ${data.issuanceLocationFr}`,
-						],
-					].map(([label, value]) => (
-						<div
-							key={label}
-							className="bg-gray-50 dark:bg-zinc-800 rounded-md px-3 py-2"
-						>
-							<div className="text-gray-400 uppercase tracking-wider mb-0.5">
-								{label}
-							</div>
-							<div className="font-medium text-gray-800 dark:text-gray-200 truncate">
-								{value}
-							</div>
-						</div>
-					))}
+					/>
 				</div>
 			</div>
 
@@ -1201,6 +1205,9 @@ export const PrintDiplomaDialog: React.FC<PrintDiplomaDialogProps> = ({
 		issuanceLocationAr: "الأغواط",
 		certNumber: 108,
 		certDate: today,
+		certReferenceNumber: "",
+		certRefDate: "",
+		certReferenceDate: "",
 		paperSize: "A4",
 		addresseeTitle: "",
 		addresseeWilaya: "",
@@ -1267,7 +1274,7 @@ export const PrintDiplomaDialog: React.FC<PrintDiplomaDialogProps> = ({
 	return (
 		<Dialog open={open} onOpenChange={handleClose}>
 			<DialogContent
-				className="max-w-[90vw]! w-[90vw]! max-h-[90vh] overflow-hidden p-4 flex flex-col gap-2 backdrop-blur-sm border "
+				className="min-w-270 max-h-[90vh] overflow-hidden p-4 flex flex-col gap-2 backdrop-blur-sm border "
 				dir={i18n.language === "ar" ? "rtl" : "ltr"}
 			>
 				<DialogHeader className="pb-0 mb-0">

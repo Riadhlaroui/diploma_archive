@@ -799,7 +799,22 @@
 		"stepPreview": "Preview & Print",
 		"generateTitle": "Generate Document",
 		"certInfo": "Certificate Info",
-		"paperSize": "Paper Size"
+		"certDate": "Certificate Date",
+		"paperSize": "Paper Size",
+		"autoFilledFromDB": "Auto-filled from database",
+		"placeOfBirthRequired": "Place of birth is required",
+		"firstNameAr": "First name",
+		"lastNameAr": "Last name",
+		"dateOfBirth": "Date of birth",
+		"placeOfBirth": "Place of birth",
+		"graduationYear": "Graduation year",
+		"fieldOfStudy": "Field (Domaine)",
+		"major": "Major (Filière)",
+		"specialty": "Specialty (Spécialité)"
+	},
+
+	"datePicker": {
+		"placeholder": "Select date"
 	},
 
 	"common": {

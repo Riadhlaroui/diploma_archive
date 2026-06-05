@@ -786,7 +786,22 @@
 		"stepPreview": "Aperçu et impression",
 		"generateTitle": "Générer un document",
 		"certInfo": "Infos du certificat",
-		"paperSize": "Format du papier"
+		"certDate": "Date du certificat",
+		"paperSize": "Format du papier",
+		"autoFilledFromDB": "Rempli automatiquement à partir de la base de données",
+		"placeOfBirthRequired": "Le lieu de naissance est obligatoire",
+		"firstNameAr": "Prénom",
+		"lastNameAr": "Nom de famille",
+		"dateOfBirth": "Date de naissance",
+		"placeOfBirth": "Lieu de naissance",
+		"graduationYear": "Année de remise des diplômes",
+		"fieldOfStudy": "Domaine",
+		"major": "Filière",
+		"specialty": "Spécialité"
+	},
+
+	"datePicker": {
+		"placeholder": "Sélectionner une date"
 	},
 
 	"common": {
