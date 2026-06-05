@@ -81,9 +81,6 @@ export default function SignIn() {
 				<div className="w-full max-w-md animate-in space-y-8">
 					<div className="flex flex-col space-y-1">
 						<h1 className="font-bold text-2xl tracking-wide">{t("welcome")}</h1>
-						<p className="text-base text-muted-foreground">
-							Login or create your account.
-						</p>
 					</div>
 
 					<div className="space-y-4">
@@ -156,9 +153,9 @@ export default function SignIn() {
 
 					{/* New Footer */}
 					<p className="text-muted-foreground text-sm">
-						Forgot your password?{" "}
+						{t("sign-in.forgotPassword")}{" "}
 						<a href="/reset-password" className="text-primary hover:underline">
-							Reset it here.
+							{t("sign-in.resetPassword")}
 						</a>
 						<br />
 					</p>

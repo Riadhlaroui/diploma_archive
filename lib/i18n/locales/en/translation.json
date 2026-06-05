@@ -9,6 +9,8 @@
 	"sign-in": {
 		"email": "Email",
 		"password": "Password",
+		"forgotPassword": "Forgot your password?",
+		"resetPassword": "Reset it here",
 		"button": "Sign in",
 		"success": "Login successful",
 		"welcome": "Welcome!"
