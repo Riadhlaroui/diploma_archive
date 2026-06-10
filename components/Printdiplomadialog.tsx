@@ -65,8 +65,8 @@ interface DiplomaData {
 	certNumber: number;
 	certDate: string;
 	certReferenceNumber: string;
-	certRefDate: string;
-	certReferenceDate: string;
+	certFirstRefDate: string;
+	certSecondRefDate: string;
 	addresseeTitle: string;
 	addresseeWilaya: string;
 	paperSize: "A4" | "A5" | "Letter";
@@ -167,7 +167,7 @@ function saveCertNumber(n: number) {
 }
 
 // Diploma HTML Generator
-function buildDiplomaHTML(d: DiplomaData): string {
+function buildMasterDiplomaHTML(d: DiplomaData): string {
 	const nameFr = `${d.lastNameFr.toUpperCase()} ${d.firstNameFr}`;
 	const nameAr =
 		d.firstNameAr || d.lastNameAr
@@ -347,16 +347,10 @@ function buildAuthCertHTML(d: DiplomaData): string {
 
 	const refNumber = d.certReferenceNumber || '<span class="meta-blank"></span>';
 
-	const refRefDate = d.certRefDate
-		? new Date(d.certRefDate).toLocaleDateString("ar-DZ", {
-				year: "numeric",
-				month: "2-digit",
-				day: "2-digit",
-			})
-		: '<span class="meta-blank"></span>';
+	const refFirstDate = d.certFirstRefDate || '<span class="meta-blank"></span>';
 
-	const refDate = d.certReferenceDate
-		? new Date(d.certReferenceDate).toLocaleDateString("ar-DZ", {
+	const refSecondDate = d.certSecondRefDate
+		? new Date(d.certSecondRefDate).toLocaleDateString("ar-DZ", {
 				year: "numeric",
 				month: "2-digit",
 				day: "2-digit",
@@ -476,9 +470,9 @@ function buildAuthCertHTML(d: DiplomaData): string {
     إرسالكم رقم :
     <span style="display:inline-block; min-width: 20mm; text-align:center;">${refNumber}</span>
     &nbsp;/&nbsp;
-    <span style="display:inline-block; min-width: 25mm; text-align:center;">${refDate}</span>
+    <span style="display:inline-block; min-width: 25mm; text-align:center;">${refFirstDate}</span>
     &nbsp;، المؤرخة في :&nbsp;
-    <span style="display:inline-block; min-width: 25mm; text-align:center;">${refRefDate}</span>
+    <span style="display:inline-block; min-width: 25mm; text-align:center;">${refSecondDate}</span>
   </span>
 </div>
   </div>
@@ -799,27 +793,19 @@ const ReviewStep: React.FC<ReviewStepProps> = ({
 									className="h-9 text-sm w-40 shrink-0"
 								/>
 								<span className="text-sm shrink-0 mt-2.5">/</span>
-								<div className="flex flex-col gap-1 min-w-60">
-									<DatePicker
-										value={data.certReferenceDate || null}
-										onChange={(val) =>
-											setData((p) => ({ ...p, certReferenceDate: val ?? "" }))
-										}
-										clearable={true}
-										className="w-full"
-									/>
-								</div>
+								<Input
+									value={data.certFirstRefDate}
+									onChange={set("certFirstRefDate")}
+									className="h-9 text-sm w-40 shrink-0"
+								/>
 								<span className="text-sm shrink-0 mt-2.5">، المؤرخة في :</span>
-								<div className="flex flex-col gap-1 min-w-60">
-									<DatePicker
-										value={data.certRefDate || null}
-										onChange={(val) =>
-											setData((p) => ({ ...p, certRefDate: val ?? "" }))
-										}
-										clearable={true}
-										className="w-full"
-									/>
-								</div>
+								<DatePicker
+									value={data.certSecondRefDate}
+									onChange={(val) =>
+										setData((p) => ({ ...p, certSecondRefDate: val ?? "" }))
+									}
+									className="h-9 text-sm w-40 shrink-0"
+								/>
 							</div>
 						</div>
 					</SectionCard>
@@ -1078,7 +1064,7 @@ const PreviewStep: React.FC<PreviewStepProps> = ({
 	const html =
 		selectedType.id === "transcript"
 			? buildAuthCertHTML(data)
-			: buildDiplomaHTML(data);
+			: buildMasterDiplomaHTML(data);
 
 	const [zoom, setZoom] = useState(1.15);
 
@@ -1206,8 +1192,8 @@ export const PrintDiplomaDialog: React.FC<PrintDiplomaDialogProps> = ({
 		certNumber: 108,
 		certDate: today,
 		certReferenceNumber: "",
-		certRefDate: "",
-		certReferenceDate: "",
+		certSecondRefDate: "",
+		certFirstRefDate: "",
 		paperSize: "A4",
 		addresseeTitle: "",
 		addresseeWilaya: "",
@@ -1227,7 +1213,9 @@ export const PrintDiplomaDialog: React.FC<PrintDiplomaDialogProps> = ({
 
 	const handlePrint = () => {
 		const isAuthCert = selectedTypeId === "transcript";
-		const html = isAuthCert ? buildAuthCertHTML(data) : buildDiplomaHTML(data);
+		const html = isAuthCert
+			? buildAuthCertHTML(data)
+			: buildMasterDiplomaHTML(data);
 
 		const win = window.open("", "_blank", "width=900,height=700");
 		if (!win) {
