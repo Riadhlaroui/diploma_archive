@@ -847,6 +847,7 @@
 		"deleteSpecialty": "Failed to delete specialty '{{name}}'.",
 		"requiredRelation": "Cannot delete '{{name}}' because it's being used by students.",
 		"generic400": "Failed to delete specialty: {{message}}",
+		"unknownError": "An unknown error occurred. Please try again.",
 
 		"sign-in": {
 			"invalidCredentials": "Invalid email or password.",

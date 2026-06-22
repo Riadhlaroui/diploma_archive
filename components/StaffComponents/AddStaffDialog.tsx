@@ -223,7 +223,7 @@ const AddStaffDialog = ({ open, onOpenChange }: Props) => {
 						</div>
 
 						{/* Phone */}
-						<div className={fieldClass}>
+						<div dir={isRtl ? "rtl" : "ltr"} className={fieldClass}>
 							<label className={labelClass}>
 								{t("addStaffDialog.phoneNumber")}{" "}
 								<span className="text-red-500">*</span>

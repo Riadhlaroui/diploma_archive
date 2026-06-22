@@ -70,6 +70,11 @@ interface DiplomaData {
 	addresseeTitle: string;
 	addresseeWilaya: string;
 	paperSize: "A4" | "A5" | "Letter";
+
+	branchFr: string;
+	diplomaRefNumber: string;
+	serialNumber: string;
+	serialCode: string;
 }
 
 const CERT_COUNTER_KEY = "lagh_auth_cert_counter";
@@ -127,7 +132,7 @@ const ALL_DOC_TYPES: DocType[] = [
 ];
 
 // Helpers
-const fmtDateFr = (d: string) => {
+/* const fmtDateFr = (d: string) => {
 	if (!d) return "—";
 	const dt = new Date(d);
 	return [
@@ -155,6 +160,26 @@ const fmtDateAr = (d: string) => {
 		"ديسمبر",
 	];
 	return `${dt.getDate()} ${months[dt.getMonth()]} ${dt.getFullYear()}`;
+}; */
+
+const fmtDateFr = (d: string) => {
+	if (!d) return "—";
+	const dt = new Date(d);
+	return [
+		dt.getFullYear(),
+		String(dt.getMonth() + 1).padStart(2, "0"),
+		String(dt.getDate()).padStart(2, "0"),
+	].join("/");
+};
+
+const fmtDateAr = (d: string) => {
+	if (!d) return "—";
+	const dt = new Date(d);
+	return [
+		dt.getFullYear(),
+		String(dt.getMonth() + 1).padStart(2, "0"),
+		String(dt.getDate()).padStart(2, "0"),
+	].join("/");
 };
 
 function getNextCertNumber(): number {
@@ -178,154 +203,346 @@ function buildMasterDiplomaHTML(d: DiplomaData): string {
 	const issueAr = fmtDateAr(d.issuanceDate);
 	const placeFr = d.placeOfBirth || "—";
 	const placeAr = d.placeOfBirthAr || d.placeOfBirth || "—";
-	const fieldAr = d.fieldFr;
-	const specAr = d.specialtyFr;
 
 	return `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width"/>
-<title>شهادة الليسانس – ${nameFr}</title>
+<title>شهادة الماستر – ${nameFr}</title>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
-  @page { size: A4 portrait; margin: 0; }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { width: 210mm; height: 297mm; background: #fff; font-family: 'Amiri', 'Times New Roman', serif; color: #1a1a1a; overflow: hidden; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-  .page { width: 210mm; height: 297mm; position: relative; display: flex; flex-direction: column; align-items: center; background: #fff; }
-  .border-frame { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
-  .border-outer { position: absolute; inset: 6mm; border: 3.5mm solid transparent; border-image: repeating-linear-gradient(45deg, #1a6b35 0px, #1a6b35 5px, #c8a850 5px, #c8a850 8px, #1a6b35 8px, #1a6b35 13px, #fff 13px, #fff 15px) 14; }
-  .border-inner { position: absolute; inset: 13mm; border: 1px solid #1a6b35; box-shadow: inset 0 0 0 2px #c8a850, inset 0 0 0 4px #1a6b35; }
-  .corner { position: absolute; width: 22mm; height: 22mm; }
-  .corner svg { width: 100%; height: 100%; }
-  .corner-tl { top: 5mm; left: 5mm; }
-  .corner-tr { top: 5mm; right: 5mm; transform: scaleX(-1); }
-  .corner-bl { bottom: 5mm; left: 5mm; transform: scaleY(-1); }
-  .corner-br { bottom: 5mm; right: 5mm; transform: scale(-1,-1); }
-  .content { position: relative; z-index: 1; width: 100%; height: 100%; display: flex; flex-direction: column; padding: 22mm 20mm 18mm; align-items: center; }
-  .republic-seal { display: flex; flex-direction: column; align-items: center; margin-bottom: 3mm; }
-  .seal-badge { width: 22mm; height: 22mm; border-radius: 50%; border: 2px solid #1a6b35; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(135deg, #f0faf3 0%, #e0f3e6 100%); box-shadow: 0 0 0 1.5px #c8a850; margin-bottom: 2mm; padding: 2mm; text-align: center; line-height: 1.2; }
-  .seal-badge span { font-size: 5pt; color: #1a6b35; font-weight: 700; display: block; }
-  .ministry-title { font-size: 10.5pt; color: #1a1a1a; text-align: center; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 1mm; }
-  .diploma-title { font-family: 'Scheherazade New', 'Amiri', serif; font-size: 26pt; font-weight: 700; color: #1a1a1a; text-align: center; margin: 2mm 0 5mm; letter-spacing: 2px; }
-  .decree-text { font-size: 8.5pt; text-align: center; color: #333; line-height: 2; max-width: 150mm; margin-bottom: 5mm; direction: rtl; }
-  .student-block-ar { width: 100%; max-width: 160mm; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; padding: 4mm 0; margin-bottom: 4mm; direction: rtl; }
-  .student-row { display: flex; align-items: baseline; gap: 4mm; margin: 2mm 0; font-size: 11pt; line-height: 1.8; }
-  .row-label { font-weight: 700; color: #1a1a1a; white-space: nowrap; min-width: 38mm; }
-  .row-value { font-size: 12pt; font-weight: 700; color: #000; border-bottom: 1px dotted #888; flex: 1; padding-bottom: 0.5mm; }
-  .diploma-type-ar { text-align: center; font-size: 14pt; font-weight: 700; margin: 3mm 0; color: #1a1a1a; }
-  .field-row { display: flex; justify-content: space-between; align-items: baseline; width: 100%; max-width: 160mm; direction: rtl; font-size: 10.5pt; gap: 3mm; margin-bottom: 6mm; }
-  .field-item { display: flex; align-items: baseline; gap: 2mm; }
-  .field-label { font-weight: 700; white-space: nowrap; }
-  .field-value { border-bottom: 1px dotted #888; min-width: 50mm; padding-bottom: 0.5mm; font-size: 11pt; font-weight: 700; }
-  .french-section { width: 100%; max-width: 160mm; direction: ltr; text-align: left; border-top: 1px solid #ccc; padding-top: 4mm; margin-bottom: 5mm; }
-  .fr-line { display: flex; align-items: baseline; gap: 3mm; margin: 1.5mm 0; font-size: 9.5pt; }
-  .fr-label { font-weight: 700; white-space: nowrap; min-width: 30mm; font-style: italic; }
-  .fr-value { font-size: 10pt; font-weight: 700; border-bottom: 1px dotted #888; flex: 1; padding-bottom: 0.5mm; font-style: normal; text-transform: uppercase; }
-  .fr-diploma-line { font-size: 9.5pt; margin: 2mm 0 1mm; }
-  .signatures-row { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; max-width: 160mm; margin-top: auto; gap: 8mm; direction: rtl; }
-  .sig-block { display: flex; flex-direction: column; align-items: center; min-width: 45mm; }
-  .sig-title { font-size: 7.5pt; text-align: center; font-weight: 700; color: #1a1a1a; line-height: 1.5; margin-bottom: 12mm; }
-  .sig-line { width: 40mm; border-top: 1px solid #666; }
-  .location-date { font-size: 9pt; text-align: center; color: #333; margin-bottom: 4mm; direction: rtl; width: 100%; max-width: 160mm; }
-  @media print { body, .page { width: 210mm; height: 297mm; } }
+
+  /* ── Page setup ── */
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    width: 297mm;
+    height: 210mm;
+    background: #fff;
+    font-family: 'Amiri', 'Times New Roman', serif;
+    font-size: 11pt;
+    color: #000;
+    overflow: hidden;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* ── Page container ── */
+  .page {
+    width: 297mm;
+    height: 210mm;
+    padding: 20mm 20mm 15mm;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Two-column bilingual layout ── */
+  .cols {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    min-height: 0;
+    direction: rtl;
+    gap: 10mm;
+  }
+
+  .col-ar {
+    width: 50%;
+    flex-shrink: 0;
+    direction: rtl;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 3mm;
+    padding: 5mm;
+  }
+
+  .col-fr {
+    width: 50%;
+    flex-shrink: 0;
+    direction: ltr;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 3mm;
+    padding: 5mm;
+  }
+
+  /* ── Rows ── */
+  .ar-row,
+  .fr-row {
+    display: flex;
+    align-items: baseline;
+    gap: 2mm;
+    min-height: 8mm;
+  }
+
+  .ar-row { font-size: 12pt; line-height: 1.8; }
+  .fr-row { font-size: 11pt; line-height: 1.8; }
+
+  /* ── Labels ── */
+  .ar-label {
+    font-weight: 700;
+    white-space: nowrap;
+    min-width: 52mm;
+  }
+
+  .fr-label {
+    font-style: italic;
+    white-space: nowrap;
+    min-width: 44mm;
+  }
+
+  /* ── Values (shared base) ── */
+  .ar-value,
+  .ar-value-short,
+  .fr-value,
+  .fr-value-short {
+    border-bottom: 1px dotted #555;
+    flex: 1;
+    font-weight: 700;
+    padding-bottom: 0.3mm;
+  }
+
+  .ar-value,
+  .ar-value-short { font-size: 12pt; }
+
+  .fr-value,
+  .fr-value-short { font-size: 11pt; }
+
+  .ar-value-short,
+.fr-value-short {
+  min-width: 30mm;
+  flex: none;
+  line-height: 1.8;    
+  display: inline-flex;
+  align-items: center;
+}
+
+  /* ── Values (alignment by column) ── */
+  .col-ar .ar-value,
+  .col-ar .ar-value-short { text-align: right; }
+
+  .col-fr .fr-value,
+  .col-fr .fr-value-short { text-align: left; }
+
+  /* ── Diploma title blocks ── */
+  .diploma-type-ar,
+  .fr-diploma-title {
+    height: 18mm;
+    min-width: 60mm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4mm 0;
+  }
+
+  .diploma-type-ar {
+    font-family: 'Scheherazade New', serif;
+    font-size: 24pt;
+    font-weight: 700;
+  }
+
+  .fr-diploma-title {
+    font-style: italic;
+    font-size: 18pt;
+    font-weight: 700;
+  }
+
+  /* ── Bottom info row ── */
+  .bottom-info {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-around;
+    font-size: 11pt;
+    direction: rtl;
+    margin-top: 5mm;
+    margin-bottom: 10mm;
+  }
+
+  .chunk {
+    display: flex;
+    align-items: baseline;
+    gap: 2mm;
+    white-space: nowrap;
+  }
+
+  .chunk-label {
+    font-weight: 700;
+    min-width: 28mm;
+    display: inline-block;
+  }
+
+  .chunk-val {
+    border-bottom: 1px dotted #555;
+    min-width: 35mm;
+    text-align: right;
+    font-weight: 700;
+    padding-bottom: 0.3mm;
+  }
+
+  /* ── Signatures ── */
+  .sigs {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    direction: rtl;
+    font-size: 11pt;
+    font-weight: 700;
+    padding: 0 15mm;
+  }
+
+  .sig-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 50mm;
+  }
+
+  .sig-title {
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 15mm;
+  }
+
+  /* ── Serial numbers ── */
+  .serials {
+    margin-top: auto;
+    font-size: 9pt;
+    direction: ltr;
+    line-height: 1.7;
+    font-weight: bold;
+  }
+
+  /* ── Print ── */
+  @media print {
+    body,
+    .page {
+      width: 297mm;
+      height: 210mm;
+    }
+  }
+
 </style>
 </head>
 <body>
 <div class="page">
-  <div class="border-frame">
-    <div class="border-outer"></div>
-    <div class="border-inner"></div>
-    ${["corner-tl", "corner-tr", "corner-bl", "corner-br"]
-			.map(
-				(cls) => `
-    <div class="corner ${cls}">
-      <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0 0 L60 0 L60 8 L8 8 L8 60 L0 60 Z" fill="#1a6b35"/>
-        <path d="M8 8 L52 8 L52 15 L15 15 L15 52 L8 52 Z" fill="#c8a850"/>
-        <path d="M15 15 L45 15 L45 22 L22 22 L22 45 L15 45 Z" fill="#1a6b35"/>
-        <circle cx="30" cy="30" r="8" fill="none" stroke="#1a6b35" stroke-width="2"/>
-        <rect x="25" y="25" width="10" height="10" transform="rotate(45 30 30)" fill="#c8a850"/>
-        <rect x="27.5" y="27.5" width="5" height="5" transform="rotate(45 30 30)" fill="#1a6b35"/>
-      </svg>
-    </div>`,
-			)
-			.join("")}
+
+  <div class="cols">
+
+    <div class="col-ar">
+      <div class="ar-row">
+        <span class="ar-label">&nbsp;</span>
+        <span class="ar-value">${issueAr}</span>
+      </div>
+      <div class="ar-row">
+        <span class="ar-label">&nbsp;</span>
+        <span class="ar-value">${nameAr}</span>
+      </div>
+      <div class="ar-row" style="align-items: center;">
+  <span class="ar-label">&nbsp;</span>
+  <span class="ar-value-short">${fmtDateAr(d.dateOfBirth)}</span>
+  <span class="ar-label">&nbsp;</span>
+  <span class="ar-value">${placeAr}</span>
+</div>
+
+      <div class="diploma-type-ar">&nbsp;</div>
+
+      <div class="ar-row">
+        <span class="ar-label">&nbsp;</span>
+        <span class="ar-value">${d.fieldFr}</span>
+      </div>
+      <div class="ar-row">
+        <span class="ar-label">&nbsp;</span>
+        <span class="ar-value">${d.branchFr ?? d.fieldFr}</span>
+      </div>
+      <div class="ar-row">
+        <span class="ar-label">&nbsp;</span>
+        <span class="ar-value">${d.specialtyFr}</span>
+      </div>
+     <div class="ar-row">
+  <span class="ar-label">&nbsp;</span>
+  <span class="ar-value">جامعة عمار ثليجي الأغواط</span>  <!-- was &nbsp; -->
+</div>
+    </div>
+
+    <div class="col-fr">
+      <div class="fr-row" style="visibility: hidden;">
+        <span class="fr-label">Spacer :</span>
+        <span class="fr-value">Spacer</span>
+      </div>
+      <div class="fr-row">
+        <span class="fr-label">&nbsp;</span>
+        <span class="fr-value">${nameFr}</span>
+      </div>
+      <div class="fr-row" style="align-items: center;">
+  <span class="fr-label">&nbsp;</span>
+  <span class="fr-value-short">${dobFr}</span>
+  <span class="fr-label">&nbsp;</span>
+  <span class="fr-value">${placeFr}</span>
+</div>
+
+      <div class="fr-diploma-title">&nbsp;</div>
+
+      <div class="fr-row">
+        <span class="fr-label">&nbsp;</span>
+        <span class="fr-value">${d.fieldFr}</span>
+      </div>
+      <div class="fr-row">
+        <span class="fr-label">&nbsp;</span>
+        <span class="fr-value">${d.branchFr ?? d.fieldFr}</span>
+      </div>
+      <div class="fr-row">
+        <span class="fr-label">&nbsp;</span>
+        <span class="fr-value">${d.specialtyFr}</span>
+      </div>
+     <div class="fr-row">
+  <span class="fr-label">&nbsp;</span>
+  <span class="fr-value">Université Amar Telidji de Laghouat</span>  <!-- was &nbsp; -->
+</div>
+    </div>
+
   </div>
-  <div class="content">
-    <div class="republic-seal">
-      <div class="seal-badge">
-        <span>الجمهورية الجزائرية</span>
-        <span>الديمقراطية الشعبية</span>
-      </div>
-      <div class="ministry-title">وزارة التعليم العالي والبحث العلمي</div>
+
+  <div class="bottom-info">
+    <div class="chunk">
+      <span class="chunk-label">&nbsp;</span>
+      <span class="chunk-val">${d.issuanceLocationAr || "&nbsp;"}</span>
     </div>
-    <div class="diploma-title">شهادة الليسانس</div>
-    <div class="decree-text">
-      إن وزير التعليم العالي والبحث العلمي، بمقتضى المرسوم التنفيذي المتضمن إنشاء شهادة الليسانس
-      <br/>
-      وبمقتضى محضر لجنة المداولات
+    <div class="chunk">
+      <span class="chunk-label">&nbsp;</span>
+      <span class="chunk-val">${issueAr}</span>
     </div>
-    <div class="student-block-ar">
-      <div class="student-row">
-        <span class="row-label">:يمنح السيد(ة) :</span>
-        <span class="row-value">${nameAr}</span>
-      </div>
-      <div class="student-row">
-        <span class="row-label">:المولود(ة) في :</span>
-        <span class="row-value">${fmtDateAr(d.dateOfBirth)}</span>
-        <span style="font-weight:700;white-space:nowrap;">د.</span>
-        <span class="row-value">${placeAr}</span>
-      </div>
-    </div>
-    <div class="diploma-type-ar">شهادة الليسانس</div>
-    <div class="field-row">
-      <div class="field-item">
-        <span class="field-label">الميدان</span>
-        <span class="field-value">${fieldAr}</span>
-      </div>
-      <div class="field-item">
-        <span class="field-label">تخصص :</span>
-        <span class="field-value">${specAr}</span>
-      </div>
-    </div>
-    <div class="french-section">
-      <div class="fr-line">
-        <span class="fr-label">Il est décerné à M: ${nameFr}</span>
-      </div>
-      <div class="fr-line">
-        <span class="fr-label">Né(e) le</span>
-        <span class="fr-value">${dobFr}</span>
-        <span style="font-weight:700;margin:0 2mm;">à</span>
-        <span class="fr-value">${placeFr}</span>
-      </div>
-      <div class="fr-diploma-line">
-        Le <strong>DIPLOME DE LICENCE ${fieldAr.toUpperCase()}</strong>
-      </div>
-      <div class="fr-line">
-        <span class="fr-label">Option</span>
-        <span class="fr-value">${specAr.toUpperCase()}</span>
-      </div>
-    </div>
-    <div class="location-date">
-      بـ ${d.issuanceLocationAr} في ${issueAr} &nbsp;|&nbsp;
-      <span dir="ltr">à ${d.issuanceLocationFr} le ${issueFr}</span>
-    </div>
-    <div class="signatures-row">
-      <div class="sig-block">
-        <div class="sig-title">رئيس لجنة المداولات</div>
-        <div class="sig-line"></div>
-      </div>
-      <div class="sig-block">
-        <div class="sig-title">عميد كلية العلوم الاقتصادية<br/>والتجارية وعلوم التسيير</div>
-        <div class="sig-line"></div>
-      </div>
-      <div class="sig-block">
-        <div class="sig-title">نائب المدير المكلف بالتعليم<br/>بالنيابة عن وزير التعليم العالي</div>
-        <div class="sig-line"></div>
-      </div>
+    <div class="chunk">
+      <span class="chunk-label">&nbsp;</span>
+      <span class="chunk-val">${d.diplomaRefNumber ?? "&nbsp;"}</span>
     </div>
   </div>
+
+  <div class="sigs">
+    <div class="sig-block">
+      <div class="sig-title">&nbsp;</div>
+    </div>
+    <div class="sig-block">
+      <div class="sig-title">&nbsp;</div>
+    </div>
+  </div>
+
+  <div class="serials">
+    <div>N: &nbsp;${d.serialNumber ?? "________"}</div>
+    <div>e: &nbsp;${d.serialCode ?? "________"}</div>
+  </div>
+
 </div>
 </body>
 </html>`;
@@ -713,7 +930,9 @@ const ReviewStep: React.FC<ReviewStepProps> = ({
 			setData((prev) => ({ ...prev, [key]: e.target.value }));
 
 	const isAuthCert = selectedTypeId === "transcript";
-	const canProceed = isAuthCert ? !!data.certDate : !!data.placeOfBirth;
+	const canProceed = isAuthCert
+		? !!data.certDate
+		: !!data.placeOfBirth && !!data.branchFr;
 
 	const { t, i18n } = useTranslation();
 	const isRtl = i18n.language === "ar";
@@ -939,10 +1158,10 @@ const ReviewStep: React.FC<ReviewStepProps> = ({
 
 				{!isAuthCert && (
 					<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-						{/* Required — not in DB */}
+						{/* Identity & Birth */}
 						<SectionCard icon={AlertCircle} title="Required — not in database">
 							<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
-								<div className="sm:col-span-2">
+								<div>
 									<FieldLabel required>Place of Birth (French)</FieldLabel>
 									<Input
 										placeholder="e.g. Laghouat"
@@ -960,7 +1179,7 @@ const ReviewStep: React.FC<ReviewStepProps> = ({
 										</p>
 									)}
 								</div>
-								<div className="sm:col-span-2">
+								<div>
 									<FieldLabel optional>Place of Birth (Arabic)</FieldLabel>
 									<Input
 										placeholder="مثال: الأغواط"
@@ -970,10 +1189,27 @@ const ReviewStep: React.FC<ReviewStepProps> = ({
 										className="h-9 text-sm"
 									/>
 								</div>
+
+								{/* Filière — separate from Domaine */}
+								<div className="sm:col-span-2">
+									<FieldLabel required status={data.branchFr ? "ok" : "warn"}>
+										Filière (Branch)
+									</FieldLabel>
+									<Input
+										placeholder="e.g. Langue Française"
+										value={data.branchFr}
+										onChange={set("branchFr")}
+										className={`h-9 text-sm ${
+											!data.branchFr
+												? "border-amber-300 focus:border-amber-400"
+												: ""
+										}`}
+									/>
+								</div>
 							</div>
 						</SectionCard>
 
-						{/* Issuance details */}
+						{/* Issuance Details */}
 						<SectionCard icon={Printer} title="Issuance Details">
 							<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
 								<div className="sm:col-span-2">
@@ -981,10 +1217,7 @@ const ReviewStep: React.FC<ReviewStepProps> = ({
 									<DatePicker
 										value={data.issuanceDate || null}
 										onChange={(val) =>
-											setData((prev) => ({
-												...prev,
-												issuanceDate: val ?? "",
-											}))
+											setData((prev) => ({ ...prev, issuanceDate: val ?? "" }))
 										}
 										placeholder="Select issuance date"
 										clearable={false}
@@ -1009,9 +1242,52 @@ const ReviewStep: React.FC<ReviewStepProps> = ({
 										className="h-9 text-sm"
 									/>
 								</div>
+
+								{/* Reference number row: تحت رقم م ش م / 047/2025 */}
+								<div className="sm:col-span-2">
+									<FieldLabel>تحت رقم (Reference No.)</FieldLabel>
+									<div className="flex items-center gap-2">
+										<span className="text-sm text-gray-500 shrink-0">
+											م ش م /
+										</span>
+										<Input
+											placeholder="e.g. 047/2025"
+											value={data.diplomaRefNumber}
+											onChange={set("diplomaRefNumber")}
+											className="h-9 text-sm"
+										/>
+									</div>
+								</div>
 							</div>
 						</SectionCard>
 					</div>
+				)}
+
+				{!isAuthCert && (
+					<SectionCard icon={ClipboardList} title="Serial Numbers (N° / C)">
+						<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+							<div>
+								<FieldLabel>N° (Serial Number)</FieldLabel>
+								<Input
+									placeholder="e.g. 0702949"
+									value={data.serialNumber}
+									onChange={set("serialNumber")}
+									className="h-9 text-sm"
+									dir="ltr"
+								/>
+							</div>
+							<div>
+								<FieldLabel>C (Code)</FieldLabel>
+								<Input
+									placeholder="e.g. UN0301/2021/2016/39003424/M/047"
+									value={data.serialCode}
+									onChange={set("serialCode")}
+									className="h-9 text-sm"
+									dir="ltr"
+								/>
+							</div>
+						</div>
+					</SectionCard>
 				)}
 			</div>
 
@@ -1066,7 +1342,11 @@ const PreviewStep: React.FC<PreviewStepProps> = ({
 			? buildAuthCertHTML(data)
 			: buildMasterDiplomaHTML(data);
 
-	const [zoom, setZoom] = useState(1.15);
+	const isLandscape = selectedType.id !== "transcript";
+	const docW = isLandscape ? "297mm" : "210mm";
+	const docH = isLandscape ? "210mm" : "297mm";
+
+	const [zoom, setZoom] = useState(isLandscape ? 0.95 : 1.15);
 
 	const { t, i18n } = useTranslation();
 	const isRtl = i18n.language === "ar";
@@ -1116,8 +1396,9 @@ const PreviewStep: React.FC<PreviewStepProps> = ({
 			>
 				<div
 					style={{
-						width: "200mm",
-						height: "350mm",
+						// Switch dimensions based on doc type
+						width: selectedType.id === "transcript" ? "210mm" : "297mm",
+						height: selectedType.id === "transcript" ? "297mm" : "210mm",
 						transform: `scale(${zoom})`,
 						transformOrigin: "top center",
 						flexShrink: 0,
@@ -1127,8 +1408,8 @@ const PreviewStep: React.FC<PreviewStepProps> = ({
 						srcDoc={html}
 						title="Diploma Preview"
 						style={{
-							width: "200mm",
-							height: "350mm",
+							width: docW, // ← matches the document exactly
+							height: docH, // ← matches the document exactly
 							border: "none",
 							background: "#fff",
 							boxShadow: "0 4px 32px rgba(0,0,0,0.18)",
@@ -1197,6 +1478,11 @@ export const PrintDiplomaDialog: React.FC<PrintDiplomaDialogProps> = ({
 		paperSize: "A4",
 		addresseeTitle: "",
 		addresseeWilaya: "",
+
+		branchFr: student.expand?.majorId?.name || "",
+		diplomaRefNumber: "",
+		serialNumber: "",
+		serialCode: "",
 	});
 
 	useEffect(() => {
@@ -1264,6 +1550,7 @@ export const PrintDiplomaDialog: React.FC<PrintDiplomaDialogProps> = ({
 			<DialogContent
 				className="min-w-270 max-h-[90vh] overflow-hidden p-4 flex flex-col gap-2 backdrop-blur-sm border "
 				dir={i18n.language === "ar" ? "rtl" : "ltr"}
+				aria-describedby={undefined}
 			>
 				<DialogHeader className="pb-0 mb-0">
 					<DialogTitle className="flex items-center gap-2 text-lg pr-8">

@@ -18,16 +18,16 @@ export const ERROR_KEYS = {
 	UPDATE_FAILED: "errors.profile.updateFailed",
 
 	// AddStaff Errors
-	MISMATCHED_PASSWORDS: "errors.addStaff.mismatchTitle",
-	MISMATCHED_PASSWORDS_SHORT: "errors.addStaff.mismatchShort",
-	MISSMATCHED_PASSWORDS_DESCRIPTION: "errors.addStaff.mismatchDesc",
-	MISSING_FIELDS_TITLE: "errors.addStaff.missingTitle",
-	MISSING_FIELDS_DESC: "errors.addStaff.missingDesc",
-	WEAK_PASSWORD_TITLE: "errors.addStaff.weakTitle",
-	WEAK_PASSWORD_DESC: "errors.addStaff.weakDesc",
-	FAILED_TO_CREATE_STAFF: "errors.addStaff.userCreatedError",
-	EMAIL_STAFF_ALREADY_EXISTS: "errors.addStaff.emailExistsTitle",
-	EMAIL_STAFF_ALREADY_EXISTS_DESC: "errors.addStaff.emailExistsDesc",
+	MISMATCHED_PASSWORDS: "errors.addStaffDialog.mismatchTitle",
+	MISMATCHED_PASSWORDS_SHORT: "errors.addStaffDialog.mismatchShort",
+	MISSMATCHED_PASSWORDS_DESCRIPTION: "errors.addStaffDialog.mismatchDesc",
+	MISSING_FIELDS_TITLE: "errors.addStaffDialog.missingTitle",
+	MISSING_FIELDS_DESC: "errors.addStaffDialog.missingDesc",
+	WEAK_PASSWORD_TITLE: "errors.addStaffDialog.weakTitle",
+	WEAK_PASSWORD_DESC: "errors.addStaffDialog.weakDesc",
+	FAILED_TO_CREATE_STAFF: "errors.addStaffDialog.userCreatedError",
+	EMAIL_STAFF_ALREADY_EXISTS: "errors.addStaffDialog.emailExistsTitle",
+	EMAIL_STAFF_ALREADY_EXISTS_DESC: "errors.addStaffDialog.emailExistsDesc",
 
 	// DeleteStaff Errors
 	FETCH_STAFF_FAILED: "errors.deleteStaffDialog.fetchFailed",

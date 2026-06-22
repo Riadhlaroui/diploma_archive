@@ -64,7 +64,6 @@ export default function SignIn() {
 				</Select>
 			</div>
 
-			{/* New Main Auth Container */}
 			<div
 				className={cn(
 					"relative flex w-full max-w-md flex-col justify-between p-6 md:p-8",
@@ -80,7 +79,12 @@ export default function SignIn() {
 
 				<div className="w-full max-w-md animate-in space-y-8">
 					<div className="flex flex-col space-y-1">
-						<h1 className="font-bold text-2xl tracking-wide">{t("welcome")}</h1>
+						<h1
+							dir={isRtl ? "rtl" : "ltr"}
+							className="font-bold text-2xl tracking-wide"
+						>
+							{t("welcome")}
+						</h1>
 					</div>
 
 					<div className="space-y-4">
@@ -105,7 +109,6 @@ export default function SignIn() {
 									</label>
 								</div>
 
-								{/* Original Password Input */}
 								<div className="relative">
 									<input
 										type={isPasswordVisible ? "text" : "password"}
@@ -137,7 +140,6 @@ export default function SignIn() {
 								</div>
 							</div>
 
-							{/* Original custom submit button */}
 							<div className="w-full inline-block group relative bg-[#c2c0c0c8] p-0.5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-[#bbbbbbc8]">
 								<Button
 									type="submit"
@@ -151,8 +153,10 @@ export default function SignIn() {
 						</form>
 					</div>
 
-					{/* New Footer */}
-					<p className="text-muted-foreground text-sm">
+					<p
+						dir={isRtl ? "rtl" : "ltr"}
+						className="text-muted-foreground text-sm"
+					>
 						{t("sign-in.forgotPassword")}{" "}
 						<a href="/reset-password" className="text-primary hover:underline">
 							{t("sign-in.resetPassword")}

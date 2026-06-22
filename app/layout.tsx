@@ -57,7 +57,7 @@ export default async function RootLayout({
 					disableTransitionOnChange
 				>
 					{children}
-					<Toaster richColors />
+					<Toaster dir={isRTL ? "rtl" : "ltr"} richColors />
 				</ThemeProvider>
 			</body>
 		</html>

@@ -23,12 +23,10 @@ export default function MainLayout({
 	const [defaultOpen, setDefaultOpen] = useState<boolean>(true);
 
 	useEffect(() => {
-		// Set text direction based on language
 		const direction = i18n.language === "ar" ? "rtl" : "ltr";
 		document.documentElement.dir = direction;
 		setDir(direction);
 
-		// Read sidebar state from localStorage instead of cookies
 		const savedState = localStorage.getItem("sidebar_state");
 		if (savedState !== null) {
 			setDefaultOpen(savedState === "true");
@@ -39,13 +37,11 @@ export default function MainLayout({
 		<SidebarProvider defaultOpen={defaultOpen}>
 			<AppSidebar />
 
-			{/* REPLACE <main> with <SidebarInset> */}
 			<SidebarInset>
 				<header className="flex h-12 shrink-0 items-center gap-2 border-b px-4">
 					<SidebarTrigger className="-ml-1" />
 				</header>
 
-				{/* Wrap children in a div that fills the remaining height */}
 				<div className="flex flex-1 flex-col">{children}</div>
 			</SidebarInset>
 		</SidebarProvider>

@@ -843,6 +843,7 @@
 		"deleteSpecialty": "فشل حذف التخصص '{{name}}'.",
 		"requiredRelation": "لا يمكن حذف '{{name}}' لأنه قيد الاستخدام من قبل الطلاب.",
 		"generic400": "فشل حذف التخصص: {{message}}",
+		"unknownError": "حدث خطأ غير معروف. يرجى المحاولة مرة أخرى.",
 
 		"sign-in": {
 			"invalidCredentials": "فشل تسجيل الدخول",

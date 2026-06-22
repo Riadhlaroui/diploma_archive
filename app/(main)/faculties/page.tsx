@@ -34,6 +34,7 @@ import ConfirmDialog from "@/components/ConfirmDialog";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { checkAuthOrRedirect } from "@/app/src/services/authService";
+import { ERROR_KEYS } from "@/lib/constants/errors";
 
 const FacultiesList = () => {
 	const [logs, setLogs] = useState<FacultieList[]>([]);
@@ -77,12 +78,14 @@ const FacultiesList = () => {
 				t("faculties.deleteSuccess", { name: facultyToDelete.name }),
 			);
 		} catch (error) {
-			toast.error(t("faculties.deleteError", { name: facultyToDelete.name }));
+			toast.error(
+				t(ERROR_KEYS.DELETE_FACULTY_FAILED, { name: facultyToDelete.name }),
+			);
 		}
 
 		setShowConfirmDialog(false);
 		setFacultyToDelete(null);
-		await fetchFaculties(); // Refresh the list
+		await fetchFaculties();
 	};
 
 	const { t, i18n } = useTranslation();
