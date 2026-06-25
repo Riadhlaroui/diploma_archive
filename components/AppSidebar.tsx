@@ -32,7 +32,7 @@ export function AppSidebar() {
 		// Check if user is authenticated and has admin role
 		const checkAdminStatus = () => {
 			if (pb.authStore.isValid) {
-				const user = pb.authStore.model;
+				const user = pb.authStore.record;
 				setIsAdmin(user?.role === "admin");
 			}
 		};

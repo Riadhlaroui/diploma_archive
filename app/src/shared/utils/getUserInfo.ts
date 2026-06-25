@@ -1,7 +1,7 @@
 import pb from "@/lib/pocketbase";
 
 export function getUserInfo() {
-	return pb.authStore.model;
+	return pb.authStore.record;
 }
 
 export function isAuthenticated() {
@@ -13,7 +13,7 @@ export function getToken() {
 }
 
 export function getUserId() {
-	return pb.authStore.model?.id ?? null;
+	return pb.authStore.record?.id ?? null;
 }
 
 export function clearAurthStore() {

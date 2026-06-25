@@ -3,7 +3,7 @@ import pb from "@/lib/pocketbase";
 import { Permission, ROLE_PRESETS } from "../config/permissions";
 
 export function usePermission() {
-	const [model, setModel] = useState(pb.authStore.model);
+	const [model, setModel] = useState(pb.authStore.record);
 
 	useEffect(() => {
 		pb.collection("Archive_users")

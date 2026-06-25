@@ -20,7 +20,7 @@ const DeleteStaffDialog = ({ open, onOpenChange }: Props) => {
 	const { t, i18n } = useTranslation();
 	const isRtl = i18n.language === "ar";
 
-	const currentUserId = pb.authStore.model?.id;
+	const currentUserId = pb.authStore.record?.id;
 
 	const [staffList, setStaffList] = useState<UserList[]>([]);
 	const [selectedIds, setSelectedIds] = useState<string[]>([]);

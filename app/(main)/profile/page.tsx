@@ -35,7 +35,7 @@ export default function ProfilePage() {
 	const isRtl = i18n.language === "ar";
 	const router = useRouter();
 
-	const model = pb.authStore.model;
+	const model = pb.authStore.record;
 
 	// Info form
 	const [info, setInfo] = useState({

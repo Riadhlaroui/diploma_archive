@@ -20,11 +20,35 @@ export async function checkAndLogin(
 	password: string,
 ): Promise<AuthCheckResult> {
 	try {
-		const auth = await pb
-			.collection("Archive_users")
-			.authWithPassword(email, password);
+		const res = await fetch("/api/auth/login", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ email, password }),
+		});
 
-		const user = auth.record;
+		const data = await res.json();
+
+		if (res.status === 429) {
+			return { success: false, errorKey: ERROR_KEYS.TOO_MANY_ATTEMPTS };
+		}
+
+		if (!res.ok) {
+			if (res.status === 400)
+				return { success: false, errorKey: ERROR_KEYS.INVALID_CREDENTIALS };
+			if (res.status === 404)
+				return { success: false, errorKey: ERROR_KEYS.NOT_FOUND };
+			return { success: false, errorKey: ERROR_KEYS.UNKNOWN_ERROR };
+		}
+
+		// Save into pb exactly as the SDK normally would
+		pb.authStore.save(data.token, data.record);
+
+		console.log("baseUrl:", pb.baseURL);
+		console.log("isValid:", pb.authStore.isValid);
+		console.log("token:", pb.authStore.token?.slice(0, 30));
+		console.log("all localStorage keys:", Object.keys(localStorage));
+
+		const user = data.record;
 
 		if (user.isActive === false) {
 			pb.authStore.clear();
@@ -37,16 +61,7 @@ export async function checkAndLogin(
 		}
 
 		return { success: true };
-	} catch (error: any) {
-		if (error?.status === 400) {
-			return { success: false, errorKey: ERROR_KEYS.INVALID_CREDENTIALS };
-		}
-		if (error?.status === 404) {
-			return { success: false, errorKey: ERROR_KEYS.NOT_FOUND };
-		}
-		if (error?.status === 429) {
-			return { success: false, errorKey: ERROR_KEYS.TOO_MANY_ATTEMPTS };
-		}
+	} catch {
 		return { success: false, errorKey: ERROR_KEYS.UNKNOWN_ERROR };
 	}
 }

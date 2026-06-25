@@ -25,6 +25,8 @@ export default function SignIn() {
 		isLoading,
 		isPasswordVisible,
 		checkingAuth,
+		lockoutSeconds, // ← new
+		formatCountdown, // ← new
 		t,
 		i18n,
 		switchLanguage,
@@ -140,15 +142,36 @@ export default function SignIn() {
 								</div>
 							</div>
 
-							<div className="w-full inline-block group relative bg-[#c2c0c0c8] p-0.5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-[#bbbbbbc8]">
-								<Button
-									type="submit"
-									disabled={isLoading}
-									className="w-full h-16 text-lg cursor-pointer font-semibold bg-black hover:bg-neutral-900 text-white rounded-lg transition-all duration-300 group-hover:-translate-y-0.5 border-none flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
-								>
-									{isLoading && <Loader2 className="w-5 h-5 animate-spin" />}
-									{t("sign-in.button")}
-								</Button>
+							<div className="space-y-2">
+								<div className="w-full inline-block group relative bg-[#c2c0c0c8] p-0.5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-[#bbbbbbc8]">
+									<Button
+										type="submit"
+										disabled={isLoading || lockoutSeconds > 0}
+										className="w-full h-16 text-lg cursor-pointer font-semibold bg-black hover:bg-neutral-900 text-white rounded-lg transition-all duration-300 group-hover:-translate-y-0.5 border-none flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+									>
+										{isLoading && <Loader2 className="w-5 h-5 animate-spin" />}
+										{lockoutSeconds > 0 ? (
+											// Show countdown inside button when locked out
+											<span className="flex items-center gap-2">
+												<span className="font-mono text-xl tracking-widest">
+													{formatCountdown(lockoutSeconds)}
+												</span>
+											</span>
+										) : (
+											t("sign-in.button")
+										)}
+									</Button>
+								</div>
+
+								{/* Warning message below button */}
+								{lockoutSeconds > 0 && (
+									<p
+										dir={isRtl ? "rtl" : "ltr"}
+										className="text-center text-sm text-red-500 animate-in fade-in duration-300"
+									>
+										{t("errors.sign-in.tooManyAttempts")}
+									</p>
+								)}
 							</div>
 						</form>
 					</div>

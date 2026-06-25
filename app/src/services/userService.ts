@@ -65,11 +65,11 @@ export async function validateSession(): Promise<{
 	valid: boolean;
 	reason?: "not_authenticated" | "account_disabled" | "account_expired";
 }> {
-	if (!pb.authStore.isValid || !pb.authStore.model) {
+	if (!pb.authStore.isValid || !pb.authStore.record) {
 		return { valid: false, reason: "not_authenticated" };
 	}
 
-	const model = pb.authStore.model;
+	const model = pb.authStore.record;
 
 	if (model.isActive === false) {
 		pb.authStore.clear();
@@ -98,7 +98,7 @@ export async function createUser(data: createUserInput): Promise<User | null> {
 
 	console.log("Created user: ", record);
 
-	const currentUser = pb.authStore.model;
+	const currentUser = pb.authStore.record;
 	if (currentUser) {
 		await pb.collection("Archive_inbox").create({
 			action: "create_user",
@@ -119,7 +119,7 @@ export async function updateUser(
 ): Promise<User | null> {
 	const updated = await pb.collection("Archive_users").update(id, data);
 
-	const currentUser = pb.authStore.model;
+	const currentUser = pb.authStore.record;
 	if (currentUser) {
 		await pb.collection("Archive_inbox").create({
 			action: "update_user",
@@ -162,7 +162,7 @@ export async function getUsersList(page = 1, perPage = 13, searchTerm = "") {
 export async function deleteUser(id: string): Promise<void> {
 	await pb.collection("Archive_users").delete(id);
 
-	const currentUser = pb.authStore.model;
+	const currentUser = pb.authStore.record;
 	if (currentUser) {
 		await pb.collection("Archive_inbox").create({
 			action: "delete_user",
@@ -180,7 +180,7 @@ export async function toggleUserActive(
 ): Promise<void> {
 	await pb.collection("Archive_users").update(id, { isActive });
 
-	const currentUser = pb.authStore.model;
+	const currentUser = pb.authStore.record;
 	if (currentUser) {
 		await pb.collection("Archive_inbox").create({
 			action: isActive ? "enable_user" : "disable_user",
@@ -193,7 +193,7 @@ export async function toggleUserActive(
 }
 
 export async function getCurrentUser(): Promise<UserList | null> {
-	const model = pb.authStore.model;
+	const model = pb.authStore.record;
 	if (!model) return null;
 	return mapUserList(model);
 }

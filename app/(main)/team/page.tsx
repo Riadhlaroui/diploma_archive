@@ -111,7 +111,7 @@ const StaffList = () => {
 		if (typeof window !== "undefined") {
 			// Check if we have a valid auth store
 			if (pb.authStore.isValid) {
-				setUserRole(pb.authStore.model?.role || null);
+				setUserRole(pb.authStore.record?.role || null);
 				setLoadingAuth(false);
 			} else {
 				router.replace("/sign-in");
